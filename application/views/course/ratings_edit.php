@@ -1,0 +1,66 @@
+<script type="text/javascript">
+        $(document).ready(function(){
+                $('[js="addPingfen"]').click(function(){
+                    $('.zuoyeList').append('<li class="fengfen">评分题<input name="ratingses[]" type="text" class="iptH37 w600 ml10" value=""><input type="hidden" name="type[]" value="1" /><a href="javascript:;" js="removeZuoye" class="blue ml10">删除</a></li>');
+                })
+                $('[js="addKaifang"]').click(function(){
+                    $('.zuoyeList').append('<li class="kaifang">开放题<input name="ratingses[]" type="text" class="iptH37 w600 ml10" value=""><input type="hidden" name="type[]" value="2" /><a href="javascript:;" js="removeZuoye" class="blue ml10">删除</a></li>');
+                })
+                $('[js="removeZuoye"]').live('click',function(){
+                    $(this).parent().remove();
+                });
+        })
+</script>
+<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
+<div class="wrap">
+        <div class="titCom clearfix"><span class="titSpan"><?php echo $course['title'] ?>  </span><a href="javascript:void(0)" class="<?php echo $course['status_class']; ?>"><?php echo $course['status_str']; ?></a></div>
+        <div class="topNaviKec">
+                <?php $this->load->view ( 'course/top_navi' ); ?>
+        </div>
+        <div class="comBox clearfix">
+                <div class="baoming">
+
+                        <div class="sideLeft">
+                                <ul class="sideLnavi">
+<?php if($loginInfo['role']==1||$roleInfo['ratingsedit']==1){ ?>
+                                        <li class="cur"><a href="<?php echo site_url('course/ratingsedit/'.$course['id']) ?>">问题设置<i></i></a></li>
+<?php } ?>
+<?php if($loginInfo['role']==1||$roleInfo['ratingslist']==1){ ?>
+                                        <li><a href="<?php echo site_url('course/ratingslist/'.$course['id']) ?>">反馈结果<i></i></a></li>
+<?php } ?>
+                                </ul>
+
+                        </div>
+                        <div class="contRight">
+                        <form id="editForm" method="post" action="">
+                            <input name="act" type="hidden" value="act" />
+                                <p class="yellowTipBox mb20">课程结束前1小时，已设置的反馈问题将禁止再次修改，编辑</p>
+                                <ul class="zuoyeList">
+                                    <?php foreach ($ratingses as $k=>$h){ ?>
+                                    <li class="<?php echo $h['type']==1?'pingfen':'kaifang' ?>"><?php echo $h['type']==1?'评分题':'开放题' ?>
+                                            <input name="ratingses[]" type="text" class="iptH37 w600 ml10" value="<?php echo $h['title'] ?>"><input type="hidden" name="type[]" value="<?php echo $h['type'] ?>" /><?php if($k>0){ ?><a href="javascript:;" js='removeZuoye' class="blue ml10">删除</a><?php } ?>
+                                        </li>
+                                    <?php } ?>
+                                    <?php if(count($ratingses)==0){ ?>
+                                        <li class="pingfen">评分题
+                                            <input name="ratingses[]" type="text" class="iptH37 w600 ml10" value="您对课程的总体评价"><input type="hidden" name="type[]" value="1" />
+                                        </li>
+                                        <li class="pingfen">评分题
+                                                <input name="ratingses[]" type="text" class="iptH37 w600 ml10" value="这个课程的目标清楚明确"><input type="hidden" name="type[]" value="1" /><a href="javascript:;" js='removeZuoye' class="blue ml10">删除</a>
+                                        </li>
+                                        <li class="kaifang">开放题
+                                            <input name="ratingses[]" type="text" class="iptH37 w600 ml10" value="您认为本次培训有哪些方面给您留下较深的印象？"><input type="hidden" name="type[]" value="2" /><a href="javascript:;" js='removeZuoye' class="blue ml10">删除</a>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+
+                                <div class="ml50 mb20"><a href="javascript:;" class="borBlueH37 mr10" js="addPingfen">添加评分题</a><a href="javascript:;" class="borBlueH37" js="addKaifang">添加开放题</a></div>
+                                
+                                <div class="aCenter"><input type="submit" class="coBtn" value="保存" /></div>
+                        </form>
+                        </div>
+
+                </div>
+
+        </div>
+    </div>
