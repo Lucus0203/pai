@@ -152,7 +152,7 @@ class Course extends CI_Controller
             $departwo = $this->department_model->get_all(array('parent_id' => $deparone[0]['id']));
         }
         if (!empty($departwo[0]['id'])) {
-            $students = $this->student_model->get_all(array('department_id' => $departwo[0]['id']));
+            $students = $this->student_model->get_all(array('department_id' => $departwo[0]['id'],'isdel'=>2));
         }
         $this->load->view('header');
         $this->load->view('course/edit', array('teachers' => $teachers, 'course' => $c, 'deparone' => $deparone, 'departwo' => $departwo, 'students' => $students, 'msg' => $msg));
@@ -211,7 +211,7 @@ class Course extends CI_Controller
             $departwo = $this->department_model->get_all(array('parent_id' => $deparone[0]['id']));
         }
         if (!empty($departwo[0]['id'])) {
-            $students = $this->student_model->get_all(array('department_id' => $departwo[0]['id']));
+            $students = $this->student_model->get_all(array('department_id' => $departwo[0]['id'],'isdel'=>2));
         }
         $course = $this->course_model->get_row(array('id' => $id,'company_code' => $logininfo['company_code']));
         $this->load->view('header');

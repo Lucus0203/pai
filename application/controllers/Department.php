@@ -130,7 +130,7 @@ class Department extends CI_Controller
         } elseif ($this->department_model->get_count(array('parent_id' => $id)) > 0) {
             echo 2;//含有子部门
             return;
-        } elseif ($this->student_model->get_count(array('department_id' => $id)) > 0) {
+        } elseif ($this->student_model->get_count(array('department_id' => $id ,'isdel'=>2)) > 0) {
             echo 3;//部门含有学员
             return;
         }
@@ -146,9 +146,9 @@ class Department extends CI_Controller
         $departs = $this->department_model->get_all(array('parent_id' => $departmentid));
         $students = array();
         if (!empty($departs[0])) {
-            $students = $this->student_model->get_all(array('department_id' => $departs[0]['id']));
+            $students = $this->student_model->get_all(array('department_id' => $departs[0]['id'],'isdel'=>2));
         } else {
-            $students = $this->student_model->get_all(array('department_id' => $departmentid));
+            $students = $this->student_model->get_all(array('department_id' => $departmentid,'isdel'=>2));
         }
         echo json_encode(array('departs' => $departs, 'students' => $students));
     }
@@ -157,7 +157,7 @@ class Department extends CI_Controller
     public function ajaxStudent()
     {
         $departmentid = $this->input->post('departmentid');
-        $students = $this->student_model->get_all(array('department_id' => $departmentid));
+        $students = $this->student_model->get_all(array('department_id' => $departmentid,'isdel'=>2));
         echo json_encode(array('students' => $students));
     }
 

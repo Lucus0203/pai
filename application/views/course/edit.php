@@ -100,7 +100,8 @@ $(document).ready(function(){
                         var count=0;
                         var str='';
                         $.each(json_obj.departs,function(i,item){
-                            str+='<li class="departwo"><label><input type="checkbox" value="'+item.id+'" />'+item.name+'</label></li>';
+							var secIpt=(i==0)?'secIpt':'';
+                            str+='<li class="departwo '+secIpt+'"><label><input type="checkbox" value="'+item.id+'" />'+item.name+'</label></li>';
                             ++count;
                         });
                         $('ul.twoUl').html(str);
