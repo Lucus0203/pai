@@ -135,8 +135,8 @@ class Upload extends CI_Controller
                 $depart=array('company_code'=>$this->_logininfo['company_code'],'name'=>$name);
                 if(!empty($fdepart_id)){
                     $p = $this->department_model->get_row(array('id' => $fdepart_id));
-                    $d['parent_id'] = $fdepart_id;
-                    $d['level'] = $p['level'] * 1 + 1;
+                    $depart['parent_id'] = $fdepart_id;
+                    $depart['level'] = $p['level'] * 1 + 1;
                 }
                 $key=$this->department_model->create($depart);
             }else{
