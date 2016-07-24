@@ -130,7 +130,7 @@ class Upload extends CI_Controller
     private function searchDepartId($name,&$arr,$fdepart_id=null){
         $key=array_search($name,$arr);
         if(empty($key)){
-            $depart=$this->department_model->get_row(array('name'=>$name));
+            $depart=$this->department_model->get_row(array('company_code'=>$this->_logininfo['company_code'],'name'=>$name));
             if(empty($depart['id'])){
                 $depart=array('company_code'=>$this->_logininfo['company_code'],'name'=>$name);
                 if(!empty($fdepart_id)){
