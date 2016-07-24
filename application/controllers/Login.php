@@ -9,7 +9,7 @@ class Login extends CI_Controller
         parent::__construct();
         $this->load->library(array('session'));
         $this->load->helper(array('form', 'url'));
-        $this->load->model(array('user_model', 'userloginlog_model', 'company_model', 'purview_model', 'industries_model'));
+        $this->load->model(array('user_model','student_model', 'userloginlog_model', 'company_model', 'purview_model', 'industries_model'));
 
     }
 
@@ -103,6 +103,16 @@ class Login extends CI_Controller
                     $user['register_flag'] = 2;
                     $this->user_model->update($user, $userinfo['id']);
                     $userinfo = $this->user_model->get_row(array('user_name' => $user_name));
+                    //管理员学员账号
+                    $student = array('company_code' => $company_code,
+                        'sex' => 1,
+                        'name' => $real_name,
+                        'mobile' => $mobile,
+                        'email' => $email,
+                        'user_name' => $user_name,
+                        'user_pass' => md5($pass),
+                        'role' => 9);
+                    $this->student_model->create($student);
                     //公司信息
                     $this->company_model->create(array('code' => $company_code,
                         'name' => $company_name,

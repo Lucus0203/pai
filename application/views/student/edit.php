@@ -133,6 +133,9 @@ $(document).ready(function(){
 <div class="wrap clearfix">
     <div class="textureSide">
         <a id="addDeart" href="javascript:void(0)" class="topbtn">新增一级部门</a>
+        <div class="fnavi">
+            <a class="flink mb10 <?php echo empty($current_department['id'])?'on':'' ?>" href="<?php echo site_url('department/index') ?>">所有人员</a>
+        </div>
             <?php foreach ($departments as $d){ ?>
                 <div class="fnavi">
                         <a href="<?php echo site_url('department/index/'.$d['id']) ?>" class="flink <?php echo $current_department['id']==$d['id']?'on':'' ?>"><i class="iup"></i><?php echo $d['name'] ?></a>
@@ -150,8 +153,8 @@ $(document).ready(function(){
     <div class="textureCont">
             <input type="hidden" id="current_department_id" value="<?php echo $current_department['id'] ?>" />
             <input type="hidden" id="current_department_name" value="<?php echo $current_department['name'] ?>" />
-            <div class="texturetip clearfix"><span class="fLeft"><?php echo empty($student)?'增加':'编辑' ?>成员(<?php echo $current_department['name'] ?>)</span>
-                    <div class="fRight"><a href="<?php echo site_url('department/index/'.$current_department['id']) ?>" class="borBlueBtnH28">返回列表</a></div>
+            <div class="texturetip clearfix"><span class="fLeft"><?php echo empty($student)?'增加':'编辑' ?>成员<?php echo !empty($current_department['name'])?'('.$current_department['name'].')':'' ?></span>
+                    <div class="fRight"><a href="<?php echo site_url('department/index/'.$current_department['id']) ?>" class="borBlueBtnH28">返回<?php echo $current_department['name'] ?></a></div>
             </div>
 
             <div class="p15">
@@ -246,9 +249,8 @@ $(document).ready(function(){
                                     <th></th>
                                     <td>
                                         <label><input name="role" value="1" type="radio" checked class="mr10" />普通学员</label>
-                                        <label><input name="role" value="2" type="radio" <?php if($student['role']==2){echo 'checked';} ?> class="mr10" />助理管理员</label>
-                                        <label><input name="role" value="3" type="radio" <?php if($student['role']==3){echo 'checked';} ?> class="mr10" />员工经理</label>
-
+                                        <label><input name="role" value="2" type="radio" <?php if($student['role']==2){echo 'checked';} ?> class="mr10" />助理管理员<span class="gray9 f14">(公司培训负责人)</span> </label>
+                                        <label><input name="role" value="3" type="radio" <?php if($student['role']==3){echo 'checked';} ?> class="mr10" />员工经理<span class="gray9 f14">(部门负责人、部门经理)</span> </label>
                                     </td>
                             </tr>
 
