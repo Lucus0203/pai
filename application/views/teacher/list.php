@@ -40,11 +40,15 @@
                                                     <a href="<?php echo site_url('teacher/teacheredit/'.$t['id']); ?>" class="editBtn"><i class="iedit"></i>编辑</a><a href="<?php echo site_url('teacher/teacherdel/'.$t['id']);?>" class="delBtn"><i class="idel"></i>删除</a></p>
                                                 <?php } ?>
 
-                                                <div class="imgBox"><a href="<?php echo site_url('teacher/teacherinfo/'.$t['id']); ?>"><img src="<?php echo base_url();?>uploads/teacher_img/<?php echo $t['head_img'] ?>" alt="" width="110"></a></div>
+                                                <div class="imgBox">
+													<?php if(!empty($t['head_img'])){ ?>
+														<a href="<?php echo site_url('teacher/teacherinfo/'.$t['id']); ?>"><img src="<?php echo base_url();?>uploads/teacher_img/<?php echo $t['head_img'] ?>" alt="" width="110"></a>
+													<?php } ?>
+												</div>
 						<div class="listText">
                                                     <p class="titp"><a class="blue" href="<?php echo site_url('teacher/teacherinfo/'.$t['id']); ?>"><?php echo $t['name'] ?></a></p>
 							<p>讲师头衔：<?php echo $t['title'] ?></p>
-							<p><span class="mr30">师资类型：<?php echo $t['type']==1?'内部':'外部' ?></span><span class="mr30">擅长类别：<?php echo $t['specialty'] ?></span>授课年限：<?php echo $t['years'] ?>年</p>
+							<p><span class="mr30">师资类型：<?php echo $t['type']==1?'内部':'外部' ?></span><span class="mr30">擅长类别：<?php echo $t['specialty'] ?></span><?php if(!empty($t['years'])){ ?>授课年限：<?php echo $t['years'] ?>年<?php } ?></p>
 						</div>
 					</div>
                                     <?php } ?>

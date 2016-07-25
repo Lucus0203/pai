@@ -95,6 +95,7 @@ class Student extends CI_Controller
         $res['departments'] = $departments;
         $res['second_departments'] = $second_departments;
         $res['current_department'] = $current_department;
+        $res['current_parent_department']=!empty($current_department['parent_id'])?$this->department_model->get_row(array('id'=>$current_department['parent_id'])):array();
         $this->load->view('header');
         $this->load->view('student/edit', $res);
         $this->load->view('footer');

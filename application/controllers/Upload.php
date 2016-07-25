@@ -8,7 +8,7 @@ class Upload extends CI_Controller
     {
         parent::__construct();
         $this->load->library(array('session'));
-        $this->load->helper(array('form', 'url'));
+        $this->load->helper(array('form', 'url','download'));
         $this->load->model(array('user_model', 'useractionlog_model', 'department_model', 'student_model'));
 
         $this->_logininfo = $this->session->userdata('loginInfo');
@@ -101,6 +101,10 @@ class Upload extends CI_Controller
         }
 
         redirect($_SERVER['HTTP_REFERER']);
+    }
+    //下载学员模板
+    public function downloadstudentexample(){
+        force_download('./uploads/studentdata/uploadExample.xlsx', NULL);
     }
 
     //学员数据验证

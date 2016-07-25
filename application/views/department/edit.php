@@ -63,7 +63,7 @@
                                 $('.textureSide').append('<div class="fnavi"><a href="<?php echo base_url() ?>department/index/' + res + '.html" class="flink"><i class="iup"></i>' + departname + '</a><ul class="clink departChildren' + res + '"></ul></div>');
                                 $('#conWindow').hide();
                             } else {
-                                $('ul.departChildren' + departid).append('<li><a href="<?php echo base_url() ?>department/index/' + res + '.html">' + departname + '</a></li>');
+                                $('ul.departChildren' + departid).append('<li><a target="_blank" href="<?php echo base_url() ?>department/index/' + res + '.html">' + departname + '</a></li>');
                                 $('#conWindow').hide();
                             }
                         }
@@ -133,7 +133,7 @@
     <div class="textureSide">
         <a id="addDeart" href="javascript:void(0)" class="topbtn">新增一级部门</a>
         <div class="fnavi">
-            <a class="flink mb10 <?php echo empty($current_department['id'])?'on':'' ?>" href="<?php echo site_url('department/index') ?>">所有人员</a>
+            <a class="flink mb10 <?php echo empty($current_department['id'])?'on':'' ?>" href="<?php echo site_url('department/index') ?>">所有学员</a>
         </div>
         <?php foreach ($departments as $d) { ?>
             <div class="fnavi">
@@ -164,11 +164,14 @@
                                                                                             href="javascript:;"
                                                                                             class="borBlueBtnH28">删除部门</a><a
                         href="<?php echo site_url('student/index/' . $current_department['id']) ?>"
-                        class="borBlueBtnH28">增加成员</a></div>
+                        class="borBlueBtnH28">增加学员</a></div>
             </div>
         <?php } else { ?>
-            <div class="texturetip clearfix"><span class="fLeft">所有成员</span>
-                <div class="fRight"><a id="addDeart2" href="javascript:;" class="borBlueBtnH28">添加一级部门</a></div>
+            <div class="texturetip clearfix"><span class="fLeft">所有学员</span>
+                <div class="fRight">
+                    <a id="addDeart2" href="javascript:;" class="borBlueBtnH28">添加一级部门</a>
+                    <a href="<?php echo site_url('student/index/' . $current_department['id']) ?>" class="borBlueBtnH28">增加学员</a>
+                </div>
             </div>
         <?php } ?>
         <div class="p15">
@@ -227,7 +230,7 @@
                     <span></span>
                     <a href="javascript:;" onclick="$('#excelFileBtn').click();" class="borBlueH37 mb10">导入学员数据</a>
                     <input id="importBtn" style="display: none;" class="coBtn" type="submit" value="确定">
-                    <p class="gray9">导入时如果学员数据已存在则会更新数据</p>
+                    <p class="gray9">导入时如果学员数据已存在则会更新数据<a href="<?php echo site_url('upload/downloadstudentexample') ?>" class="blue">下载模板</a> </p>
                 </div>
             </form>
         </div>

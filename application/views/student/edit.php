@@ -134,7 +134,7 @@ $(document).ready(function(){
     <div class="textureSide">
         <a id="addDeart" href="javascript:void(0)" class="topbtn">新增一级部门</a>
         <div class="fnavi">
-            <a class="flink mb10 <?php echo empty($current_department['id'])?'on':'' ?>" href="<?php echo site_url('department/index') ?>">所有人员</a>
+            <a class="flink mb10 <?php echo empty($current_department['id'])?'on':'' ?>" href="<?php echo site_url('department/index') ?>">所有学员</a>
         </div>
             <?php foreach ($departments as $d){ ?>
                 <div class="fnavi">
@@ -153,7 +153,7 @@ $(document).ready(function(){
     <div class="textureCont">
             <input type="hidden" id="current_department_id" value="<?php echo $current_department['id'] ?>" />
             <input type="hidden" id="current_department_name" value="<?php echo $current_department['name'] ?>" />
-            <div class="texturetip clearfix"><span class="fLeft"><?php echo empty($student)?'增加':'编辑' ?>成员<?php echo !empty($current_department['name'])?'('.$current_department['name'].')':'' ?></span>
+            <div class="texturetip clearfix"><span class="fLeft"><?php echo empty($student)?'增加':'编辑' ?>学员<?php echo !empty($current_department['name'])?'('.$current_department['name'].')':'' ?></span>
                     <div class="fRight"><a href="<?php echo site_url('department/index/'.$current_department['id']) ?>" class="borBlueBtnH28">返回<?php echo $current_department['name'] ?></a></div>
             </div>
 
@@ -198,13 +198,13 @@ $(document).ready(function(){
                                         <select name="department_parent_id" class="iptH37">
                                             <option value="">请选择</option>
                                         <?php foreach($departments as $d){ ?>
-                                            <option <?php if($d['id']==$student['department_parent_id']){ ?>selected=""<?php } ?> value="<?php echo $d['id'] ?>"><?php echo $d['name'] ?></option>
+                                            <option <?php if(!empty($student['department_parent_id'])&&$d['id']==$student['department_parent_id'] || empty($student['department_parent_id'])&&($d['id']==$current_department['id']||$d['id']==$current_parent_department['id'])){ ?>selected=""<?php } ?> value="<?php echo $d['id'] ?>"><?php echo $d['name'] ?></option>
                                         <?php } ?>
                                         </select>
                                         <select name="department_id" class="iptH37">
                                             <option value="<?php echo $student['department_parent_id'] ?>">请选择</option>
                                         <?php foreach($second_departments as $d){ ?>
-                                            <option <?php if($d['id']==$student['department_id']){ ?>selected=""<?php } ?> value="<?php echo $d['id'] ?>"><?php echo $d['name'] ?></option>
+                                            <option <?php if(!empty($student['department_parent_id'])&&$d['id']==$student['department_id'] || empty($student['department_parent_id'])&&$d['id']==$current_department['id']){ ?>selected=""<?php } ?> value="<?php echo $d['id'] ?>"><?php echo $d['name'] ?></option>
                                         <?php } ?>
                                         </select>
                                     </td>
@@ -233,7 +233,7 @@ $(document).ready(function(){
                             </colgroup><tbody><tr>
                                     <th><span class="red">*</span>登录账号</th>
                                     <td>
-                                        <input <?php if($student['role']==1){echo 'style="color:#ccc"';}else{echo 'style="color:#666"';} ?> name="user_name" value="<?php echo $student['user_name'] ?>" type="text" class="iptH37 w250">
+                                        <input <?php if($student['role']==1){echo 'style="color:#ccc"';}else{echo 'style="color:#666"';} ?> name="user_name" value="<?php echo $student['user_name'] ?>" type="text" class="iptH37 w250" autocomplete="off">
 
 
                                     </td>

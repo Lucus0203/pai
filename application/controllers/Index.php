@@ -28,7 +28,7 @@ class Index extends CI_Controller {
 		$courses_num=$query['num'];
                 $query = $this->db->query ( " select count(*) num from ".$this->db->dbprefix('teacher')." t where company_code='{$logininfo['company_code']}' and isdel=2 " )->row_array();
                 $teachers_num=$query['num'];
-                $query = $this->db->query ( " select count(*) num from ".$this->db->dbprefix('student')." s where company_code='{$logininfo['company_code']}' " )->row_array();
+                $query = $this->db->query ( " select count(*) num from ".$this->db->dbprefix('student')." s where company_code='{$logininfo['company_code']}' and role=1 and isdel = 2 " )->row_array();
                 $students_num=$query['num'];
                 $query = $this->db->query ( " select count(*) num from ".$this->db->dbprefix('student')." s where company_code='{$logininfo['company_code']}' and role=2 " )->row_array();
                 $adms_num=$query['num'];

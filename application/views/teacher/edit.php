@@ -10,7 +10,11 @@
                                 },
                                 specialty: {
                                         required: true
-                                }
+                                },
+								head_img: {
+										required: true,
+										accept: "image/*"
+								}
                         },
                         messages: {
                                 name: {
@@ -21,7 +25,11 @@
                                 },
                                 specialty: {
                                         required: "请选择擅长类别"
-                                }
+                                },
+								head_img: {
+									required: "请选择头像",
+									accept: "请上传正确的图片格式"
+								}
                         },
                         errorPlacement: function ( error, element ) {
                                 error.addClass( "ui red pointing label transition" );
@@ -57,7 +65,7 @@
                                     <?php if(!empty($msg)){echo '<p class="aCenter red f14">'.$msg.'</p>'; } ?>
                                     <form id="editForm" method="post" action=""  enctype="multipart/form-data">
                                         <input name="act" type="hidden" value="act" />
-                                        <div class="upPhoto"><?php if(!empty($teacher['head_img'])){?><img src="<?php echo base_url()?>/uploads/teacher_img/<?php echo $teacher['head_img'] ?>" alt="" width="122"><?php }else{?><img src="<?php echo base_url()?>/images/face_default.png" alt="" width="122"><?php } ?><input name="head_img" type="file" style="display: none;" id="fileBtn" /><a href="javascript:;" onclick="$('#fileBtn').click()">上传头像</a>
+                                        <div class="upPhoto"><?php if(!empty($teacher['head_img'])){?><img src="<?php echo base_url()?>/uploads/teacher_img/<?php echo $teacher['head_img'] ?>" alt="" width="122"><?php }else{?><img src="<?php echo base_url()?>/images/face_default.png" alt="" width="122"><?php } ?><input required="required" name="head_img" type="file" style="display: none;" id="fileBtn" /><a class="blue" href="javascript:;" onclick="$('#fileBtn').click()">上传头像</a>
                                         </div>
 					<table cellspacing="0" class="comTable">
 						<col width="20%" />
@@ -104,7 +112,7 @@
 							<td>
                                                             <span class="iptInner">
                                                             <select name="years" class="iptH37 w215">
-									<option>请选择</option>
+									<option value="">请选择</option>
                                                                         <?php for($i=1;$i<=30;$i++){
                                                                             if($teacher['years']==$i){
                                                                                 echo '<option selected="selected" value="'.$i.'">'.$i.'年</option>';
