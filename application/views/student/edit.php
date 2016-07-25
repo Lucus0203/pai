@@ -157,7 +157,7 @@ $(document).ready(function(){
                     <div class="fRight"><a href="<?php echo site_url('department/index/'.$current_department['id']) ?>" class="borBlueBtnH28">返回<?php echo $current_department['name'] ?></a></div>
             </div>
 
-            <div class="p15">
+            <div class="p15"><input type="password" style="display: none;">
                     <div class="tiph3">基本信息</div>
                     <form id="editForm" method="post" action=""  enctype="multipart/form-data">
                     <input name="act" type="hidden" value="act" />
@@ -227,7 +227,7 @@ $(document).ready(function(){
 
                     </tbody></table>
 
-                    <div class="tiph3">账号信息<input type="password" style="display: none;"></div>
+                    <div class="tiph3">账号信息</div>
                     <table cellspacing="0" class="comTable">
                             <colgroup><col width="100">
                             </colgroup><tbody><tr>
