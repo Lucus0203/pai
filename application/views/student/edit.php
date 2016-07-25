@@ -160,7 +160,6 @@ $(document).ready(function(){
             <div class="p15">
                     <div class="tiph3">基本信息</div>
                     <form id="editForm" method="post" action=""  enctype="multipart/form-data">
-                        <input type="password" style="display: none;">
                     <input name="act" type="hidden" value="act" />
                     <p class="red"><?php echo $msg ?></p>
                     <table cellspacing="0" class="comTable">
@@ -234,6 +233,7 @@ $(document).ready(function(){
                             </colgroup><tbody><tr>
                                     <th><span class="red">*</span>登录账号</th>
                                     <td>
+                                        <input type="text" name="user_name" value="" disabled style="display: none;"><input type="password" name="user_pass" value="" disabled style="display: none;">
                                         <input <?php if($student['role']==1){echo 'style="color:#ccc"';}else{echo 'style="color:#666"';} ?> name="user_name" value="<?php echo $student['user_name'] ?>" type="text" class="iptH37 w250" autocomplete="off" >
 
 
@@ -242,7 +242,7 @@ $(document).ready(function(){
                             <tr>
                                     <th><span class="red">*</span>登录密码</th>
                                     <td>
-                                        <input name="user_pass" value="<?php echo $student['user_pass'] ?>" type="password" class="iptH37 w250" autocomplete="off">
+                                        <input name="user_pass" value="<?php echo $student['user_pass'] ?>" type="password" class="iptH37 w250" autocomplete="off" >
 
                                     </td>
                             </tr>
