@@ -227,13 +227,13 @@ $(document).ready(function(){
 
                     </tbody></table>
 
-                    <div class="tiph3">账号信息</div>
+                    <div class="tiph3">账号信息<input type="password" style="display: none;"></div>
                     <table cellspacing="0" class="comTable">
                             <colgroup><col width="100">
                             </colgroup><tbody><tr>
                                     <th><span class="red">*</span>登录账号</th>
                                     <td>
-                                        <input <?php if($student['role']==1){echo 'style="color:#ccc"';}else{echo 'style="color:#666"';} ?> name="user_name" value="<?php echo $student['user_name'] ?>" type="text" class="iptH37 w250" autocomplete="off">
+                                        <input <?php if($student['role']==1){echo 'style="color:#ccc"';}else{echo 'style="color:#666"';} ?> name="user_name" value="<?php echo $student['user_name'] ?>" type="text" class="iptH37 w250" autocomplete="off" >
 
 
                                     </td>
