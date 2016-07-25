@@ -38,6 +38,7 @@ class Center extends CI_Controller
                     'mobile' => $this->input->post('mobile'),
                     'tel' => $this->input->post('tel'),
                     'email' => $this->input->post('email'));
+                $config['max_size'] = 5*1024;
                 $config['upload_path'] = './uploads/company_logo';
                 $config['allowed_types'] = 'gif|jpg|png|jpeg';
                 $config['file_name'] = $file_name = $logininfo['id'] . date("YmdHis");

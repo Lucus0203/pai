@@ -56,7 +56,7 @@ class Student extends CI_Controller
                 'role' => $this->input->post('role'));
 
             //验证账号
-            if ($this->student_model->get_count(array('mobile' => $s['mobile'],'isdel'=>2)) > 0) {
+            if ($this->student_model->get_count(array('company_code' => $s['company_code'],'mobile' => $s['mobile'],'isdel'=>2)) > 0) {
                 $res['msg'] = '手机号已被使用';
                 $res['student'] = $s;
             } elseif ($this->user_model->get_count(array('company_code' => $s['company_code'], 'user_name' => $s['user_name'])) > 0) {
@@ -131,7 +131,7 @@ class Student extends CI_Controller
                 $s['user_pass'] = md5($s['user_pass']);
             }
             //验证账号
-            if ($this->student_model->get_count(" mobile='".$s['mobile']."' and id <> {$id} and isdel = 2 ") > 0) {
+            if ($this->student_model->get_count(" company_code = '{$s['company_code']}' and mobile='".$s['mobile']."' and id <> {$id} and isdel = 2 ") > 0) {
                 $res['msg'] = '手机号已被使用';
                 $res['student'] = $s;
             } elseif ($this->user_model->get_count("company_code = '{$s['company_code']}' and user_name = '{$s['user_name']}' and (student_id <> {$id} or student_id is null) ") > 0) {

@@ -9,6 +9,7 @@
 
 		<script type="text/javascript" src="<?php echo base_url();?>js/jquery1.83.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>js/jquery.validate.min.js"></script>
+		<script type="text/javascript" src="<?php echo base_url();?>js/additional-methods.min.js"></script>
 		<script type="text/javascript"  src="<?php echo base_url() ?>js/wdate/WdatePicker.js"></script>
 <script type="text/javascript">
 var _hmt = _hmt || [];

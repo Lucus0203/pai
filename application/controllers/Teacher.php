@@ -100,6 +100,7 @@ class Teacher extends CI_Controller
                 'hourly' => $this->input->post('hourly'),
                 'info' => $this->input->post('info'));
 
+            $config['max_size'] = 5*1024;
             $config['upload_path'] = './uploads/teacher_img';
             $config['allowed_types'] = 'gif|jpg|png|jpeg';
             $config['file_name'] = $file_name = $logininfo['id'] . date("YmdHis");
