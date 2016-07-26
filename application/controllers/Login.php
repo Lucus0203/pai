@@ -41,7 +41,7 @@ class Login extends CI_Controller
             $user = $this->input->post('user_name');
             $pass = $this->input->post('user_pass');
             $company_code = $this->input->post('company_code');
-            $userinfo = $this->user_model->get_row(array('user_name' => $user, 'company_code' => $company_code));
+            $userinfo = $this->user_model->get_row(" user_name = '$user' and company_code = '$company_code' and role <> 1 ");
             if (count($userinfo) > 0 && is_array($userinfo)) {
                 $pwd = $userinfo ['user_pass'];
                 if ($pwd == md5($pass)) {
@@ -79,18 +79,25 @@ class Login extends CI_Controller
             $email = $this->input->post('email');
             $mobile = $this->input->post('mobile');
             $mobile_code = $this->input->post('mobile_code');
+            $invitation_code = $this->input->post('invitation_code');
             $user = array('user_name' => $user_name,
-                'user_pass' => md5($pass),
+                'user_pass' => $pass,
                 'real_name' => $real_name,
                 'email' => $email,
                 'mobile' => $mobile,
                 'mobile_code' => $mobile_code);
             $res['user'] = $user;
+            $res['user_company_name']=$company_name;
+            $res['user_industry_parent']=$this->industries_model->get_row(array('id'=>$industry_parent_id));
+            $res['user_industrys']=$this->industries_model->get_all(array('parent_id'=>$industry_parent_id));
+            $res['user_industry_id']=$industry_id;
             $userinfo = $this->user_model->get_row(array('role' => 1, 'user_name' => $user_name, "mobile != '$mobile'"));
             if (!empty($userinfo)) {
                 $res['msg'] = '账号已被使用';
+            }elseif ($invitation_code != 8367) {//邀请码
+                $res['msg'] = '邀请码不正确';
             } else {
-                $userinfo = $this->user_model->get_row(array('mobile' => $mobile));
+                $userinfo = $this->user_model->get_row(array('mobile' => $mobile,'role'=>1));
                 if (!empty($userinfo) && $userinfo['mobile_code'] == $mobile_code) {
                     $code = rand(1000, 9999);//换个验证码
                     $this->load->database();
@@ -98,11 +105,13 @@ class Login extends CI_Controller
                     $last_company = $this->company_model->get_last_company();
                     $company_code = empty($last_company) ? '100001' : $last_company['code'] * 1 + 1;
                     $user['company_code'] = $company_code;
+                    $user['user_pass'] = md5($pass);
+                    $user['mobile_code'] = $code;
                     $user['status'] = 2;
                     $user['role'] = 1;
                     $user['register_flag'] = 2;
                     $this->user_model->update($user, $userinfo['id']);
-                    $userinfo = $this->user_model->get_row(array('user_name' => $user_name));
+                    $userinfo = $this->user_model->get_row(array('mobile' => $mobile,'role'=>1));
                     //管理员学员账号
                     $student = array('company_code' => $company_code,
                         'sex' => 1,
@@ -225,9 +234,10 @@ class Login extends CI_Controller
     //获取验证码
     public function getcode()
     {
+        $this->load->library('chuanlansms');
         $user = $this->input->post('user_name');
         $mobile = $this->input->post('mobile');
-        $code = 8888;//rand(1000, 9999);
+        $code = rand(1000, 9999);
         $userinfo = $this->user_model->get_row(array('mobile' => $mobile));
         if ($userinfo['register_flag'] == 2) {
             echo '此手机号已注册';
@@ -244,7 +254,7 @@ class Login extends CI_Controller
             $this->user_model->create(array('mobile' => $mobile, 'mobile_code' => $code, 'created' => date("Y-m-d H:i:s"), 'status' => 1));
         }
         echo '1';
-        //$this->sms->sendMsg('验证码:'.$code,$mobile);
+        $this->chuanlansms->sendSMS($mobile, '验证码:'.$code);
     }
 
     public function loginout()

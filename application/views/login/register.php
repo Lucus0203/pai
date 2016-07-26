@@ -72,7 +72,9 @@
                     mobile_code: {
                         required: true
                     },
-                    agree: "required"
+                    invitation_code: {
+                        required: true
+                    }
                 },
                 messages: {
 
@@ -116,7 +118,9 @@
                         required: "请输入验证码",
                         digits: "只能输入数字"
                     },
-                    agree: "Please accept our policy"
+                    invitation_code: {
+                        required: "请输入邀请码"
+                    }
                 },
                 errorPlacement: function (error, element) {
                     error.addClass("ui red pointing label transition");
@@ -224,18 +228,18 @@
                 </div>
                 <div class="iptBox">
                     <div class="iptInner">
-                        <input type="password" name="user_pass" value="" class="ipt" placeholder="密码"/>
+                        <input type="password" name="user_pass" value="<?php echo $user['user_pass'] ?>" class="ipt" placeholder="密码"/>
                     </div>
                 </div>
                 <div class="iptBox">
                     <div class="iptInner">
-                        <input type="password" name="password_confirm" value="" class="ipt" placeholder="再输入一次密码"/>
+                        <input type="password" name="password_confirm" value="<?php echo $user['user_pass'] ?>" class="ipt" placeholder="再输入一次密码"/>
                     </div>
                 </div>
 
                 <div class="iptBox">
                     <div class="iptInner">
-                        <input type="text" name="company_name" value="<?php echo $user['company_name'] ?>" class="ipt"
+                        <input type="text" name="company_name" value="<?php echo $user_company_name ?>" class="ipt"
                                placeholder="企业注册名称"/>
                     </div>
                 </div>
@@ -244,8 +248,7 @@
                         <select id="industry_parent_id" name="industry_parent_id" class="iptH37">
                             <option value="">请选择所属行业</option>
                             <?php foreach ($industry_parent as $pindus) { ?>
-                                <option
-                                    value="<?php echo $pindus['id'] ?>"><?php echo $pindus['name'] ?></option>
+                                <option value="<?php echo $pindus['id'] ?>" <?php if($pindus['id']==$user_industry_parent['id']){ ?>selected<?php } ?> ><?php echo $pindus['name'] ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -254,6 +257,11 @@
                     <div class="iptInner">
                         <select id="industry_id" name="industry_id" class="iptH37">
                             <option value="">请选择行业领域</option>
+                            <?php if(!empty($user_industry_id)){
+                                    foreach ($user_industrys as $ind){
+                                ?>
+                                <option value="<?php echo $ind['id'] ?>" <?php if($ind['id']==$user_industry_id){ ?>selected<?php } ?> ><?php echo $ind['name'] ?></option>
+                            <?php } } ?>
                         </select>
                     </div>
                 </div>
@@ -280,6 +288,11 @@
                         <input type="text" name="mobile_code" value="<?php echo $user['mobile_code'] ?>"
                                class="ipt w157" placeholder="验证码 "/>
                         <a id="get_mobile_code" href="javascript:void(0)" class="coBtn" rel="0">获取验证码</a>
+                    </div>
+                </div>
+                <div class="iptBox">
+                    <div class="iptInner">
+                        <input type="text" id="invitation_code" value="<?php echo $user['invitation_code'] ?>" name="invitation_code" class="ipt" placeholder="您的邀请码 "/>
                     </div>
                 </div>
                 <div class="iptBox">
