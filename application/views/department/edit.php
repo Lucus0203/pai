@@ -230,7 +230,7 @@
                     <span></span>
                     <a href="javascript:;" onclick="$('#excelFileBtn').click();" class="borBlueH37 mb10">导入学员数据</a>
                     <input id="importBtn" style="display: none;" class="coBtn" type="submit" value="确定">
-                    <p class="gray9">导入时如果学员数据已存在则会更新数据<a href="<?php echo site_url('upload/downloadstudentexample') ?>" class="blue">下载模板</a> </p>
+                    <p class="gray9">导入时如果学员数据已存在(手机号不能重复)则会更新数据<a href="<?php echo site_url('upload/downloadstudentexample') ?>" class="blue">下载模板</a> </p>
                 </div>
             </form>
         </div>
