@@ -47,7 +47,7 @@ class Notifyclass
                 $students[]=$student;
             }
         }
-        if(!empty($studentmobiles)){
+        if(!empty($studentmobiles)&&$course['notice_type_msg']==1){
             $this->CI->load->library('chuanlansms');
             $msg="
 《{$course['title']}》课程将于" . date('m月d日H点', strtotime($course['time_start'])) . "举行，现已启动报名。
@@ -59,30 +59,34 @@ class Notifyclass
         }
 
         //mail
-        $tomail = $user['email'];
-        $subject = "《{$course['title']}》开启报名";
-        $message = "亲爱的{$user['real_name']}，
-你好！
-《{$course['title']}》课程将于" . date('m月d日H点', strtotime($course['time_start'])) . "举行，现已启动报名。
-报名将在" . date('m月d日', strtotime($course['apply_end'])) . "内截止，点击下面的链接报名吧。
-{unwrap}" . $this->CI->config->item('web_url') . 'course/info/' . $course['id'] . ".html{/unwrap}
-
-".$company['name']."
-" . date("m月d日");
-        $this->CI->email->from('service@trainingpie.com', '培训派');
-        $this->CI->email->to($tomail);//
-        $this->CI->email->subject($subject);
-        $this->CI->email->message($message);
-        $this->CI->email->send();//发送给创建者
-        $this->CI->email->clear();
-        //发送给学员
-        foreach ($students as $student) {
+        if($course['notice_type_email']==1){
+            $tomail = $user['email'];
+            $subject = "《{$course['title']}》开启报名";
+            $message = "亲爱的{$user['real_name']}，
+    你好！
+    《{$course['title']}》课程将于" . date('m月d日H点', strtotime($course['time_start'])) . "举行，现已启动报名。
+    报名将在" . date('m月d日', strtotime($course['apply_end'])) . "内截止，点击下面的链接报名吧。
+    {unwrap}" . $this->CI->config->item('web_url') . 'course/info/' . $course['id'] . ".html{/unwrap}
+    
+    ".$company['name']."
+    " . date("m月d日");
             $this->CI->email->from('service@trainingpie.com', '培训派');
-            $this->CI->email->to($student['email']);
+            $this->CI->email->to($tomail);//
             $this->CI->email->subject($subject);
             $this->CI->email->message($message);
-            $this->CI->email->send();
+            $this->CI->email->send();//发送给创建者
             $this->CI->email->clear();
+            //发送给学员
+            foreach ($students as $student) {
+                if(!empty($student['email'])){
+                    $this->CI->email->from('service@trainingpie.com', '培训派');
+                    $this->CI->email->to($student['email']);
+                    $this->CI->email->subject($subject);
+                    $this->CI->email->message($message);
+                    $this->CI->email->send();
+                    $this->CI->email->clear();
+                }
+            }
         }
 
     }
@@ -96,7 +100,7 @@ class Notifyclass
         $company = $this->CI->company_model->get_row(array('code' => $student['company_code']));
 
         //短信通知
-        if (!empty($student['mobile'])) {
+        if (!empty($student['mobile'])&&$course['notice_type_msg']==1) {
             $this->CI->load->library('chuanlansms');
             $msg = "
 你已成功报名参加《{$course['title']}》课程。该课程将于" . date('m月d日', strtotime($course['time_start'])) . "在" . $course['address'] . "举行，请提前安排好工作或出差行程。
@@ -108,7 +112,7 @@ class Notifyclass
         }
 
         //mail
-        if (!empty($student['email'])) {
+        if (!empty($student['email'])&&$course['notice_type_email']==1) {
 
             $tomail = $student['email'];
             $subject = "《{$course['title']}》报名成功";
@@ -128,7 +132,7 @@ class Notifyclass
 
         }
         //微信通知
-        if (!empty($student['openid'])) {
+        if (!empty($student['openid'])&&$course['notice_type_wx']==1) {
             $wxdata = array(
                 'first' => array(
                     'value' => '您好,' . $student['name'] . '

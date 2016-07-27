@@ -14,7 +14,7 @@
                                         <li class="cur"><a href="<?php echo site_url('course/notifyset/'.$course['id']) ?>">通知设置<i></i></a></li>
 <?php } ?>
 <?php if($loginInfo['role']==1||$roleInfo['notifycustomize']==1){ ?>
-                                        <li style="display:none;"><a href="<?php echo site_url('course/notifycustomize/'.$course['id']) ?>">自定义发送<i></i></a></li>
+<!--                                        <li><a href="--><?php //echo site_url('course/notifycustomize/'.$course['id']) ?><!--">自定义发送<i></i></a></li>-->
 <?php } ?>
                                 </ul>
 
@@ -40,11 +40,10 @@
                                         <th>通知渠道</th>
                                         <td>
                                         <ul class="lineUl">
-<!--                                                        <li>
-                                                            <label><input name="notice_type_msg" <?php if($course['notice_type_msg']==1){echo 'checked="checked"';} ?>  value="1" type="checkbox">短信通知</label></li>-->
                                                         <li>
-                                                            <label><input name="notice_type_email" <?php if($course['notice_type_email']==1){echo 'checked="checked"';} ?> value="1" type="checkbox">邮件通知</label></li>
-<!--                                                        <li><label><input name="notice_type_wx" <?php if($course['notice_type_wx']==1){echo 'checked="checked"';} ?> value="1" type="checkbox">微信通知</label></li>-->
+                                                            <label><input name="notice_type_msg" <?php if($course['notice_type_msg']==1){echo 'checked="checked"';} ?>  value="1" type="checkbox">短信通知</label></li>
+                                                        <li>
+                                                            <label><input name="notice_type_email" <?php if($course['notice_type_email']==1){echo 'checked="checked"';} ?> value="1" type="checkbox">邮件通知</label></li>                                                                        <li><label><input name="notice_type_wx" <?php if($course['notice_type_wx']==1){echo 'checked="checked"';} ?> value="1" type="checkbox">微信通知(需要学员授权微信服务号)</label></li>
                                                 </ul>
                                         </td>
                                 </tr>
