@@ -200,8 +200,6 @@ class Course extends CI_Controller
                 $config['width'] = 320;
                 $this->load->library('image_lib', $config);
                 $this->image_lib->resize();
-            }else{
-                echo $this->upload->display_errors();
             }
             $c['ispublic'] = $this->input->post('public') == 1 ? 1 : 2;
             $this->course_model->update($c, $id);
