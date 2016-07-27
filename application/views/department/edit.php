@@ -119,7 +119,33 @@
                 $('#importBtn').show();
             }
         });
-    })
+        $('#uploadForm').validate({
+            rules: {
+                excelFile: {
+                    required: true,
+                    extension: "xls|xlsx",
+                    filesize: 50 * 1048576
+                }
+            },
+            messages: {
+                excelFile: {
+                    required: "请上传要导入数据",
+                    accept: "上传文件必须是excel",
+                    filesize: "图片大小不能超过50M"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.addClass("ui red pointing label transition");
+                error.insertAfter(element.parent());
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents(".row").addClass(errorClass);
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents(".row").removeClass(errorClass);
+            }
+        });
+    });
     function checkFile(){
         if($('#excelFileBtn').val()==''){
             alert('请选择学员数据文件');
@@ -128,6 +154,9 @@
             return true;
         }
     }
+    $( window ).unload(function() {
+        alert(1);
+    });
 </script>
 <div class="wrap">
     <div class="textureSide">
@@ -224,8 +253,8 @@
 
         <?php if(empty($current_department['id'])){ ?>
         <div class="texturetip clearfix">
-            <form method="post" action="<?php echo site_url('upload/uploadstudent') ?>"  enctype="multipart/form-data" onsubmit="return checkFile();">
-                <div class="fRight">
+            <form id="uploadForm" method="post" action="<?php echo site_url('upload/uploadstudent') ?>"  enctype="multipart/form-data" onsubmit="return checkFile();">
+                <div class="fLeft">
                     <input id="excelFileBtn" type="file" name="excelFile" style="display: none;" autocomplete="off" />
                     <span></span>
                     <a href="javascript:;" onclick="$('#excelFileBtn').click();" class="borBlueH37 mb10">导入学员数据</a>

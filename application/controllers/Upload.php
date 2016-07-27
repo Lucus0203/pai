@@ -50,52 +50,55 @@ class Upload extends CI_Controller
             $objPHPExcel = PHPExcel_IOFactory::load($config['upload_path'] . $excelfile);
             $sheet = $objPHPExcel->setActiveSheetIndex(0);
             $highestRow = $sheet->getHighestRow(); // 取得总行数
+            $highestCol = $sheet->getHighestColumn(); // 取得总列数
             $first_depart_array=$second_depart_array=array();//初始化部门临时数组
-            for ($row = 2; $row <= $highestRow; $row++) {
-                $name = $objPHPExcel->getActiveSheet()->getCell('A' . $row)->getValue();//姓名
-                $mobile = $objPHPExcel->getActiveSheet()->getCell('B' . $row)->getValue();//手机
-                $email = $objPHPExcel->getActiveSheet()->getCell('C' . $row)->getValue();//邮箱
-                $pass = $objPHPExcel->getActiveSheet()->getCell('D' . $row)->getValue();//密码
-                $sex = $objPHPExcel->getActiveSheet()->getCell('E' . $row)->getValue();//性别
-                $jobcode = $objPHPExcel->getActiveSheet()->getCell('F' . $row)->getValue();//工号
-                $jobname = $objPHPExcel->getActiveSheet()->getCell('G' . $row)->getValue();//职位
-                $first_department = trim($objPHPExcel->getActiveSheet()->getCell('H' . $row)->getValue());//一级部门
-                $second_department = trim($objPHPExcel->getActiveSheet()->getCell('I' . $row)->getValue());//二级部门
+            if($highestCol=='I') {
+                for ($row = 2; $row <= $highestRow; $row++) {
+                    $name = $objPHPExcel->getActiveSheet()->getCell('A' . $row)->getValue();//姓名
+                    $mobile = $objPHPExcel->getActiveSheet()->getCell('B' . $row)->getValue();//手机
+                    $email = $objPHPExcel->getActiveSheet()->getCell('C' . $row)->getValue();//邮箱
+                    $pass = $objPHPExcel->getActiveSheet()->getCell('D' . $row)->getValue();//密码
+                    $sex = $objPHPExcel->getActiveSheet()->getCell('E' . $row)->getValue();//性别
+                    $jobcode = $objPHPExcel->getActiveSheet()->getCell('F' . $row)->getValue();//工号
+                    $jobname = $objPHPExcel->getActiveSheet()->getCell('G' . $row)->getValue();//职位
+                    $first_department = trim($objPHPExcel->getActiveSheet()->getCell('H' . $row)->getValue());//一级部门
+                    $second_department = trim($objPHPExcel->getActiveSheet()->getCell('I' . $row)->getValue());//二级部门
 
 
-                $student = array('company_code' => $this->_logininfo['company_code'],
-                    'sex' => trim($sex)=='男'?1:2,
-                    'name' => trim($name),
-                    'job_code' => trim($jobcode),
-                    'job_name' => trim($jobname),
-                    'mobile' => trim($mobile),
-                    'email' => trim($email),
-                    'user_name' => trim($mobile),
-                    'user_pass' => !empty($pass)?md5($pass):'',
-                    'role' => 1,
-                    'isdel' => 2);
-                //数据验证
-                $flag=$this->validateStudent($student,$row,$first_department,$second_department);
-                if(!$flag){//验证不通过则跳出程序
-                    return false;
-                }
+                    $student = array('company_code' => $this->_logininfo['company_code'],
+                        'sex' => trim($sex) == '男' ? 1 : 2,
+                        'name' => trim($name),
+                        'job_code' => trim($jobcode),
+                        'job_name' => trim($jobname),
+                        'mobile' => trim($mobile),
+                        'email' => trim($email),
+                        'user_name' => trim($mobile),
+                        'user_pass' => !empty($pass) ? md5($pass) : '',
+                        'role' => 1,
+                        'isdel' => 2);
+                    //数据验证
+                    $flag = $this->validateStudent($student, $row, $first_department, $second_department);
+                    if (!$flag) {//验证不通过则跳出程序
+                        return false;
+                    }
 
-                //获取部门id
-                if(!empty($first_department)){
-                    $student['department_parent_id'] = $this->searchDepartId($first_department,$first_depart_array);
-                }
-                if(!empty($second_department)) {
-                    $student['department_id'] = $this->searchDepartId($second_department, $second_depart_array, $student['department_parent_id']);
-                }else{
-                    $student['department_id']=$student['department_parent_id'];
-                }
+                    //获取部门id
+                    if (!empty($first_department)) {
+                        $student['department_parent_id'] = $this->searchDepartId($first_department, $first_depart_array);
+                    }
+                    if (!empty($second_department)) {
+                        $student['department_id'] = $this->searchDepartId($second_department, $second_depart_array, $student['department_parent_id']);
+                    } else {
+                        $student['department_id'] = $student['department_parent_id'];
+                    }
 
-                //判断学员是否存在
-                $s=$this->student_model->get_row(array('company_code' => $this->_logininfo['company_code'], 'mobile' => $student['mobile'],'isdel'=>2));
-                if (empty($s['id'])) {
-                    $this->student_model->create($student);
-                }else{
-                    $this->student_model->update($student,$s['id']);
+                    //判断学员是否存在
+                    $s = $this->student_model->get_row(array('company_code' => $this->_logininfo['company_code'], 'mobile' => $student['mobile'], 'isdel' => 2));
+                    if (empty($s['id'])) {
+                        $this->student_model->create($student);
+                    } else {
+                        $this->student_model->update($student, $s['id']);
+                    }
                 }
             }
             unlink($config['upload_path'] . $excelfile);

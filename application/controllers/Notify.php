@@ -50,6 +50,7 @@ class Notify extends CI_Controller {
                         $this->email->subject($subject);
                         $this->email->message($message);
                         $this->email->send();
+                        $this->email->clear();
                         //微信通知
                         $wxdata=array(
                             'userName'=>array(

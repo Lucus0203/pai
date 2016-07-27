@@ -54,7 +54,7 @@ $(document).ready(function(){
                                                             <?php if($c['status']==1){//1报名中2进行中3结束4待发布5待开启报名9其他 ?>
                                                             <span class="greenH25">报名中</span>
                                                             <?php }elseif($c['status']==2){ ?>
-                                                            <span class="orangeH25">进行中</span>
+                                                            <span class="greenH25">进行中</span>
                                                             <?php }elseif($c['status']==3){ ?>
                                                             <span class="grayH25">已结束</span>
                                                             <?php }elseif($c['status']==4){ ?>
