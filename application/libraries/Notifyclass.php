@@ -37,25 +37,27 @@ class Notifyclass
         $user = $this->CI->user_model->get_row(array('id' => $course['user_id']));
         $company = $this->CI->company_model->get_row(array('code'=>$user['company_code']));
         //短信通知
-        $studentsarr = explode(',', $course['targetstudent']);
-        $studentmobiles=$user['mobile'];
-        $students=array();
-        foreach ($studentsarr as $s) {
-            $student = $this->CI->student_model->get_row(array('id' => $s));
-            $studentmobiles.=!empty($student['mobile'])?','.$student['mobile']:'';
-            if(!empty($student['email'])){
-                $students[]=$student;
+        if($course['notice_type_msg']==1){
+            $studentsarr = explode(',', $course['targetstudent']);
+            $studentmobiles=$user['mobile'];
+            $students=array();
+            foreach ($studentsarr as $s) {
+                $student = $this->CI->student_model->get_row(array('id' => $s));
+                $studentmobiles.=!empty($student['mobile'])?','.$student['mobile']:'';
+                if(!empty($student['email'])){
+                    $students[]=$student;
+                }
             }
-        }
-        if(!empty($studentmobiles)&&$course['notice_type_msg']==1){
-            $this->CI->load->library('chuanlansms');
-            $msg="
-《{$course['title']}》课程将于" . date('m月d日H点', strtotime($course['time_start'])) . "举行，现已启动报名。
-报名将在" . date('m月d日', strtotime($course['apply_end'])) . "内截止，点击下面的链接报名吧。
-" . $this->CI->config->item('web_url') . 'course/info/' . $course['id'] . ".html
-
-".$company['name'];
-           $this->CI->chuanlansms->sendSMS($studentmobiles, $msg);
+            if(!empty($studentmobiles)){
+                $this->CI->load->library('chuanlansms');
+                $msg="
+    《{$course['title']}》课程将于" . date('m月d日H点', strtotime($course['time_start'])) . "举行，现已启动报名。
+    报名将在" . date('m月d日', strtotime($course['apply_end'])) . "内截止，点击下面的链接报名吧。
+    " . $this->CI->config->item('web_url') . 'course/info/' . $course['id'] . ".html
+    
+    ".$company['name'];
+               $this->CI->chuanlansms->sendSMS($studentmobiles, $msg);
+            }
         }
 
         //mail
