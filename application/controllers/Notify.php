@@ -4,7 +4,7 @@ class Notify extends CI_Controller {
 	
 	function __construct(){
 		parent::__construct();
-		$this->load->library(array('wechat'));
+		$this->load->library(array('wechat','chuanlansms'));
 		$this->load->helper(array('form','url'));
 		$this->load->model(array('user_model','company_model','course_model','teacher_model','homework_model','survey_model','ratings_model','student_model','department_model'));
                 
@@ -27,52 +27,68 @@ class Notify extends CI_Controller {
                 $courses=$this->course_model->get_all(" notice_trigger_one=1 and time_start >= '".date('Y-m-d',strtotime('+1 day'))." 00:00:00' and time_start <= '".date('Y-m-d',strtotime('+1 day'))." 23:59:59' ");
                 foreach ($courses as $c) {
                     $subject="《{$c['title']}》即将开课";
+                    $company = $this->CI->company_model->get_row(array('code' => $c['company_code']));
                     $teacher=$this->teacher_model->get_row(array('id'=>$c['teacher_id']));
                     $this->load->database ();
                     $sql="select s.* from ".$this->db->dbprefix('student')." s left join ".$this->db->dbprefix('course_apply_list')." a on s.id=a.student_id where a.course_id=".$c['id']." and a.status=1 ";
                     $query = $this->db->query ($sql);
                     $students=$query->result_array();
                     foreach ($students as $s) {
-                        
-                        //mail
-                        $tomail=$s['email'];
-                        $message="
-    亲爱的{$s['name']}
-    你好！
-    《{$c['title']}》课程将于".date('m月d日H点',strtotime($c['time_start']))."在{$c['address']}举行，请安排好工作，或做好出差计划，准时参加课程。
+                        //短信通知
+                        if (!empty($s['mobile'])) {
+                            $this->CI->load->library('chuanlansms');
+                            $msg = "
+你已成功报名参加《{$subject}》课程。该课程将于" . date('m月d日', strtotime($c['time_start'])) . "在" . $c['address'] . "举行，请安排好工作，或做好出差计划，准时参加课程。
     上课前，请做好课前作业，提交给我们。
     签到在开课前2小时生效，别忘了签到哦，谢谢！
 
-    培训派
-    ".date("m月d日");
-                        $this->email->from('service@trainingpie.com', '培训派');
-                        $this->email->to($tomail);//
-                        $this->email->subject($subject);
-                        $this->email->message($message);
-                        $this->email->send();
-                        $this->email->clear();
+" . $company['name'];
+                            $this->CI->chuanlansms->sendSMS($s['mobile'], $msg);
+                        }
+
+                        //mail
+                        if (!empty($s['email'])) {
+                            $tomail = $s['email'];
+                            $message = "
+    亲爱的{$s['name']}
+    你好！
+    《{$c['title']}》课程将于" . date('m月d日H点', strtotime($c['time_start'])) . "在{$c['address']}举行，请安排好工作，或做好出差计划，准时参加课程。
+    上课前，请做好课前作业，提交给我们。
+    签到在开课前2小时生效，别忘了签到哦，谢谢！
+
+    " . $company['name'] . "
+    " . date("m月d日");
+                            $this->email->from('service@trainingpie.com', '培训派');
+                            $this->email->to($tomail);//
+                            $this->email->subject($subject);
+                            $this->email->message($message);
+                            $this->email->send();
+                            $this->email->clear();
+                        }
                         //微信通知
-                        $wxdata=array(
-                            'userName'=>array(
-                                'value'=>$s['name'],
-                                'color'=>"#173177"
-                            ),
-                            'courseName'=>array(
-                                'value'=>$c['title'],
-                                'color'=>"#173177"
-                            ),
-                            'date'=>array(
-                                'value'=>date('m月d日H点',strtotime($c['time_start']))."在".$c['address'],
-                                'color'=>"#173177"
-                            ),
-                            'remark'=>array(
-                                'value'=>"请安排好工作，或做好出差计划，准时参加课程。
+                        if (!empty($s['openid'])) {
+                            $wxdata = array(
+                                'userName' => array(
+                                    'value' => $s['name'],
+                                    'color' => "#173177"
+                                ),
+                                'courseName' => array(
+                                    'value' => $c['title'],
+                                    'color' => "#173177"
+                                ),
+                                'date' => array(
+                                    'value' => date('m月d日H点', strtotime($c['time_start'])) . "在" . $c['address'],
+                                    'color' => "#173177"
+                                ),
+                                'remark' => array(
+                                    'value' => "请安排好工作，或做好出差计划，准时参加课程。
 上课前，请做好课前作业，提交给我们。
 签到在开课前2小时生效，别忘了签到哦，谢谢！",
-                                'color'=>"#173177"
-                            )
-                        );
-                        $res=$this->wechat->templateSend($s['openid'],'5yxj6pEwlEw9xB0fFy-xUp6ec0azoAvPYA-tE-uBwDU',$this->config->item('web_url').'course/courseinfo/'.$c['id'].'.html',$wxdata);
+                                    'color' => "#173177"
+                                )
+                            );
+                            $res = $this->wechat->templateSend($s['openid'], '5yxj6pEwlEw9xB0fFy-xUp6ec0azoAvPYA-tE-uBwDU', $this->config->item('web_url') . 'course/courseinfo/' . $c['id'] . '.html', $wxdata);
+                        }
                     }
                 }
 	}

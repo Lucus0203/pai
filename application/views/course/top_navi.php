@@ -16,6 +16,6 @@
         <li <?php if(strpos(current_url(),'course/ratingsedit')||strpos(current_url(),'course/ratingslist')){?> class="cur"<?php } ?>><a href="<?php $uriarg=$roleInfo['ratingslist']==1?'ratingslist':'ratingsedit'; echo site_url('course/'.$uriarg.'/'.$course['id']) ?>">课程反馈</a></li>
 <?php } ?>
 <?php if($loginInfo['role']==1||$roleInfo['notifyset']==1||$roleInfo['notifycustomize']==1){ ?>
-        <li <?php if(strpos(current_url(),'course/notifyset')||strpos(current_url(),'course/notifycustomize')){?> class="cur"<?php } ?>><a href="<?php echo site_url('course/notifyset/'.$course['id']) ?>">通知设置</a></li>
+        <!-- <li <?php if(strpos(current_url(),'course/notifyset')||strpos(current_url(),'course/notifycustomize')){?> class="cur"<?php } ?>><a href="<?php echo site_url('course/notifyset/'.$course['id']) ?>">通知设置</a></li> -->
 <?php } ?>
 </ul>
