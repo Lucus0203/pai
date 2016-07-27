@@ -26,6 +26,9 @@ class Notify extends CI_Controller {
 	public function coursestart() {
                 $courses=$this->course_model->get_all(" notice_trigger_one=1 and time_start >= '".date('Y-m-d',strtotime('+1 day'))." 00:00:00' and time_start <= '".date('Y-m-d',strtotime('+1 day'))." 23:59:59' ");
                 foreach ($courses as $c) {
+                    if($c['isnotice_open']!=1){//自动通知关闭
+                        continue;
+                    }
                     $subject="《{$c['title']}》即将开课";
                     $company = $this->CI->company_model->get_row(array('code' => $c['company_code']));
                     $teacher=$this->teacher_model->get_row(array('id'=>$c['teacher_id']));

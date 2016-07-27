@@ -126,6 +126,10 @@ $(document).ready(function(){
         },
         unhighlight: function (element, errorClass, validClass) {
                 $( element ).parents( ".row" ).removeClass( errorClass );
+        },
+        submitHandler:function(form){
+            $('input[type=submit]').val('请稍后..').attr('disabled','disabled');
+            form.submit();
         }
     });
 });

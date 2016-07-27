@@ -34,6 +34,9 @@ class Notifyclass
     public function applyopen($courseid)
     {
         $course = $this->CI->course_model->get_row(array('id' => $courseid));
+        if($course['isnotice_open']!=1){//自动通知关闭
+            return false;
+        }
         $user = $this->CI->user_model->get_row(array('id' => $course['user_id']));
         $company = $this->CI->company_model->get_row(array('code'=>$user['company_code']));
         //短信通知
@@ -98,6 +101,9 @@ class Notifyclass
     public function applysuccess($courseid, $studentid)
     {
         $course = $this->CI->course_model->get_row(array('id' => $courseid));
+        if($course['isnotice_open']!=1){//自动通知关闭
+            return false;
+        }
         $student = $this->CI->student_model->get_row(array('id' => $studentid));
         $company = $this->CI->company_model->get_row(array('code' => $student['company_code']));
 
