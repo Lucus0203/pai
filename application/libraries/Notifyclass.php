@@ -39,6 +39,7 @@ class Notifyclass
         }
         $user = $this->CI->user_model->get_row(array('id' => $course['user_id']));
         $company = $this->CI->company_model->get_row(array('code'=>$user['company_code']));
+        $ischeckmsg=($course['apply_check']==1)?'报名经你的上级领导审核通过后，我们将另行发送报名成功通知。':'';
         //短信通知
         if($course['notice_type_msg']==1){
             $studentsarr = explode(',', $course['targetstudent']);
@@ -53,12 +54,18 @@ class Notifyclass
             }
             if(!empty($studentmobiles)){
                 $this->CI->load->library('chuanlansms');
-                $msg="
-    《{$course['title']}》课程将于" . date('m月d日H点', strtotime($course['time_start'])) . "举行，现已启动报名。
-    报名将在" . date('m月d日', strtotime($course['apply_end'])) . "内截止，点击下面的链接报名吧。
-    " . $this->CI->config->item('web_url') . 'course/info/' . $course['id'] . ".html
-    
-    ".$company['name'];
+                $msg="依据公司培训计划安排，《{$course['title']}》将于" . date('Y年m月d日H时', strtotime($course['time_start'])) . "举行。现已启动报名工作，报名将在" . date('Y年m月d日', strtotime($course['apply_end'])) . "截止，点击下面的链接报名吧。
+" . $this->CI->config->item('web_url') . 'course/info/' . $course['id'] . ".html
+{$ischeckmsg}
+为了大家的共同进步，请积极参与！
+
+".$company['name'];
+                if($company['code']=='100276'){
+                    $msg.="
+人力资源部";
+                }
+                    $msg.="
+". date("Y年m月d日");
                $this->CI->chuanlansms->sendSMS($studentmobiles, $msg);
             }
         }
@@ -67,27 +74,34 @@ class Notifyclass
         if($course['notice_type_email']==1){
             $tomail = $user['email'];
             $subject = "《{$course['title']}》开启报名";
-            $message = "亲爱的{$user['real_name']}，
-    你好！
-    《{$course['title']}》课程将于" . date('m月d日H点', strtotime($course['time_start'])) . "举行，现已启动报名。
-    报名将在" . date('m月d日', strtotime($course['apply_end'])) . "内截止，点击下面的链接报名吧。
+            $studentname="亲爱的{$user['real_name']}同仁：";
+            $message = "
+    依据公司培训计划安排，《{$course['title']}》将于" . date('Y年m月d日H时', strtotime($course['time_start'])) . "举行。现已启动报名工作，报名将在" . date('Y年m月d日', strtotime($course['apply_end'])) . "截止，点击下面的链接报名吧。
     {unwrap}" . $this->CI->config->item('web_url') . 'course/info/' . $course['id'] . ".html{/unwrap}
+{$ischeckmsg}
+为了大家的共同进步，请积极参与！
     
-    ".$company['name']."
-    " . date("m月d日");
+                                                                                                ".$company['name'];
+            if($company['code']=='100276'){
+                $message.="
+                                                                                                人力资源部";
+            }
+            $message.="
+                                                                                                ". date("Y年m月d日");
             $this->CI->email->from('service@trainingpie.com', '培训派');
             $this->CI->email->to($tomail);//
             $this->CI->email->subject($subject);
-            $this->CI->email->message($message);
+            $this->CI->email->message($studentname.$message);
             $this->CI->email->send();//发送给创建者
             $this->CI->email->clear();
             //发送给学员
             foreach ($students as $student) {
                 if(!empty($student['email'])){
+                    $studentname="亲爱的{$student['name']}同仁：";
                     $this->CI->email->from('service@trainingpie.com', '培训派');
                     $this->CI->email->to($student['email']);
                     $this->CI->email->subject($subject);
-                    $this->CI->email->message($message);
+                    $this->CI->email->message($studentname.$message);
                     $this->CI->email->send();
                     $this->CI->email->clear();
                 }
@@ -110,12 +124,18 @@ class Notifyclass
         //短信通知
         if (!empty($student['mobile'])&&$course['notice_type_msg']==1) {
             $this->CI->load->library('chuanlansms');
-            $msg = "
-你已成功报名参加《{$course['title']}》课程。该课程将于" . date('m月d日', strtotime($course['time_start'])) . "在" . $course['address'] . "举行，请提前安排好工作或出差行程。
-上课前，请先完成课前调研表（" . site_url('course/survey/' . $course['id']) . "）和课前作业，提交给我们。
-谢谢你的参与，并祝你学习愉快，取得进步！
+            $msg = "亲爱的{$student['name']}同仁：
+你已成功报名参加《{$course['title']}》，该课程将于" . date('Y年m月d日H时', strtotime($course['time_start'])) . "在" . $course['address'] . "举行，请提前安排好工作或出差行程，准时参加培训。
+上课前请先完成课前调研表（" . site_url('course/survey/' . $course['id']) . "）和课前作业并提交给我们。
+预祝学习愉快，收获满满！
 
 " . $company['name'];
+            if($company['code']=='100276'){
+                $msg.="
+人力资源部";
+            }
+            $msg.="
+". date("Y年m月d日");
             $this->CI->chuanlansms->sendSMS($student['mobile'], $msg);
         }
 
@@ -124,14 +144,18 @@ class Notifyclass
 
             $tomail = $student['email'];
             $subject = "《{$course['title']}》报名成功";
-            $message = "亲爱的{$student['name']}，
-你好！
-你已成功报名参加《{$course['title']}》课程。该课程将于" . date('m月d日', strtotime($course['time_start'])) . "在" . $course['address'] . "举行，请提前安排好工作或出差行程。
-上课前，请先完成课前调研表（" . site_url('course/survey/' . $course['id']) . "）和课前作业，提交给我们。
-谢谢你的参与，并祝你学习愉快，取得进步！
+            $message = "亲爱的{$student['name']}同仁：
+你已成功报名参加《{$course['title']}》，该课程将于" . date('Y年m月d日H时', strtotime($course['time_start'])) . "在" . $course['address'] . "举行，请提前安排好工作或出差行程，准时参加培训。
+上课前请先完成课前调研表（" . site_url('course/survey/' . $course['id']) . "）和课前作业并提交给我们。
+预祝学习愉快，收获满满！
 
-" . $company['name'] . "
-" . date("m月d日");
+                                                                                                ".$company['name'];
+            if($company['code']=='100276'){
+                $message.="
+                                                                                                人力资源部";
+            }
+            $message.="
+                                                                                                ". date("Y年m月d日");
             $this->CI->email->from('service@trainingpie.com', '培训派');
             $this->CI->email->to($tomail);//
             $this->CI->email->subject($subject);
@@ -160,9 +184,8 @@ class Notifyclass
                     'color' => "#173177"
                 ),
                 'remark' => array(
-                    'value' => "请提前安排好工作或出差行程。
-上课前，请先完成课前调研表和课前作业，提交给我们。
-谢谢你的参与，并祝你学习愉快，取得进步！",
+                    'value' => "请提前安排好工作或出差行程，准时参加培训。上课前请先完成课前调研表和课前作业并提交给我们。
+预祝学习愉快，收获满满！",
                     'color' => "#173177"
                 )
             );
