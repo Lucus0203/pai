@@ -74,7 +74,7 @@ class Notifyclass
         if($course['notice_type_email']==1){
             $tomail = $user['email'];
             $subject = "《{$course['title']}》开启报名";
-            $studentname="亲爱的{$user['real_name']}同仁：";
+            $studentname="亲爱的{$user['real_name']}：";
             $message = "
     依据公司培训计划安排，《{$course['title']}》将于" . date('Y年m月d日H时', strtotime($course['time_start'])) . "举行。现已启动报名工作，报名将在" . date('Y年m月d日', strtotime($course['apply_end'])) . "截止，点击下面的链接报名吧。
     {unwrap}" . $this->CI->config->item('web_url') . 'course/info/' . $course['id'] . ".html{/unwrap}
@@ -124,7 +124,7 @@ class Notifyclass
         //短信通知
         if (!empty($student['mobile'])&&$course['notice_type_msg']==1) {
             $this->CI->load->library('chuanlansms');
-            $msg = "亲爱的{$student['name']}同仁：
+            $msg = "亲爱的{$student['name']}：
 你已成功报名参加《{$course['title']}》，该课程将于" . date('Y年m月d日H时', strtotime($course['time_start'])) . "在" . $course['address'] . "举行，请提前安排好工作或出差行程，准时参加培训。
 上课前请先完成课前调研表（" . $this->CI->config->item('web_url') .'course/survey/' . $course['id'] . ".html）和课前作业并提交给我们。
 预祝学习愉快，收获满满！
@@ -144,7 +144,7 @@ class Notifyclass
 
             $tomail = $student['email'];
             $subject = "《{$course['title']}》报名成功";
-            $message = "亲爱的{$student['name']}同仁：
+            $message = "亲爱的{$student['name']}：
 你已成功报名参加《{$course['title']}》，该课程将于" . date('Y年m月d日H时', strtotime($course['time_start'])) . "在" . $course['address'] . "举行，请提前安排好工作或出差行程，准时参加培训。
 上课前请先完成课前调研表（" . $this->CI->config->item('web_url') .'course/survey/' . $course['id'] . ".html）和课前作业并提交给我们。
 预祝学习愉快，收获满满！
