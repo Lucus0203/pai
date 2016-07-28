@@ -126,7 +126,7 @@ class Notifyclass
             $this->CI->load->library('chuanlansms');
             $msg = "亲爱的{$student['name']}同仁：
 你已成功报名参加《{$course['title']}》，该课程将于" . date('Y年m月d日H时', strtotime($course['time_start'])) . "在" . $course['address'] . "举行，请提前安排好工作或出差行程，准时参加培训。
-上课前请先完成课前调研表（" . site_url('course/survey/' . $course['id']) . "）和课前作业并提交给我们。
+上课前请先完成课前调研表（" . $this->CI->config->item('web_url') .'course/survey/' . $course['id'] . ".html）和课前作业并提交给我们。
 预祝学习愉快，收获满满！
 
 " . $company['name'];
@@ -146,7 +146,7 @@ class Notifyclass
             $subject = "《{$course['title']}》报名成功";
             $message = "亲爱的{$student['name']}同仁：
 你已成功报名参加《{$course['title']}》，该课程将于" . date('Y年m月d日H时', strtotime($course['time_start'])) . "在" . $course['address'] . "举行，请提前安排好工作或出差行程，准时参加培训。
-上课前请先完成课前调研表（" . site_url('course/survey/' . $course['id']) . "）和课前作业并提交给我们。
+上课前请先完成课前调研表（" . $this->CI->config->item('web_url') .'course/survey/' . $course['id'] . ".html）和课前作业并提交给我们。
 预祝学习愉快，收获满满！
 
                                                                                                 ".$company['name'];
@@ -189,7 +189,7 @@ class Notifyclass
                     'color' => "#173177"
                 )
             );
-            $res = $this->CI->wechat->templateSend($student['openid'], 'yFfIfh1EPvvpyeNplv5n6xBEyn5Em4r5ZYAHoLFnM9E', $this->CI->config->item('base_url') . 'course/info/' . $course['id'] . '.html', $wxdata);
+            $res = $this->CI->wechat->templateSend($student['openid'], 'yFfIfh1EPvvpyeNplv5n6xBEyn5Em4r5ZYAHoLFnM9E', $this->CI->config->item('web_url') . 'course/survey/' . $course['id'] . '.html', $wxdata);
         }
     }
 
