@@ -79,17 +79,17 @@ class Notifyclass
             $subject = "《{$course['title']}》开启报名";
             $studentname="亲爱的{$user['real_name']}：";
             $message = <<< EOF
-<p style="text-indent:20px">依据公司培训计划安排，《{$course['title']}》将于{$t1}举行。现已启动报名工作，报名将在{$t2}截止，点击下面的链接报名吧。
+<p style="text-indent:40px">依据公司培训计划安排，《{$course['title']}》将于{$t1}举行。现已启动报名工作，报名将在{$t2}截止，点击下面的链接报名吧。
 <br><a href='{$link}' target='_blank'>{$link}</a></p>
-<p style="text-indent:20px">{$ischeckmsg}</p>
-<p style="text-indent:20px">为了大家的共同进步，请积极参与！</p>
+<p style="text-indent:40px">{$ischeckmsg}</p>
+<p style="text-indent:40px">为了大家的共同进步，请积极参与！</p>
 
-<br><p>{$company['name']}</p>
+<br><p style="text-align: right;margin-right: 40px;">{$company['name']}</p>
 EOF;
             if($company['code']=='100276'){
-                $message.='<p>人力资源部</p>';
+                $message.='<p style="text-align: right;margin-right: 40px;">人力资源部</p>';
             }
-            $message.='<p>'. date("Y年m月d日").'</p>';
+            $message.='<p style="text-align: right;margin-right: 40px;">'. date("Y年m月d日").'</p>';
             $this->CI->email->from('service@trainingpie.com', '培训派');
             $this->CI->email->to($tomail);//
             $this->CI->email->subject($subject);
@@ -149,9 +149,9 @@ EOF;
             $tomail = $student['email'];
             $subject = "《{$course['title']}》报名成功";
             $message = "亲爱的{$student['name']}：
-<p style='text-indent:20px'>你已成功报名参加《{$course['title']}》，该课程将于{$t}在{$course['address']}举行，请提前安排好工作或出差行程，准时参加培训。</p>
-<p style='text-indent:20px'>上课前请先完成课前调研表（<a href='{$link}' target='_blank'>{$link}</a>）和课前作业并提交给我们。</p>
-<p style='text-indent:20px'>预祝学习愉快，收获满满！</p>
+<p style='text-indent:40px'>你已成功报名参加《{$course['title']}》，该课程将于{$t}在{$course['address']}举行，请提前安排好工作或出差行程，准时参加培训。</p>
+<p style='text-indent:40px'>上课前请先完成课前调研表（<a href='{$link}' target='_blank'>{$link}</a>）和课前作业并提交给我们。</p>
+<p style='text-indent:40px'>预祝学习愉快，收获满满！</p>
 
 <p>".$company['name'].'</p>';
             if($company['code']=='100276'){
