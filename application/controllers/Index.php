@@ -9,7 +9,7 @@ class Index extends CI_Controller
     {
         parent::__construct();
         $this->load->library('session');
-        $this->load->helper(array('form', 'url'));
+        $this->load->helper(array('form', 'url','download'));
         $this->load->model(array('user_model', 'course_model', 'teacher_model', 'homework_model','company_model'));
 
         $this->_logininfo = $this->session->userdata('loginInfo');
@@ -45,6 +45,16 @@ class Index extends CI_Controller
         $query = $this->db->query($sql);
         $courses = $query->result_array();
 
+        //学员登录二维码
+        if(!file_exists(base_url().'uploads/login_qrcode/'.$logininfo['company_code'].'.png')){
+            $this->load->library('ciqrcode');
+            $params['data'] = $this->config->item('web_url') . 'login/index/' . $logininfo['company_code'] . '.html';
+            $params['level'] = 'H';
+            $params['size'] = 1025;
+            $params['savename'] = './uploads/login_qrcode/' . $logininfo['company_code'].'.png';
+            $this->ciqrcode->generate($params);
+        }
+
         $this->load->view('header');
         $this->load->view('index', compact('courses_num', 'teachers_num', 'students_num', 'adms_num', 'courses','company'));
         $this->load->view('footer');
@@ -58,5 +68,9 @@ class Index extends CI_Controller
         $this->session->set_userdata('loginInfo', $userinfo);
         $this->load->vars(array('loginInfo' => $userinfo));
         echo 1;
+    }
+
+    public function loginqrcode(){
+        force_download('./uploads/login_qrcode/' . $this->_logininfo['company_code'].'.png', NULL);
     }
 }
