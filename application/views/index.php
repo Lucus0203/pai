@@ -53,7 +53,7 @@
         </div>
         <div class="sideBox">
             <p class="ttl02">学员登录扫一扫</p>
-            <p class="aCenter"><img width="70%" src="<?php echo base_url() ?>uploads/login_qrcode/<?php echo $loginInfo['company_code'] ?>.png" alt="">
+            <p class="aCenter"><img width="78%" src="<?php echo base_url() ?>uploads/login_qrcode/<?php echo $loginInfo['company_code'] ?>.png" alt="">
                 <br><a class="blue aCenter" href="<?php echo site_url('index/loginqrcode') ?>" target="_blank">下载二维码</a>
             </p>
 
