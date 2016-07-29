@@ -46,6 +46,12 @@ class Notify extends CI_Controller {
     签到在开课前2小时生效，别忘了签到哦，谢谢！
 
 " . $company['name'];
+                            if($company['code']=='100276'){
+                                $msg.="
+人力资源部";
+                            }
+                            $msg.="
+". date("Y年m月d日");
                             $this->CI->chuanlansms->sendSMS($s['mobile'], $msg);
                         }
 
@@ -53,14 +59,19 @@ class Notify extends CI_Controller {
                         if (!empty($s['email'])) {
                             $tomail = $s['email'];
                             $message = "
-    亲爱的{$s['name']}
-    你好！
-    《{$c['title']}》课程将于" . date('m月d日H点', strtotime($c['time_start'])) . "在{$c['address']}举行，请安排好工作，或做好出差计划，准时参加课程。
-    上课前，请做好课前作业，提交给我们。
-    签到在开课前2小时生效，别忘了签到哦，谢谢！
+亲爱的{$s['name']}:
+    
+            《{$c['title']}》课程将于" . date('m月d日H点', strtotime($c['time_start'])) . "在{$c['address']}举行，请安排好工作，或做好出差计划，准时参加课程。
+上课前，请做好课前作业，提交给我们。
+签到在开课前2小时生效，别忘了签到哦，谢谢！
 
-    " . $company['name'] . "
-    " . date("m月d日");
+" . $company['name'];
+                            if($company['code']=='100276'){
+                                $message.="
+人力资源部";
+                            }
+                            $message.="
+". date("Y年m月d日");
                             $this->email->from('service@trainingpie.com', '培训派');
                             $this->email->to($tomail);//
                             $this->email->subject($subject);
