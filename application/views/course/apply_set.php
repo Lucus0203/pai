@@ -110,12 +110,12 @@
                                         <th>其他设置</th>
                                         <td>
                                             <label><input name="apply_check" value="1" <?php if($course['apply_check']==1){echo 'checked="checked"';} ?> type="checkbox" class="mr10" />报名需审核</label>
-                                                <ul class="lineUl">
+                                                <!--<ul class="lineUl">
                                                         <li>
                                                             <input name="apply_check_type" <?php if($course['apply_check_type']==1){echo 'checked="checked"';} ?> value="1" type="radio">管理员审核</li>
                                                         <li>
                                                             <input name="apply_check_type" <?php if($course['apply_check_type']==2){echo 'checked="checked"';} ?> value="2" type="radio">部门经理审核(分级管理员)</li>
-                                                </ul>
+                                                </ul>-->
 
                                         </td>
                                 </tr>
