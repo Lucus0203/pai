@@ -45,8 +45,7 @@ $(document).ready(function(){
 						<p class="operaBtn">
 <?php if($loginInfo['role']==1||$roleInfo['courseedit']==1){ ?>
                                                     <a href="<?php echo site_url('course/courseedit/'.$c['id']);?>" class="editBtn"><i class="iedit"></i>编辑</a><a href="<?php echo site_url('course/coursedel/'.$c['id']);?>" class="delBtn"><i class="idel"></i>删除</a>
-<?php } ?>
-<!--                                                    <a href="javascript:;" class="shareBtn"><i class="ishar"></i>分享</a></p>-->
+<?php } ?><?php if($c['status']==4){ ?><a href="<?php echo site_url('course/coursepublic/'.$c['id']);?>" class="shareBtn"><i class="ishar"></i>发布</a></p><?php } ?>
 
                                                 <div class="imgBox"><a href="<?php echo site_url('course/courseinfo/'.$c['id']);?>"><img src="<?php echo empty($c['page_img'])?base_url().'images/course_default_img.jpg':base_url('uploads/course_img/'.$c['page_img']) ?>" alt="" width="160"></a></div>
 						<div class="listText">

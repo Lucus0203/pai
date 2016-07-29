@@ -9,8 +9,7 @@
                 <p class="opBtn">
 <?php if($loginInfo['role']==1||$roleInfo['courseedit']==1){ ?>
                     <a href="<?php echo site_url('course/courseedit/'.$course['id']);?>" class="editBtn"><i class="iedit"></i>编辑课程</a><a href="<?php echo site_url('course/coursedel/'.$course['id']);?>" class="delBtn"><i class="idel"></i>删除课程</a>
-<?php } ?>
-<!--                    <a href="javascript:;" class="shareBtn"><i class="ishar"></i>分享课程</a></p>-->
+<?php } ?><?php if($course['ispublic']!=1){ ?><a href="<?php echo site_url('course/coursepublic/'.$course['id']);?>" class="shareBtn"><i class="ishar"></i>发布</a></p><?php } ?>
 
                 <div class="listBox">
                         <div class="listCont listContGray">

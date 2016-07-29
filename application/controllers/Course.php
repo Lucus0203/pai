@@ -638,15 +638,24 @@ class Course extends CI_Controller
     //课程删除
     public function coursedel($id)
     {
-        $logininfo = $this->_logininfo;
         if (!empty($id)) {
-            $logininfo = $this->_logininfo;
             $c = $this->course_model->get_row(array('id' => $id));
-            if ($c['company_code'] == $logininfo['company_code']) {
+            if ($c['company_code'] == $this->_logininfo['company_code']) {
                 $this->course_model->update(array('isdel' => 1), $id);
             }
         }
         redirect(site_url('course/courselist'));
+    }
+
+    //课程发布
+    public function coursepublic($id){
+        if (!empty($id)) {
+            $c = $this->course_model->get_row(array('id' => $id));
+            if ($c['company_code'] == $this->_logininfo['company_code']) {
+                $this->course_model->update(array('ispublic' => 1), $id);
+            }
+        }
+        redirect($_SERVER['HTTP_REFERER']);
     }
 
 
