@@ -23,7 +23,7 @@ class Notifyclass
         $config['smtp_pass'] = 'service';
         $config['smtp_port'] = '25';
         $config['charset'] = 'utf-8';
-        $config['mailtype'] = 'text';
+        $config['mailtype'] = 'html';
         $config['smtp_timeout'] = '5';
         $config['newline'] = "\r\n";
         $this->CI->load->library('email', $config);
@@ -79,10 +79,10 @@ class Notifyclass
             $t2 = date('Y年m月d日', strtotime($course['apply_end']));
             $link = '{unwrap}' . $this->CI->config->item('web_url') . 'course/info/'.$course['id'].'html{/unwrap}';
             $message = <<< EOF
-\t\t依据公司培训计划安排，《{$course['title']}》将于{$t1}举行。现已启动报名工作，报名将在{$t2}截止，点击下面的链接报名吧。
+&nbsp;&nbsp;&nbsp;&nbsp;依据公司培训计划安排，《{$course['title']}》将于{$t1}举行。现已启动报名工作，报名将在{$t2}截止，点击下面的链接报名吧。
 {$link}
-\t\t{$ischeckmsg}
-\t\t为了大家的共同进步，请积极参与！
+&nbsp;&nbsp;&nbsp;&nbsp;{$ischeckmsg}
+&nbsp;&nbsp;&nbsp;&nbsp;为了大家的共同进步，请积极参与！
 
 {$company['name']}
 EOF;
