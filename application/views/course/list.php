@@ -5,6 +5,7 @@ $(document).ready(function(){
                 $('.Wdate').eq(1).val($('.Wdate').eq(0).val());
             }
         });
+		$(function(){$('.shareBtn').click(function(){return confirm('确定发布吗?')});});
 });
 </script>
 <div class="wrap">
