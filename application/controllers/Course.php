@@ -311,8 +311,10 @@ class Course extends CI_Controller
                 $this->db->where('id', $id);
                 $this->db->update('course_apply_list', array('status' => $status));
                 //发送报名成功通知
-                $this->load->library(array('notifyclass'));
-                $this->notifyclass->applysuccess($obj['course_id'], $obj['student_id']);
+                if($status==1){
+                    $this->load->library(array('notifyclass'));
+                    $this->notifyclass->applysuccess($obj['course_id'], $obj['student_id']);
+                }
             }
         }
         redirect($_SERVER['HTTP_REFERER']);

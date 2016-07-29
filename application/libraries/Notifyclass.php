@@ -163,6 +163,7 @@ EOF;
             $this->CI->email->subject($subject);
             $this->CI->email->message($message);
             $this->CI->email->send();
+            $this->CI->email->clear();
 
         }
         //微信通知
