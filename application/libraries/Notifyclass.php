@@ -23,7 +23,7 @@ class Notifyclass
         $config['smtp_pass'] = 'service';
         $config['smtp_port'] = '25';
         $config['charset'] = 'utf-8';
-        $config['mailtype'] = 'html';
+        $config['mailtype'] = 'text';
         $config['smtp_timeout'] = '5';
         $config['newline'] = "\r\n";
         $this->CI->load->library('email', $config);
