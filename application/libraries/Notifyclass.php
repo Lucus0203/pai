@@ -84,7 +84,8 @@ class Notifyclass
 {$ischeckmsg}
 为了大家的共同进步，请积极参与！
 
-{$company['name']}EOF;
+{$company['name']}
+EOF;
             if($company['code']=='100276'){
                 $message.='
 人力资源部';
