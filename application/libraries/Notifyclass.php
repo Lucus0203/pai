@@ -79,19 +79,17 @@ class Notifyclass
             $t2 = date('Y年m月d日', strtotime($course['apply_end']));
             $link = '{unwrap}' . $this->CI->config->item('web_url') . 'course/info/'.$course['id'].'html{/unwrap}';
             $message = <<< EOF
-<body style="text-indent:20px"><p>依据公司培训计划安排，《{$course['title']}》将于{$t1}举行。现已启动报名工作，报名将在{$t2}截止，点击下面的链接报名吧。
+<p style="text-indent:20px">依据公司培训计划安排，《{$course['title']}》将于{$t1}举行。现已启动报名工作，报名将在{$t2}截止，点击下面的链接报名吧。
 <br>{$link}</p>
-<p>{$ischeckmsg}</p>
-<p>为了大家的共同进步，请积极参与！</p>
+<p style="text-indent:20px">{$ischeckmsg}</p>
+<p style="text-indent:20px">为了大家的共同进步，请积极参与！</p>
 
-<br><p>{$company['name']}</p>
+<br><p style="text-indent:20px">{$company['name']}</p>
 EOF;
             if($company['code']=='100276'){
-                $message.='
-<p style="text-indent:20px">人力资源部</p>';
+                $message.='<p style="text-indent:20px">人力资源部</p>';
             }
             $message.='<p style="text-indent:20px">'. date("Y年m月d日").'</p>';
-            $message.='</body>';
             $this->CI->email->from('service@trainingpie.com', '培训派');
             $this->CI->email->to($tomail);//
             $this->CI->email->subject($subject);
