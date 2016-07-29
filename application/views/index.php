@@ -34,11 +34,13 @@
     </div>
     <div class="sideBar">
         <div class="sideBox">
-            <p class="ttl02"><?php echo $loginInfo['company_name'] ?></p>
+            <p class="ttl02"><?php echo $company['name'] ?></p>
             <dl class="dl01">
                 <dt>管理账号：</dt>
                 <dd><?php echo $loginInfo['user_name'] ?>
                     <br><?php echo $loginInfo['real_name'] . ' ' . $loginInfo['mobile'] ?></dd>
+                <dt>公司编号：</dt>
+                <dd><?php echo $loginInfo['company_code'] ?></dd>
             </dl>
         </div>
         <div class="sideBox">

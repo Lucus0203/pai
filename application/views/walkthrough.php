@@ -3,7 +3,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
-        $('#walkthrough').pagewalkthrough({
+        //$('#walkthrough').pagewalkthrough({
+        $('body').pagewalkthrough({
 
             steps: [
                 {
@@ -54,13 +55,15 @@
 
         $('.prev-step').live('click', function (e) {
             $.pagewalkthrough('prev', e);
+            return false;
         });
 
-        $('.next-step').live('click', function (e) {
+        $('#navi-department,#navi-teacher,.next-step').live('click', function (e) {
             $.pagewalkthrough('next', e);
+            return false;
         });
 
-        $('.close-step').live('click', function (e) {
+        $('#navi-course,.close-step').live('click', function (e) {
             $.pagewalkthrough('close');
             $.ajax({
                 type: "post",
@@ -68,6 +71,7 @@
                 success: function (res) {
                 }
             });
+            return false;
         });
 
 
@@ -77,14 +81,14 @@
 <div id="walkthrough">
     <div id="navi-department" style="display:none;">
         <p class="tooltipTitle">第一步：创建学员</p>
-        <p><img src="<?php echo base_url();?>images/walkthrough01.png" width="90%" /></p>
+        <p><img src="<?php echo base_url();?>images/walkthrough01.png" width="80%" /></p>
         <p style="text-align: left;padding: 0 25px;">为您的课程创建第一个学员.</p>
         <br>
         <a href="javascript:;" class="next-step" style="float:right;">下一步</a>
     </div>
     <div id="navi-teacher" style="display:none;">
         <p class="tooltipTitle">第二步：创建讲师</p>
-        <p><img src="<?php echo base_url();?>images/walkthrough02.png" width="90%" /></p>
+        <p><img src="<?php echo base_url();?>images/walkthrough02.png" width="80%" /></p>
         <p style="text-align: left;padding: 0 25px;">谁来上课呢?</p>
         <br>
         <a href="javascript:;" class="prev-step" style="float:left;">上一步</a>
@@ -92,7 +96,7 @@
     </div>
     <div id="navi-course" style="display:none;">
         <p class="tooltipTitle">最后一步：创建课程</p>
-        <p><img src="<?php echo base_url();?>images/walkthrough03.png" width="90%" /></p>
+        <p><img src="<?php echo base_url();?>images/walkthrough03.png" width="80%" /></p>
         <p style="text-align: left;padding: 0 25px;">为您的课程添加一些信息.</p>
         <br>
         <a href="javascript:;" class="prev-step" style="float:left;">上一步</a>

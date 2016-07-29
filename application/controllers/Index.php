@@ -10,7 +10,7 @@ class Index extends CI_Controller
         parent::__construct();
         $this->load->library('session');
         $this->load->helper(array('form', 'url'));
-        $this->load->model(array('user_model', 'course_model', 'teacher_model', 'homework_model'));
+        $this->load->model(array('user_model', 'course_model', 'teacher_model', 'homework_model','company_model'));
 
         $this->_logininfo = $this->session->userdata('loginInfo');
         if (empty($this->_logininfo)) {
@@ -25,7 +25,7 @@ class Index extends CI_Controller
     public function index()
     {
         $logininfo = $this->_logininfo;
-        $this->load->database();
+        $company = $this->company_model->get_row(array('code'=>$logininfo['company_code']));
         $sql = "select c.*,t.name as teacher from " . $this->db->dbprefix('course') . " c "
             . "left join " . $this->db->dbprefix('teacher') . " t on c.teacher_id=t.id "
             . "where c.company_code = " . $logininfo['company_code'] . " and c.isdel=2 ";
@@ -46,7 +46,7 @@ class Index extends CI_Controller
         $courses = $query->result_array();
 
         $this->load->view('header');
-        $this->load->view('index', array('courses_num' => $courses_num, 'teachers_num' => $teachers_num, 'students_num' => $students_num, 'adms_num' => $adms_num, 'courses' => $courses));
+        $this->load->view('index', compact('courses_num', 'teachers_num', 'students_num', 'adms_num', 'courses','company'));
         $this->load->view('footer');
     }
 
