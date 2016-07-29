@@ -79,19 +79,19 @@ class Notifyclass
             $t2 = date('Y年m月d日', strtotime($course['apply_end']));
             $link = '{unwrap}' . $this->CI->config->item('web_url') . 'course/info/'.$course['id'].'html{/unwrap}';
             $message = <<< EOF
-&nbsp;&nbsp;&nbsp;&nbsp;依据公司培训计划安排，《{$course['title']}》将于{$t1}举行。现已启动报名工作，报名将在{$t2}截止，点击下面的链接报名吧。
-{$link}
-&nbsp;&nbsp;&nbsp;&nbsp;{$ischeckmsg}
-&nbsp;&nbsp;&nbsp;&nbsp;为了大家的共同进步，请积极参与！
+<br>&nbsp;&nbsp;&nbsp;&nbsp;依据公司培训计划安排，《{$course['title']}》将于{$t1}举行。现已启动报名工作，报名将在{$t2}截止，点击下面的链接报名吧。
+<br>{$link}
+<br>&nbsp;&nbsp;&nbsp;&nbsp;{$ischeckmsg}
+<br>&nbsp;&nbsp;&nbsp;&nbsp;为了大家的共同进步，请积极参与！
 
-{$company['name']}
+<br><br>{$company['name']}
 EOF;
             if($company['code']=='100276'){
                 $message.='
-人力资源部';
+<br>人力资源部';
             }
             $message.='
-'. date("Y年m月d日");
+<br>'. date("Y年m月d日");
             $this->CI->email->from('service@trainingpie.com', '培训派');
             $this->CI->email->to($tomail);//
             $this->CI->email->subject($subject);
