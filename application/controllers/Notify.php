@@ -14,7 +14,7 @@ class Notify extends CI_Controller {
                 $config['smtp_pass']    = 'service';  
                 $config['smtp_port']    = '25';  
                 $config['charset']      = 'utf-8';  
-                $config['mailtype']     = 'text';  
+                $config['mailtype']     = 'html';
                 $config['smtp_timeout'] = '5';  
                 $config['newline'] = "\r\n";
                 $this->load->library ('email', $config);
@@ -31,7 +31,7 @@ class Notify extends CI_Controller {
                     }
                     $subject="《{$c['title']}》即将开课";
                     $company = $this->CI->company_model->get_row(array('code' => $c['company_code']));
-                    $teacher=$this->teacher_model->get_row(array('id'=>$c['teacher_id']));
+                    $t=date('m月d日', strtotime($c['time_start']));
                     $this->load->database ();
                     $sql="select s.* from ".$this->db->dbprefix('student')." s left join ".$this->db->dbprefix('course_apply_list')." a on s.id=a.student_id where a.course_id=".$c['id']." and a.status=1 ";
                     $query = $this->db->query ($sql);
@@ -41,9 +41,9 @@ class Notify extends CI_Controller {
                         if (!empty($s['mobile'])) {
                             $this->CI->load->library('chuanlansms');
                             $msg = "
-你已成功报名参加《{$subject}》课程。该课程将于" . date('m月d日', strtotime($c['time_start'])) . "在" . $c['address'] . "举行，请安排好工作，或做好出差计划，准时参加课程。
-    上课前，请做好课前作业，提交给我们。
-    签到在开课前2小时生效，别忘了签到哦，谢谢！
+你已成功报名参加《{$subject}》课程。该课程将于{$t}在{$c['address']}举行，请安排好工作，或做好出差计划，准时参加课程。
+上课前，请做好课前作业，提交给我们。
+签到在开课前2小时生效，别忘了签到哦，谢谢！
 
 " . $company['name'];
                             if($company['code']=='100276'){
@@ -58,20 +58,16 @@ class Notify extends CI_Controller {
                         //mail
                         if (!empty($s['email'])) {
                             $tomail = $s['email'];
-                            $message = "
-亲爱的{$s['name']}:
-    
-            《{$c['title']}》课程将于" . date('m月d日H点', strtotime($c['time_start'])) . "在{$c['address']}举行，请安排好工作，或做好出差计划，准时参加课程。
-上课前，请做好课前作业，提交给我们。
-签到在开课前2小时生效，别忘了签到哦，谢谢！
+                            $message = "亲爱的{$s['name']}:
+<p style=\"text-indent:20px\">《{$c['title']}》课程将于{$t}在{$c['address']}举行，请安排好工作，或做好出差计划，准时参加课程。</p>
+<p style=\"text-indent:20px\">上课前，请做好课前作业，提交给我们。</p>
+<p style=\"text-indent:20px\">签到在开课前2小时生效，别忘了签到哦，谢谢！</p>
 
-" . $company['name'];
+<p>" . $company['name'].'</p>';
                             if($company['code']=='100276'){
-                                $message.="
-人力资源部";
+                                $message.='<p>人力资源部</p>';
                             }
-                            $message.="
-". date("Y年m月d日");
+                            $message.='<p>'. date("Y年m月d日").'</p>';
                             $this->email->from('service@trainingpie.com', '培训派');
                             $this->email->to($tomail);//
                             $this->email->subject($subject);

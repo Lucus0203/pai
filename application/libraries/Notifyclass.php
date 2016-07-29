@@ -99,7 +99,7 @@ EOF;
             //发送给学员
             foreach ($students as $student) {
                 if(!empty($student['email'])){
-                    $studentname="亲爱的{$student['name']}同仁：";
+                    $studentname="亲爱的{$student['name']}：";
                     $this->CI->email->from('service@trainingpie.com', '培训派');
                     $this->CI->email->to($student['email']);
                     $this->CI->email->subject($subject);
@@ -123,13 +123,13 @@ EOF;
         $student = $this->CI->student_model->get_row(array('id' => $studentid));
         $company = $this->CI->company_model->get_row(array('code' => $student['company_code']));
 
-        $t1 = date('Y年m月d日H时', strtotime($course['time_start']));//举行时间
+        $t = date('Y年m月d日H时', strtotime($course['time_start']));//举行时间
         $link = $this->CI->config->item('web_url') .'course/survey/' . $course['id'] . '.html';//链接
         //短信通知
         if (!empty($student['mobile'])&&$course['notice_type_msg']==1) {
             $this->CI->load->library('chuanlansms');
             $msg = "亲爱的{$student['name']}：
-你已成功报名参加《{$course['title']}》，该课程将于{$t1}在{$course['address']}举行，请提前安排好工作或出差行程，准时参加培训。
+你已成功报名参加《{$course['title']}》，该课程将于{$t}在{$course['address']}举行，请提前安排好工作或出差行程，准时参加培训。
 上课前请先完成课前调研表（{$link}）和课前作业并提交给我们。
 预祝学习愉快，收获满满！
 
@@ -149,7 +149,7 @@ EOF;
             $tomail = $student['email'];
             $subject = "《{$course['title']}》报名成功";
             $message = "亲爱的{$student['name']}：
-<p style=\"text-indent:20px\">你已成功报名参加《{$course['title']}》，该课程将于{$t1}在{$course['address']}举行，请提前安排好工作或出差行程，准时参加培训。</p>
+<p style=\"text-indent:20px\">你已成功报名参加《{$course['title']}》，该课程将于{$t}在{$course['address']}举行，请提前安排好工作或出差行程，准时参加培训。</p>
 <p style=\"text-indent:20px\">上课前请先完成课前调研表（{$link}）和课前作业并提交给我们。</p>
 <p style=\"text-indent:20px\">预祝学习愉快，收获满满！</p>
 
