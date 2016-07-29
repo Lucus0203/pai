@@ -40,6 +40,9 @@ class Notifyclass
         $user = $this->CI->user_model->get_row(array('id' => $course['user_id']));
         $company = $this->CI->company_model->get_row(array('code'=>$user['company_code']));
         $ischeckmsg=($course['apply_check']==1)?'报名经你的上级领导审核通过后，我们将另行发送报名成功通知。':'';
+        $t1 = date('Y年m月d日H时', strtotime($course['time_start']));//举行时间
+        $t2 = date('Y年m月d日H时', strtotime($course['apply_end']));//截止时间
+        $link = $this->CI->config->item('web_url') . 'course/info/'.$course['id'].'html';//链接
         //短信通知
         if($course['notice_type_msg']==1){
             $studentsarr = explode(',', $course['targetstudent']);
@@ -54,8 +57,8 @@ class Notifyclass
             }
             if(!empty($studentmobiles)){
                 $this->CI->load->library('chuanlansms');
-                $msg="依据公司培训计划安排，《{$course['title']}》将于" . date('Y年m月d日H时', strtotime($course['time_start'])) . "举行。现已启动报名工作，报名将在" . date('Y年m月d日', strtotime($course['apply_end'])) . "截止，点击下面的链接报名吧。
-" . $this->CI->config->item('web_url') . 'course/info/' . $course['id'] . ".html
+                $msg="依据公司培训计划安排，《{$course['title']}》将于{$t1}举行。现已启动报名工作，报名将在{$t2}截止，点击下面的链接报名吧。
+{$link}
 {$ischeckmsg}
 为了大家的共同进步，请积极参与！
 
@@ -75,21 +78,18 @@ class Notifyclass
             $tomail = $user['email'];
             $subject = "《{$course['title']}》开启报名";
             $studentname="亲爱的{$user['real_name']}：";
-            $t1 = date('Y年m月d日H时', strtotime($course['time_start']));
-            $t2 = date('Y年m月d日', strtotime($course['apply_end']));
-            $link = '{unwrap}' . $this->CI->config->item('web_url') . 'course/info/'.$course['id'].'html{/unwrap}';
             $message = <<< EOF
 <p style="text-indent:20px">依据公司培训计划安排，《{$course['title']}》将于{$t1}举行。现已启动报名工作，报名将在{$t2}截止，点击下面的链接报名吧。
-<br>{$link}</p>
+<br>{unwrap}{$link}{/unwrap}</p>
 <p style="text-indent:20px">{$ischeckmsg}</p>
 <p style="text-indent:20px">为了大家的共同进步，请积极参与！</p>
 
-<br><p style="text-indent:20px">{$company['name']}</p>
+<br><p>{$company['name']}</p>
 EOF;
             if($company['code']=='100276'){
-                $message.='<p style="text-indent:20px">人力资源部</p>';
+                $message.='<p>人力资源部</p>';
             }
-            $message.='<p style="text-indent:20px">'. date("Y年m月d日").'</p>';
+            $message.='<p>'. date("Y年m月d日").'</p>';
             $this->CI->email->from('service@trainingpie.com', '培训派');
             $this->CI->email->to($tomail);//
             $this->CI->email->subject($subject);
@@ -123,12 +123,14 @@ EOF;
         $student = $this->CI->student_model->get_row(array('id' => $studentid));
         $company = $this->CI->company_model->get_row(array('code' => $student['company_code']));
 
+        $t1 = date('Y年m月d日H时', strtotime($course['time_start']));//举行时间
+        $link = $this->CI->config->item('web_url') .'course/survey/' . $course['id'] . '.html';//链接
         //短信通知
         if (!empty($student['mobile'])&&$course['notice_type_msg']==1) {
             $this->CI->load->library('chuanlansms');
             $msg = "亲爱的{$student['name']}：
-你已成功报名参加《{$course['title']}》，该课程将于" . date('Y年m月d日H时', strtotime($course['time_start'])) . "在" . $course['address'] . "举行，请提前安排好工作或出差行程，准时参加培训。
-上课前请先完成课前调研表（" . $this->CI->config->item('web_url') .'course/survey/' . $course['id'] . ".html）和课前作业并提交给我们。
+你已成功报名参加《{$course['title']}》，该课程将于{$t1}在{$course['address']}举行，请提前安排好工作或出差行程，准时参加培训。
+上课前请先完成课前调研表（{$link}）和课前作业并提交给我们。
 预祝学习愉快，收获满满！
 
 " . $company['name'];
@@ -147,17 +149,15 @@ EOF;
             $tomail = $student['email'];
             $subject = "《{$course['title']}》报名成功";
             $message = "亲爱的{$student['name']}：
-            你已成功报名参加《{$course['title']}》，该课程将于" . date('Y年m月d日H时', strtotime($course['time_start'])) . "在" . $course['address'] . "举行，请提前安排好工作或出差行程，准时参加培训。
-上课前请先完成课前调研表（" . $this->CI->config->item('web_url') .'course/survey/' . $course['id'] . ".html）和课前作业并提交给我们。
-预祝学习愉快，收获满满！
+<p style=\"text-indent:20px\">你已成功报名参加《{$course['title']}》，该课程将于{$t1}在{$course['address']}举行，请提前安排好工作或出差行程，准时参加培训。</p>
+<p style=\"text-indent:20px\">上课前请先完成课前调研表（{$link}）和课前作业并提交给我们。</p>
+<p style=\"text-indent:20px\">预祝学习愉快，收获满满！</p>
 
-".$company['name'];
+<p>".$company['name'].'</p>';
             if($company['code']=='100276'){
-                $message.="
-人力资源部";
+                $message.='<p>人力资源部</p>';
             }
-            $message.="
-". date("Y年m月d日");
+            $message.='<p>'. date("Y年m月d日").'</p>';
             $this->CI->email->from('service@trainingpie.com', '培训派');
             $this->CI->email->to($tomail);//
             $this->CI->email->subject($subject);
