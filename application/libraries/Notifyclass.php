@@ -39,7 +39,7 @@ class Notifyclass
         }
         $user = $this->CI->user_model->get_row(array('id' => $course['user_id']));
         $company = $this->CI->company_model->get_row(array('code'=>$user['company_code']));
-        $ischeckmsg=($course['apply_check']==1)?'报名需经您的上级领导审核，通过后另行通知。':'';
+        $ischeckmsg=($course['apply_check']==1)?'报名需经您的上级领导审核，通过后另行通知。':'报名成功后我们将另行通知。';
         $t1 = date('m月d日H时', strtotime($course['time_start']));//举行时间
         $t2 = date('m月d日H时', strtotime($course['apply_end']));//截止时间
         $link = $this->CI->config->item('web_url') . 'course/info/'.$course['id'].'.html';//链接
