@@ -56,7 +56,7 @@ class Notifyclass
                 if(!empty($student['email'])){
                     $students[]=$student;
                 }
-                if($student['status']==1){
+                if($student['register_flag']==1){
                     $pass=rand(100000,999999);
                     $accountmsg='账号：'.$student['mobile'].'
 密码：'.$pass.'
