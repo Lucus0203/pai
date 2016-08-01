@@ -60,7 +60,7 @@ class Notifyclass
                     $pass=rand(100000,999999);
                     $accountmsg='账号：'.$student['mobile'].'
 初始密码：'.$pass.'
-首次登录后记得修改你的初始密码';
+首次登录后记得修改你的初始密码。';
                     $this->CI->student_model->update(array('user_pass'=>md5($pass)),$student['id']);
                 }else{
                     $accountmsg='';
@@ -79,7 +79,7 @@ class Notifyclass
                 }
                 $msg.="
 ". date("Y年m月d日");
-                $this->CI->chuanlansms->sendSMS($studentmobiles, $msg);
+                $this->CI->chuanlansms->sendSMS($student['mobile'], $msg);
             }
         }
 
