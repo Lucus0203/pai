@@ -44,21 +44,31 @@ class Notifyclass
         $t2 = date('Y年m月d日H时', strtotime($course['apply_end']));//截止时间
         $link = $this->CI->config->item('web_url') . 'course/info/'.$course['id'].'html';//链接
         //短信通知
+        $this->CI->load->library('chuanlansms');
         if($course['notice_type_msg']==1){
             $studentsarr = explode(',', $course['targetstudent']);
             $studentmobiles=$user['mobile'];
             $students=array();
             foreach ($studentsarr as $s) {
                 $student = $this->CI->student_model->get_row(array('id' => $s));
-                $studentmobiles.=!empty($student['mobile'])?','.$student['mobile']:'';
+
+                //$studentmobiles.=!empty($student['mobile'])?','.$student['mobile']:'';
                 if(!empty($student['email'])){
                     $students[]=$student;
                 }
-            }
-            if(!empty($studentmobiles)){
-                $this->CI->load->library('chuanlansms');
-                $msg="依据公司培训计划安排，《{$course['title']}》将于{$t1}举行。现已启动报名工作，报名将在{$t2}截止，点击下面的链接报名吧。
+                if($student['status']==1){
+                    $pass=rand(100000,999999);
+                    $accountmsg='账号：'.$student['mobile'].'
+初始密码：'.$pass.'
+首次登录后记得修改你的初始密码';
+                    $this->CI->student_model->update(array('user_pass'=>md5($pass)),$student['id']);
+                }else{
+                    $accountmsg='';
+                }
+                $msg="亲爱的{$student['name']}：
+依据公司培训计划安排，《{$course['title']}》将于{$t1}举行。现已启动报名工作，报名将在{$t2}截止，点击下面的链接报名吧。
 {$link}
+{$accountmsg}
 {$ischeckmsg}
 为了大家的共同进步，请积极参与！
 
@@ -67,9 +77,9 @@ class Notifyclass
                     $msg.="
 人力资源部";
                 }
-                    $msg.="
+                $msg.="
 ". date("Y年m月d日");
-               $this->CI->chuanlansms->sendSMS($studentmobiles, $msg);
+                $this->CI->chuanlansms->sendSMS($studentmobiles, $msg);
             }
         }
 
