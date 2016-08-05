@@ -253,8 +253,7 @@ class Login extends CI_Controller
         } else {
             $this->user_model->create(array('mobile' => $mobile, 'mobile_code' => $code, 'created' => date("Y-m-d H:i:s"), 'status' => 1));
         }
-        echo '1';
-        $this->chuanlansms->sendSMS($mobile, '验证码:'.$code);
+        $this->chuanlansms->sendSMS($mobile, '您的验证码是:'.$code.',5分钟有效,请勿将验证码泄露给他人');
     }
 
     public function loginout()
