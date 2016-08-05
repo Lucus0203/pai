@@ -1,14 +1,36 @@
 <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css"/>
 <script type="text/javascript">
-    var currentTargetIndex=0;
+    currentTargetIndex=0;
     $(function(){
         //选择对象
         $('.addTarget').click(function () {
             currentTargetIndex=$('.addTarget').index($(this));
+            //初始化弹窗
+            var targetone = $('input[name=targetone]').eq(currentTargetIndex).val();
+            var strarr = targetone.split(',');
+            $('ul.oneUl').find('input').removeAttr('checked');
+            for (var i = 0; i < strarr.length; i++) {
+                $('ul.oneUl').find('input[value=' + strarr[i] + ']').attr('checked', 'checked');
+            }
+
+            var targettwo = $('input[name=targettwo]').eq(currentTargetIndex).val();
+            var strarr = targettwo.split(',');
+            $('ul.twoUl').find('input').removeAttr('checked');
+            for (var i = 0; i < strarr.length; i++) {
+                $('ul.twoUl').find('input[value=' + strarr[i] + ']').attr('checked', 'checked');
+            }
+
+            var targetstudent = $('input[name=targetstudent]').eq(currentTargetIndex).val();
+            var strarr = targetstudent.split(',');
+            $('ul.threeUl').find('input').removeAttr('checked');
+            for (var i = 0; i < strarr.length; i++) {
+                $('ul.threeUl').find('input[value=' + strarr[i] + ']').attr('checked', 'checked');
+            }
             $('#conWindow').show();
+            resetconWindow();
             return false;
         });
-        $('#popConClose,a.okBtn').click(function () {
+        $('#popConClose').click(function () {
             $('#conWindow').hide();
             return false;
         });
@@ -143,12 +165,33 @@
                 if (arr[i].length == 0) arr.splice(i, 1);
             }
             $('input[name=' + inputname + ']').eq(currentTargetIndex).val(arr.join(','));
-            var targetstr = '';
-            $('ul.oneUl input:checked,ul.twoUl input:checked,ul.threeUl input:checked').each(function () {
-                targetstr += $(this).parent().text() + ',';
-            });
-            $('.target').eq(currentTargetIndex).text(targetstr.slice(0, -1));
+            resetconWindow();
         }
+        //调整弹窗列数
+        function resetconWindow(){
+            if($('#conMessage .twoUl li').length<=0){
+                $('#conMessage .twoUl').hide();
+                $('#conMessage .oneUl,#conMessage .threeUl').width('45%');
+            }else{
+                $('#conMessage .oneUl,#conMessage .threeUl').width('33%');
+                $('#conMessage .twoUl').show();
+            }
+        }
+        $('a.okBtn').click(function () {
+            $(this).text('请稍后..');
+            $.ajax({
+                type: "post",
+                url: '<?php echo site_url('ability/updateTarget') ?>',
+                data: {'jobid': $('input[name=jobid]').eq(currentTargetIndex).val(),'targetone':$('input[name=targetone]').eq(currentTargetIndex).val(),'targettwo':$('input[name=targettwo]').eq(currentTargetIndex).val(),'targetstudent':$('input[name=targetstudent]').eq(currentTargetIndex).val()},
+                async: false,
+                success: function (res) {
+                    $('.target').eq(currentTargetIndex).text(res);
+                }
+            });
+            $(this).text('确定');
+            $('#conWindow').hide();
+            return false;
+        });
 
     });
 </script>
@@ -162,29 +205,40 @@
         </div>
 
         <div class="p15">
-            <p class="clearfix f14 mb20">共3个岗位能力</p>
+            <p class="clearfix f14 mb20">共<?php echo $total_rows ?>个岗位能力</p>
             <table cellspacing="0" class="listTable">
                 <col width="10%">
                 <col width="50%">
+                <col width="10%">
                 <col width="10%">
                 <tbody>
                 <tr>
                     <th class="center">岗位</th>
                     <th class="center">匹配人员</th>
+                    <th class="center">状态</th>
                     <th class="center">操作</th>
 
                 </tr>
                 <?php foreach ($jobs as $job) { ?>
                     <tr>
                         <td class="aCenter"><a class="blue" href="<?php echo site_url('ability/show/'.$job['id']) ?>"><?php echo $job['name'] ?></a></td>
-                        <td>
-                            <input type="hidden" name="targetone" value="<?php echo $job['targetone'] ?>"/>
-                            <input type="hidden" name="targettwo" value="<?php echo $job['targettwo'] ?>"/>
-                            <input type="hidden" name="targetstudent" value="<?php echo $job['targetstudent'] ?>"/>
-                            <span class="target"><?php echo $job['target'] ?></span>
+                        <td class="aCenter">
+                            <input type="hidden" name="jobid" value="<?php echo $job['id'] ?>"/>
+                            <input type="hidden" name="targetone" value="<?php echo $job['target_one'] ?>"/>
+                            <input type="hidden" name="targettwo" value="<?php echo $job['target_two'] ?>"/>
+                            <input type="hidden" name="targetstudent" value="<?php echo $job['target_student'] ?>"/>
+                            <a class="blue target" href="<?php echo site_url('ability/targets/'.$job['id']) ?>"><?php echo $res = mb_strlen($job['target'], 'utf-8') > 20 ? mb_substr( $job['target'],0,40,"utf-8").'...':$job['target']; ?></a>
                         </td>
                         <td class="aCenter">
-                            <a href="#" class="blue addTarget">匹配</a>
+                            <?php echo $job['status']==1?'发布':'未发布' ?>
+                        </td>
+                        <td class="aCenter">
+                            <a href="#" class="blue addTarget">匹配</a>&nbsp;&nbsp;
+                            <?php if($job['status']==1){ ?>
+                                <a class="blue" href="<?php echo site_url('ability/unpublish/'.$job['id']) ?>">不发布</a>
+                            <?php }else{ ?>
+                                <a class="blue" href="<?php echo site_url('ability/publish/'.$job['id']) ?>">发布</a>
+                            <?php } ?>
                         </td>
                     </tr>
                 <?php } ?>
