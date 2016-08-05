@@ -24,6 +24,23 @@
  	
  }
  
+ .toporangebtn{ 
+	border:  1px solid #ff7200;
+ 	border-radius: 2px; display: block; 
+ 	color: #ff7200;
+ 	line-height: 35px;
+ 	font-size: 16px;
+ 	text-align:  center;
+ 	margin-bottom: 20px;
+ }
+ 
+ .toporangebtn:hover{
+ 	background-color: #ff7200;
+ 	color: #fff;
+ 	
+ }
+ 
+ 
  .textureSide .flink{
  	font-size: 16px;
  	background-color: #f5f5f5;
@@ -66,10 +83,6 @@
 .textureSide .fnavi ul.clink li a{
 	padding: 0 10px;
 	color: #747474;
-}
-
-.textureSide .fnavi ul.clink li.on a {
-    color: #09bed5;
 }
 
 .textureSide .fnavi ul.clink li a:hover{

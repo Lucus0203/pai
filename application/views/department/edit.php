@@ -184,6 +184,7 @@
                 </ul>
             </div>
         <?php } ?>
+        <a href="<?php echo site_url('ability/index') ?>" class="toporangebtn mt20">能力评估管理</a>
     </div>
     <div class="textureCont">
         <?php if (!empty($current_department)) { ?>

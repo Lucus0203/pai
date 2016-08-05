@@ -44,10 +44,10 @@ class Department_model extends CI_Model {
 		$this->db->delete ( 'department' );
 	}
         
-        //查找数量
-        public function get_count($where=FALSE){
-		$this->db->where ($where);
-               return $this->db->count_all_results('department');
-        }
+    //查找数量
+    public function get_count($where=FALSE){
+    $this->db->where ($where);
+           return $this->db->count_all_results('department');
+    }
 	
 }
