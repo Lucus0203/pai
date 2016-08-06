@@ -2,7 +2,7 @@
 <div class="wrap">
     <div class="textureCont w960">
 
-        <div class="texturetip clearfix"><span class="fLeft"><?php $abilityjob['name'] ?>评估</span>
+        <div class="texturetip clearfix"><span class="fLeft"><?php echo $abilityjob['name'] ?>评估</span>
             <div class="fRight">
                 <a class="borBlueBtnH28" href="<?php echo site_url('ability/index') ?>">返回</a>
             </div>

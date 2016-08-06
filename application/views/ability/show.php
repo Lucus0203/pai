@@ -1,5 +1,5 @@
 <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css"/>
-<script type="text/javascript" src="<?php echo base_url(); ?>js/Chart.bundle.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>js/Chart.bundle.min.js"></script>
 <style>
     canvas {
         -moz-user-select: none;

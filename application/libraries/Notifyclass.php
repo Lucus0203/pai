@@ -39,26 +39,36 @@ class Notifyclass
         }
         $user = $this->CI->user_model->get_row(array('id' => $course['user_id']));
         $company = $this->CI->company_model->get_row(array('code'=>$user['company_code']));
-        $ischeckmsg=($course['apply_check']==1)?'报名经你的上级领导审核通过后，我们将另行发送报名成功通知。':'';
-        $t1 = date('Y年m月d日H时', strtotime($course['time_start']));//举行时间
-        $t2 = date('Y年m月d日H时', strtotime($course['apply_end']));//截止时间
-        $link = $this->CI->config->item('web_url') . 'course/info/'.$course['id'].'html';//链接
+        $ischeckmsg=($course['apply_check']==1)?'报名需经您的上级领导审核，通过后另行通知。':'报名成功后我们将另行通知。';
+        $t1 = date('m月d日H时', strtotime($course['time_start']));//举行时间
+        $t2 = date('m月d日H时', strtotime($course['apply_end']));//截止时间
+        $link = $this->CI->config->item('web_url') . 'course/info/'.$course['id'].'.html';//链接
         //短信通知
+        $this->CI->load->library('chuanlansms');
         if($course['notice_type_msg']==1){
             $studentsarr = explode(',', $course['targetstudent']);
             $studentmobiles=$user['mobile'];
             $students=array();
             foreach ($studentsarr as $s) {
                 $student = $this->CI->student_model->get_row(array('id' => $s));
-                $studentmobiles.=!empty($student['mobile'])?','.$student['mobile']:'';
+
+                //$studentmobiles.=!empty($student['mobile'])?','.$student['mobile']:'';
                 if(!empty($student['email'])){
                     $students[]=$student;
                 }
-            }
-            if(!empty($studentmobiles)){
-                $this->CI->load->library('chuanlansms');
-                $msg="依据公司培训计划安排，《{$course['title']}》将于{$t1}举行。现已启动报名工作，报名将在{$t2}截止，点击下面的链接报名吧。
+                if($student['register_flag']==1){
+                    $pass=rand(100000,999999);
+                    $accountmsg='账号：'.$student['mobile'].'
+密码：'.$pass.'
+记得修改密码。';
+                    $this->CI->student_model->update(array('user_pass'=>md5($pass)),$student['id']);
+                }else{
+                    $accountmsg='';
+                }
+                $msg="亲爱的{$student['name']}：
+依据公司安排，《{$course['title']}》将于{$t1}举行。报名已启动，将在{$t2}截止，点击报名：
 {$link}
+{$accountmsg}
 {$ischeckmsg}
 为了大家的共同进步，请积极参与！
 
@@ -67,9 +77,9 @@ class Notifyclass
                     $msg.="
 人力资源部";
                 }
-                    $msg.="
+                $msg.="
 ". date("Y年m月d日");
-               $this->CI->chuanlansms->sendSMS($studentmobiles, $msg);
+                $this->CI->chuanlansms->sendSMS($student['mobile'], $msg);
             }
         }
 
