@@ -15,7 +15,7 @@ class Notifyclass
         $this->CI =& get_instance();
         $this->CI->load->library(array('wechat'));
         $this->CI->load->helper(array('form', 'url'));
-        $this->CI->load->model(array('user_model', 'company_model', 'course_model', 'teacher_model', 'homework_model', 'survey_model', 'ratings_model', 'student_model', 'department_model'));
+        $this->CI->load->model(array('user_model', 'company_model', 'course_model', 'teacher_model', 'homework_model', 'survey_model', 'ratings_model', 'student_model', 'department_model','abilityjob_model'));
 
         $config['protocol'] = 'smtp';
         $config['smtp_host'] = '127.0.0.1';
@@ -47,12 +47,9 @@ class Notifyclass
         $this->CI->load->library('chuanlansms');
         if($course['notice_type_msg']==1){
             $studentsarr = explode(',', $course['targetstudent']);
-            $studentmobiles=$user['mobile'];
             $students=array();
             foreach ($studentsarr as $s) {
                 $student = $this->CI->student_model->get_row(array('id' => $s));
-
-                //$studentmobiles.=!empty($student['mobile'])?','.$student['mobile']:'';
                 if(!empty($student['email'])){
                     $students[]=$student;
                 }
@@ -203,6 +200,54 @@ EOF;
                 )
             );
             $res = $this->CI->wechat->templateSend($student['openid'], 'yFfIfh1EPvvpyeNplv5n6xBEyn5Em4r5ZYAHoLFnM9E', $this->CI->config->item('web_url') . 'course/survey/' . $course['id'] . '.html', $wxdata);
+        }
+    }
+
+    //能力评估通知
+    public function abilitypublish($ability_job_id,$student_id){
+        $abilityjob = $this->CI->abilityjob_model->get_row(array('id' => $ability_job_id));
+        $student = $this->CI->student_model->get_row(array('id' => $student_id));
+        $company = $this->CI->company_model->get_row(array('code' => $student['company_code']));
+
+        $link = $this->CI->config->item('web_url') .'ability/assess/' . $ability_job_id . '.html';//链接
+        //短信通知
+        if (!empty($student['mobile'])) {
+            $this->CI->load->library('zhidingsms');
+            $msg = "亲爱的{$student['name']}：
+请完成《{$abilityjob['name']}》能力评估（{$link}）并提交给我们。
+预祝学习愉快，收获满满！
+
+" . $company['name'];
+            if($company['code']=='100276'){
+                $msg.="
+人力资源部";
+            }
+            $msg.="
+". date("Y年m月d日");
+            $this->CI->zhidingsms->sendSMS($student['mobile'], $msg);
+        }
+
+        //mail
+        if (!empty($student['email'])) {
+
+            $tomail = $student['email'];
+            $subject = "《{$abilityjob['name']}》能力评估";
+            $message = "亲爱的{$student['name']}：
+<p style='text-indent:40px'>上课前请完成《{$abilityjob['name']}》（<a href='{$link}' target='_blank'>{$link}</a>）并提交给我们。</p>
+<p style='text-indent:40px'>预祝学习愉快，收获满满！</p>
+
+<p style=\"text-align: right;margin-right: 40px;\">".$company['name'].'</p>';
+            if($company['code']=='100276'){
+                $message.='<p style="text-align: right;margin-right: 40px;">人力资源部</p>';
+            }
+            $message.='<p style="text-align: right;margin-right: 40px;">'. date("Y年m月d日").'</p>';
+            $this->CI->email->from('service@trainingpie.com', '培训派');
+            $this->CI->email->to($tomail);//
+            $this->CI->email->subject($subject);
+            $this->CI->email->message($message);
+            $this->CI->email->send();
+            $this->CI->email->clear();
+
         }
     }
 

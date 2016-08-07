@@ -27,6 +27,8 @@ body {
 	background-color: #f6f6f6;
 }
 
+.w960{ width: 960px !important;}
+
 .nobg{ background:  none #f6f6f6 !important;}
 
 table {
@@ -143,6 +145,12 @@ textarea:after {
 .mt5 {
 	margin-top: 5px !important;
 }
+
+
+.mt20{
+	margin-top: 20px !important;
+}
+
 
 .ml0 {
 	margin-left: 0px !important;
@@ -1145,12 +1153,35 @@ textarea:after {
 .secBox ul.threeUl{ background-color: #ffffff; }
 .secBox ul.threeUl li{ border-bottom:  1px solid #ffffff; }
 
+/*能力评估*/
+.blueline{ border-bottom:  2px solid #ececec; font-size: 22px; line-height: 40px; margin-bottom: 10px;} 
+.blueline span{  border-bottom:  1px solid #00bbd3; display:  inline-block; margin-bottom: -1px;}
+.nengli{ overflow: hidden; zoom:1; padding: 20px;}
+.nengli .nengliRight{ width: 300px;  height: 300px; float: right;}
+.nengli .nengliLeft{ float: left; width: 580px;}
+.nengli .txt{ font-size: 16px; line-height: 1.7; color: #3e3e3e; margin-bottom:  10px;}
+.nengli .txt span{ font-size: 20px; display: block;}
+.starBox{ margin-bottom:  40px;}
+.starBox .star { margin-bottom: -2px; margin-left: 5px;}
+.starBox li{ display: inline-block; margin-right: 5px;}
+.starBox li a{ background: url(../images/gray_start.png) no-repeat left top; text-align:  center; width: 32px; height: 44px; padding-top: 5px; font-size: 16px; color: #fff; display: inline-block;}
 
+.starBox li.cur a{ background: url(../images/yellow_start.png) no-repeat left top;}
+.starBox .starTxt{ font-size:  16px; color: #3e3e3e; border:  1px solid #f0f0f0; padding: 10px;border-radius: 5px; background-color: #f8f8f8;}
+.f18{font-size: 18px !important;}
+.f24{font-size: 24px !important;}
+.nengli01{ padding:  20px 20px; width: 920px !important; font-size:  15px; line-height: 1.8;}
+.nengli01 p{ margin-bottom:  20px;}
+.nengli01 .ttl01{ font-size: 30px; color: #666; border:  none; padding: 20px 20px; }
+.nengliBox{ border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom:  10px; overflow: hidden; zoom: 1;}
+.nengli01 .boxl{ float: left;}
+.nengli01 .boxl p{ margin-bottom:  30px;}
+.nengli01 .boxr{ float:  right; width: 323px;}
 
-
-
-
-
+.vmiddle{ vertical-align:  middle;}
+.nengTable{ width:  600px; margin:  0 auto; border-spacing: 0; border-collapse: collapse; border-radius: 5px; line-height:  1.8;}
+.nengTable th{ color: #fff; background-color:  #00bbd3; border: 1px solid #eee; font-weight:  normal; padding: 5px 0; }
+.nengTable td{ text-align: center; border: 1px solid #eee; padding: 5px 0;}
 
 
 

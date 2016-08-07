@@ -90,6 +90,7 @@
         //选择对象
         $('#addTarget').click(function () {
             $('#conWindow').show();
+            resetconWindow();
             return false;
         });
         $('#popConClose,a.okBtn').click(function () {
@@ -232,6 +233,17 @@
                 targetstr += $(this).parent().text() + ',';
             });
             $('input[name=target]').val(targetstr.slice(0, -1));
+            resetconWindow();
+        }
+        //调整弹窗列数
+        function resetconWindow(){
+            if($('#conMessage .twoUl li').length<=0){
+                $('#conMessage .twoUl').hide();
+                $('#conMessage .oneUl,#conMessage .threeUl').width('45%');
+            }else{
+                $('#conMessage .oneUl,#conMessage .threeUl').width('33%');
+                $('#conMessage .twoUl').show();
+            }
         }
 
     });

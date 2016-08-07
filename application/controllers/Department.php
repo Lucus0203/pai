@@ -51,7 +51,7 @@ class Department extends CI_Controller
             }
         }
         $this->load->database();
-        $sql = "select student.*,department.name as department from " . $this->db->dbprefix('student') . " student left join " . $this->db->dbprefix('department') . " department on student.department_id=department.id where student.role != 9 and student.isdel = 2 and student.company_code='{$logininfo['company_code']}' ";
+        $sql = "select student.*,department.name as department from " . $this->db->dbprefix('student') . " student left join " . $this->db->dbprefix('department') . " department on student.department_id=department.id where student.user_name <> '' and student.role != 9 and student.isdel = 2 and student.company_code='{$logininfo['company_code']}' ";
         $sql .= !empty($dpid) ? " and (department_id=".$this->db->escape($dpid)." or department.parent_id = ".$this->db->escape($dpid).") " : '';
         //总人数
         $query = $this->db->query("select count(*) as num from ($sql) s ");
