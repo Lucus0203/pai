@@ -85,7 +85,7 @@
                                 </ul>
                                 <?php for($i=1;$i<=$a['level'];$i++){
                                     if($a['point']==$i){ ?>
-                                <p class="starTxt"><?php echo $a['level_info'.$i] ?></p>
+                                <p class="starTxt"><?php echo nl2br($a['level_info'.$i]) ?></p>
                                 <?php }} ?>
                             </div>
                         <?php } ?>
