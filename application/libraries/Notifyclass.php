@@ -233,10 +233,10 @@ EOF;
             $tomail = $student['email'];
             $subject = "《{$abilityjob['name']}》能力评估";
             $message = "亲爱的{$student['name']}：
-<p style='text-indent:40px'>上课前请完成《{$abilityjob['name']}》（<a href='{$link}' target='_blank'>{$link}</a>）并提交给我们。</p>
+<p style='text-indent:40px'>请完成《{$abilityjob['name']}》能力评估（<a href='{$link}' target='_blank'>{$link}</a>）并提交给我们。</p>
 <p style='text-indent:40px'>预祝学习愉快，收获满满！</p>
 
-<p style=\"text-align: right;margin-right: 40px;\">".$company['name'].'</p>';
+<p style='text-align: right;margin-right: 40px;'>".$company['name'].'</p>';
             if($company['code']=='100276'){
                 $message.='<p style="text-align: right;margin-right: 40px;">人力资源部</p>';
             }
