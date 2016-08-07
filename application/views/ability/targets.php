@@ -25,15 +25,19 @@
                 </tr>
                 <?php foreach ($students as $s) { ?>
                     <tr>
-                        <td class="aCenter"><a class="blue" href="<?php echo site_url('ability/show/'.$job['id']) ?>"><?php echo $s['name'] ?></a></td>
+                        <td class="aCenter"><a class="blue" href="<?php echo site_url('ability/targetdetail/'.$abilityjob['id']).'?s='.$s['id'] ?>"><?php echo $s['name'] ?></a></td>
                         <td class="aCenter">
                             <?php echo $s['parent_department_name'] ?> <?php echo $s['department_name'] ?>
                         </td>
                         <td class="aCenter">
-                            未提交
+                            <?php echo !empty($s['point'])?$s['point']:'未提交' ?>
                         </td>
                         <td class="aCenter">
-                            <a href="#" class="blue addTarget">查看详细</a>
+                            <?php if(!empty($s['point'])){ ?>
+                                <a href="<?php echo site_url('ability/targetdetail/'.$abilityjob['id']).'?s='.$s['id'] ?>" class="blue addTarget">查看详细</a>
+                            <?php }else{ ?>
+                                未提交
+                            <?php } ?>
                         </td>
                     </tr>
                 <?php } ?>

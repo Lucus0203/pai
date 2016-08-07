@@ -2,6 +2,9 @@
 <script type="text/javascript">
     currentTargetIndex=0;
     $(function(){
+        $('#publish').click(function () {
+            return confirm('确定发布并短信提醒评估对象吗?')
+        });
         //选择对象
         $('.addTarget').click(function () {
             currentTargetIndex=$('.addTarget').index($(this));
@@ -178,7 +181,7 @@
             }
         }
         $('a.okBtn').click(function () {
-            $(this).text('请稍后..');
+            $(this).html('请稍后..');
             $.ajax({
                 type: "post",
                 url: '<?php echo site_url('ability/updateTarget') ?>',
@@ -188,7 +191,7 @@
                     $('.target').eq(currentTargetIndex).text(res);
                 }
             });
-            $(this).text('确定');
+            $(this).html('确定');
             $('#conWindow').hide();
             return false;
         });
@@ -237,7 +240,7 @@
                             <?php if($job['status']==1){ ?>
                                 <a class="blue" href="<?php echo site_url('ability/unpublish/'.$job['id']) ?>">不发布</a>
                             <?php }else{ ?>
-                                <a class="blue" href="<?php echo site_url('ability/publish/'.$job['id']) ?>">发布</a>
+                                <a class="blue" id="publish" href="<?php echo site_url('ability/publish/'.$job['id']) ?>">发布</a>
                             <?php } ?>
                         </td>
                     </tr>

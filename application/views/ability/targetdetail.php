@@ -17,7 +17,14 @@
                     label:'<?php echo $abilityjob['name'] ?>',
                     backgroundColor: "rgba(156,224,234,0.7)",
                     pointBackgroundColor: "rgba(220,220,220,1)",
-                    data: [5,5,5,5,5]
+                    data: [<?php if(array_key_exists(1,$chartArr)){ echo $chartArr[1]['point']/$chartArr[1]['level']*5 ?>,<?php } ?>
+                        <?php if(array_key_exists(3,$chartArr)){ echo $chartArr[3]['point']/$chartArr[3]['level']*5 ?>,<?php } ?>
+
+                        <?php if(array_key_exists(5,$chartArr)){ echo $chartArr[5]['point']/$chartArr[5]['level']*5 ?>,<?php } ?>
+
+                        <?php if(array_key_exists(4,$chartArr)){ echo $chartArr[4]['point']/$chartArr[4]['level']*5 ?>,<?php } ?>
+
+                        <?php if(array_key_exists(2,$chartArr)){ echo $chartArr[2]['point']/$chartArr[2]['level']*5 ?>,<?php } ?>]
                 },]
             },
             options: {
@@ -35,19 +42,12 @@
             }
         };
         window.myRadar = new Chart(document.getElementById("canvas"), config);
-
-        $('ul.star li').click(function(){
-            var i=$(this).parent().find('li').index($(this));
-            $(this).addClass('cur').siblings().removeClass('cur');
-            $(this).parent().parent().find('.starTxt').hide().eq(i).show();
-            return false;
-        });
     });
 </script>
 <div class="wrap">
     <div class="textureCont w960">
 
-        <div class="texturetip clearfix"><span class="fLeft mr10"><?php echo $abilityjob['name'] ?></span>
+        <div class="texturetip clearfix"><span class="fLeft mr10"><?php echo $student['name'].'《'.$abilityjob['name'] ?>》能力评估</span>
             <div class="fRight">
                 <a class="borBlueBtnH28" href="<?php echo site_url('ability/index') ?>">返回</a>
             </div>
@@ -78,14 +78,15 @@
                             <div class="starBox">
                                 <ul class="star">
                                     <?php for($i=1;$i<=$a['level'];$i++){?>
-                                    <li <?php if($i==1){ ?>class="cur"<?php } ?>>
+                                    <li <?php if($a['point']==$i){ ?>class="cur"<?php } ?>>
                                         <a href="#"><?php echo $i ?></a>
                                     </li>
                                     <?php } ?>
                                 </ul>
-                                <?php for($i=1;$i<=$a['level'];$i++){?>
-                                <p class="starTxt" <?php if($i>1){ ?>style="display: none;"<?php } ?> ><?php echo $a['level_info'.$i] ?></p>
-                                <?php } ?>
+                                <?php for($i=1;$i<=$a['level'];$i++){
+                                    if($a['point']==$i){ ?>
+                                <p class="starTxt"><?php echo $a['level_info'.$i] ?></p>
+                                <?php }} ?>
                             </div>
                         <?php } ?>
                 <?php } ?>
