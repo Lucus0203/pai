@@ -13,7 +13,7 @@ class Notifyclass
     {
 
         $this->CI =& get_instance();
-        $this->CI->load->library(array('wechat'));
+        $this->CI->load->library(array('wechat','zhidingsms'));
         $this->CI->load->helper(array('form', 'url'));
         $this->CI->load->model(array('user_model', 'company_model', 'course_model', 'teacher_model', 'homework_model', 'survey_model', 'ratings_model', 'student_model', 'department_model','abilityjob_model'));
 
@@ -43,8 +43,10 @@ class Notifyclass
         $t1 = date('m月d日H时', strtotime($course['time_start']));//举行时间
         $t2 = date('m月d日H时', strtotime($course['apply_end']));//截止时间
         $link = $this->CI->config->item('web_url') . 'course/info/'.$course['id'].'.html';//链接
+        $link_short='course/info/'.$course['id'].'.html';
+        $sign=$company['name'];
+        $sign.=($company['code']=='100276')?' 人力资源部':'';
         //短信通知
-        $this->CI->load->library('chuanlansms');
         if($course['notice_type_msg']==1){
             $studentsarr = explode(',', $course['targetstudent']);
             $students=array();
@@ -62,7 +64,7 @@ class Notifyclass
                 }else{
                     $accountmsg='';
                 }
-                $msg="亲爱的{$student['name']}：
+                /*$msg="亲爱的{$student['name']}：
 依据公司安排，《{$course['title']}》将于{$t1}举行。报名已启动，将在{$t2}截止，点击报名：
 {$link}
 {$accountmsg}
@@ -76,7 +78,9 @@ class Notifyclass
                 }
                 $msg.="
 ". date("Y年m月d日");
-                $this->CI->chuanlansms->sendSMS($student['mobile'], $msg);
+                $this->CI->zhidingsms->sendSMS($student['mobile'], $msg);*/
+                $content='@1@='.$student['name'].',@2@='.$course['title'].',@3@='.$t1.',@4@='.$t2.',@5@='.$link_short.',@6@='.$accountmsg.',@7@='.$ischeckmsg.',@8@='.$sign.',@9@='.date("Y年m月d日");
+                $this->CI->zhidingsms->sendTPSMS($student['mobile'], $content,'ZD30018-0002');
             }
         }
 
@@ -132,10 +136,12 @@ EOF;
 
         $t = date('Y年m月d日H时', strtotime($course['time_start']));//举行时间
         $link = $this->CI->config->item('web_url') .'course/survey/' . $course['id'] . '.html';//链接
+        $link_short='course/survey/' . $course['id'].'.html';
+        $sign=$company['name'];
+        $sign.=($company['code']=='100276')?' 人力资源部':'';
         //短信通知
         if (!empty($student['mobile'])&&$course['notice_type_msg']==1) {
-            $this->CI->load->library('chuanlansms');
-            $msg = "亲爱的{$student['name']}：
+            /*$msg = "亲爱的{$student['name']}：
 你已成功报名参加《{$course['title']}》，该课程将于{$t}在{$course['address']}举行，请提前安排好工作或出差行程，准时参加培训。
 上课前请先完成课前调研表（{$link}）和课前作业并提交给我们。
 预祝学习愉快，收获满满！
@@ -147,7 +153,9 @@ EOF;
             }
             $msg.="
 ". date("Y年m月d日");
-            $this->CI->chuanlansms->sendSMS($student['mobile'], $msg);
+            $this->CI->zhidingsms->sendSMS($student['mobile'], $msg);*/
+            $content='@1@='.$student['name'].',@2@='.$course['title'].',@3@='.$t.',@4@='.$course['address'].',@5@='.$link_short.',@6@='.$sign.',@7@='.date("Y年m月d日");
+            $this->CI->zhidingsms->sendTPSMS($student['mobile'], $content,'ZD30018-0003');
         }
 
         //mail
@@ -210,10 +218,12 @@ EOF;
         $company = $this->CI->company_model->get_row(array('code' => $student['company_code']));
 
         $link = $this->CI->config->item('web_url') .'ability/assess/' . $ability_job_id . '/'.$student['company_code'].'.html';//链接
+        $link_short='ability/assess/' . $ability_job_id . '/'.$student['company_code'].'.html';
+        $sign=$company['name'];
+        $sign.=($company['code']=='100276')?' 人力资源部':'';
         //短信通知
         if (!empty($student['mobile'])) {
-            $this->CI->load->library('zhidingsms');
-            $msg = "亲爱的{$student['name']}：
+            /*$msg = "亲爱的{$student['name']}：
 请完成《{$abilityjob['name']}》能力评估（{$link}）并提交给我们。
 预祝学习愉快，收获满满！
 
@@ -224,7 +234,9 @@ EOF;
             }
             $msg.="
 ". date("Y年m月d日");
-            $this->CI->zhidingsms->sendSMS($student['mobile'], $msg);
+            $this->CI->zhidingsms->sendSMS($student['mobile'], $msg);*/
+            $content='@1@='.$student['name'].',@2@='.$abilityjob['name'].',@3@='.$link_short.',@4@='.$sign.',@5@='.date("Y年m月d日");
+            $this->CI->zhidingsms->sendTPSMS($student['mobile'], $content,'ZD30018-0004');
         }
 
         //mail
