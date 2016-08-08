@@ -4,7 +4,7 @@ class Notify extends CI_Controller {
 	
 	function __construct(){
 		parent::__construct();
-		$this->load->library(array('wechat','chuanlansms'));
+		$this->load->library(array('wechat','zhidingsms'));
 		$this->load->helper(array('form','url'));
 		$this->load->model(array('user_model','company_model','course_model','teacher_model','homework_model','survey_model','ratings_model','student_model','department_model'));
                 
@@ -31,7 +31,9 @@ class Notify extends CI_Controller {
                     }
                     $subject="《{$c['title']}》即将开课";
                     $company = $this->CI->company_model->get_row(array('code' => $c['company_code']));
-                    $t=date('m月d日', strtotime($c['time_start']));
+                    $t=date('m月d日H时', strtotime($c['time_start']));
+                    $sign=$company['name'];
+                    $sign.=($company['code']=='100276')?' 人力资源部':'';
                     $this->load->database ();
                     $sql="select s.* from ".$this->db->dbprefix('student')." s left join ".$this->db->dbprefix('course_apply_list')." a on s.id=a.student_id where a.course_id=".$c['id']." and a.status=1 ";
                     $query = $this->db->query ($sql);
@@ -39,9 +41,8 @@ class Notify extends CI_Controller {
                     foreach ($students as $s) {
                         //短信通知
                         if (!empty($s['mobile'])) {
-                            $this->CI->load->library('chuanlansms');
-                            $msg = "
-你已成功报名参加《{$subject}》课程。该课程将于{$t}在{$c['address']}举行，请安排好工作，或做好出差计划，准时参加课程。
+                            /*$msg = "亲爱的{$s['name']}:
+你已成功报名参加《{$subject}》课程即将开课。该课程将于{$t}在{$c['address']}举行，请安排好工作，或做好出差计划，准时参加课程。
 上课前，请做好课前作业，提交给我们。
 签到在开课前2小时生效，别忘了签到哦，谢谢！
 
@@ -52,7 +53,9 @@ class Notify extends CI_Controller {
                             }
                             $msg.="
 ". date("Y年m月d日");
-                            $this->CI->chuanlansms->sendSMS($s['mobile'], $msg);
+                            $this->CI->zhidingsms->sendSMS($s['mobile'], $msg);*/
+                            $content='@1@='.$s['name'].',@2@='.$subject.',@3@='.$t.',@4@='.$c['address'].',@5@='.$sign.',@6@='.date("Y年m月d日");
+                            $this->CI->zhidingsms->sendTPSMS($s['mobile'], $content,'ZD30018-0006');
                         }
 
                         //mail
