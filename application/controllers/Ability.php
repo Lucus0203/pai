@@ -173,7 +173,7 @@ class Ability extends CI_Controller {
         $studentids=$compjob['target_student'];
         if(!empty($studentids)){
             //已经不存在评估的对象改为删除状态
-            $sql = "update ".$this->db->dbprefix('company_ability_job_student')." set isdel = 1 where student_id not in ($studentids) ";
+            $sql = "update ".$this->db->dbprefix('company_ability_job_student')." set isdel = 1 where company_code='".$this->_logininfo['company_code']."' and student_id not in ($studentids) ";
             $this->db->query($sql);
             //循环现有的评估对象,如果已有但是删除状态则更改删除状态,如果无则新增并通知
             $studentids=explode(',',$studentids);
@@ -211,7 +211,7 @@ class Ability extends CI_Controller {
         $page = $this->input->get('per_page', true);
         $page = $page * 1 < 1 ? 1 : $page;
         $page_size = 10;
-        $sql = "select parent_depart.name as parent_department_name ,depart.name as department_name,cajs.point ,student.* from " . $this->db->dbprefix('company_ability_job_student') . " cajs "
+        $sql = "select parent_depart.name as parent_department_name ,depart.name as department_name,cajs.point,student.* from " . $this->db->dbprefix('company_ability_job_student') . " cajs "
             . "left join " .$this->db->dbprefix('student')." student on cajs.student_id = student.id "
             . "left join " .$this->db->dbprefix('department')." parent_depart on student.department_parent_id = parent_depart.id "
             . "left join " .$this->db->dbprefix('department')." depart on student.department_id = depart.id "
@@ -237,10 +237,9 @@ class Ability extends CI_Controller {
     /**
      * 查看评估详情
      */
-    public function targetdetail($abilityjobid){
-        $studentid=$this->input->get('s');
+    public function targetdetail($abilityjobid,$studentid){
         if(empty($studentid)){
-            redirect(site_url('ability/show/'.$abilityjobid));
+            redirect(site_url('ability/targets/'.$abilityjobid));
             return false;
         }
         $student=$this->student_model->get_row(array('id'=>$studentid));
@@ -248,6 +247,10 @@ class Ability extends CI_Controller {
             . "where assess.company_code = '".$this->_logininfo['company_code']."' and assess.ability_job_id=$abilityjobid and student_id=".$studentid;
         $query = $this->db->query($sql);
         $res = $query->result_array();
+        if(count($res)<=0){
+            redirect(site_url('ability/targets/'.$abilityjobid));
+            return false;
+        }
         $abilities=array();
         $chartArr=array();
         foreach ($res as $a){

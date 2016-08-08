@@ -230,7 +230,7 @@
                     </tr>
                     <?php foreach ($students as $s) { ?>
                         <tr>
-                            <td class="blue"><?php echo $s['name'] ?></td>
+                            <td class="blue"><a class="blue" href="<?php echo site_url('student/edit/' . $s['id']) ?>"><?php echo $s['name'] ?></a></td>
                             <td><?php echo $s['job_code'] ?></td>
                             <td><?php echo $s['job_name'] ?></td>
                             <td><?php echo $s['department'] ?></td>

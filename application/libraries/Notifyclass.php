@@ -209,7 +209,7 @@ EOF;
         $student = $this->CI->student_model->get_row(array('id' => $student_id));
         $company = $this->CI->company_model->get_row(array('code' => $student['company_code']));
 
-        $link = $this->CI->config->item('web_url') .'ability/assess/' . $ability_job_id . '.html';//链接
+        $link = $this->CI->config->item('web_url') .'ability/assess/' . $ability_job_id . '/'.$student['company_code'].'.html';//链接
         //短信通知
         if (!empty($student['mobile'])) {
             $this->CI->load->library('zhidingsms');

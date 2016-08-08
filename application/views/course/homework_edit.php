@@ -15,7 +15,7 @@
         })
         function checkform(){
             if($('#anstotal').val()*1>0){
-                return confirm('保存之后需要学员重新填写作业,确认保存吗?')
+                return confirm('保存之后需要学员重新填写作业,确认保存吗?');
             }else{
                 return true;
             }

@@ -25,7 +25,7 @@
                 </tr>
                 <?php foreach ($students as $s) { ?>
                     <tr>
-                        <td class="aCenter"><a class="blue" href="<?php echo site_url('ability/targetdetail/'.$abilityjob['id']).'?s='.$s['id'] ?>"><?php echo $s['name'] ?></a></td>
+                        <td class="aCenter"><?php if(!empty($s['point'])){?><a class="blue" href="<?php echo site_url('ability/targetdetail/'.$abilityjob['id'].'/'.$s['id']) ?>" ><?php echo $s['name'] ?></a> <?php }else{?><?php echo $s['name'] ?><?php } ?> </td>
                         <td class="aCenter">
                             <?php echo $s['parent_department_name'] ?> <?php echo $s['department_name'] ?>
                         </td>
@@ -34,7 +34,7 @@
                         </td>
                         <td class="aCenter">
                             <?php if(!empty($s['point'])){ ?>
-                                <a href="<?php echo site_url('ability/targetdetail/'.$abilityjob['id']).'?s='.$s['id'] ?>" class="blue addTarget">查看详细</a>
+                                <a href="<?php echo site_url('ability/targetdetail/'.$abilityjob['id'].'/'.$s['id']) ?>" class="blue addTarget">查看详细</a>
                             <?php }else{ ?>
                                 未提交
                             <?php } ?>

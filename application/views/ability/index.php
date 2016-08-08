@@ -2,8 +2,8 @@
 <script type="text/javascript">
     currentTargetIndex=0;
     $(function(){
-        $('#publish').click(function () {
-            return confirm('确定发布并短信提醒评估对象吗?')
+        $('.publish').click(function () {
+            return confirm('确定发布并短信提醒评估对象吗?');
         });
         //选择对象
         $('.addTarget').click(function () {
@@ -240,7 +240,7 @@
                             <?php if($job['status']==1){ ?>
                                 <a class="blue" href="<?php echo site_url('ability/unpublish/'.$job['id']) ?>">不发布</a>
                             <?php }else{ ?>
-                                <a class="blue" id="publish" href="<?php echo site_url('ability/publish/'.$job['id']) ?>">发布</a>
+                                <a class="blue publish" href="<?php echo site_url('ability/publish/'.$job['id']) ?>">发布</a>
                             <?php } ?>
                         </td>
                     </tr>
