@@ -105,19 +105,114 @@ class Ability extends CI_Controller {
      * @param $jobid
      */
     public function show($jobid){
+        $company=$this->company_model->get_row(array('code'=>$this->_logininfo['company_code']));
+        $sql = "select job.id,job.name,cpjob.standard_type from " . $this->db->dbprefix('ability_job') . " job "
+            . "left join " .$this->db->dbprefix('company_ability_job')." cpjob on cpjob.ability_job_id = job.id and cpjob.company_code='".$this->_logininfo['company_code']."' "
+            . "left join " .$this->db->dbprefix('company_order')." company_order on company_order.company_code='".$this->_logininfo['company_code']."' and (company_order.features_id = job.id or company_order.features_id=0 ) and company_order.module='ability' "
+            . "where job.status = 1 and (job.type = 1 or job.company_code = " . $this->_logininfo['company_code'] . " or (job.industry_parent_id = '{$company['industry_parent_id']}' and job.industry_id = '{$company['industry_id']}' )) and company_order.checked=1 and (company_order.use_num=0 or company_order.use_num_remain > 0) and (company_order.years=0 or (date_add(company_order.start_time, interval 1 year) > NOW() and company_order.start_time < NOW() ) ) ";
+        $sql.=" and job.id=$jobid ";
+        $query = $this->db->query($sql);
+        $cpjob = $query->row_array();
+        if(empty($cpjob)){//不符合条件则跳转
+            redirect(site_url('ability/index'));
+            return false;
+        }
+        //能力模型详细
         $abilityjob=$this->abilityjob_model->get_row(array('id'=>$jobid));
-        $sql = "select ability.* from " . $this->db->dbprefix('ability_job_model') . " job_model "
+        $sql = "select ability.*,if(cajm.model_name!='',cajm.model_name,ability.name) as model_name,if(cajm.level_standard!='',cajm.level_standard,job_model.level_standard) as level_standard from " . $this->db->dbprefix('ability_job_model') . " job_model "
             . "left join " . $this->db->dbprefix('ability_model') . " ability on ability.id = job_model.model_id "
+            . "left join " . $this->db->dbprefix('company_ability_job_model') . " cajm on cajm.model_id = job_model.model_id and cajm.job_id=$jobid and cajm.company_code='".$this->_logininfo['company_code']."' "
             . "where job_model.job_id = $jobid ";
         $query = $this->db->query($sql . " order by ability.type asc,job_model.id asc ");
         $res = $query->result_array();
-        $abilities=array();
+        $abilities=$levelradar=array();
         foreach ($res as $a){
             $abilities[$a['type']][]=$a;
+            $levelradar[$a['type']]['level_standard']+=$a['level_standard']*1;
+            $levelradar[$a['type']]['level_total']+=$a['level']*1;
         }
+
+        //匹配学员
+        $sql="select student.name,cajs.ability_job_id,cajs.student_id,cajs.status from " . $this->db->dbprefix('company_ability_job_student')." cajs left join ".$this->db->dbprefix('student')." student on cajs.student_id = student.id 
+            where cajs.ability_job_id=$jobid and cajs.company_code='".$this->_logininfo['company_code']."' and cajs.isdel = 2 ";
+        $query = $this->db->query($sql . " order by cajs.id ");
+        $students = $query->result_array();
         $this->load->view ( 'header' );
-        $this->load->view ( 'ability/show',compact('abilities','abilityjob'));
+        $this->load->view ( 'ability/show',compact('abilities','abilityjob','levelradar','students','cpjob'));
         $this->load->view ( 'footer' );
+    }
+
+    /**
+     * 保存新标准
+     */
+    public function saveStandard(){
+        $jobid=$this->input->post('jobid');
+        $levels=$this->input->post('levels');
+        $types=$this->input->post('types');
+        $mids=$this->input->post('mids');
+        $mnames=$this->input->post('mnames');
+        $levels=explode(',',$levels);
+        $types=explode(',',$types);
+        $mids=explode(',',$mids);
+        $mnames=explode(',',$mnames);
+        //判断提交能力模型个数是否和基本岗位模型数量相同
+        $sql = "select count(*) as num from " . $this->db->dbprefix('ability_job_model') . " job_model "
+            . "where job_model.job_id = $jobid ";
+        $query = $this->db->query($sql);
+        $num = $query->row_array();
+        $total_rows = $num['num'];
+        if(empty($mids)||count($mids)!=$total_rows){
+            echo json_encode(array('success'=>'failure','msg'=>'数据正确,保存失败'));
+            return false;
+        }
+        //判断学员是否已提交评估
+        $sql = "select count(*) as num from " . $this->db->dbprefix('company_ability_job_student_assess') . " assess "
+            . "where assess.company_code='".$this->_logininfo['company_code']."' and assess.ability_job_id = $jobid ";
+        $query = $this->db->query($sql);
+        $num = $query->row_array();
+        $total_rows = $num['num'];
+        if($total_rows>0){
+            echo json_encode(array('success'=>'failure','msg'=>'已有学员提交评估,保存失败'));
+            return false;
+        }
+        //清除旧数据
+        $clearsql="DELETE FROM `pai_company_ability_job_model` WHERE `company_code` = '".$this->_logininfo['company_code']."' and `job_id` = $jobid ";
+        $this->db->query($clearsql);
+        //插入新数据
+        $insertsql="INSERT INTO `".$this->db->dbprefix('company_ability_job_model')."` (`company_code`, `type`, `job_id`, `model_id`, `model_name`, `level_standard`, `created`) VALUES ";
+        $datastr='';
+        foreach ($mids as $k=>$mid){
+            $d="('{$this->_logininfo['company_code']}', '{$types[$k]}', '$jobid', '{$mid}', '{$mnames[$k]}', '{$levels[$k]}', '".date('Y-m-d H:i:s')."')";
+            $datastr.=($datastr=='')?$d:','.$d;
+        }
+        $insertsql.=$datastr.';';
+        $this->db->query($insertsql);
+        //更新company_ability_job
+        $this->db->where ( array('company_code'=>$this->_logininfo['company_code'],'ability_job_id'=>$jobid ) );
+        $this->db->update ( 'company_ability_job', array('standard_type'=>2) );
+        echo json_encode(array('success'=>'ok'));
+
+    }
+
+    //重置标准
+    public function resetStandard($jobid){
+        //判断学员是否已提交评估
+        $sql = "select count(*) as num from " . $this->db->dbprefix('company_ability_job_student_assess') . " assess "
+            . "where assess.company_code='".$this->_logininfo['company_code']."' and assess.ability_job_id = $jobid ";
+        $query = $this->db->query($sql);
+        $num = $query->row_array();
+        $total_rows = $num['num'];
+        if($total_rows>0){
+            echo json_encode(array('success'=>'failure','msg'=>'已有学员提交评估,重置失败'));
+            return false;
+        }
+        //清除旧数据
+        $clearsql="DELETE FROM `pai_company_ability_job_model` WHERE `company_code` = '".$this->_logininfo['company_code']."' and `job_id` = $jobid ";
+        $this->db->query($clearsql);
+        //更新company_ability_job
+        $this->db->where ( array('company_code'=>$this->_logininfo['company_code'],'ability_job_id'=>$jobid ) );
+        $this->db->update ( 'company_ability_job', array('standard_type'=>1) );
+        echo json_encode(array('success'=>'ok'));
     }
 
     /**
@@ -252,16 +347,29 @@ class Ability extends CI_Controller {
             return false;
         }
         $abilities=array();
-        $chartArr=array();
+        $studentPoint=array();
         foreach ($res as $a){
             $abilities[$a['type']][]=$a;
-            $chartArr[$a['type']]['point']+=$a['point'];
-            $chartArr[$a['type']]['level']+=$a['level'];
+            $studentPoint[$a['type']]['point']+=$a['point'];
+            $studentPoint[$a['type']]['level']+=$a['level'];
         }
         $abilityjob=$this->abilityjob_model->get_row(array('id'=>$abilityjobid));
 
+        //获取岗位评分标准
+        $sql = "select ability.type,if(cajm.level_standard!='',cajm.level_standard,job_model.level_standard) as level_standard from " . $this->db->dbprefix('ability_job_model') . " job_model "
+            . "left join " . $this->db->dbprefix('ability_model') . " ability on ability.id = job_model.model_id "
+            . "left join " . $this->db->dbprefix('company_ability_job_model') . " cajm on cajm.model_id = job_model.model_id and cajm.job_id=$abilityjobid and cajm.company_code='".$this->_logininfo['company_code']."' "
+            . "where job_model.job_id = $abilityjobid ";
+        $sql.=" order by ability.type asc,job_model.id asc";
+        $query = $this->db->query("select s.type,sum(level_standard) as point_standard from ($sql) s group by s.type ");
+        $res = $query->result_array();
+        $standard=array();
+        foreach ($res as $s){
+            $standard[$s['type']]=$s['point_standard'];
+        }
+
         $this->load->view ( 'header' );
-        $this->load->view ( 'ability/targetdetail',compact('student','abilities','abilityjob','chartArr'));
+        $this->load->view ( 'ability/targetdetail',compact('student','abilities','abilityjob','studentPoint','standard'));
         $this->load->view ( 'footer' );
     }
 

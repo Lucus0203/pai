@@ -524,6 +524,16 @@ textarea:after {
 	color: #fff;
 }
 
+.borGaryBtnH28 {
+	border: 1px solid #ccc;
+	color: #ccc;
+	line-height: 28px;
+	padding: 0 10px;
+	background-color: #fff;
+	display: inline-block;
+	margin: 0 5px;
+}
+
 
 /*讲师资源*/
 
@@ -1157,7 +1167,7 @@ textarea:after {
 .blueline{ border-bottom:  2px solid #ececec; font-size: 22px; line-height: 40px; margin-bottom: 10px;} 
 .blueline span{  border-bottom:  1px solid #00bbd3; display:  inline-block; margin-bottom: -1px;}
 .nengli{ overflow: hidden; zoom:1; padding: 20px;}
-.nengli .nengliRight{ width: 300px;  height: 300px; float: right;}
+.nengli .nengliRight{ width: 300px;  float: right;}
 .nengli .nengliLeft{ float: left; width: 580px;}
 .nengli .txt{ font-size: 16px; line-height: 1.7; color: #3e3e3e; margin-bottom:  10px;}
 .nengli .txt span{ font-size: 20px; display: block;}
