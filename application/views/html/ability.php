@@ -30,16 +30,16 @@
                 <tr>
                     <td>第二个</td>
                     <td class="red">&yen;200</td>
-                    <td class="red">折扣价</td>
+                    <td class="red">详谈</td>
                 </tr><tr>
                     <td>第三个</td>
                     <td class="red">&yen;100</td>
-                    <td class="red">折扣价</td>
+                    <td class="red">详谈</td>
                 </tr>
                 <tr>
                     <td>3个以上</td>
                     <td class="red">&yen;100</td>
-                    <td class="red">折扣价</td>
+                    <td class="red">详谈</td>
                 </tr>
             </table>
         </div>

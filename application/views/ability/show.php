@@ -20,7 +20,7 @@
                     label:'<?php echo $abilityjob['name'] ?>',
                     backgroundColor: "rgba(156,224,234,0.7)",
                     pointBackgroundColor: "rgba(220,220,220,1)",
-                    data: [<?php if(array_key_exists(1,$levelradar)){ echo $levelradar[1]['level_standard']/$levelradar[1]['level_total']*5; ?>,<?php } ?> <?php if(array_key_exists(3,$levelradar)){ echo $levelradar[3]['level_standard']/$levelradar[3]['level_total']*5; ?>,<?php } ?><?php if(array_key_exists(5,$levelradar)){ echo $levelradar[5]['level_standard']/$levelradar[5]['level_total']*5; ?>,<?php } ?><?php if(array_key_exists(4,$levelradar)){ echo $levelradar[4]['level_standard']/$levelradar[4]['level_total']*5; ?>,<?php } ?><?php if(array_key_exists(2,$levelradar)){ echo $levelradar[2]['level_standard']/$levelradar[2]['level_total']*5; } ?>]
+                    data: [<?php if(array_key_exists(1,$levelradar)){ echo round($levelradar[1]['level_standard']/$levelradar[1]['level_total']*5,1); ?>,<?php } ?> <?php if(array_key_exists(3,$levelradar)){ echo round($levelradar[3]['level_standard']/$levelradar[3]['level_total']*5,1); ?>,<?php } ?><?php if(array_key_exists(5,$levelradar)){ echo round($levelradar[5]['level_standard']/$levelradar[5]['level_total']*5,1); ?>,<?php } ?><?php if(array_key_exists(4,$levelradar)){ echo round($levelradar[4]['level_standard']/$levelradar[4]['level_total']*5,1); ?>,<?php } ?><?php if(array_key_exists(2,$levelradar)){ echo round($levelradar[2]['level_standard']/$levelradar[2]['level_total']*5,1); } ?>]
                 },]
             },
             options: {
@@ -203,7 +203,7 @@
                     } ?>
                         <?php foreach ($abilies as $k=>$a){ ?>
                             <p class="txt">
-                                <span><?php echo ($k+1).'、'.$a['model_name'] ?><input class="company_model_name" style="display: none;" type="text" value="<?php echo $a['model_name'] ?>"><a href="#" class="editBtn blue"><i class="f18 ml10 fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></a></span>
+                                <span><?php echo ($k+1).'、'.$a['model_name'] ?><input class="company_model_name" style="display: none;" type="text" value="<?php echo $a['model_name'] ?>" maxlength="50"><a href="#" class="editBtn blue"><i class="f18 ml10 fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></a></span>
                                 <?php echo $a['info'] ?>
                             </p>
                             <input class="company_model_id" type="hidden" value="<?php echo $a['id'] ?>">

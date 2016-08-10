@@ -18,26 +18,26 @@
                     label:'<?php echo $student['name'] ?>',
                     backgroundColor: "rgba(255, 206, 73,0.5)",
                     pointBackgroundColor: "rgba(217, 163, 73,1)",
-                    data: [<?php if(array_key_exists(1,$studentPoint)){ echo $studentPoint[1]['point']/$studentPoint[1]['level']*5 ?>,<?php } ?>
-                        <?php if(array_key_exists(3,$studentPoint)){ echo $studentPoint[3]['point']/$studentPoint[3]['level']*5 ?>,<?php } ?>
+                    data: [<?php if(array_key_exists(1,$studentPoint)){ echo round($studentPoint[1]['point']/$studentPoint[1]['level']*5,1) ?>,<?php } ?>
+                        <?php if(array_key_exists(3,$studentPoint)){ echo round($studentPoint[3]['point']/$studentPoint[3]['level']*5,1) ?>,<?php } ?>
 
-                        <?php if(array_key_exists(5,$studentPoint)){ echo $studentPoint[5]['point']/$studentPoint[5]['level']*5 ?>,<?php } ?>
+                        <?php if(array_key_exists(5,$studentPoint)){ echo round($studentPoint[5]['point']/$studentPoint[5]['level']*5,1) ?>,<?php } ?>
 
-                        <?php if(array_key_exists(4,$studentPoint)){ echo $studentPoint[4]['point']/$studentPoint[4]['level']*5 ?>,<?php } ?>
+                        <?php if(array_key_exists(4,$studentPoint)){ echo round($studentPoint[4]['point']/$studentPoint[4]['level']*5,1) ?>,<?php } ?>
 
-                        <?php if(array_key_exists(2,$studentPoint)){ echo $studentPoint[2]['point']/$studentPoint[2]['level']*5 ?>,<?php } ?>]
+                        <?php if(array_key_exists(2,$studentPoint)){ echo round($studentPoint[2]['point']/$studentPoint[2]['level']*5,1) ?>,<?php } ?>]
                 },{
                     label:'<?php echo $abilityjob['name'] ?>',
                     backgroundColor: "rgba(156,224,234,0.5)",
                     pointBackgroundColor: "rgba(220,220,220,1)",
-                    data: [<?php if(array_key_exists(1,$studentPoint)){ echo $standard[1]/$studentPoint[1]['level']*5 ?>,<?php } ?>
-                        <?php if(array_key_exists(3,$studentPoint)){ echo $standard[3]/$studentPoint[3]['level']*5 ?>,<?php } ?>
+                    data: [<?php if(array_key_exists(1,$studentPoint)){ echo round($standard[1]/$studentPoint[1]['level']*5,1) ?>,<?php } ?>
+                        <?php if(array_key_exists(3,$studentPoint)){ echo round($standard[3]/$studentPoint[3]['level']*5,1) ?>,<?php } ?>
 
-                        <?php if(array_key_exists(5,$studentPoint)){ echo $standard[5]/$studentPoint[5]['level']*5 ?>,<?php } ?>
+                        <?php if(array_key_exists(5,$studentPoint)){ echo round($standard[5]/$studentPoint[5]['level']*5,1) ?>,<?php } ?>
 
-                        <?php if(array_key_exists(4,$studentPoint)){ echo $standard[4]/$studentPoint[4]['level']*5 ?>,<?php } ?>
+                        <?php if(array_key_exists(4,$studentPoint)){ echo round($standard[4]/$studentPoint[4]['level']*5,1) ?>,<?php } ?>
 
-                        <?php if(array_key_exists(2,$studentPoint)){ echo $standard[2]/$studentPoint[2]['level']*5 ?>,<?php } ?>]
+                        <?php if(array_key_exists(2,$studentPoint)){ echo round($standard[2]/$studentPoint[2]['level']*5,1) ?>,<?php } ?>]
                 }]
             },
             options: {
