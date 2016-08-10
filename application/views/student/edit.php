@@ -51,14 +51,14 @@ $(document).ready(function(){
         var mobile = /^((1[0-9]{2})+\d{8})$/; 
         return this.optional(element) || (length == 11 && mobile.test(value)); 
     }, "请正确填写您的手机号码");
-    $("input[name=role]").change(function(){
-        if($("input[name=role]:checked").val()!=1){
-            $('input[name=user_name]').removeAttr('readonly').css('color','#666');
-        }else{
-            $('input[name=user_name]').val($('input[name=mobile]').val()).attr('readonly','readonly').css('color','#ccc');
-        }
-            
-    });
+//    $("input[name=role]").change(function(){
+//        if($("input[name=role]:checked").val()!=1){
+//            $('input[name=user_name]').removeAttr('readonly').css('color','#666');
+//        }else{
+//            $('input[name=user_name]').val($('input[name=mobile]').val()).attr('readonly','readonly').css('color','#ccc');
+//        }
+//
+//    });
     $('input[name=mobile]').keyup(function(){
         //if($("input[name=role]:checked").val()==1){
             $('input[name=user_name]').val($('input[name=mobile]').val()).attr('readonly','readonly');
