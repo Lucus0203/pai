@@ -14,17 +14,6 @@ class Ability extends CI_Controller {
         } else {
             $loginInfo = $this->_logininfo;
             $roleInfo = $this->session->userdata('roleInfo');
-            if ($loginInfo['role'] != 1) {
-                $redirect_flag = true;
-                foreach ($roleInfo as $key => $value) {
-                    if (strpos(current_url(), $key)) {//包含则不用跳转
-                        $redirect_flag = false;
-                    }
-                }
-                if ($redirect_flag) {
-                    redirect($_SERVER['HTTP_REFERER']);
-                }
-            }
             $this->useractionlog_model->create(array('user_id' => $this->_logininfo['id'], 'url' => uri_string()));
             $this->load->vars(array('loginInfo' => $this->_logininfo, 'roleInfo' => $roleInfo));
         }
@@ -309,7 +298,7 @@ class Ability extends CI_Controller {
         $sql = "select parent_depart.name as parent_department_name ,depart.name as department_name,cajs.point,student.* from " . $this->db->dbprefix('company_ability_job_student') . " cajs "
             . "left join " .$this->db->dbprefix('student')." student on cajs.student_id = student.id "
             . "left join " .$this->db->dbprefix('department')." parent_depart on student.department_parent_id = parent_depart.id "
-            . "left join " .$this->db->dbprefix('department')." depart on student.department_id = depart.id "
+            . "left join " .$this->db->dbprefix('department')." depart on student.department_id = depart.id and depart.id != student.department_parent_id "
             . "where student.isdel = 2 and cajs.isdel=2 and cajs.ability_job_id=$abilityjobid and cajs.company_code = '".$this->_logininfo['company_code']."'";
 
         $query = $this->db->query("select count(*) as num from ($sql) s ");

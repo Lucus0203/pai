@@ -3,7 +3,10 @@
     currentTargetIndex=0;
     $(function(){
         $('.publish').click(function () {
-            return confirm('确定发布并短信提醒评估对象吗?');
+            return confirm('确定发布并短信提醒匹配人员吗?');
+        });
+        $('.unpublish').click(function(){
+            return confirm('此操作将停止收集学员评估,是否继续?')
         });
         //选择对象
         $('.addTarget').click(function () {
@@ -201,14 +204,14 @@
 <div class="wrap">
     <div class="textureCont w960">
 
-        <div class="texturetip clearfix"><span class="fLeft">所有岗位评估</span>
+        <div class="texturetip clearfix"><span class="fLeft">所有能力模型</span>
             <div class="fRight">
-                <a class="borBlueBtnH28" href="<?php echo site_url('html/abilityCustom') ?>">定制岗位能力</a>
+                <a class="borBlueBtnH28" href="<?php echo site_url('html/abilityCustom') ?>">定制能力模型</a>
             </div>
         </div>
 
         <div class="p15">
-            <p class="clearfix f14 mb20">共<?php echo $total_rows ?>个岗位能力</p>
+            <p class="clearfix f14 mb20">共<?php echo $total_rows ?>个岗位</p>
             <table cellspacing="0" class="listTable">
                 <col width="10%">
                 <col width="50%">
@@ -238,7 +241,7 @@
                         <td class="aCenter">
                             <a href="#" class="blue addTarget">匹配</a>&nbsp;&nbsp;
                             <?php if($job['status']==1){ ?>
-                                <a class="blue" href="<?php echo site_url('ability/unpublish/'.$job['id']) ?>">不发布</a>
+                                <a class="blue unpublish" href="<?php echo site_url('ability/unpublish/'.$job['id']) ?>"不发布</a>
                             <?php }else{ ?>
                                 <a class="blue publish" href="<?php echo site_url('ability/publish/'.$job['id']) ?>">发布</a>
                             <?php } ?>
