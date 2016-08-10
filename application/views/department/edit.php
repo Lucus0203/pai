@@ -236,7 +236,9 @@
                             <td><?php echo $s['department'] ?></td>
                             <td><?php echo $s['status'] == 1 ? '未激活' : '已激活' ?></td>
                             <td><span class="yellow"><?php
-                                    if ($s['role'] == 1) {
+                                    if ($s['role'] == 9) {
+                                        echo '系统管理员';
+                                    } elseif ($s['role'] == 1) {
                                         echo '普通学员';
                                     } elseif ($s['role'] == 2) {
                                         echo '助理管理员';
