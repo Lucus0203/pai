@@ -61,7 +61,7 @@ class Center extends CI_Controller
                     //更新公司手机信息则更新学员管理员
                     $sacount=$this->student_model->get_row(array('company_code'=>$logininfo['company_code'],'role'=>9));
                     if(!empty($sacount)){
-                        $this->student_model->update(array('mobile',$c['mobile']),$sacount['id']);
+                        $this->student_model->update(array('mobile'=>$c['mobile'],'user_name'=>$c['user_name']),$sacount['id']);
                     }
                     $logininfo['company_name'] = $this->input->post('name');
                     $logininfo['logo'] = !empty($c['logo']) ? $c['logo'] : $logininfo['logo'];
