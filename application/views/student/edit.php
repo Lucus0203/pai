@@ -218,7 +218,7 @@ $(document).ready(function(){
                                     <th><span class="red">*</span>手机号码</th>
 
                                     <td>
-                                        <input name="mobile" value="<?php echo $student['mobile'] ?>" type="text" class="iptH37 w250">
+                                        <input name="mobile" value="<?php echo $student['mobile'] ?>" type="text" class="iptH37 w250" <?php if($student['role']==9){ echo ' readonly'; }?> >
 
                                     </td>
                             </tr><tr>
