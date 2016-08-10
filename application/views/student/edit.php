@@ -239,7 +239,7 @@ $(document).ready(function(){
                                     <th><span class="red">*</span>登录账号</th>
                                     <td>
                                         <input type="text" name="user_name" value="" disabled style="display: none;"><input type="password" name="user_pass" value="" disabled style="display: none;">
-                                        <input <?php if($student['role']==1){echo 'style="color:#ccc"';}else{echo 'style="color:#666"';} ?> name="user_name" value="<?php echo $student['user_name'] ?>" type="text" class="iptH37 w250" autocomplete="off" >
+                                        <input <?php if($student['role']==1||$student['role']==9){echo 'style="color:#ccc"';}else{echo 'style="color:#666"';} ?> name="user_name" value="<?php echo $student['user_name'] ?>" type="text" class="iptH37 w250" autocomplete="off" <?php if($student['role']==9){ echo 'readonly'; }?> >
 
 
                                     </td>
@@ -247,7 +247,7 @@ $(document).ready(function(){
                             <tr>
                                     <th><span class="red">*</span>登录密码</th>
                                     <td>
-                                        <input name="user_pass" value="<?php echo $student['user_pass'] ?>" type="password" class="iptH37 w250" autocomplete="off" >
+                                        <input name="user_pass" value="<?php echo $student['user_pass'] ?>" type="password" class="iptH37 w250" autocomplete="off" <?php if($student['role']==9){ echo 'style="color:#ccc" readonly'; }?> >
 
                                     </td>
                             </tr>
