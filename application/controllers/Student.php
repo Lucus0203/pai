@@ -134,7 +134,7 @@ class Student extends CI_Controller
             if ($this->student_model->get_count(" company_code = '{$s['company_code']}' and mobile='".$s['mobile']."' and id <> {$id} and isdel = 2 ") > 0) {
                 $res['msg'] = '手机号已被使用';
                 $res['student'] = $s;
-            } elseif ($this->user_model->get_count("company_code = '{$s['company_code']}' and user_name = '{$s['user_name']}' and (student_id <> {$id} or student_id is null) ") > 0) {
+            } elseif ($res['student']['role']!=9 && $this->user_model->get_count("company_code = '{$s['company_code']}' and user_name = '{$s['user_name']}' and (student_id <> {$id} or student_id is null) ") > 0) {
                 $res['msg'] = '登录账号已被使用';
                 $res['student'] = $s;
             } else {
