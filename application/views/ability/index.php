@@ -241,7 +241,7 @@
                         <td class="aCenter">
                             <a href="#" class="blue addTarget">匹配</a>&nbsp;&nbsp;
                             <?php if($job['status']==1){ ?>
-                                <a class="blue unpublish" href="<?php echo site_url('ability/unpublish/'.$job['id']) ?>"不发布</a>
+                                <a class="blue unpublish" href="<?php echo site_url('ability/unpublish/'.$job['id']) ?>" >取消发布</a>
                             <?php }else{ ?>
                                 <a class="blue publish" href="<?php echo site_url('ability/publish/'.$job['id']) ?>">发布</a>
                             <?php } ?>
