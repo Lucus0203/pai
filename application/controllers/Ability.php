@@ -151,7 +151,7 @@ class Ability extends CI_Controller {
         $num = $query->row_array();
         $total_rows = $num['num'];
         if(empty($mids)||count($mids)!=$total_rows){
-            echo json_encode(array('success'=>'failure','msg'=>'数据正确,保存失败'));
+            echo json_encode(array('success'=>'failure','msg'=>'保存失败,数据不正确!'));
             return false;
         }
         //判断学员是否已提交评估
@@ -161,7 +161,7 @@ class Ability extends CI_Controller {
         $num = $query->row_array();
         $total_rows = $num['num'];
         if($total_rows>0){
-            echo json_encode(array('success'=>'failure','msg'=>'已有学员提交评估,保存失败'));
+            echo json_encode(array('success'=>'failure','msg'=>'保存失败,已有学员提交评估!'));
             return false;
         }
         //清除旧数据

@@ -116,10 +116,9 @@
                         dataType:"json",
                         success:function(res){
                             if(res.success!='ok'){
-                                alert(res.msg);
+                                $('.alert-danger .alert-msg').text(res.msg).parent().show();
                             }else{
-                                $('.alert-msg').text('保存成功!').parent().show();
-                                $('.alert-remove').click(function(){$('.alertBox').hide()});
+                                $('.alert-success .alert-msg').text('保存成功!').parent().show();
                                 $('#resetAbilityStandard').removeClass('borGaryBtnH28').addClass('borBlueBtnH28');
                                 editflag=false;
                             }
@@ -156,6 +155,7 @@
             },
             zIndex: 999
         });
+        $('.alert-remove').click(function(){$('.alertBox').hide()});
     });
 //    window.onbeforeunload = function() {
 //        if(editflag) {
@@ -168,7 +168,8 @@
         <input id="jobid" type="hidden" value="<?php echo $abilityjob['id'] ?>" />
         <div class="texturetip clearfix"><span class="fLeft mr10"><?php echo $abilityjob['name'] ?>评估标准</span>
         </div>
-        <p class="alertBox"><span class="alert-msg">保存成功!</span><a href="javascript:;" class="alert-remove">x</a></p>
+        <p class="alertBox alert-success"><span class="alert-msg">保存成功!</span><a href="javascript:;" class="alert-remove">X</a></p>
+        <p class="alertBox alert-danger"><span class="alert-msg">保存失败!</span><a href="javascript:;" class="alert-remove">X</a></p>
         <div class="nengli">
             <div class="nengliRight pt10">
                 <div class="fRight">
