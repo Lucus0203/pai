@@ -254,9 +254,13 @@ $(document).ready(function(){
                             <tr>
                                     <th></th>
                                     <td>
+                                        <?php if($student['role']==9){?>
+                                            <label><input name="role" value="9" type="hidden" />系统管理员</label>
+                                        <?php }else{?>
                                         <label><input name="role" value="1" type="radio" checked class="mr10" />普通学员</label>
                                         <label><input name="role" value="2" type="radio" <?php if($student['role']==2){echo 'checked';} ?> class="mr10" />助理管理员<span class="gray9 f14">(公司培训负责人)</span> </label>
                                         <label><input name="role" value="3" type="radio" <?php if($student['role']==3){echo 'checked';} ?> class="mr10" />员工经理<span class="gray9 f14">(部门负责人、部门经理)</span> </label>
+                                        <?php } ?>
                                     </td>
                             </tr>
 
