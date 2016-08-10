@@ -268,7 +268,7 @@ class Ability extends CI_Controller {
         $studentids=$compjob['target_student'];
         if(!empty($studentids)){
             //已经不存在评估的对象改为删除状态
-            $sql = "update ".$this->db->dbprefix('company_ability_job_student')." set isdel = 1 where company_code='".$this->_logininfo['company_code']."' and student_id not in ($studentids) ";
+            $sql = "update ".$this->db->dbprefix('company_ability_job_student')." set isdel = 1 where company_code='".$this->_logininfo['company_code']."' and ability_job_id=$ability_job_id and student_id not in ($studentids) ";
             $this->db->query($sql);
             //循环现有的评估对象,如果已有但是删除状态则更改删除状态,如果无则新增并通知
             $studentids=explode(',',$studentids);
@@ -277,9 +277,9 @@ class Ability extends CI_Controller {
                 $query = $this->db->get_where ( 'company_ability_job_student', $where );
                 $saj=$query->row_array();
                 if(!empty($saj)){//已有
-                    if($saj['isdel']==1){//但是删除状态则更改删除状态
+                    if($saj['isdel']==1){//但是删除状态则更改正常状态
                         $this->db->where ( $where );
-                        $this->db->update ( 'company_ability_job_student', array('isdel'=>2) );
+                        $this->db->update ( 'company_ability_job_student', array('isdel'=>2) );//恢复可用
                     }
                 }else{//无则新增并通知
                     $obj=array('company_code'=>$this->_logininfo['company_code'],'ability_job_id'=>$ability_job_id,'student_id'=>$sid,'created'=>date("Y-m-d H:i:s"));
