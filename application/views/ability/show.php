@@ -57,10 +57,10 @@
             var inp=span.find('input').eq(0).val(v).show();
             span.text(txt.slice(0,txt.indexOf('、')+1)).append(inp);
             var strLength = inp.val().length * 2;
-            inp.focus();
+            inp.attr('data-prev',inp.val()).focus();
             inp[0].setSelectionRange(strLength, strLength);
             inp.blur(function(){
-                var v=$(this).val();
+                var v=$(this).val()==''?$(this).attr('data-prev'):$(this).val();
                 var inp=$(this).hide();
                 var txt=$(this).parent().text();
                 $(this).parent().text(txt+v).append(inp).append('<a href="#" class="editBtn blue"><i class="f18 ml10 fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></a>');
@@ -118,7 +118,8 @@
                             if(res.success!='ok'){
                                 alert(res.msg);
                             }else{
-                                alert('保存成功');
+                                $('.alert-msg').text('保存成功!').parent().show();
+                                $('.alert-remove').click(function(){$('.alertBox').hide()});
                                 $('#resetAbilityStandard').removeClass('borGaryBtnH28').addClass('borBlueBtnH28');
                                 editflag=false;
                             }
@@ -139,7 +140,6 @@
                             if(res.success!='ok'){
                                 alert(res.msg);
                             }else{
-                                alert('重置成功');
                                 window.location.reload();
                             }
                         }
@@ -168,7 +168,7 @@
         <input id="jobid" type="hidden" value="<?php echo $abilityjob['id'] ?>" />
         <div class="texturetip clearfix"><span class="fLeft mr10"><?php echo $abilityjob['name'] ?>评估标准</span>
         </div>
-
+        <p class="alertBox"><span class="alert-msg">保存成功!</span><a href="javascript:;" class="alert-remove">x</a></p>
         <div class="nengli">
             <div class="nengliRight pt10">
                 <div class="fRight">

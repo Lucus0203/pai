@@ -220,12 +220,12 @@
                 <table cellspacing="0" class="listTable">
                     <tbody>
                     <tr>
-                        <th>姓名</th>
-                        <th>工号</th>
-                        <th>职务</th>
-                        <th>部门</th>
-                        <th>账号状态</th>
-                        <th>账号类别</th>
+                        <th class="aLeft">姓名</th>
+                        <th class="aLeft">工号</th>
+                        <th class="aLeft">职务</th>
+                        <th class="aLeft">部门</th>
+                        <th class="aLeft">账号状态</th>
+                        <th class="aLeft">账号类别</th>
                         <th>操作</th>
                     </tr>
                     <?php foreach ($students as $s) { ?>
@@ -245,7 +245,7 @@
                                     } else {
                                         echo '员工经理';
                                     } ?></span></td>
-                            <td><a class="blue" href="<?php echo site_url('student/edit/' . $s['id']) ?>">编辑</a>
+                            <td class="aCenter"><a class="blue" href="<?php echo site_url('student/edit/' . $s['id']) ?>">编辑</a>
                                 <?php if($s['role'] != 9){ ?>
                                 <a class="blue delStudent" href="<?php echo site_url('student/del/' . $s['id']) ?>">删除</a>
                                 <?php } ?>
