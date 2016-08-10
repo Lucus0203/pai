@@ -9,7 +9,7 @@ class Center extends CI_Controller
         parent::__construct();
         $this->load->library(array('session'));
         $this->load->helper(array('form', 'url'));
-        $this->load->model(array('user_model','useractionlog_model', 'company_model', 'purview_model', 'industries_model'));
+        $this->load->model(array('user_model','useractionlog_model', 'company_model', 'purview_model', 'industries_model','student_model'));
 
         $this->_logininfo = $this->session->userdata('loginInfo');
         if (empty($this->_logininfo)) {
@@ -58,6 +58,11 @@ class Center extends CI_Controller
                 $lastc = $this->company_model->get_row(array('code' => $logininfo['company_code']));
                 if ($logininfo['role'] == 1) {
                     $this->company_model->update($c, $lastc['id']);
+                    //更新公司手机信息则更新学员管理员
+                    $sacount=$this->student_model->get_row(array('company_code'=>$logininfo['company_code'],'role'=>9));
+                    if(!empty($sacount)){
+                        $this->student_model->update(array('mobile',$c['mobile']),$sacount['id']);
+                    }
                     $logininfo['company_name'] = $this->input->post('name');
                     $logininfo['logo'] = !empty($c['logo']) ? $c['logo'] : $logininfo['logo'];
                 }
@@ -78,6 +83,11 @@ class Center extends CI_Controller
                 } else {
                     $this->user_model->update(array('user_pass' => md5($new_pass)), $logininfo['id']);
                     $msg = '密码更新成功';
+                    //更新公司密码则更新学员管理员密码
+                    $sacount=$this->student_model->get_row(array('company_code'=>$logininfo['company_code'],'role'=>9));
+                    if(!empty($sacount)){
+                        $this->student_model->update(array('user_pass',md5($new_pass)),$sacount['id']);
+                    }
                 }
                 $tab = 2;
             } elseif ($act == 'purview') {//权限设置

@@ -246,8 +246,9 @@
                                         echo '员工经理';
                                     } ?></span></td>
                             <td><a class="blue" href="<?php echo site_url('student/edit/' . $s['id']) ?>">编辑</a>
-                                <a class="blue delStudent"
-                                   href="<?php echo site_url('student/del/' . $s['id']) ?>">删除</a>
+                                <?php if($s['role'] != 9){ ?>
+                                <a class="blue delStudent" href="<?php echo site_url('student/del/' . $s['id']) ?>">删除</a>
+                                <?php } ?>
                             </td>
                         </tr>
                     <?php } ?>
