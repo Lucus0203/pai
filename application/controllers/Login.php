@@ -234,8 +234,12 @@ class Login extends CI_Controller
     //获取验证码
     public function getcode()
     {
-        $user = $this->input->post('user_name');
-        $mobile = $this->input->post('mobile');
+        $user = $this->input->get('user_name');
+        $mobile = $this->input->get('mobile');
+        if(empty($mobile)){
+            echo '手机号码获取失败,请联系管理员';
+            return false;
+        }
         $code = rand(1000, 9999);
         $userinfo = $this->user_model->get_row(array('mobile' => $mobile));
         if ($userinfo['register_flag'] == 2) {

@@ -138,7 +138,7 @@
                 var mobile = $('#mobile').val();
                 if (ismobile(mobile) && $('#get_mobile_code').attr('rel') <= 0) {
                     $.ajax({
-                        type: "post",
+                        type: "get",
                         url: '<?php echo site_url('login/getcode') ?>',
                         data: {'mobile': mobile, 'user_name': username},
                         success: function (res) {
