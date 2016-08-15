@@ -190,21 +190,18 @@
         <?php if (!empty($current_department)) { ?>
             <input type="hidden" id="current_department_id" value="<?php echo $current_department['id'] ?>"/>
             <input type="hidden" id="current_department_name" value="<?php echo $current_department['name'] ?>"/>
-            <div class="texturetip clearfix"><span class="fLeft"><?php echo $current_department['name'] ?></span>
-                <div class="fRight"><?php if ($current_department['level'] == 0) { ?><a id="addChildDepart"
-                                                                                        href="javascript:;"
-                                                                                        class="borBlueBtnH28">添加下级部门</a><?php } ?>
-                    <a id="editDepart" href="javascript:;" class="borBlueBtnH28">编辑部门</a><a id="delDepart"
-                                                                                            href="javascript:;"
-                                                                                            class="borBlueBtnH28">删除部门</a><a
-                        href="<?php echo site_url('student/index/' . $current_department['id']) ?>"
-                        class="borBlueBtnH28">增加学员</a></div>
+            <div class="texturetip p2014 clearfix"><span class="fLeft"><?php echo $current_department['name'] ?></span>
+                <div class="fRight"><?php if ($current_department['level'] == 0) { ?>
+                        <a id="addChildDepart" href="javascript:;" class="borBlueBtnH28 w72 aCenter">添加下级部门</a><?php } ?>
+                    <a id="editDepart" href="javascript:;" class="borBlueBtnH28 w72 aCenter">编辑部门</a>
+                    <a id="delDepart" href="javascript:;" class="borBlueBtnH28 w72 aCenter">删除部门</a>
+                    <a href="<?php echo site_url('student/index/' . $current_department['id']) ?>" class="borBlueBtnH28 w72 aCenter">增加学员</a></div>
             </div>
         <?php } else { ?>
-            <div class="texturetip clearfix"><span class="fLeft">所有学员</span>
+            <div class="texturetip p2014 clearfix"><span class="fLeft">所有学员</span>
                 <div class="fRight">
-                    <a id="addDeart2" href="javascript:;" class="borBlueBtnH28">添加一级部门</a>
-                    <a href="<?php echo site_url('student/index/' . $current_department['id']) ?>" class="borBlueBtnH28">增加学员</a>
+                    <a id="addDeart2" href="javascript:;" class="borBlueBtnH28 w72 aCenter">添加一级部门</a>
+                    <a href="<?php echo site_url('student/index/' . $current_department['id']) ?>" class="borBlueBtnH28 w72 aCenter">增加学员</a>
                 </div>
             </div>
         <?php } ?>

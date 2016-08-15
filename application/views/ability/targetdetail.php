@@ -70,9 +70,9 @@
 <div class="wrap">
     <div class="textureCont w960">
 
-        <div class="texturetip clearfix"><span class="fLeft mr10"><?php echo $student['name'].'《'.$abilityjob['name'] ?>》能力评估</span>
+        <div class="texturetip clearfix"><span class="fLeft pt5"><?php echo $student['name'].'《'.$abilityjob['name'] ?>》能力评估</span>
             <div class="fRight">
-                <a class="borBlueBtnH28" href="<?php echo $_SERVER['HTTP_REFERER'] ?>">返回</a>
+                <a class="borBlueH37 aCenter" href="<?php echo $_SERVER['HTTP_REFERER'] ?>">返回</a>
             </div>
         </div>
 

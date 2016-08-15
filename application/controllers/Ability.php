@@ -219,14 +219,12 @@ class Ability extends CI_Controller {
             $targetone=$this->department_model->get_all(' id in ('.$data['target_one'].') ');
             if(!empty($targetone)){
                 $targetone = array_column($targetone, 'name');
-                $target .= implode(",",$targetone);
             }
         }
         if(!empty($data['target_two'])) {
             $targettwo = $this->department_model->get_all(' id in (' . $data['target_two'] . ') ');
             if (!empty($targettwo)) {
                 $targettwo = array_column($targettwo, 'name');
-                $target .= implode(",", $targettwo);
             }
         }
         if(!empty($data['target_student'])) {

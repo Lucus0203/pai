@@ -1,7 +1,7 @@
 <ul class="topNaviUlKec">
         <li <?php if(strpos(current_url(),'course/courseinfo')){?> class="cur"<?php } ?>><a href="<?php echo site_url('course/courseinfo/'.$course['id']) ?>">课程信息</a></li>
 <?php if($loginInfo['role']==1||$roleInfo['applylist']==1||$roleInfo['applylist']==1){ ?>
-        <li <?php if(strpos(current_url(),'course/applyset')||strpos(current_url(),'course/applylist')){?> class="cur"<?php } ?>><a href="<?php $uriarg=$roleInfo['applylist']==1?'applylist':'applyset'; echo site_url('course/'.$uriarg.'/'.$course['id']) ?>">报名管理</a></li>
+        <li <?php if(strpos(current_url(),'course/applyset')||strpos(current_url(),'course/applylist')||strpos(current_url(),'course/notifyset')){?> class="cur"<?php } ?>><a href="<?php $uriarg=$roleInfo['applylist']==1?'applylist':'applyset'; echo site_url('course/'.$uriarg.'/'.$course['id']) ?>">报名管理</a></li>
 <?php } ?>
 <?php if($loginInfo['role']==1||$roleInfo['signinset']==1||$roleInfo['signinlist']==1){ ?>
         <li <?php if(strpos(current_url(),'course/signinset')||strpos(current_url(),'course/signinlist')){?> class="cur"<?php } ?>><a href="<?php $uriarg=$roleInfo['signinlist']==1?'signinlist':'signinset'; echo site_url('course/'.$uriarg.'/'.$course['id']) ?>">签到管理</a></li>
@@ -14,8 +14,5 @@
 <?php } ?>
 <?php if($loginInfo['role']==1||$roleInfo['ratingsedit']==1||$roleInfo['ratingslist']==1){ ?>
         <li <?php if(strpos(current_url(),'course/ratingsedit')||strpos(current_url(),'course/ratingslist')){?> class="cur"<?php } ?>><a href="<?php $uriarg=$roleInfo['ratingslist']==1?'ratingslist':'ratingsedit'; echo site_url('course/'.$uriarg.'/'.$course['id']) ?>">课程反馈</a></li>
-<?php } ?>
-<?php if($loginInfo['role']==1||$roleInfo['notifyset']==1||$roleInfo['notifycustomize']==1){ ?>
-        <li <?php if(strpos(current_url(),'course/notifyset')||strpos(current_url(),'course/notifycustomize')){?> class="cur"<?php } ?>><a href="<?php echo site_url('course/notifyset/'.$course['id']) ?>">通知设置</a></li>
 <?php } ?>
 </ul>

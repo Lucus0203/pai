@@ -142,10 +142,17 @@ textarea:after {
 	background-color: #fff;
 }
 
+.mt3 {
+	margin-top: 3px !important;
+}
+
 .mt5 {
 	margin-top: 5px !important;
 }
 
+.mt15{
+	margin-top: 15px !important;
+}
 
 .mt20{
 	margin-top: 20px !important;
@@ -175,9 +182,18 @@ textarea:after {
 	margin-right: 10px !important;
 }
 
+.mr20 {
+	margin-right: 20px !important;
+}
+
 .mr30 {
 	margin-right: 30px !important;
 }
+
+.mr60 {
+	margin-right: 60px !important;
+}
+
 
 .mb10 {
 	margin-bottom: 10px !important;
@@ -191,8 +207,22 @@ textarea:after {
 	padding-top: 10px !important;
 }
 
+.pt5 {
+	padding-top: 5px !important;
+}
+
 .p15 {
-	padding: 15px;
+	padding: 15px !important;
+}
+
+.p1524{
+	padding: 16px 24px !important;
+}
+.p2014{
+	padding: 20px 10px 20px 14px !important;
+}
+.p2015{
+	padding: 20px 15px 20px 14px !important;
 }
 
 .p20{ padding:  20px !important;}
@@ -217,9 +247,34 @@ textarea:after {
 	width: 250px !important;
 }
 
+.w237 {
+	width: 237px !important;
+}
+
 .w225 {
 	width: 225px !important;
 }
+
+.w156 {
+	min-width: 0 !important;
+	width: 156px !important;
+}
+
+.w157 {
+	min-width: 0 !important;
+	width: 157px !important;
+}
+
+.w100 {
+	min-width: 0 !important;
+	width: 100px !important;
+}
+
+.w72 {
+	min-width: 0 !important;
+	width: 72px !important;
+}
+
 
 .bgGray {
 	background-color: #f6f6f6 !important;
@@ -374,6 +429,8 @@ textarea:after {
 	font-size: 14px;
 	padding: 0 15px;
 	display: inline-block;
+	background-color: #FFFFFF;
+	cursor: pointer;
 }
 
 .borBlueH37:hover {
@@ -405,7 +462,6 @@ textarea:after {
 	font-size: 14px;
 	vertical-align: middle;
 	text-align: center;
-	margin-left: 30px;
 }
 
 .orangeH25 {
@@ -458,9 +514,9 @@ textarea:after {
 
 .iptare {
 	width: 100%;
-	max-width: 615px;
+	max-width: 500px;
 	padding: 0 10px;
-	height: 220px;
+	height: 150px;
 	border: 1px solid #f0f0f0;
 	background-color: #f8f8f8;
 	border-radius: 4px;
@@ -543,6 +599,7 @@ textarea:after {
 }
 
 .seachBox li {
+	color: #999;
 	float: left;
 	width: 170px;
 	margin-right: 20px;
@@ -583,9 +640,9 @@ textarea:after {
 
 .operaBtn a {
 	background-color: #fff;
-	color: #8fd5e4;
+	color: #3ec2d3;
 	display: inline-block;
-	border: 1px solid #cfebee;
+	border: 1px solid #3ec2d3;
 	padding: 0 10px;
 	margin-left: -1px;
 }
@@ -603,9 +660,19 @@ textarea:after {
 }
 
 .listBox .listCont .imgBox {
+    float: left;
 	min-width: 110px;
-	float: left;
 	margin-right: 25px;
+    min-height: 110px;
+}
+
+.listBox .listCont .imgBox .helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+.listBox .listCont .imgBox img {
+    vertical-align: middle;
 }
 
 .listBox .listCont .listText {
@@ -703,7 +770,7 @@ textarea:after {
 	zoom: 1;
 	clear: both;
 	line-height: 1.5;
-	padding: 15px 24px 0;
+	padding: 15px 25px 0;
 }
 
 .topNavi ul {
@@ -913,7 +980,6 @@ textarea:after {
 	text-align: center;
 	width: 90px;
 	font-size: 14px;
-	padding: 12px 0 10px;
 }
 
 .listFunction li a {
@@ -922,10 +988,10 @@ textarea:after {
 }
 
 .listFunction i {
-	background: url(../images/icons_menu.png) no-repeat;
+	font-size: 38px;
 	display: block;
-	margin: 0 auto 6px;
-	height: 40px;
+	margin: 20px;
+	color: #9de0e7;
 }
 
 .listFunction .ico_01 {
@@ -1174,9 +1240,10 @@ textarea:after {
 .starBox{ margin-bottom:  40px;}
 .starBox .star { margin-bottom: -2px; margin-left: 5px;}
 .starBox li{ display: inline-block; margin-right: 5px;}
-.starBox li a{ background: url(../images/gray_start.png) no-repeat left top; text-align:  center; width: 32px; height: 44px; padding-top: 5px; font-size: 16px; color: #fff; display: inline-block;}
+.starBox li a{ background: url(../images/start_gray.png) no-repeat left top; text-align:  center; width: 32px; height: 44px; padding-top: 5px; font-size: 16px; color: #fff; display: inline-block;}
 
-.starBox li.cur a{ background: url(../images/yellow_start.png) no-repeat left top;}
+.starBox li.cur a{ background: url(../images/start_yellow.png) no-repeat left top;}
+.starBox li.standard a{ background: url(../images/start_blue.png) no-repeat left top;}
 .starBox .starTxt{ font-size:  16px; color: #3e3e3e; border:  1px solid #f0f0f0; padding: 10px;border-radius: 5px; background-color: #f8f8f8;}
 .f18{font-size: 18px !important;}
 .f24{font-size: 24px !important;}
@@ -1192,12 +1259,11 @@ textarea:after {
 .nengTable{ width:  600px; margin:  0 auto; border-spacing: 0; border-collapse: collapse; border-radius: 5px; line-height:  1.8;}
 .nengTable th{ color: #fff; background-color:  #00bbd3; border: 1px solid #eee; font-weight:  normal; padding: 5px 0; }
 .nengTable td{ text-align: center; border: 1px solid #eee; padding: 5px 0;}
-.alertBox{font-size: 14px;padding: 15px; display: none;}
+.alertBox{font-size: 14px;padding: 15px;}
 .alertBox .alert-msg{padding-left: 5px;}
 .alertBox .alert-remove{float:right;color: #468847;}
 .alert-success{color: #468847;background-color: #dff0d8;border: solid 1px #46e99e;}
 .alert-danger{color: #b94a48;background-color: #f2dede;border: solid 1px #eed3d7;}
-
 
 
 

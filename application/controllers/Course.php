@@ -69,10 +69,10 @@ class Course extends CI_Controller
             $sql .= " and (c.title like '%" . $pvalue['keyword'] . "%' )";
         }
         if (!empty($parm['time_start'])) {
-            $sql .= " and unix_timestamp(time_start) >= unix_timestamp('" . $pvalue['time_start'] . "') ";
+            $sql .= " and unix_timestamp(time_start) >= unix_timestamp(" . $pvalue['time_start']  . ") ";
         }
         if (!empty($parm['time_end'])) {
-            $sql .= " and unix_timestamp(time_start) <= unix_timestamp('" . $pvalue['time_end'] . "') ";
+            $sql .= " and unix_timestamp(time_start) <= unix_timestamp(" . $pvalue['time_end'] . ") ";
         }
         $query = $this->db->query("select count(*) as num from ($sql) s ");
         $num = $query->row_array();
@@ -142,7 +142,7 @@ class Course extends CI_Controller
                 $this->load->library(array('notifyclass'));
                 $this->notifyclass->applyopen($id);
             }
-            redirect(site_url('course/courselist'));
+            redirect(site_url('course/courseinfo/'.$id));
             return;
         }
         $teachers = $this->teacher_model->get_all(array('company_code' => $logininfo['company_code'], 'isdel' => 2));

@@ -2,14 +2,14 @@
 <div class="wrap">
     <div class="textureCont w960">
 
-        <div class="texturetip clearfix"><span class="fLeft"><?php echo $abilityjob['name'] ?>评估</span>
+        <div class="texturetip p2015 clearfix"><span class="fLeft pt5"><?php echo $abilityjob['name'] ?>评估</span>
             <div class="fRight">
-                <a class="borBlueBtnH28" href="<?php echo site_url('ability/index') ?>">返回</a>
+                <a class="borBlueH37 aCenter" href="<?php echo site_url('ability/index') ?>">返回</a>
             </div>
         </div>
 
         <div class="p15">
-            <p class="clearfix f14 mb20">共<?php echo $total_rows ?>评估对象</p>
+            <p class="clearfix f14 mb20">共<?php echo $total_rows ?>评估学员</p>
             <table cellspacing="0" class="listTable">
                 <col width="20%">
                 <col width="30%">
@@ -17,7 +17,7 @@
                 <col width="10%">
                 <tbody>
                 <tr>
-                    <th class="center">评估对象</th>
+                    <th class="center">学员</th>
                     <th class="center">部门</th>
                     <th class="center">评分</th>
                     <th class="center">操作</th>

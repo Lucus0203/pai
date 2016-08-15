@@ -14,7 +14,7 @@
 </script>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
 <div class="wrap">
-    <div class="titCom clearfix"><span class="titSpan"><?php echo $course['title'] ?>  </span><a href="javascript:void(0);" class="<?php echo $course['status_class']; ?>"><?php echo $course['status_str']; ?></a></div>
+    <div class="titCom clearfix"><span class="titSpan"><?php echo $course['title'] ?>  </span><span class="<?php echo $course['status_class']; ?> ml20"><?php echo $course['status_str']; ?></span></div>
     <div class="topNaviKec">
                 <?php $this->load->view ( 'course/top_navi' ); ?>
 
@@ -51,9 +51,9 @@
                                         </colgroup>
                                         <tbody>
                                                 <tr>
-                                                        <th>发送对象</th>
+                                                        <th>发送学员</th>
                                                         <td>
-                                                                <input type="text" class="iptH37 w250"><a class="borBlueH37 ml20" href="javascript:void(0)"><i class="addQuan"></i>选择名单</a>
+                                                                <input type="text" class="iptH37 w250"><a class="borBlueH37 ml20" href="javascript:void(0)"><i class="addQuan"></i>选择学员</a>
 
                                                         </td>
                                                 </tr>

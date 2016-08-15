@@ -8,7 +8,7 @@ $(document).ready(function(){
 });
 </script>
 <div class="wrap">
-        <div class="titCom clearfix"><span class="titSpan"><?php echo $course['title'] ?>  </span><a href="javascript:void(0);" class="<?php echo $course['status_class']; ?>"><?php echo $course['status_str']; ?></a></div>
+        <div class="titCom clearfix"><span class="titSpan"><?php echo $course['title'] ?>  </span><span class="<?php echo $course['status_class']; ?> ml20"><?php echo $course['status_str']; ?></span></div>
         <div class="topNaviKec">
                 <?php $this->load->view ( 'course/top_navi' ); ?>
         </div>
@@ -19,10 +19,13 @@ $(document).ready(function(){
                         <ul class="sideLnavi">
                             
 <?php if($loginInfo['role']==1||$roleInfo['applyset']==1){ ?>
-                                <li><a href="<?php echo site_url('course/applyset/'.$course['id']) ?>">报名设置<i></i></a></li>
+                                <li><a href="<?php echo site_url('course/applyset/'.$course['id']) ?>">报名设置</a></li>
 <?php } ?>
 <?php if($loginInfo['role']==1||$roleInfo['applylist']==1){ ?>                            
-                                <li class="cur"><a href="<?php echo site_url('course/applylist/'.$course['id']) ?>">报名名单<i></i></a></li>
+                                <li class="cur"><a href="<?php echo site_url('course/applylist/'.$course['id']) ?>">报名名单<i class="ml10 fa fa-angle-right fa-lg"></i></a></li>
+<?php } ?>
+<?php if($loginInfo['role']==1||$roleInfo['notifyset']==1){ ?>
+                                <li ><a href="<?php echo site_url('course/notifyset/'.$course['id']) ?>">通知设置</a></li>
 <?php } ?>
                         </ul>
 

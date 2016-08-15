@@ -57,17 +57,12 @@
             unhighlight: function (element, errorClass, validClass) {
                 $(element).parents(".row").removeClass(errorClass);
             },
-            submitHandler:function(form){
-                $('input[type=submit]').val('请稍后..').attr('disabled','disabled');
+            submitHandler: function (form) {
+                $('input[type=submit]').val('请稍后..').attr('disabled', 'disabled');
                 form.submit();
             }
         });
 
-        $('.Wdate').eq(1).focus(function () {
-            if ($('.Wdate').eq(1).val() == '') {
-                $('.Wdate').eq(1).val($('.Wdate').eq(0).val());
-            }
-        });
         $('#fileBtn').change(function () {
             // 检查是否为图像类型
             var simpleFile = document.getElementById("fileBtn").files[0];
@@ -80,10 +75,10 @@
             reader.readAsDataURL(simpleFile);
             reader.onload = function (e) {
                 if ($('#fileBtn').parent().find('img').length > 0) {
-                    $('#fileBtn').prev().attr('src', this.result);
+                    $('#fileBtn').parent().find('img').attr('src', this.result);
                 } else {
-                    $('#fileBtn').before('<img onclick="$(\'#fileBtn\').click()" src="' + this.result + '" width="200" />');
-                    $('#fileBtn').next().text('点击图片可更换,文件类型JPG、PNG、GIF格式图片，大小不超过5M');
+                    $('#fileBtn').before('<img onclick="$(\'#fileBtn\').click()" src="' + this.result + '" width="200" /><br>');
+                    $('#fileBtn').parent().next().text('JPG、PNG、GIF格式，不超过5M');
                 }
             }
         });
@@ -229,18 +224,19 @@
             }
             $('input[name=' + inputname + ']').val(arr.join(','));
             var targetstr = '';
-            $('ul.oneUl input:checked,ul.twoUl input:checked,ul.threeUl input:checked').each(function () {
+            $('ul.threeUl input:checked').each(function () {//ul.oneUl input:checked,ul.twoUl input:checked,
                 targetstr += $(this).parent().text() + ',';
             });
             $('input[name=target]').val(targetstr.slice(0, -1));
             resetconWindow();
         }
+
         //调整弹窗列数
-        function resetconWindow(){
-            if($('#conMessage .twoUl li').length<=0){
+        function resetconWindow() {
+            if ($('#conMessage .twoUl li').length <= 0) {
                 $('#conMessage .twoUl').hide();
                 $('#conMessage .oneUl,#conMessage .threeUl').width('45%');
-            }else{
+            } else {
                 $('#conMessage .oneUl,#conMessage .threeUl').width('33%');
                 $('#conMessage .twoUl').show();
             }
@@ -251,10 +247,10 @@
 <div class="wrap">
     <div class="titCom clearfix"><span class="titSpan"><?php echo empty($course) ? '创建新课程' : '编辑课程' ?></span></div>
     <div class="comBox">
+        <?php if (!empty($msg)) {?>
+            <p class="alertBox alert-success"><span class="alert-msg"><?php echo $msg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
+        <?php } ?>
         <div class="tableBox">
-            <?php if (!empty($msg)) {
-                echo '<p class="aCenter red f14">' . $msg . '</p>';
-            } ?>
             <form id="editForm" method="post" action="" enctype="multipart/form-data">
                 <input name="act" type="hidden" value="act"/>
                 <table cellspacing="0" class="comTable">
@@ -262,66 +258,64 @@
                     <tr>
                         <th><span class="red">*</span>课程标题</th>
                         <td>
-                                                            <span class="iptInner">
-                                                            <input name="title" value="<?php echo $course['title'] ?>"
-                                                                   type="text" class="iptH37 w345">
-                                                            </span>
+                            <span class="iptInner">
+                            <input name="title" value="<?php echo $course['title'] ?>"
+                                   type="text" class="iptH37 w345" placeholder="请输入课程标题">
+                            </span>
 
                         </td>
                     </tr>
                     <tr>
                         <th><span class="red">*</span>开课时间</th>
                         <td>
-                                                            <span class="iptInner">
-                                                            <input name="time_start"
-                                                                   value="<?php echo $course['time_start'] ?>"
-                                                                   type="text" class="iptH37 w157 mr5 Wdate"
-                                                                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"
-                                                                   autocomplete="off">至<input name="time_end"
-                                                                                              value="<?php echo $course['time_end'] ?>"
-                                                                                              type="text"
-                                                                                              class="iptH37 w157 ml5 Wdate"
-                                                                                              onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"
-                                                                                              autocomplete="off">
-                                                            </span>
+                            <span class="iptInner">
+                            <input placeholder="开始时间" name="time_start"
+                                   value="<?php echo empty($course['time_start'])?'':date("Y-m-d H:i",strtotime($course['time_start'])) ?>"
+                                   type="text" class="iptH37 mr10 DTdate w156" >至<input placeholder="结束时间" name="time_end"
+                                                              value="<?php echo empty($course['time_end'])?'':date('Y-m-d H:i',strtotime($course['time_end'])) ?>"
+                                                              type="text"
+                                                              class="iptH37 ml10 DTdate w156" >
+                            </span>
 
                         </td>
                     </tr>
                     <tr>
                         <th><span class="red">*</span>课程地点</th>
                         <td>
-                                                            <span class="iptInner">
-                                                            <input name="address"
-                                                                   value="<?php echo $course['address'] ?>" type="text"
-                                                                   class="iptH37 w345">
-                                                            </span>
+                            <span class="iptInner">
+                            <input placeholder="请输入课程地点" name="address"
+                                   value="<?php echo $course['address'] ?>" type="text"
+                                   class="iptH37 w345">
+                            </span>
 
                         </td>
                     </tr>
                     <tr>
                         <th>课程讲师</th>
                         <td>
-                                                            <span class="iptInner">
-                                                            <select name="teacher_id" class="iptH37 w215">
-                                                                <option value="">请选择</option>
-                                                                <?php foreach ($teachers as $t) {
-                                                                    echo $course['teacher_id'] == $t['id'] ? '<option selected value="' . $t['id'] . '">' . $t['name'] . '</option>' : '<option value="' . $t['id'] . '">' . $t['name'] . '</option>';
-                                                                } ?>
-                                                            </select>
-                                                            </span>
+                            <span class="iptInner">
+                                <select name="teacher_id" class="iptH37 w237">
+                                    <option value="">请选择</option>
+                                    <?php foreach ($teachers as $t) {
+                                        echo $course['teacher_id'] == $t['id'] ? '<option selected value="' . $t['id'] . '">' . $t['name'] . '</option>' : '<option value="' . $t['id'] . '">' . $t['name'] . '</option>';
+                                    } ?>
+                                </select><a class="borBlueH37 ml20" href="<?php echo site_url('teacher/teachercreate') ?>">创建讲师</a>
+                            </span>
 
                         </td>
                     </tr>
                     <tr>
-                        <th>培训对象</th>
+                        <th>培训学员</th>
                         <td>
+                            <span class="iptInner">
                             <input type="hidden" name="targetone" value="<?php echo $course['targetone'] ?>"/><input
                                 type="hidden" name="targettwo" value="<?php echo $course['targettwo'] ?>"/><input
                                 type="hidden" name="targetstudent" value="<?php echo $course['targetstudent'] ?>"/>
-                            <input readonly="true" name="target" value="<?php echo $course['target'] ?>" type="text"
-                                   class="iptH37 w250"><a id="addTarget" class="borBlueH37 ml20"
-                                                          href="javascript:void(0)"><i class="addQuan"></i>选择名单</a>
-                            <p class="gray9">您的培训对象将在报名开启后收到报名通知</p>
+                            <input readonly="true" placeholder="请选择培训学员" name="target" value="<?php echo $course['target'] ?>" type="text"
+                                   class="iptH37 w237"><a id="addTarget" class="borBlueH37 ml20"
+                                                          href="javascript:void(0)">选择学员</a>
+                            </span>
+                            <p class="gray9 mt15">培训学员将在报名开启后收到报名通知</p>
 
                         </td>
                     </tr>
@@ -329,73 +323,58 @@
                     <tr>
                         <th>课程封面</th>
                         <td>
-                                                            <span class="iptInner">
-                                                            <?php if (!empty($course['page_img'])) { ?><img
-                                                                onclick="$('#fileBtn').click()"
-                                                                src="<?php echo base_url() . 'uploads/course_img/' . $course['page_img'] ?> "
-                                                                width="200" /> <?php } ?>
-                                                                <input name="page_img" type="file"
-                                                                       style="visibility: hidden;" id="fileBtn"/><br><a
-                                                                    href="javascript:;" onclick="$('#fileBtn').click()"
-                                                                    class="borBlueH37 mb10">上传封面</a>
-                                                            </span>
-                            <p class="gray9"><?php echo !empty($course['page_img']) ? '点击图片可更换,文件类型' : '' ?>
-                                JPG、PNG、GIF格式图片，大小不超过5M</p>
+                            <span class="iptInner">
+                            <?php if (!empty($course['page_img'])) { ?><img
+                                onclick="$('#fileBtn').click()"
+                                src="<?php echo base_url() . 'uploads/course_img/' . $course['page_img'] ?> "
+                                width="200" /><br> <?php } ?>
+                                <input name="page_img" type="file"
+                                       style="display: none;" id="fileBtn"/><a
+                                    href="javascript:;" onclick="$('#fileBtn').click()"
+                                    class="borBlueH37 mb10">上传封面</a>
+                            </span>
+                            <p class="gray9">JPG、PNG、GIF格式，大小不超过5M</p>
                         </td>
                     </tr>
-
                     <tr>
                         <th>课程价格</th>
                         <td>
-                                                            <span class="iptInner">
-                                                            <input name="price" value="<?php echo $course['price'] ?>"
-                                                                   type="text" class="iptH37 w157 mr5">元/课时
-                                                            </span>
+                            <span class="iptInner">
+                            <input name="price" placeholder="请输入课程价格" value="<?php echo $course['price'] ?>" type="text" class="iptH37 w157 mr20 w237">元/课时
+                            </span>
 
                         </td>
                     </tr>
                     <tr>
                         <th>课程介绍</th>
                         <td>
-                                                            <span class="iptInner">
-                                                            <textarea name="info"
-                                                                      class="iptare"><?php echo $course['info'] ?></textarea>
-                                                            </span>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>课程收益</th>
-                        <td>
-                                                            <span class="iptInner">
-                                                            <textarea name="income"
-                                                                      class="iptare"><?php echo $course['income'] ?></textarea>
-                                                            </span>
+                            <span class="iptInner">
+                            <textarea name="info" class="iptare pt10" placeholder="请输入课程介绍和收益"><?php echo $course['info'] ?></textarea>
+                            </span>
 
                         </td>
                     </tr>
                     <tr>
                         <th><span class="red">*</span>课程大纲</th>
                         <td>
-                                                            <span class="iptInner">
-                                                            <textarea name="outline"
-                                                                      class="iptare"><?php echo $course['outline'] ?></textarea>
-                                                            </span>
+                            <span class="iptInner">
+                            <textarea name="outline" class="iptare pt10" placeholder="请输入课程大纲"><?php echo $course['outline'] ?></textarea>
+                            </span>
 
                         </td>
                     </tr>
                     <tr>
                         <th></th>
                         <td>
-                                                            <span class="iptInner">
-                                                            <input type="submit"
-                                                                   value="<?php echo empty($course) ? '创建课程' : '保存课程' ?>"
-                                                                   class="coBtn mr30">
-                                                                <label class="checkBox"><input
-                                                                        name="public" <?php if ($course['ispublic'] == '1') {
-                                                                        echo 'checked="checked"';
-                                                                    } ?> value="1" type="checkbox">发布</label>
-                                                            </span>
+                            <span class="iptInner">
+                            <input type="submit"
+                                   value="<?php echo empty($course) ? '创建课程' : '保存课程' ?>"
+                                   class="coBtn mr30">
+                                <label class="checkBox"><input
+                                        name="public" <?php if ($course['ispublic'] == '1') {
+                                        echo 'checked="checked"';
+                                    } ?> value="1" type="checkbox">发布</label>
+                            </span>
                         </td>
                     </tr>
                 </table>
@@ -407,7 +386,7 @@
 <div id="conWindow" style="z-index: 99999;display:none;" class="popWinBox">
     <div class="pop_div" style="z-index: 100001;">
         <div class="title_div"><a class="closeBtn" id="popConClose" href="javascript:;">X</a><span id="title_divSpan"
-                                                                                                   class="title_divText">请选择对象</span>
+                                                                                                   class="title_divText">请选择学员</span>
         </div>
         <div id="conMessage" class="pop_txt01">
             <div class="secBox">

@@ -1,15 +1,23 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.listBox .listCont .imgBox').each(function(){
+            $(this).height($(this).next().find('.listText').height());
+        })
+    });
+</script>
+<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css"/>
 <div class="wrap">
-			<div class="titCom clearfix">
-<?php if($loginInfo['role']==1||$roleInfo['teachercreate']==1){ ?>
-                            <a href="<?php echo site_url('teacher/teachercreate') ?>" class="fRight blueH35"><i class="addQuan"></i>新增讲师</a>
-<?php } ?>
-                        <span class="titSpan">讲师列表</span></div>
 			<div class="comBox">
+				<div class="texturetip clearfix p1524"><span class="fLeft pt5">讲师列表</span>
+					<div class="fRight">
+						<a class="borBlueH37 w72 aCenter" href="<?php echo site_url('teacher/teachercreate') ?>">创建讲师</a>
+					</div>
+				</div>
 				<div class="seachBox clearfix">
-                                    <form method="get" action="">
+                    <form method="get" action="">
 					<ul>
 						<li>
-                                                    <input name="keyword" value="<?php echo $parm['keyword'] ?>" type="text" class="ipt" placeholder="关键字">
+                            <input name="keyword" value="<?php echo $parm['keyword'] ?>" type="text" class="ipt" placeholder="关键字">
 						</li>
 						<li>
                                                         <select name="type" class="ipt">
@@ -28,7 +36,7 @@
 								<option value="2" <?php if($parm['work_type']==2){ ?>selected=""<?php } ?>>兼职</option>
 							</select>
 						</li>
-                                                <li class="btn"><input type="submit" value="查询" class="grayH42" /></li>
+                                                <li class="btn fRight"><input type="submit" value="查询" class="borBlueH37 w100 mt3" /></li>
 					</ul>
                                         </form>
 				</div>
@@ -41,15 +49,15 @@
                                                 <?php } ?>
 
                                                 <div class="imgBox">
-													<?php if(!empty($t['head_img'])){ ?>
-														<a href="<?php echo site_url('teacher/teacherinfo/'.$t['id']); ?>"><img src="<?php echo base_url();?>uploads/teacher_img/<?php echo $t['head_img'] ?>" alt="" width="110"></a>
-													<?php } ?>
+                                                    <span class="helper"></span>
+														<a href="<?php echo site_url('teacher/teacherinfo/'.$t['id']); ?>"><img src="<?php echo !empty($t['head_img'])?base_url('uploads/teacher_img/'.$t['head_img']):base_url().'images/face_default.png' ?>" alt="" width="110"></a>
 												</div>
-						<div class="listText">
-                                                    <p class="titp"><a class="blue" href="<?php echo site_url('teacher/teacherinfo/'.$t['id']); ?>"><?php echo $t['name'] ?></a></p>
-							<p>讲师头衔：<?php echo $t['title'] ?></p>
-							<p><span class="mr30">师资类型：<?php echo $t['type']==1?'内部':'外部' ?></span><span class="mr30">擅长类别：<?php echo $t['specialty'] ?></span><?php if(!empty($t['years'])){ ?>授课年限：<?php echo $t['years'] ?>年<?php } ?></p>
-						</div>
+						<a class="blue" href="<?php echo site_url('teacher/teacherinfo/'.$t['id']); ?>">
+							<div class="listText"><p class="titp blue"><?php echo $t['name'] ?></p>
+							<p><span class="mr30">师资类型：<?php echo $t['type']==1?'内部':'外部' ?></span><?php if(!empty($t['specialty'])){ ?><span class="mr30">擅长类别：<?php echo $t['specialty'] ?></span><?php } ?><?php if(!empty($t['years'])){ ?>授课年限：<?php echo $t['years'] ?>年<?php } ?></p>
+							<?php if(!empty($t['info'])){ ?><p>讲师介绍：<?php echo mb_strlen($t['info'],'utf-8')>30?mb_substr($t['info'],0,30,'utf-8').'……':mb_substr($t['info'],0,30,'utf-8') ?></p><?php } ?>
+							</div>
+						</a>
 					</div>
                                     <?php } ?>
 				</div>

@@ -204,9 +204,9 @@
 <div class="wrap">
     <div class="textureCont w960">
 
-        <div class="texturetip clearfix"><span class="fLeft">所有能力模型</span>
+        <div class="texturetip p2015 clearfix"><span class="fLeft pt5">所有能力模型</span>
             <div class="fRight">
-                <a class="borBlueBtnH28" href="<?php echo site_url('html/abilityCustom') ?>">定制能力模型</a>
+                <a class="borBlueH37 aCenter" href="<?php echo site_url('html/abilityCustom') ?>">定制能力模型</a>
             </div>
         </div>
 
@@ -219,15 +219,15 @@
                 <col width="10%">
                 <tbody>
                 <tr>
-                    <th class="center">岗位</th>
-                    <th class="center">匹配人员</th>
+                    <th class="aLeft">岗位</th>
+                    <th class="center">匹配学员</th>
                     <th class="center">状态</th>
                     <th class="center">操作</th>
 
                 </tr>
                 <?php foreach ($jobs as $job) { ?>
                     <tr>
-                        <td class="aCenter"><a class="blue" href="<?php echo site_url('ability/show/'.$job['id']) ?>"><?php echo $job['name'] ?></a></td>
+                        <td class="aLeft"><a class="blue" href="<?php echo site_url('ability/show/'.$job['id']) ?>"><?php echo $job['name'] ?></a></td>
                         <td class="aCenter">
                             <input type="hidden" name="jobid" value="<?php echo $job['id'] ?>"/>
                             <input type="hidden" name="targetone" value="<?php echo $job['target_one'] ?>"/>
@@ -263,7 +263,7 @@
 <div id="conWindow" style="z-index: 99999;display:none;" class="popWinBox">
     <div class="pop_div" style="z-index: 100001;">
         <div class="title_div"><a class="closeBtn" id="popConClose" href="javascript:;">X</a><span id="title_divSpan"
-                                                                                                   class="title_divText">请选择对象</span>
+                                                                                                   class="title_divText">请选择学员</span>
         </div>
         <div id="conMessage" class="pop_txt01">
             <div class="secBox">

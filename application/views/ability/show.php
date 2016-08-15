@@ -155,7 +155,6 @@
             },
             zIndex: 999
         });
-        $('.alert-remove').click(function(){$('.alertBox').hide()});
     });
 //    window.onbeforeunload = function() {
 //        if(editflag) {
@@ -168,8 +167,8 @@
         <input id="jobid" type="hidden" value="<?php echo $abilityjob['id'] ?>" />
         <div class="texturetip clearfix"><span class="fLeft mr10"><?php echo $abilityjob['name'] ?>评估标准</span>
         </div>
-        <p class="alertBox alert-success"><span class="alert-msg">保存成功!</span><a href="javascript:;" class="alert-remove">X</a></p>
-        <p class="alertBox alert-danger"><span class="alert-msg">保存失败!</span><a href="javascript:;" class="alert-remove">X</a></p>
+        <p class="alertBox alert-success " style="display: none;"><span class="alert-msg">保存成功!</span><a href="javascript:;" class="alert-remove">X</a></p>
+        <p class="alertBox alert-danger" style="display: none;"><span class="alert-msg">保存失败!</span><a href="javascript:;" class="alert-remove">X</a></p>
         <div class="nengli">
             <div class="nengliRight pt10">
                 <div class="fRight">
@@ -180,7 +179,7 @@
                 <div style="width: 500px;height:300px; margin:40px 0 0 -100px;">
                     <canvas id="canvas"></canvas>
                 </div>
-                <p class="txt">匹配人员:</p>
+                <p class="txt">匹配学员:</p>
                 <p class="txt ml10"><?php if(count($students)>0){?>
                         <?php foreach ($students as $stu){?>
                             <?php if($stu['status']==2){//完成评估 ?>

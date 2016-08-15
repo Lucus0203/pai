@@ -9,7 +9,7 @@
 
                 <div class="listBox">
                         <div class="listCont listContGray">
-                                <?php if(!empty($teacher['head_img'])){ ?><div class="imgBox"><img src="<?php echo base_url('uploads/teacher_img/'.$teacher['head_img']) ?>" alt="" width="160"></div><?php } ?>
+                                <div class="imgBox"><img src="<?php echo !empty($teacher['head_img'])?base_url('uploads/teacher_img/'.$teacher['head_img']):base_url().'images/face_default.png' ?>" alt="" width="160"></div>
                                 <div class="listText">
                                         <p class="titp"><?php echo $teacher['name'] ?></p>
                                         <p>师资类型：<?php echo $teacher['type']==2?'外部':'内部' ?></p>

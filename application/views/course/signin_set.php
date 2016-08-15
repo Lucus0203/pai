@@ -44,7 +44,7 @@
 </script>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
 <div class="wrap">
-        <div class="titCom clearfix"><span class="titSpan"><?php echo $course['title'] ?>  </span><a href="javascript:void(0)" class="<?php echo $course['status_class']; ?>"><?php echo $course['status_str']; ?></a></div>
+        <div class="titCom clearfix"><span class="titSpan"><?php echo $course['title'] ?>  </span><span class="<?php echo $course['status_class']; ?> ml20"><?php echo $course['status_str']; ?></span></div>
         <div class="topNaviKec">
                 <?php $this->load->view ( 'course/top_navi' ); ?>
 
@@ -55,10 +55,10 @@
                         <div class="sideLeft">
                                 <ul class="sideLnavi">
 <?php if($loginInfo['role']==1||$roleInfo['signinset']==1){ ?>
-                                        <li class="cur"><a href="<?php echo site_url('course/signinset/'.$course['id']) ?>">签到设置<i></i></a></li>
+                                        <li class="cur"><a href="<?php echo site_url('course/signinset/'.$course['id']) ?>">签到设置<i class="ml10 fa fa-angle-right fa-lg"></i></a></li>
 <?php } ?>
 <?php if($loginInfo['role']==1||$roleInfo['signinlist']==1){ ?>
-                                        <li><a href="<?php echo site_url('course/signinlist/'.$course['id']) ?>">签到名单<i></i></a></li>
+                                        <li><a href="<?php echo site_url('course/signinlist/'.$course['id']) ?>">签到名单</a></li>
 <?php } ?>
                                 </ul>
 
@@ -86,7 +86,7 @@
                                                 <tr>
                                                         <th><span class="red">*</span>签到时段</th>
                                                         <td>
-                                                            <input type="text" name="signin_start" value="<?php echo $course['signin_start'] ?>" class="iptH37 Wdate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" autocomplete="off"> 至 <input name="signin_end" value="<?php echo $course['signin_end'] ?>" type="text" class="iptH37 Wdate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" autocomplete="off">
+                                                            <input type="text" name="signin_start" value="<?php echo $course['signin_start'] ?>" class="iptH37 DTdate" autocomplete="off"> 至 <input name="signin_end" value="<?php echo $course['signin_end'] ?>" type="text" class="iptH37 DTdate" autocomplete="off">
 
                                                         </td>
                                                 </tr>
@@ -99,7 +99,7 @@
                                                 <tr>
                                                         <th>签退时段</th>
                                                         <td>
-                                                            <input type="text" name="signout_start" value="<?php echo $course['signout_start'] ?>" class="iptH37 Wdate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" autocomplete="off"> 至 <input name="signout_end" value="<?php echo $course['signout_end'] ?>" type="text" class="iptH37 Wdate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" autocomplete="off">
+                                                            <input type="text" name="signout_start" value="<?php echo $course['signout_start'] ?>" class="iptH37 DTdate" autocomplete="off"> 至 <input name="signout_end" value="<?php echo $course['signout_end'] ?>" type="text" class="iptH37 DTdate" autocomplete="off">
                                                             
 
                                                         </td>

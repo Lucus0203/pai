@@ -4,33 +4,11 @@
             rules: {
                 name: {
                     required: true
-                },
-                title: {
-                    required: true
-                },
-                specialty: {
-                    required: true
-                },
-                head_img: {
-                    required: true,
-                    accept: "image/*",
-                    filesize: 5 * 1048576
                 }
             },
             messages: {
                 name: {
                     required: "请输入讲师姓名"
-                },
-                title: {
-                    required: "请输入讲师头衔"
-                },
-                specialty: {
-                    required: "请选择擅长类别"
-                },
-                head_img: {
-                    required: "请选择讲师头像",
-                    accept: "图片格式不正确",
-                    filesize: "图片大小不能超过5M"
                 }
             },
             errorPlacement: function (error, element) {
@@ -65,29 +43,31 @@
     });
 </script>
 <div class="wrap">
-    <div class="titCom clearfix"><span class="titSpan"><?php echo empty($teacher) ? '新增讲师' : '编辑讲师' ?></span></div>
+    <div class="titCom clearfix"><span class="titSpan"><?php echo empty($teacher) ? '创建讲师' : '编辑讲师' ?></span></div>
     <div class="comBox">
+        <?php if (!empty($msg)) {?>
+            <p class="alertBox alert-success"><span class="alert-msg"><?php echo $msg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
+        <?php } ?>
         <div class="tableBox">
-            <?php if (!empty($msg)) {
-                echo '<p class="aCenter red f14">' . $msg . '</p>';
-            } ?>
             <form id="editForm" method="post" action="" enctype="multipart/form-data">
                 <input name="act" type="hidden" value="act"/>
+                <input name="refere_url" type="hidden" value="<?php echo $_SERVER['HTTP_REFERER'];?>" />
                 <div class="upPhoto">
-											<span><?php if (!empty($teacher['head_img'])) { ?><img
-                                                    src="<?php echo base_url() ?>/uploads/teacher_img/<?php echo $teacher['head_img'] ?>"
-                                                    alt="" width="122"><?php } else { ?><img
-                                                    src="<?php echo base_url() ?>/images/face_default.png" alt=""
-                                                    width="122"><?php } ?><input required="required" name="head_img"
-                                                                                 type="file"
-                                                                                 style="<?php if (empty($teacher['head_img'])) { ?>visibility: hidden;<?php } else { ?>display:none<?php } ?>"
-                                                                                 id="fileBtn"/><a class="blue"
-                                                                                                  href="javascript:;"
-                                                                                                  onclick="$('#fileBtn').click()">上传头像</a>
-											</span>
+                    <span><?php if (!empty($teacher['head_img'])) { ?><img src="<?php echo base_url() ?>/uploads/teacher_img/<?php echo $teacher['head_img'] ?>" alt="" width="122"><?php } else { ?><img src="<?php echo base_url() ?>images/face_default.png" width="122"><?php } ?><input name="head_img" type="file" style="<?php if (empty($teacher['head_img'])) { ?>visibility: hidden;<?php } else { ?>display:none<?php } ?>" id="fileBtn"/><a class="blue" href="javascript:;" onclick="$('#fileBtn').click()">上传头像</a>
+                    </span>
                 </div>
                 <table cellspacing="0" class="comTable">
                     <col width="20%"/>
+                    <tr>
+                        <th><span class="red">*</span>讲师姓名</th>
+                        <td>
+                            <span class="iptInner">
+                            <input name="name" placeholder="请输入讲师姓名" value="<?php echo $teacher['name'] ?>"
+                                   type="text" class="iptH37 w237">
+                            </span>
+
+                        </td>
+                    </tr>
                     <tr>
                         <th><span class="red">*</span>师资类型</th>
                         <td>
@@ -96,57 +76,8 @@
                                     <label><input name="type" checked="checked" value="1" type="radio">内部</label></li>
                                 <li>
                                     <label><input
-                                            name="type" <?php echo $teacher['type'] == 2 ? 'checked="checked"' : '' ?>
-                                            value="2" type="radio">外部</label></li>
+                                            name="type" <?php echo $teacher['type'] == 2 ? 'checked="checked"' : '' ?> value="2" type="radio">外部</label></li>
                             </ul>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <th><span class="red">*</span>讲师姓名</th>
-                        <td>
-                                                            <span class="iptInner">
-                                                            <input name="name" value="<?php echo $teacher['name'] ?>"
-                                                                   type="text" class="iptH37 w215">
-                                                            </span>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <th><span class="red">*</span>讲师头衔</th>
-                        <td>
-                                                            <span class="iptInner">
-                                                            <input name="title" value="<?php echo $teacher['title'] ?>"
-                                                                   type="text" class="iptH37 w345">
-                                                            </span>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <th><span class="red">*</span>擅长类别</th>
-                        <td>
-                                                            <span class="iptInner">
-                                                            <input name="specialty"
-                                                                   value="<?php echo $teacher['specialty'] ?>"
-                                                                   type="text" class="iptH37 w345">
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>授课年限</th>
-                        <td>
-                                                            <span class="iptInner">
-                                                            <select name="years" class="iptH37 w215">
-									<option value="">请选择</option>
-                                                                <?php for ($i = 1; $i <= 30; $i++) {
-                                                                    if ($teacher['years'] == $i) {
-                                                                        echo '<option selected="selected" value="' . $i . '">' . $i . '年</option>';
-                                                                    } else {
-                                                                        echo '<option value="' . $i . '">' . $i . '年</option>';
-                                                                    }
-                                                                } ?>
-								</select>
-                                                            </span>
 
                         </td>
                     </tr>
@@ -159,11 +90,35 @@
                                     <input checked="checked" name="work_type" value="1" type="radio">专职
                                 </li>
                                 <li>
-                                    <input
-                                        name="work_type" <?php echo $teacher['work_type'] == 2 ? 'checked="checked"' : '' ?>
-                                        value="2" type="radio">兼职
+                                    <input name="work_type" <?php echo $teacher['work_type'] == 2 ? 'checked="checked"' : '' ?> value="2" type="radio">兼职
                                 </li>
                             </ul>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>擅长类别</th>
+                        <td>
+                            <span class="iptInner">
+                            <input name="specialty" placeholder="请输入擅长类型" value="<?php echo $teacher['specialty'] ?>" type="text" class="iptH37 w237">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>授课年限</th>
+                        <td>
+                            <span class="iptInner">
+                            <select name="years" class="iptH37 w237">
+                                <option value="">请选择</option>
+                                <?php for ($i = 1; $i <= 30; $i++) {
+                                    if ($teacher['years'] == $i) {
+                                        echo '<option selected="selected" value="' . $i . '">' . $i . '年</option>';
+                                    } else {
+                                        echo '<option value="' . $i . '">' . $i . '年</option>';
+                                    }
+                                } ?>
+                            </select>
+                            </span>
 
                         </td>
                     </tr>
@@ -171,21 +126,18 @@
                     <tr>
                         <th>授课薪酬</th>
                         <td>
-                                                            <span class="iptInner">
-                                                            <input name="hourly"
-                                                                   value="<?php echo $teacher['hourly'] ?>" type="text"
-                                                                   class="iptH37 w157 mr5">元/课时
-                                                            </span>
+                            <span class="iptInner">
+                            <input name="hourly" placeholder="请输入授课薪酬" value="<?php echo $teacher['hourly'] ?>" type="text" class="iptH37 w157 mr20">元/课时
+                            </span>
 
                         </td>
                     </tr>
                     <tr>
                         <th>讲师简介</th>
                         <td>
-                                                            <span class="iptInner">
-                                                            <textarea name="info"
-                                                                      class="iptare"><?php echo $teacher['info'] ?></textarea>
-                                                            </span>
+                            <span class="iptInner">
+                            <textarea name="info" placeholder="请输入讲师简介和头衔" class="iptare"><?php echo $teacher['info'] ?></textarea>
+                            </span>
 
                         </td>
                     </tr>

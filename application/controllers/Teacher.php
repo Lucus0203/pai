@@ -89,6 +89,7 @@ class Teacher extends CI_Controller
         $res = array();
         $act = $this->input->post('act');
         if (!empty($act)) {
+            $refere_url=$this->input->post('refere_url');
             $logininfo = $this->_logininfo;
             $t = array('company_code' => $logininfo['company_code'],
                 'type' => $this->input->post('type'),
@@ -119,7 +120,7 @@ class Teacher extends CI_Controller
                 $this->image_lib->resize();
             }
             $id = $this->teacher_model->create($t);
-            redirect(site_url('teacher/teacherlist'));
+            echo '<script>history.go(-2);</script>';
             return;
         }
 

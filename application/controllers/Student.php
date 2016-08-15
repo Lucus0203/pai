@@ -48,12 +48,12 @@ class Student extends CI_Controller
                 'job_code' => $this->input->post('job_code'),
                 'job_name' => $this->input->post('job_name'),
                 'department_parent_id' => $this->input->post('department_parent_id'),
-                'department_id' => $this->input->post('department_id'),
                 'mobile' => $this->input->post('mobile'),
                 'email' => $this->input->post('email'),
                 'user_name' => $this->input->post('user_name'),
                 'user_pass' => $this->input->post('user_pass'),
                 'role' => $this->input->post('role'));
+            $s['department_id']=$this->input->post('department_id')??$this->input->post('department_parent_id');
 
             //验证账号
             if ($this->student_model->get_count(array('company_code' => $s['company_code'],'mobile' => $s['mobile'],'isdel'=>2)) > 0) {
@@ -86,7 +86,7 @@ class Student extends CI_Controller
 
         $where = "parent_id is null and company_code = '{$logininfo['company_code']}' ";
         $departments = $this->department_model->get_all($where);
-        $second_departments = (!empty($departments))?$this->department_model->get_all(array('parent_id' => $departments[0]['id'])):array();
+        $second_departments = array();
         foreach ($departments as $key => $d) {
             if (($d['id'] == $current_department['parent_id']) || $d['id'] == $dpid) {
                 $departments[$key]['departs'] = $this->department_model->get_all(array('parent_id' => $d['id']));
@@ -121,12 +121,12 @@ class Student extends CI_Controller
                 'job_code' => $this->input->post('job_code'),
                 'job_name' => $this->input->post('job_name'),
                 'department_parent_id' => $this->input->post('department_parent_id'),
-                'department_id' => $this->input->post('department_id'),
                 'mobile' => $this->input->post('mobile'),
                 'email' => $this->input->post('email'),
                 'user_name' => $this->input->post('user_name'),
                 'user_pass' => $this->input->post('user_pass'),
                 'role' => $this->input->post('role'));
+            $s['department_id']=$this->input->post('department_id')??$this->input->post('department_parent_id');
             if ($res['student']['user_pass'] != $s['user_pass']) {
                 $s['user_pass'] = md5($s['user_pass']);
             }

@@ -141,7 +141,7 @@
                     <tr>
                         <th>公司编号</th>
                         <td>
-                            <?php echo $user['company_code'] ?><span class="gray9">(系统自动分配的编号,不可修改)</span>
+                            <?php echo $user['company_code'] ?><span class="gray9">(系统分配)</span>
                         </td>
                     </tr>
                     <tr>
@@ -292,14 +292,14 @@
                     <table cellspacing="0" class="listTable">
                         <tbody>
                         <tr>
-                            <th>一级模块</th>
-                            <th>二级模块</th>
-                            <th>三级模块</th>
+                            <th class="aLeft">一级模块</th>
+                            <th class="aLeft">二级模块</th>
+                            <th class="aLeft">三级模块</th>
                             <th>助理管理员</th>
                             <th>员工经理</th>
                         </tr>
                         <tr>
-                            <td rowspan="17">课程管理</td>
+                            <td rowspan="16">课程管理</td>
                             <td rowspan="5">课程管理</td>
                             <td>列表</td>
                             <td class="aCenter"><input name="role2[courselist]" value="1"
@@ -356,7 +356,7 @@
                                 } ?> /></td>
                         </tr>
                         <tr>
-                            <td rowspan="2">报名管理</td>
+                            <td rowspan="3">报名管理</td>
                             <td>报名设置</td>
                             <td class="aCenter"><input name="role2[applyset]" value="1"
                                                        type="checkbox" <?php if ($role['role2']['applyset'] == 1) {
@@ -375,6 +375,17 @@
                                 } ?> /></td>
                             <td class="aCenter"><input name="role3[applylist]" value="1"
                                                        type="checkbox" <?php if ($role['role3']['applylist'] == 1) {
+                                    echo 'checked';
+                                } ?> /></td>
+                        </tr>
+                        <tr>
+                            <td>通知设置</td>
+                            <td class="aCenter"><input name="role2[notifyset]" value="1"
+                                                       type="checkbox" <?php if ($role['role2']['notifyset'] == 1) {
+                                    echo 'checked';
+                                } ?> /></td>
+                            <td class="aCenter"><input name="role3[notifyset]" value="1"
+                                                       type="checkbox" <?php if ($role['role3']['notifyset'] == 1) {
                                     echo 'checked';
                                 } ?> /></td>
                         </tr>
@@ -471,29 +482,8 @@
                                 } ?> /></td>
                         </tr>
                         <tr>
-                            <td rowspan="2">通知设置</td>
-                            <td>通知设置</td>
-                            <td class="aCenter"><input name="role2[notifyset]" value="1"
-                                                       type="checkbox" <?php if ($role['role2']['notifyset'] == 1) {
-                                    echo 'checked';
-                                } ?> /></td>
-                            <td class="aCenter"><input name="role3[notifyset]" value="1"
-                                                       type="checkbox" <?php if ($role['role3']['notifyset'] == 1) {
-                                    echo 'checked';
-                                } ?> /></td>
+                            <th colspan="5"></th>
                         </tr>
-                        <tr>
-                            <td>自定义发送</td>
-                            <td class="aCenter"><input name="role2[notifycustomize]" value="1"
-                                                       type="checkbox" <?php if ($role['role2']['notifycustomize'] == 1) {
-                                    echo 'checked';
-                                } ?> /></td>
-                            <td class="aCenter"><input name="role3[notifycustomize]" value="1"
-                                                       type="checkbox" <?php if ($role['role3']['notifycustomize'] == 1) {
-                                    echo 'checked';
-                                } ?> /></td>
-                        </tr>
-
                         <tr>
                             <td rowspan="5">讲师资源</td>
                             <td rowspan="5">讲师管理</td>
@@ -550,6 +540,9 @@
                                                        type="checkbox" <?php if ($role['role3']['teacherdel'] == 1) {
                                     echo 'checked';
                                 } ?> /></td>
+                        </tr>
+                        <tr>
+                            <th colspan="5"></th>
                         </tr>
                         <tr>
                             <td rowspan="2">组织与学员</td>

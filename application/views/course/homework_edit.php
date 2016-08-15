@@ -23,7 +23,7 @@
 </script>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
 <div class="wrap">
-        <div class="titCom clearfix"><span class="titSpan"><?php echo $course['title'] ?>  </span><a href="javascript:void(0)" class="<?php echo $course['status_class']; ?>"><?php echo $course['status_str']; ?></a></div>
+        <div class="titCom clearfix"><span class="titSpan"><?php echo $course['title'] ?>  </span><span class="<?php echo $course['status_class']; ?> ml20"><?php echo $course['status_str']; ?></span></div>
         <div class="topNaviKec">
                 <?php $this->load->view ( 'course/top_navi' ); ?>
         </div>
@@ -33,7 +33,7 @@
                         <div class="sideLeft">
                                 <ul class="sideLnavi">
 <?php if($loginInfo['role']==1||$roleInfo['homeworkedit']==1){ ?>
-                                        <li class="cur"><a href="<?php echo site_url('course/homeworkedit/'.$course['id']) ?>">作业编辑<i></i></a></li>
+                                        <li class="cur"><a href="<?php echo site_url('course/homeworkedit/'.$course['id']) ?>">作业编辑<i class="ml10 fa fa-angle-right fa-lg"></i></a></li>
 <?php } ?>
 <?php if($loginInfo['role']==1||$roleInfo['homeworklist']==1){ ?>
                                         <li><a href="<?php echo site_url('course/homeworklist/'.$course['id']) ?>">提交名单<i></i></a></li>
