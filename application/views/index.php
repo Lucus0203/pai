@@ -47,9 +47,9 @@
         <div class="sideBox">
             <p class="ttl02">常用功能</p>
             <ul class="listFunction clearfix">
-                <li><a href="<?php echo site_url('course/coursecreate') ?>"><i class="fa fa-book fa-lg"></i>创建课程</a></li>
-                <li><a href="<?php echo site_url('department/index') ?>"><i class="fa fa-users fa-lg"></i>组织管理</a></li>
-                <li><a href="<?php echo site_url('ability/index') ?>"><i class="fa fa-cube fa-lg"></i>能力模型</a></li>
+                <li><a href="<?php echo site_url('course/coursecreate') ?>"><i class="fa fa-book fa-3x"></i>创建课程</a></li>
+                <li><a href="<?php echo site_url('department/index') ?>"><i class="fa fa-users fa-3x"></i>组织管理</a></li>
+                <li><a href="<?php echo site_url('ability/index') ?>"><i class="fa fa-cube fa-3x"></i>能力模型</a></li>
             </ul>
         </div>
         <div class="sideBox">

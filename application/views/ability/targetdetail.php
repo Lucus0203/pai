@@ -17,7 +17,7 @@
                 datasets: [{
                     label:'<?php echo $student['name'] ?>',
                     backgroundColor: "rgba(255, 206, 73,0.5)",
-                    pointBackgroundColor: "rgba(217, 163, 73,1)",
+                    pointBackgroundColor: "rgba(255, 206, 73,1)",
                     data: [<?php if(array_key_exists(1,$studentPoint)){ echo round($studentPoint[1]['point']/$studentPoint[1]['level']*5,1) ?>,<?php } ?>
                         <?php if(array_key_exists(3,$studentPoint)){ echo round($studentPoint[3]['point']/$studentPoint[3]['level']*5,1) ?>,<?php } ?>
 
@@ -65,6 +65,14 @@
             },
             zIndex: 999
         });
+        $('ul.star li').click(function() {
+            var i = $(this).parent().find('li').index($(this));
+            $(this).addClass('cur').siblings().removeClass('cur');
+            var starBox = $(this).parent().parent();
+            starBox.find('.starTxt').hide().eq(i).show();
+            starBox.prev().val(i + 1);
+            return false;
+        });
     });
 </script>
 <div class="wrap">
@@ -101,15 +109,14 @@
                             <div class="starBox">
                                 <ul class="star">
                                     <?php for($i=1;$i<=$a['level'];$i++){?>
-                                    <li <?php if($a['point']==$i){ ?>class="cur"<?php } ?>>
-                                        <a href="#"><?php echo $i ?></a>
+                                    <li class="<?php if($a['point']==$i){ echo 'cur yellow'; }elseif($a['level_standard']==$i){echo 'blue';} ?>" >
+                                        <a href="#"><i class="fa fa-star fa-3x"></i><span class="num"><?php echo $i ?></span></a>
                                     </li>
                                     <?php } ?>
                                 </ul>
-                                <?php for($i=1;$i<=$a['level'];$i++){
-                                    if($a['point']==$i){ ?>
-                                <p class="starTxt"><?php echo nl2br($a['level_info'.$i]) ?></p>
-                                <?php }} ?>
+                                <?php for($i=1;$i<=$a['level'];$i++){ ?>
+                                <p <?php if($a['point']!=$i){?>style="display:none;"<?php } ?> class="starTxt"><?php echo nl2br($a['level_info'.$i]) ?></p>
+                                <?php } ?>
                             </div>
                         <?php } ?>
                 <?php } ?>

@@ -325,7 +325,9 @@ class Ability extends CI_Controller {
             return false;
         }
         $student=$this->student_model->get_row(array('id'=>$studentid));
-        $sql = "select * from " . $this->db->dbprefix('company_ability_job_student_assess') . " assess "
+        $sql = "select assess.*,if(cajm.level_standard!='',cajm.level_standard,job_model.level_standard) as level_standard from " . $this->db->dbprefix('company_ability_job_student_assess') . " assess "
+            . "left join " . $this->db->dbprefix('ability_job_model') . " job_model on job_model.id = assess.model_id "
+            . "left join " . $this->db->dbprefix('company_ability_job_model') . " cajm on cajm.model_id = assess.model_id and cajm.job_id=$abilityjobid and cajm.company_code='".$this->_logininfo['company_code']."' "
             . "where assess.company_code = '".$this->_logininfo['company_code']."' and assess.ability_job_id=$abilityjobid and student_id=".$studentid;
         $query = $this->db->query($sql);
         $res = $query->result_array();

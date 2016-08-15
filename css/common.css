@@ -663,7 +663,7 @@ textarea:after {
     float: left;
 	min-width: 110px;
 	margin-right: 25px;
-    min-height: 110px;
+    min-height: 130px;
 }
 
 .listBox .listCont .imgBox .helper {
@@ -673,6 +673,10 @@ textarea:after {
 }
 .listBox .listCont .imgBox img {
     vertical-align: middle;
+}
+
+.teacherList .listCont .imgBox {
+    min-height: 100px;
 }
 
 .listBox .listCont .listText {
@@ -859,7 +863,6 @@ textarea:after {
 
 .upPhoto span,
 .upPhoto img {
-	border-radius: 61;
 	display: block;
 }
 
@@ -988,7 +991,6 @@ textarea:after {
 }
 
 .listFunction i {
-	font-size: 38px;
 	display: block;
 	margin: 20px;
 	color: #9de0e7;
@@ -1240,10 +1242,11 @@ textarea:after {
 .starBox{ margin-bottom:  40px;}
 .starBox .star { margin-bottom: -2px; margin-left: 5px;}
 .starBox li{ display: inline-block; margin-right: 5px;}
-.starBox li a{ background: url(../images/start_gray.png) no-repeat left top; text-align:  center; width: 32px; height: 44px; padding-top: 5px; font-size: 16px; color: #fff; display: inline-block;}
-
-.starBox li.cur a{ background: url(../images/start_yellow.png) no-repeat left top;}
-.starBox li.standard a{ background: url(../images/start_blue.png) no-repeat left top;}
+.starBox li a{ text-align:  center; color: #e7e7e7; display: inline-block;padding-bottom: 13px; position: relative;}
+.starBox li a span.num{position: absolute;top:0;left: 0;width: 33px;line-height: 36px;text-align: center;color:#ffffff;    font-size: 15px;}
+.starBox li.yellow a{ color:#ffce49;}
+.starBox li.blue a{ color:#9de0e7;}
+.starBox li.cur a{ background: url(../images/start_cur.png) no-repeat left top;}
 .starBox .starTxt{ font-size:  16px; color: #3e3e3e; border:  1px solid #f0f0f0; padding: 10px;border-radius: 5px; background-color: #f8f8f8;}
 .f18{font-size: 18px !important;}
 .f24{font-size: 24px !important;}

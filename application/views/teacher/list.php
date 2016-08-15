@@ -40,7 +40,7 @@
 					</ul>
                                         </form>
 				</div>
-				<div class="listBox">
+				<div class="listBox teacherList">
                                     <?php foreach ($teachers as $t) { ?>
 					<div class="listCont">
                                                 <?php if($loginInfo['role']==1||$roleInfo['teacheredit']==1){ ?>

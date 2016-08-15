@@ -39,7 +39,7 @@
 
         $('ul.star li').click(function(){
             var i=$(this).parent().find('li').index($(this));
-            $(this).addClass('cur').siblings().removeClass('cur');
+            $(this).addClass('cur yellow').siblings().removeClass('cur yellow');
             var starBox=$(this).parent().parent();
             starBox.find('.starTxt').hide().eq(i).show();
             starBox.prev().val(i+1);
@@ -118,6 +118,7 @@
                             if(res.success!='ok'){
                                 $('.alert-danger .alert-msg').text(res.msg).parent().show();
                             }else{
+                                $('ul.star li.yellow').addClass('blue').siblings().removeClass('blue');
                                 $('.alert-success .alert-msg').text('保存成功!').parent().show();
                                 $('#resetAbilityStandard').removeClass('borGaryBtnH28').addClass('borBlueBtnH28');
                                 editflag=false;
@@ -212,8 +213,8 @@
                             <div class="starBox">
                                 <ul class="star starType<?php echo $a['type'] ?>">
                                     <?php for($i=1;$i<=$a['level'];$i++){?>
-                                    <li <?php if($i==$a['level_standard']){ ?>class="cur"<?php } ?>>
-                                        <a href="#"><?php echo $i ?></a>
+                                    <li class="<?php if($i==$a['level_standard']){ echo 'cur blue'; } ?>" >
+                                        <a href="#"><i class="fa fa-star fa-3x"></i><span class="num"><?php echo $i ?></span></a>
                                     </li>
                                     <?php } ?>
                                 </ul>

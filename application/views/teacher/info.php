@@ -7,17 +7,17 @@
                     <a href="<?php echo site_url('teacher/teacheredit/'.$teacher['id']);?>" class="editBtn"><i class="iedit"></i>编辑讲师</a><a href="<?php echo site_url('teacher/teacherdel/'.$teacher['id']);?>" class="delBtn"><i class="idel"></i>删除讲师</a>
 <?php } ?>
 
-                <div class="listBox">
+                <div class="listBox teacherList">
                         <div class="listCont listContGray">
                                 <div class="imgBox"><img src="<?php echo !empty($teacher['head_img'])?base_url('uploads/teacher_img/'.$teacher['head_img']):base_url().'images/face_default.png' ?>" alt="" width="160"></div>
                                 <div class="listText">
                                         <p class="titp"><?php echo $teacher['name'] ?></p>
                                         <p>师资类型：<?php echo $teacher['type']==2?'外部':'内部' ?></p>
-                                        <p>讲师头衔：<?php echo $teacher['title'] ?></p>
-                                        <p>擅长类别：<?php echo $teacher['specialty'] ?></p>
-                                        <p>授课年限：<?php echo $teacher['years'] ?></p>
+                                        <?php if(!empty($teacher['title'])){?><p>讲师头衔：<?php echo $teacher['title'] ?></p><?php } ?>
+            <?php if(!empty($teacher['specialty'])){?><p>擅长类别：<?php echo $teacher['specialty'] ?></p><?php } ?>
+            <?php if(!empty($teacher['years'])){?><p>授课年限：<?php echo $teacher['years'] ?></p><?php } ?>
                                         <p>工作形式：<?php echo $teacher['work_type']==2?'兼职':'专职' ?></p>
-                                        <?php if($loginInfo['role']==1||$roleInfo['teacheredit']==1){ ?><p>授课薪酬：<?php echo $teacher['hourly'] ?>元/课时</p><?php } ?>
+            <?php if(!empty($teacher['years'])){  if($loginInfo['role']==1||$roleInfo['teacheredit']==1){ ?><p>授课薪酬：<?php echo $teacher['hourly'] ?>元/课时</p><?php } } ?>
                                 </div>
                         </div>
 

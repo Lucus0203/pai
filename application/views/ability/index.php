@@ -184,17 +184,22 @@
             }
         }
         $('a.okBtn').click(function () {
-            $(this).html('请稍后..');
+            $(this).text('请稍后..');
             $.ajax({
                 type: "post",
                 url: '<?php echo site_url('ability/updateTarget') ?>',
-                data: {'jobid': $('input[name=jobid]').eq(currentTargetIndex).val(),'targetone':$('input[name=targetone]').eq(currentTargetIndex).val(),'targettwo':$('input[name=targettwo]').eq(currentTargetIndex).val(),'targetstudent':$('input[name=targetstudent]').eq(currentTargetIndex).val()},
+                data: {
+                    'jobid': $('input[name=jobid]').eq(currentTargetIndex).val(),
+                    'targetone': $('input[name=targetone]').eq(currentTargetIndex).val(),
+                    'targettwo': $('input[name=targettwo]').eq(currentTargetIndex).val(),
+                    'targetstudent': $('input[name=targetstudent]').eq(currentTargetIndex).val()
+                },
                 async: false,
                 success: function (res) {
                     $('.target').eq(currentTargetIndex).text(res);
                 }
             });
-            $(this).html('确定');
+            $(this).text('确定');
             $('#conWindow').hide();
             return false;
         });
