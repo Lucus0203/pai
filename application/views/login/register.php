@@ -133,14 +133,24 @@
                     $(element).parents(".row").removeClass(errorClass);
                 }
             });
+
+            $('#get_captcha_btn,#get_captcha').click(function(){$.ajax({
+                type: "get",
+                url: '<?php echo site_url('login/updateCaptcha') ?>',
+                success: function (res) {
+                    $('#get_captcha').html(res);
+                }
+            })
+            });
             $('#get_mobile_code').click(function () {
                 var username = $('#username').val();
                 var mobile = $('#mobile').val();
+                var captcha = $('#captcha').val();
                 if (ismobile(mobile) && $('#get_mobile_code').attr('rel') <= 0) {
                     $.ajax({
-                        type: "get",
+                        type: "post",
                         url: '<?php echo site_url('login/getcode') ?>',
-                        data: {'mobile': mobile, 'user_name': username},
+                        data: {'mobile': mobile, 'user_name': username,'captcha':captcha},
                         success: function (res) {
                             if (res == 1) {
                                 alert('验证码已发送,请注意查收')
@@ -182,7 +192,7 @@
                     timing();
                 }, 1000);
             } else {
-                $('#get_mobile_code').css('background-color', '#67d0de').text('获取验证码').attr('rel', 0);
+                $('#get_mobile_code').css('background-color', '#67d0de').text('获取手机验证码').attr('rel', 0);
             }
         }
         function ismobile(mobile) {
@@ -285,9 +295,14 @@
                 </div>
                 <div class="iptBox">
                     <div class="iptInner">
+                        <input type="text" id="captcha" value="" class="ipt w157" placeholder="验证码 "/><a id="get_captcha_btn" href="javascript:void(0);" class="blue fRight f16 pt10">换一个?</a><a id="get_captcha" href="javascript:void(0)" class="captchaBtn" rel="0"><?php echo $cap['image'] ?></a>
+                    </div>
+                </div>
+                <div class="iptBox">
+                    <div class="iptInner">
                         <input type="text" name="mobile_code" value="<?php echo $user['mobile_code'] ?>"
-                               class="ipt w157" placeholder="验证码 "/>
-                        <a id="get_mobile_code" href="javascript:void(0)" class="coBtn" rel="0">获取验证码</a>
+                               class="ipt w157" placeholder="手机验证码 "/>
+                        <a id="get_mobile_code" href="javascript:void(0)" class="coBtn fRight" rel="0">获取手机验证码</a>
                     </div>
                 </div>
                 <div class="iptBox">

@@ -1267,7 +1267,8 @@ textarea:after {
 .alertBox .alert-remove{float:right;color: #468847;}
 .alert-success{color: #468847;background-color: #dff0d8;border: solid 1px #46e99e;}
 .alert-danger{color: #b94a48;background-color: #f2dede;border: solid 1px #eed3d7;}
-
+.captchaBtn{display: block;float: right;font-size: 15px;}
+.captchaBtn img{margin: 5px;vertical-align: middle;}
 
 
 

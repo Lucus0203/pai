@@ -8,7 +8,7 @@ class Login extends CI_Controller
     {
         parent::__construct();
         $this->load->library(array('session'));
-        $this->load->helper(array('form', 'url'));
+        $this->load->helper(array('form', 'url','captcha'));
         $this->load->model(array('user_model','student_model', 'userloginlog_model', 'company_model', 'purview_model', 'industries_model'));
     }
 
@@ -142,6 +142,17 @@ class Login extends CI_Controller
                 }
             }
         }
+        $vals = array(
+            'img_width' => '100',
+            'img_height'    => 30,
+            'word_length'   => 4,
+            'font_size' => 16,
+            'img_path'  => './uploads/captcha/',
+            'img_url'   => base_url().'uploads/captcha/'
+        );
+        $cap = create_captcha($vals);
+        $res['cap']=$cap;
+        $this->session->set_userdata('captcha', $cap['word']);
 
         $res['industry_parent'] = $this->industries_model->get_all("parent_id = '' or parent_id is null ");
 
@@ -233,10 +244,15 @@ class Login extends CI_Controller
     //获取验证码
     public function getcode()
     {
-        $user = $this->input->get('user_name');
-        $mobile = $this->input->get('mobile');
+        $user = $this->input->post('user_name');
+        $mobile = $this->input->post('mobile');
+        $captcha = $this->input->post('captcha');
         if(empty($mobile)){
             echo '手机号码获取失败,请联系管理员';
+            return false;
+        }
+        if($captcha!=$this->session->userdata('captcha')){
+            echo '验证码错误';
             return false;
         }
         $code = rand(1000, 9999);
@@ -258,6 +274,20 @@ class Login extends CI_Controller
         $this->load->library('zhidingsms');
         $this->zhidingsms->sendTPSMS($mobile,'@1@='.$code,'ZD30018-0001');
         echo 1;
+    }
+
+    public function updateCaptcha(){
+        $vals = array(
+            'img_width' => '100',
+            'img_height'    => 30,
+            'word_length'   => 4,
+            'font_size' => 16,
+            'img_path'  => './uploads/captcha/',
+            'img_url'   => base_url().'uploads/captcha/'
+        );
+        $cap = create_captcha($vals);
+        $this->session->set_userdata('captcha', $cap['word']);
+        echo $cap['image'];
     }
 
     public function loginout()
