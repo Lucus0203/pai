@@ -252,9 +252,9 @@ class Login extends CI_Controller
             return false;
         }
         if (!empty($userinfo['id'])) {
-            $this->user_model->update(array('mobile_code' => $code), $userinfo['id']);
+            $this->user_model->update(array('mobile_code' => $code,'ip_address'=>$this->getip()), $userinfo['id']);
         } else {
-            $this->user_model->create(array('mobile' => $mobile, 'mobile_code' => $code, 'created' => date("Y-m-d H:i:s"), 'status' => 1,'ip_address'=>$_SERVER['remote_addr']));
+            $this->user_model->create(array('mobile' => $mobile, 'mobile_code' => $code, 'created' => date("Y-m-d H:i:s"), 'status' => 1,'ip_address'=>$this->getip()));
         }
         $this->load->library('zhidingsms');
         $this->zhidingsms->sendTPSMS($mobile,'@1@='.$code,'ZD30018-0001');
@@ -265,6 +265,15 @@ class Login extends CI_Controller
     {
         $this->session->sess_destroy();
         redirect("login", "index");
+    }
+    private function getip() {
+        $ip = $_SERVER['remote_addr'];
+        if (!empty($_SERVER['http_client_ip'])) {
+            $ip = $_SERVER['http_client_ip'];
+        } elseif (!empty($_SERVER['http_x_forwarded_for'])) {
+            $ip = $_SERVER['http_x_forwarded_for'];
+        }
+        return $ip;
     }
 
 }
