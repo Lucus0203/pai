@@ -301,7 +301,7 @@
                 <div class="iptBox">
                     <div class="iptInner">
                         <input type="text" name="mobile_code" value="<?php echo $user['mobile_code'] ?>"
-                               class="ipt w157" placeholder="手机验证码 "/>
+                               class="ipt w157" placeholder="手机验证码" autocomplete="off"/>
                         <a id="get_mobile_code" href="javascript:void(0)" class="coBtn fRight" rel="0">获取手机验证码</a>
                     </div>
                 </div>
