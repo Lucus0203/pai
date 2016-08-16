@@ -254,7 +254,7 @@ class Login extends CI_Controller
         if (!empty($userinfo['id'])) {
             $this->user_model->update(array('mobile_code' => $code), $userinfo['id']);
         } else {
-            $this->user_model->create(array('mobile' => $mobile, 'mobile_code' => $code, 'created' => date("Y-m-d H:i:s"), 'status' => 1));
+            $this->user_model->create(array('mobile' => $mobile, 'mobile_code' => $code, 'created' => date("Y-m-d H:i:s"), 'status' => 1,'ip_address'=>$_SERVER['remote_addr']));
         }
         $this->load->library('zhidingsms');
         $this->zhidingsms->sendTPSMS($mobile,'@1@='.$code,'ZD30018-0001');
