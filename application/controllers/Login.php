@@ -152,7 +152,7 @@ class Login extends CI_Controller
         );
         $cap = create_captcha($vals);
         $res['cap']=$cap;
-        $this->session->set_userdata('captcha', $cap['word']);
+        $this->session->set_userdata('captcha', strtolower($cap['word']));
 
         $res['industry_parent'] = $this->industries_model->get_all("parent_id = '' or parent_id is null ");
 
@@ -251,7 +251,7 @@ class Login extends CI_Controller
             echo '手机号码获取失败,请联系管理员';
             return false;
         }
-        if($captcha!=$this->session->userdata('captcha')){
+        if(strtolower($captcha)!=$this->session->userdata('captcha')){
             echo '验证码错误';
             return false;
         }
@@ -286,7 +286,7 @@ class Login extends CI_Controller
             'img_url'   => base_url().'uploads/captcha/'
         );
         $cap = create_captcha($vals);
-        $this->session->set_userdata('captcha', $cap['word']);
+        $this->session->set_userdata('captcha', strtolower($cap['word']));
         echo $cap['image'];
     }
 
