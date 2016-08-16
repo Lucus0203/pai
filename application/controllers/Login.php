@@ -267,7 +267,7 @@ class Login extends CI_Controller
             return false;
         }
         if (!empty($userinfo['id'])) {
-            $this->user_model->update(array('mobile_code' => $code,'ip_address'=>$this->getip()), $userinfo['id']);
+            $this->user_model->update(array('mobile_code' => $code, $userinfo['id']);
         } else {
             $this->user_model->create(array('mobile' => $mobile, 'mobile_code' => $code, 'created' => date("Y-m-d H:i:s"), 'status' => 1,'ip_address'=>$this->input->ip_address()));
         }
