@@ -250,13 +250,11 @@ class Login extends CI_Controller
         if(empty($mobile)){
             echo '手机号码获取失败,请联系管理员';
             return false;
-        }
-        if(strtolower($captcha)!=$this->session->userdata('captcha')){
-            echo '验证码错误';
-            return false;
-        }
-        if($this->session->userdata('captcha')=='999999'){
+        }elseif($this->session->userdata('captcha')=='999999'){
             echo '验证码已过期';
+            return false;
+        }elseif(strtolower($captcha)!=$this->session->userdata('captcha')){
+            echo '验证码错误';
             return false;
         }
         $code = rand(1000, 9999);
