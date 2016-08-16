@@ -142,18 +142,7 @@ class Login extends CI_Controller
                 }
             }
         }
-        $vals = array(
-            'img_width' => '100',
-            'img_height'    => 30,
-            'word_length'   => 4,
-            'font_size' => 16,
-            'img_path'  => './uploads/captcha/',
-            'img_url'   => base_url().'uploads/captcha/'
-        );
-        $cap = create_captcha($vals);
-        $res['cap']=$cap;
-        $this->session->set_userdata('captcha', strtolower($cap['word']));
-
+        $res['cap']=$this->getCaptcha();
         $res['industry_parent'] = $this->industries_model->get_all("parent_id = '' or parent_id is null ");
 
         $this->load->view('login/register', $res);
@@ -280,17 +269,23 @@ class Login extends CI_Controller
     }
 
     public function updateCaptcha(){
+        $cap=$this->getCaptcha();
+        echo $cap['image'];
+    }
+
+    private function getCaptcha(){
         $vals = array(
             'img_width' => '100',
             'img_height'    => 30,
             'word_length'   => 4,
             'font_size' => 16,
             'img_path'  => './uploads/captcha/',
-            'img_url'   => base_url().'uploads/captcha/'
+            'img_url'   => base_url().'uploads/captcha/',
+            'pool'      => '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ'
         );
         $cap = create_captcha($vals);
         $this->session->set_userdata('captcha', strtolower($cap['word']));
-        echo $cap['image'];
+        return $cap;
     }
 
     public function loginout()

@@ -295,7 +295,7 @@
                 </div>
                 <div class="iptBox">
                     <div class="iptInner">
-                        <input type="text" id="captcha" value="" class="ipt w157" placeholder="验证码 "/><a id="get_captcha_btn" href="javascript:void(0);" class="blue fRight f16 pt10">换一个?</a><a id="get_captcha" href="javascript:void(0)" class="captchaBtn" rel="0"><?php echo $cap['image'] ?></a>
+                        <input type="text" id="captcha" value="" class="ipt w157" placeholder="验证码 "/><a id="get_captcha_btn" href="javascript:void(0);" class="blue fRight f14 pt10">换一个?</a><a id="get_captcha" href="javascript:void(0)" class="captchaBtn" rel="0"><?php echo $cap['image'] ?></a>
                     </div>
                 </div>
                 <div class="iptBox">
