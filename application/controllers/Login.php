@@ -255,6 +255,10 @@ class Login extends CI_Controller
             echo '验证码错误';
             return false;
         }
+        if($this->session->userdata('captcha')=='999999'){
+            echo '验证码已过期';
+            return false;
+        }
         $code = rand(1000, 9999);
         $userinfo = $this->user_model->get_row(array('mobile' => $mobile));
         if ($userinfo['register_flag'] == 2) {
@@ -273,6 +277,7 @@ class Login extends CI_Controller
         }
         $this->load->library('zhidingsms');
         $this->zhidingsms->sendTPSMS($mobile,'@1@='.$code,'ZD30018-0001');
+        $this->session->set_userdata('captcha', '999999');
         echo 1;
     }
 
