@@ -70,8 +70,11 @@ $(document).ready(function(){
                                                     <?php } ?>
                                                     </td>
                                                     <td>
+                                                        <?php if($a['apply_status']!=1){ ?>
                                                         <a href="<?php echo site_url('course/applycheck/'.$a['apply_id']).'?status=1' ?>" class="blue">通过</a>
+                                                        <?php }elseif($a['apply_status']==1){ ?>
                                                         <a href="<?php echo site_url('course/applycheck/'.$a['apply_id']).'?status=2' ?>" class="blue">不通过</a>
+                                                        <?php } ?>
                                                     </td>
                                             </tr>
                                             <?php } ?>
