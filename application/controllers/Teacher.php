@@ -45,10 +45,10 @@ class Teacher extends CI_Controller
         $page = $page * 1 < 1 ? 1 : $page;
         $page_size = 10;
         $parm['keyword'] = $this->input->get('keyword');
-        $parm['type'] = $this->input->get('type');
-        $parm['specialty'] = $this->input->get('specialty');
-        $parm['work_type'] = $this->input->get('work_type');
-        $pvalue=array_map(array($this,'escapeVal'),$parm);//防sql注入
+        $parm['type'] = $this->escapeVal($this->input->get('type'));
+        $parm['specialty'] = $this->escapeVal($this->input->get('specialty'));
+        $parm['work_type'] = $this->escapeVal($this->input->get('work_type'));
+        //$pvalue=array_map(array($this,'escapeVal'),$parm);//防sql注入
         $where = " company_code = '" . $logininfo['company_code'] . "' and isdel=2 ";
         if (!empty($parm['keyword'])) {
             $where .= " and name like '%" . $pvalue['keyword'] . "%' or title like '%" . $pvalue['keyword'] . "%' or info like '%" . $parm['keyword'] . "%' or specialty like '%" . $pvalue['keyword'] . "%' ";

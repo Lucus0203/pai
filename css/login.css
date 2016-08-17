@@ -80,32 +80,11 @@ body {
 
 .w157{ width:  175px !important;}
 .label {
-    position: absolute;
-    border:  1px solid #ff4646;
+    font-size: 14px;
     line-height: 30px;
     padding: 5px 10px;
-    background-color: #fff;
     width: 360px;
-    color: #ff4646;
-    left: -15px;
-    z-index: 9;
     margin-top: 9px;
-}
-.label::before {
-    border: 1px solid #ff4646;
-    border-right: none;
-    border-bottom: none;
-    left: 10%;
-    top: -5px;
-    transform: translateX(-50%) translateY(-50%) rotate(45deg);
-    content: "";
-    height: 0.6666em;
-    position: absolute;
-    transform: rotate(45deg);
-    transition: background 0.1s ease 0s;
-    width: 0.6666em;
-    z-index: 2;
-    background-color: #fff;
 }
 .ieTxt{ background-color: #F2DA89; color: #f00; position: fixed; top: 0; width: 100%; line-height: 30px;}
 .ieTxt span{ float: right; padding-right: 30px;}
