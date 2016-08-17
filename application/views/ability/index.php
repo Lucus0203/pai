@@ -211,7 +211,7 @@
 
         <div class="texturetip p2015 clearfix"><span class="fLeft pt5">所有能力模型</span>
             <div class="fRight">
-                <a class="borBlueH37 aCenter" href="<?php echo site_url('html/abilityCustom') ?>">定制能力模型</a>
+                <a class="borBlueH37 aCenter w72" href="<?php echo site_url('html/ability') ?>">更多模型</a>
             </div>
         </div>
 
@@ -253,6 +253,9 @@
                         </td>
                     </tr>
                 <?php } ?>
+                <tr>
+                    <td colspan="4"><a class="blue" href="<?php echo site_url('html/ability') ?>"><i class="fa fa-plus fa-lg mr5"></i>开通更多</a></td>
+                </tr>
 
                 </tbody>
             </table>
