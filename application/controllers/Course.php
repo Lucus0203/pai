@@ -49,7 +49,6 @@ class Course extends CI_Controller
         $parm['time_start'] = $this->input->get('time_start');
         $parm['time_end'] = $this->input->get('time_end');
         $pvalue=array_map(array($this,'escapeVal'),$parm);//防sql注入
-        $pvalue['keyword']=$parm['keyword'];
         $this->load->database();
         //status 1报名中2进行中3结束4待发布5待开启报名9其他
         $sql = "select c.*,t.name as teacher,if( c.ispublic != 1,4,if( unix_timestamp(now()) > unix_timestamp(c.time_end),3,if( unix_timestamp(now()) > unix_timestamp(c.time_start) and unix_timestamp(now()) < unix_timestamp(c.time_end),2,if( isapply_open !=1 ,5,if(unix_timestamp(now()) > unix_timestamp(c.apply_start) and unix_timestamp(now()) < unix_timestamp(c.apply_end),1,9) ) ) ) ) as status from " . $this->db->dbprefix('course') . " c "
@@ -67,7 +66,7 @@ class Course extends CI_Controller
             $sql .= " and c.ispublic = 1 and (isapply_open!=1 or unix_timestamp(now()) < unix_timestamp(c.apply_start) ) and unix_timestamp(now()) < unix_timestamp(c.time_start) ";
         }
         if (!empty($parm['keyword'])) {
-            $sql .= " and (c.title like '%" . $pvalue['keyword'] . "%' )";
+            $sql .= " and (c.title like '%" . $parm['keyword'] . "%' )";
         }
         if (!empty($parm['time_start'])) {
             $sql .= " and unix_timestamp(time_start) >= unix_timestamp(" . $pvalue['time_start']  . ") ";
