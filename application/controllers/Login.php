@@ -233,6 +233,11 @@ class Login extends CI_Controller
     //获取验证码
     public function getcode()
     {
+        $s=$this->input->server(array('HTTP_REFERER'));
+        if(empty($s['HTTP_REFERER'])){
+            show_404();
+            return false;
+        }
         $user = $this->input->post('user_name');
         $mobile = $this->input->post('mobile');
         $captcha = $this->input->post('captcha');
