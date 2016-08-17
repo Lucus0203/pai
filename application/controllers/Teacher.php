@@ -45,9 +45,9 @@ class Teacher extends CI_Controller
         $page = $page * 1 < 1 ? 1 : $page;
         $page_size = 10;
         $parm['keyword'] = $this->input->get('keyword');
-        $parm['type'] = $this->escapeVal($this->input->get('type'));
-        $parm['specialty'] = $this->escapeVal($this->input->get('specialty'));
-        $parm['work_type'] = $this->escapeVal($this->input->get('work_type'));
+        $parm['type'] = $this->input->get('type');
+        $parm['specialty'] = $this->input->get('specialty');
+        $parm['work_type'] = $this->input->get('work_type');
         $pvalue=array_map(array($this,'escapeVal'),$parm);//防sql注入
         $pvalue['keyword']=$parm['keyword'];
         $where = " company_code = '" . $logininfo['company_code'] . "' and isdel=2 ";
