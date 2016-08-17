@@ -44,11 +44,12 @@ class Course extends CI_Controller
         $page = $this->input->get('per_page', true);
         $page = $page * 1 < 1 ? 1 : $page;
         $page_size = 10;
-        $parm['status'] = $this->escapeVal($this->input->get('status'));
+        $parm['status'] = $this->input->get('status');
         $parm['keyword'] = $this->input->get('keyword');
-        $parm['time_start'] = $this->escapeVal($this->input->get('time_start'));
-        $parm['time_end'] = $this->escapeVal($this->input->get('time_end'));
-        //$pvalue=array_map(array($this,'escapeVal'),$parm);//防sql注入
+        $parm['time_start'] = $this->input->get('time_start');
+        $parm['time_end'] = $this->input->get('time_end');
+        $pvalue=array_map(array($this,'escapeVal'),$parm);//防sql注入
+        $pvalue['keyword']=$parm['keyword'];
         $this->load->database();
         //status 1报名中2进行中3结束4待发布5待开启报名9其他
         $sql = "select c.*,t.name as teacher,if( c.ispublic != 1,4,if( unix_timestamp(now()) > unix_timestamp(c.time_end),3,if( unix_timestamp(now()) > unix_timestamp(c.time_start) and unix_timestamp(now()) < unix_timestamp(c.time_end),2,if( isapply_open !=1 ,5,if(unix_timestamp(now()) > unix_timestamp(c.apply_start) and unix_timestamp(now()) < unix_timestamp(c.apply_end),1,9) ) ) ) ) as status from " . $this->db->dbprefix('course') . " c "

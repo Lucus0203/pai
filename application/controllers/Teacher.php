@@ -48,10 +48,11 @@ class Teacher extends CI_Controller
         $parm['type'] = $this->escapeVal($this->input->get('type'));
         $parm['specialty'] = $this->escapeVal($this->input->get('specialty'));
         $parm['work_type'] = $this->escapeVal($this->input->get('work_type'));
-        //$pvalue=array_map(array($this,'escapeVal'),$parm);//防sql注入
+        $pvalue=array_map(array($this,'escapeVal'),$parm);//防sql注入
+        $pvalue['keyword']=$parm['keyword'];
         $where = " company_code = '" . $logininfo['company_code'] . "' and isdel=2 ";
         if (!empty($parm['keyword'])) {
-            $where .= " and name like '%" . $pvalue['keyword'] . "%' or title like '%" . $pvalue['keyword'] . "%' or info like '%" . $parm['keyword'] . "%' or specialty like '%" . $pvalue['keyword'] . "%' ";
+            $where .= " and (name like '%" . $pvalue['keyword'] . "%' or title like '%" . $pvalue['keyword'] . "%' or info like '%" . $parm['keyword'] . "%' or specialty like '%" . $pvalue['keyword'] . "%') ";
         }
         if (!empty($parm['type'])) {
             $where .= " and type = " . $pvalue['type'] ;
