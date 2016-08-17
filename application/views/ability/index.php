@@ -218,7 +218,7 @@
         <div class="p15">
             <p class="clearfix f14 mb20">共<?php echo $total_rows ?>个岗位</p>
             <table cellspacing="0" class="listTable">
-                <col width="10%">
+                <col width="20%">
                 <col width="50%">
                 <col width="10%">
                 <col width="10%">
