@@ -136,7 +136,7 @@
                         <th>讲师简介</th>
                         <td>
                             <span class="iptInner">
-                            <textarea name="info" placeholder="请输入讲师简介和头衔" class="iptare"><?php echo $teacher['info'] ?></textarea>
+                            <textarea name="info" placeholder="请输入讲师简介和头衔" class="iptare pt10"><?php echo $teacher['info'] ?></textarea>
                             </span>
 
                         </td>

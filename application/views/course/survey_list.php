@@ -40,7 +40,7 @@
                                                         <td><?php echo $h['department'] ?></td>
                                                         <td><?php echo $h['mobile'] ?></td>
                                                         <td><?php echo date("Y-m-d H:i",strtotime($h['created'])) ?></td>
-                                                        <td><a href="<?php echo site_url('course/surveydetail/'.$h['course_id'].'/'.$h['student_id']) ?>" class="blue" target="_blank">查看作业</a></td>
+                                                        <td><a href="<?php echo site_url('course/surveydetail/'.$h['course_id'].'/'.$h['student_id']) ?>" class="blue" target="_blank">查看调研</a></td>
                                                 </tr>
                                                 <?php } ?>
 

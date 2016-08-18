@@ -21,13 +21,7 @@
                         </div>
                         <div class="contRight">
                                 <p class="clearfix f14 mb20">
-                                        <select class="iptH37 fRight">
-                                                <option></option>
-                                        </select>
-
-                                        <span class="pt10 fLeft">
-
-共有<?php echo $signin_count ?>人签到，<span class="orange"><?php echo $signout_count ?></span> 人签退</span>
+                                        <span class="pt10 fLeft">共有<?php echo $signin_count ?>人签到，<span class="orange"><?php echo $signout_count ?></span> 人签退</span>
                                 </p>
                                 <table cellspacing="0" class="listTable">
                                         <tbody>
