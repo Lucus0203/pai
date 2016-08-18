@@ -43,7 +43,7 @@
                                     <?php } ?>
                                     <?php if(count($ratingses)==0){ ?>
                                         <li class="pingfen">评分题
-                                            <input name="ratingses[]" type="text" class="iptH37 w600 ml10" value="您对课程的总体评价"><input type="hidden" name="type[]" value="1" />
+                                            <input name="ratingses[]" type="text" class="iptH37 w600 ml10 gray9" value="您对课程的总体评价" readonly ><input type="hidden" name="type[]" value="1" />
                                         </li>
                                         <li class="pingfen">评分题
                                                 <input name="ratingses[]" type="text" class="iptH37 w600 ml10" value="这个课程的目标清楚明确"><input type="hidden" name="type[]" value="1" /><a href="javascript:;" js='removeZuoye' class="blue ml10">删除</a>
