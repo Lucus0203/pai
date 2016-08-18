@@ -241,12 +241,12 @@
                             <a class="blue target" href="<?php echo site_url('ability/targets/'.$job['id']) ?>"><?php echo $res = mb_strlen($job['target'], 'utf-8') > 20 ? mb_substr( $job['target'],0,40,"utf-8").'...':$job['target']; ?></a>
                         </td>
                         <td class="aCenter">
-                            <?php echo $job['status']==1?'发布':'未发布' ?>
+                            <?php echo $job['status']==1?'发布中':'未发布' ?>
                         </td>
                         <td class="aCenter">
                             <a href="#" class="blue addTarget">匹配</a>&nbsp;&nbsp;
                             <?php if($job['status']==1){ ?>
-                                <a class="blue unpublish" href="<?php echo site_url('ability/unpublish/'.$job['id']) ?>" >不发布</a>
+                                <a class="blue unpublish" href="<?php echo site_url('ability/unpublish/'.$job['id']) ?>" >取消</a>
                             <?php }else{ ?>
                                 <a class="blue publish" href="<?php echo site_url('ability/publish/'.$job['id']) ?>">发布</a>
                             <?php } ?>

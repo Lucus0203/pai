@@ -42,7 +42,7 @@
                         <dl class="askDl">
                             <?php foreach ($ratings as $k=>$h){ ?>
                                 <dt><?php echo ($h['type']==1)?'评分题':'开放题' ?>&nbsp;<?php echo $h['title'] ?></dt>
-                                <dd class="f18 p15">
+                                <dd class="f18 mb10">
                                     <?php if($h['type']==1){ ?>
                                         <div class="starBox mb0">
                                             <ul class="star">
