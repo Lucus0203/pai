@@ -1063,6 +1063,8 @@ textarea:after {
 	height: 11px;
 	vertical-align: top;
 }
+.starGray7{ color:#e7e7e7 !important;}
+.starYellow{ color:#ffce49 !important;}
 
 .grayTipBox {
 	font-size: 12px;

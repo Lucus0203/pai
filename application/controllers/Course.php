@@ -600,7 +600,7 @@ class Course extends CI_Controller
             . "left join " . $this->db->dbprefix('course_ratings') . " hw on hwlist.ratings_id=hw.id where hwlist.course_id=$courseid and hwlist.student_id=$studentid order by hw.num ";
         $query = $this->db->query($sql);
         $ratings = $query->result_array();
-        $depart = $this->department_model->get_row(array('id', $student['department_id']));
+        $depart = $this->department_model->get_row(array('id'=>$student['department_id']));
         $student['department'] = $depart['name'];
         $this->load->view('course/ratings_detail', array('ratings' => $ratings, 'student' => $student));
 

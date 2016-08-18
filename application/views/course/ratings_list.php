@@ -20,7 +20,12 @@
 
                         </div>
                         <div class="contRight">
-                                <p class="clearfix f14 mb20">共有<?php echo $total ?>对本次进行评价，综合评分<span class="startBox"><i style="width: <?php echo $avgstar/5*100 ?>%;"></i></span></p>
+                                <p class="clearfix f14 mb20">共有<?php echo $total ?>对本次进行评价，综合评分
+                                    <span class="blue">
+                                        <?php for($i=1;$i<6;$i++){?>
+                                        <i class="fa fa-star fa-lg <?php echo ($i>round($avgstar))?'starGray7':''?>"></i>
+                                        <?php } ?>
+                                    </span> </p>
                                 <table cellspacing="0" class="listTable">
                                         <tbody>
                                                 <tr>
@@ -29,7 +34,7 @@
                                                         <th class="aLeft">职务</th>
                                                         <th class="aLeft">部门</th>
                                                         <th class="aLeft">手机</th>
-                                                        <th class="aLeft">评价星值</th>
+                                                        <th>评价星值</th>
                                                         <th>操作</th>
                                                 </tr>
                                                 <?php foreach ($ratingslist as $h) { ?>
@@ -39,7 +44,11 @@
                                                         <td><?php echo $h['job_name'] ?></td>
                                                         <td><?php echo $h['department'] ?></td>
                                                         <td><?php echo $h['mobile'] ?></td>
-                                                        <td><span class="startBox"><i style="width: <?php echo $h['star']/5*100 ?>%;"></i></span></td>
+                                                        <td class="aCenter"><span class="blue">
+                                                                <?php for($i=1;$i<6;$i++){?>
+                                                                    <i class="fa fa-star fa-1x <?php echo ($i>round($h['star']))?'starGray7':''?>"></i>
+                                                                <?php } ?>
+                                                            </span></td>
                                                         <td class="aCenter"><a href="<?php echo site_url('course/ratingsdetail/'.$h['course_id'].'/'.$h['student_id']) ?>" class="blue" target="_blank">查看反馈</a></td>
                                                 </tr>
                                                 <?php } ?>
