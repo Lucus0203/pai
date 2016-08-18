@@ -10,13 +10,14 @@ class Index extends CI_Controller
         parent::__construct();
         $this->load->library('session');
         $this->load->helper(array('form', 'url','download'));
-        $this->load->model(array('user_model', 'course_model', 'teacher_model', 'homework_model','company_model'));
+        $this->load->model(array('user_model','useractionlog_model', 'course_model', 'teacher_model', 'homework_model','company_model'));
 
         $this->_logininfo = $this->session->userdata('loginInfo');
         if (empty($this->_logininfo)) {
             redirect('login', 'index');
         } else {
             $roleInfo = $this->session->userdata('roleInfo');
+            $this->useractionlog_model->create(array('user_id' => $this->_logininfo['id'], 'url' => uri_string()));
             $this->load->vars(array('loginInfo' => $this->_logininfo, 'roleInfo' => $roleInfo));
         }
     }
