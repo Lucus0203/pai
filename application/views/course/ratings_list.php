@@ -39,7 +39,7 @@
                                                         <td class="aCenter"><?php echo $h['job_name'] ?></td>
                                                         <td class="aCenter"><?php echo $h['department'] ?></td>
                                                         <td class="aCenter"><?php echo $h['mobile'] ?></td>
-                                                        <td class="aCenter"><span class="startBox"><i style="width: <?php echo $h['star']/5*100 ?>%;"></i></span></td>
+                                                        <td><span class="startBox"><i style="width: <?php echo $h['star']/5*100 ?>%;"></i></span></td>
                                                         <td class="aCenter"><a href="<?php echo site_url('course/ratingsdetail/'.$h['course_id'].'/'.$h['student_id']) ?>" class="blue" target="_blank">查看反馈</a></td>
                                                 </tr>
                                                 <?php } ?>
