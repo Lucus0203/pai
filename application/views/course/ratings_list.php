@@ -34,7 +34,7 @@
                                                         <th class="aLeft">职务</th>
                                                         <th class="aLeft">部门</th>
                                                         <th class="aLeft">手机</th>
-                                                        <th>评价星值</th>
+                                                        <th>评分星值</th>
                                                         <th>操作</th>
                                                 </tr>
                                                 <?php foreach ($ratingslist as $h) { ?>
