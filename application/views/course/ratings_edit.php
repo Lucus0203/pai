@@ -38,7 +38,7 @@
                                 <ul class="zuoyeList">
                                     <?php foreach ($ratingses as $k=>$h){ ?>
                                     <li class="<?php echo $h['type']==1?'pingfen':'kaifang' ?>"><?php echo $h['type']==1?'评分题':'开放题' ?>
-                                            <input name="ratingses[]" type="text" class="iptH37 w600 ml10" value="<?php echo $h['title'] ?>"><input type="hidden" name="type[]" value="<?php echo $h['type'] ?>" /><?php if($k>0){ ?><a href="javascript:;" js='removeZuoye' class="blue ml10">删除</a><?php } ?>
+                                            <input name="ratingses[]" type="text" class="iptH37 w600 ml10 <?php echo ($k==0)?'gray9':'' ?>" <?php echo ($k==0)?'readonly':'' ?> value="<?php echo $h['title'] ?>"><input type="hidden" name="type[]" value="<?php echo $h['type'] ?>" /><?php if($k>0){ ?><a href="javascript:;" js='removeZuoye' class="blue ml10">删除</a><?php } ?>
                                         </li>
                                     <?php } ?>
                                     <?php if(count($ratingses)==0){ ?>
