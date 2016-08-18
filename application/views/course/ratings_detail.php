@@ -42,13 +42,13 @@
                         <dl class="askDl">
                             <?php foreach ($ratings as $k=>$h){ ?>
                                 <dt><?php echo ($h['type']==1)?'评分题':'开放题' ?>&nbsp;<?php echo $h['title'] ?></dt>
-                                <dd class="f18">
+                                <dd class="f18 p15">
                                     <?php if($h['type']==1){ ?>
-                                        <div class="starBox mb10">
+                                        <div class="starBox mb0">
                                             <ul class="star">
                                                 <?php for($i=1;$i<6;$i++){?>
                                                     <li class="blue" >
-                                                        <a href="javascript:void(0)" class="<?php echo ($i>round($h['star']))?'starGray7':''?>"><i class="fa fa-star fa-2x"></i><span class="num"><?php echo $i ?></span></a>
+                                                        <a href="javascript:void(0)" class="<?php echo ($i>round($h['star']))?'starGray7':''?> pb0"><i class="fa fa-star fa-2x"></i><span class="num"><?php echo $i ?></span></a>
                                                     </li>
                                                 <?php } ?>
                                             </ul>
