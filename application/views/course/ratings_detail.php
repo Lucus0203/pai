@@ -18,18 +18,18 @@
     <div class="headerCom">
                     <div class="inner">
                             <div class="log">
-                                    <a href="javascript:void(0);"><img src="<?php echo base_url();?>images/logo01.png" alt="培训 派"></a><span class="logoTip">课程反馈详情</span>
+                                    <a href="javascript:void(0);"><img src="<?php echo base_url();?>images/logo01.png" alt="培训派"></a><span class="logoTip"><?php echo $course['title']?></span>
                             </div>
 
 
                     </div>
             </div>
             <div class="wrap">
-                <p class="askbox">答题人:<span class="fbold">&nbsp;<?php echo $student['name'] ?>&nbsp;</span>
+                <p class="askbox">反馈人:<span class="fbold">&nbsp;<?php echo $student['name'] ?>&nbsp;</span>
                     <?php echo $student['job_name'].'/'.$student['department'].'/'.$student['mobile']; ?><span class="ml20">提交时间：<?php echo date("Y.m.d H:i:s",strtotime($ratings[0]['created'])) ?></span></p>
                     <div class="comBox p40">
                         <?php $firstrat=array_shift($ratings);?>
-                        <p class="aCenter f24 mb20">本次课程总体评分</p>
+                        <p class="aCenter f24 mb20">总体评分</p>
                         <div class="starBox aCenter f18">
                             <ul class="star">
                                 <?php for($i=1;$i<6;$i++){?>

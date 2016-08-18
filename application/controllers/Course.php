@@ -602,7 +602,8 @@ class Course extends CI_Controller
         $ratings = $query->result_array();
         $depart = $this->department_model->get_row(array('id'=>$student['department_id']));
         $student['department'] = $depart['name'];
-        $this->load->view('course/ratings_detail', array('ratings' => $ratings, 'student' => $student));
+        $course=$this->course_model->get_row(array('id'=>$courseid));
+        $this->load->view('course/ratings_detail', array('ratings' => $ratings,'student' => $student,'course'=>$course));
 
     }
 

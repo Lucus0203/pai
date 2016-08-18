@@ -24,7 +24,7 @@
                     </div>
             </div>
             <div class="wrap">
-                <p class="askbox">答题人:<span class="fbold">&nbsp;<?php echo $student['name'] ?>&nbsp;</span>
+                <p class="askbox">调研人:<span class="fbold">&nbsp;<?php echo $student['name'] ?>&nbsp;</span>
                     <?php echo $student['job_name'].'/'.$student['department'].'/'.$student['mobile']; ?><span class="ml20">提交时间：<?php echo date("Y.m.d H:i:s",strtotime($survey[0]['created'])) ?></span></p>
 
 
