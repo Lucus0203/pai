@@ -42,12 +42,12 @@ $(document).ready(function(){
                             <table cellspacing="0" class="listTable">
                                     <tbody>
                                             <tr>
-                                                    <th>姓名</th>
-                                                    <th>工号</th>
-                                                    <th>职务</th>
-                                                    <th>部门</th>
-                                                    <th>手机</th>
-                                                    <th>申请原因</th>
+                                                    <th class="aLeft">姓名</th>
+                                                    <th class="aLeft">工号</th>
+                                                    <th class="aLeft">职务</th>
+                                                    <th class="aLeft">部门</th>
+                                                    <th class="aLeft">手机</th>
+                                                    <th class="aLeft">申请原因</th>
                                                     <th>报名时间</th>
                                                     <th>状态</th>
                                                     <th>审核</th>
@@ -60,8 +60,8 @@ $(document).ready(function(){
                                                     <td><?php echo $a['department'] ?></td>
                                                     <td><?php echo $a['mobile'] ?></td>
                                                     <td class="wordBreak"><?php echo $a['note'] ?></td>
-                                                    <td><?php echo date("Y-m-d H:i",strtotime($a['created'])) ?></td>
-                                                    <td><?php if($a['apply_status']==1){ ?>
+                                                    <td><?php echo date("m-d H:i",strtotime($a['created'])) ?></td>
+                                                    <td class="aCenter"><?php if($a['apply_status']==1){ ?>
                                                         <span class="green">审核通过</span>
                                                     <?php }elseif($a['apply_status']==2){ ?>
                                                         <span class="red">审核不通过</span>
@@ -69,7 +69,7 @@ $(document).ready(function(){
                                                         <span class="orange">待审核</span>
                                                     <?php } ?>
                                                     </td>
-                                                    <td>
+                                                    <td class="aCenter">
                                                         <?php if($a['apply_status']!=1){ ?>
                                                         <a href="<?php echo site_url('course/applycheck/'.$a['apply_id']).'?status=1' ?>" class="blue">通过</a>
                                                         <?php }elseif($a['apply_status']==1){ ?>

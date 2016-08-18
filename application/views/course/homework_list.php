@@ -24,22 +24,22 @@
                                 <table cellspacing="0" class="listTable">
                                         <tbody>
                                                 <tr>
-                                                        <th>姓名</th>
-                                                        <th>工号</th>
-                                                        <th>职务</th>
-                                                        <th>部门</th>
-                                                        <th>手机</th>
+                                                        <th class="aLeft">姓名</th>
+                                                        <th class="aLeft">工号</th>
+                                                        <th class="aLeft">职务</th>
+                                                        <th class="aLeft">部门</th>
+                                                        <th class="aLeft">手机</th>
                                                         <th>提交时间</th>
                                                         <th>操作</th>
                                                 </tr>
                                                 <?php foreach ($homeworklist as $h) { ?>
                                                 <tr>
-                                                        <td class="blue aCenter"><?php echo $h['name'] ?></td>
-                                                        <td class="aCenter"><?php echo $h['job_code'] ?></td>
-                                                        <td class="aCenter"><?php echo $h['job_name'] ?></td>
-                                                        <td class="aCenter"><?php echo $h['department'] ?></td>
-                                                        <td class="aCenter"><?php echo $h['mobile'] ?></td>
-                                                        <td class="aCenter"><?php echo date("Y-m-d H:i",strtotime($h['created'])) ?></td>
+                                                        <td class="blue"><?php echo $h['name'] ?></td>
+                                                        <td><?php echo $h['job_code'] ?></td>
+                                                        <td><?php echo $h['job_name'] ?></td>
+                                                        <td><?php echo $h['department'] ?></td>
+                                                        <td><?php echo $h['mobile'] ?></td>
+                                                        <td class="aCenter"><?php echo date("m-d H:i",strtotime($h['created'])) ?></td>
                                                         <td class="aCenter"><a href="<?php echo site_url('course/homeworkdetail/'.$h['course_id'].'/'.$h['student_id']) ?>" class="blue" target="_blank">查看作业</a></td>
                                                 </tr>
                                                 <?php } ?>

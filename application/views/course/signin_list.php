@@ -26,23 +26,23 @@
                                 <table cellspacing="0" class="listTable">
                                         <tbody>
                                                 <tr>
-                                                        <th>姓名</th>
-                                                        <th>工号</th>
-                                                        <th>职务</th>
-                                                        <th>部门</th>
-                                                        <th>手机</th>
+                                                        <th class="aLeft">姓名</th>
+                                                        <th class="aLeft">工号</th>
+                                                        <th class="aLeft">职务</th>
+                                                        <th class="aLeft">部门</th>
+                                                        <th class="aLeft">手机</th>
                                                         <th>签到时间</th>
                                                         <th>签退时间</th>
                                                 </tr>
                                                 <?php foreach ($siginlist as $h) { ?>
                                                 <tr>
-                                                        <td class="blue aCenter"><?php echo $h['name'] ?></td>
-                                                        <td class="aCenter"><?php echo $h['job_code'] ?></td>
-                                                        <td class="aCenter"><?php echo $h['job_name'] ?></td>
-                                                        <td class="aCenter"><?php echo $h['department'] ?></td>
-                                                        <td class="aCenter"><?php echo $h['mobile'] ?></td>
-                                                        <td class="aCenter"><?php echo date("Y-m-d H:i",strtotime($h['signin_time'])) ?></td>
-                                                        <td class="aCenter"><?php echo !empty($h['signout_time'])?date("Y-m-d H:i",strtotime($h['signout_time'])):'' ?></td>
+                                                        <td class="blue"><?php echo $h['name'] ?></td>
+                                                        <td><?php echo $h['job_code'] ?></td>
+                                                        <td><?php echo $h['job_name'] ?></td>
+                                                        <td><?php echo $h['department'] ?></td>
+                                                        <td><?php echo $h['mobile'] ?></td>
+                                                        <td class="aCenter"><?php echo date("m-d H:i",strtotime($h['signin_time'])) ?></td>
+                                                        <td class="aCenter"><?php echo !empty($h['signout_time'])?date("m-d H:i",strtotime($h['signout_time'])):'' ?></td>
                                                 </tr>
                                                 <?php } ?>
 
