@@ -134,11 +134,6 @@ class Center extends CI_Controller
         } else {
             $this->user_model->update(array('user_pass' => md5($new_pass)), $this->_logininfo['id']);
             $msg = '密码更新成功';
-            //更新公司密码则更新学员管理员密码
-            $sacount=$this->student_model->get_row(array('company_code'=>$this->_logininfo['company_code'],'role'=>9));
-            if(!empty($sacount)){
-                $this->student_model->update(array('user_pass',md5($new_pass)),$sacount['id']);
-            }
         }
         return array('success'=>$success,'msg'=>$msg);
     }

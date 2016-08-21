@@ -242,7 +242,7 @@ $(document).ready(function(){
                             <tr>
                                 <th><span class="red">*</span>登录密码</th>
                                 <td><span class="iptInner">
-                                        <input name="user_pass" value="<?php echo $student['user_pass'] ?>" type="password" class="iptH37 w250" autocomplete="off" <?php if($student['role']==9){ echo 'style="color:#ccc" readonly'; }?> ><br><span style="color:#ccc">默认手机号码后6位</span>
+                                        <input name="user_pass" value="<?php echo $student['user_pass'] ?>" type="password" class="iptH37 w250" autocomplete="off" ><br><span style="color:#ccc">默认手机号码后6位</span>
                                         </span>
 
                                 </td>
