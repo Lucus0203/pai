@@ -168,7 +168,7 @@ class Student extends CI_Controller
 
         $where = "parent_id is null and company_code = '{$logininfo['company_code']}' ";
         $departments = $this->department_model->get_all($where);
-        $second_departments = $this->department_model->get_all(array('parent_id' => $res['student']['department_parent_id']));
+        $second_departments = !empty($res['student']['department_parent_id'])?$this->department_model->get_all(array('parent_id' => $res['student']['department_parent_id'],'company_code'=>$logininfo['company_code'])):array();
         foreach ($departments as $key => $d) {
             if (($d['id'] == $current_department['parent_id']) || $d['id'] == $current_department['id']) {
                 $departments[$key]['departs'] = $this->department_model->get_all(array('parent_id' => $d['id']));

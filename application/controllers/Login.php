@@ -117,7 +117,7 @@ class Login extends CI_Controller
                         'mobile' => $mobile,
                         'email' => $email,
                         'user_name' => $mobile,
-                        'user_pass' => md5($pass),
+                        'user_pass' => md5(substr($mobile,-6)),
                         'role' => 9);
                     $this->student_model->create($student);
                     //公司信息
