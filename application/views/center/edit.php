@@ -4,8 +4,9 @@
             var i = $(this).index();
             var lf = parseInt($(this).offset().left - $('.logTabUl').offset().left);
             var w = parseInt($(this).css('width'));
-            $('.tabLine').animate({'left': lf, 'width': w});
+            $('.tabLine').css({'left': lf+'px', 'width': w+'px'});
             $('.tableBox').hide().eq(i).show();
+            $('.alertBox').hide().eq(i).show();
         });
         $('#fileBtn').change(function () {
             // 检查是否为图像类型
@@ -82,7 +83,7 @@
                     required: "请输入公司名称"
                 },
                 industry_parent_id: {
-                    required: ""
+                    required: "请选择所属行业"
                 },
                 industry_id: {
                     required: "请选择行业领域"
@@ -114,6 +115,45 @@
                 $(element).parents(".row").removeClass(errorClass);
             }
         });
+
+        $("#editForm").validate({
+            rules: {
+                cur_pass: {
+                    required: true
+                },
+                new_pass: {
+                    required: true,
+                    minlength: 6
+                },
+                repeat_pass: {
+                    required: true,
+                    equalTo: "input[name=new_pass]"
+                }
+            },
+            messages: {
+                cur_pass: {
+                    required: "请输入当前密码"
+                },
+                new_pass: {
+                    required: "请输入新密码",
+                    minlength: "密码的长度要大于6个字符"
+                },
+                repeat_pass: {
+                    required: "请再输入一次密码",
+                    equalTo: "两次密码不一致"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.addClass("ui red pointing label transition");
+                error.insertAfter(element.parent());
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents(".row").addClass(errorClass);
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents(".row").removeClass(errorClass);
+            }
+        });
         <?php if($loginInfo['role']==1&&$tab==2){?>$('.tabLine').css('left', '123px');
         <?php }elseif($loginInfo['role']==1&&$tab==3){ ?>$('.tabLine').css('left', '229px');<?php } ?>
     })
@@ -130,10 +170,12 @@
             </ul>
             <p class="tabLine" style="left: 17px; width: 72px;"></p>
         </div>
+        <?php if (!empty($msg)) {?>
+            <p class="alertBox <?php echo $success=='ok'?'alert-success':'alert-danger' ?> "><span class="alert-msg"><?php echo $msg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
+        <?php } ?>
         <div class="tableBox tableBox01" <?php if ($tab != 1) {
             echo 'style="display:none"';
         } ?> >
-            <?php if ($tab == 1 && !empty($success)) { ?><p class="f14 red aCenter">信息更新成功</p><?php } ?>
             <form id="companyeditForm" method="post" action="" enctype="multipart/form-data">
                 <input name="act" type="hidden" value="info"/>
                 <table cellspacing="0" class="comTable">
@@ -147,8 +189,9 @@
                     <tr>
                         <th><span class="red">*</span>公司名称</th>
                         <td><?php if ($loginInfo['role'] == 1) { ?>
+                            <span class="iptInner">
                                 <input name="name" value="<?php echo $company['name'] ?>" type="text"
-                                       class="iptH37 w345">
+                                       class="iptH37 w345"></span>
                             <?php } else { ?>
                                 <?php echo $company['name'] ?>
                             <?php } ?>
@@ -156,7 +199,9 @@
                     </tr>
                     <tr>
                         <th><span class="red">*</span>所属行业</th>
-                        <td><select id="industry_parent_id" name="industry_parent_id" class="iptH37">
+                        <td>
+                            <span class="iptInner">
+                                <select id="industry_parent_id" name="industry_parent_id" class="iptH37">
                                 <option value="">请选择所属行业</option>
                                 <?php foreach ($industry_parent as $pindus) { ?>
                                     <option
@@ -174,6 +219,7 @@
                                     } ?> ><?php echo $indus['name'] ?></option>
                                 <?php } ?>
                             </select>
+                            </span>
                         </td>
                     </tr>
                     <tr>
@@ -197,31 +243,36 @@
                     <tr>
                         <th><span class="red">*</span>联系人</th>
                         <td>
+                            <span class="iptInner">
                             <input name="contact" value="<?php echo $user['real_name'] ?>" type="text"
-                                   class="iptH37 w345">
+                                   class="iptH37 w345"></span>
 
                         </td>
                     </tr>
                     <tr>
                         <th><span class="red">*</span>手机号码</th>
                         <td>
+                            <span class="iptInner">
                             <input name="mobile" value="<?php echo $user['mobile'] ?>" type="text" class="iptH37 w345">
-
+                                </span>
                         </td>
                     </tr>
 
                     <tr>
                         <th>电话号码</th>
                         <td>
+                            <span class="iptInner">
                             <input name="tel" value="<?php echo $logininfo['tel'] ?>" type="text" class="iptH37 w345">
-
+                                </span>
                         </td>
                     </tr>
 
                     <tr>
                         <th><span class="red">*</span>电子邮件</th>
                         <td>
+                            <span class="iptInner">
                             <input name="email" value="<?php echo $user['email'] ?>" type="text" class="iptH37 w345">
+                                </span>
                         </td>
                     </tr>
 
@@ -239,7 +290,6 @@
         <div class="tableBox tableBox01" <?php if ($tab != 2) {
             echo 'style="display:none"';
         } ?>>
-            <?php echo ($tab == 2 && !empty($msg)) ? '<p class="f14 red aCenter">' . $msg . '</p>' : '' ?>
             <form id="editForm" method="post" action="" enctype="multipart/form-data">
                 <input name="act" type="hidden" value="pass"/>
                 <table cellspacing="0" class="comTable">
@@ -253,21 +303,24 @@
                     <tr>
                         <th><span class="red">*</span>当前密码</th>
                         <td>
+                            <span class="iptInner">
                             <input name="cur_pass" type="password" class="iptH37 w345">
-
+                                </span>
                         </td>
                     </tr>
                     <tr>
                         <th><span class="red">*</span>新密码</th>
-                        <td>
+                        <td><span class="iptInner">
                             <input name="new_pass" type="password" class="iptH37 w345">
+                                </span>
                         </td>
                     </tr>
                     <tr>
                         <th><span class="red">*</span>重复新密码</th>
                         <td>
+                            <span class="iptInner">
                             <input name="repeat_pass" type="password" class="iptH37 w345">
-
+                                </span>
                         </td>
                     </tr>
 
@@ -286,7 +339,6 @@
             <div class="tableBox tableBox01" <?php if ($tab != 3) {
                 echo 'style="display:none"';
             } ?>>
-                <?php if ($tab == 3 && !empty($success)) { ?><p class="f14 red aCenter">权限保存成功</p><?php } ?>
                 <form id="editForm" method="post" action="">
                     <input name="act" type="hidden" value="purview"/>
                     <table cellspacing="0" class="listTable">

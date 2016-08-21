@@ -1,9 +1,17 @@
 <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
+<script>
+    function windowReload(){
+        window.location.reload();
+        setTimeout("windowReload()",1000*30);
+    }
+    $(function(){
+        setTimeout("windowReload()",1000*30);
+    });
+</script>
 <div class="wrap">
         <div class="titCom clearfix"><span class="titSpan"><?php echo $course['title'] ?>  </span><span class="<?php echo $course['status_class']; ?> ml20"><?php echo $course['status_str']; ?></span></div>
         <div class="topNaviKec">
                 <?php $this->load->view ( 'course/top_navi' ); ?>
-
         </div>
         <div class="comBox clearfix">
                 <div class="baoming">

@@ -9,7 +9,7 @@ class Course extends CI_Controller
         parent::__construct();
         $this->load->library(array('session', 'pagination'));
         $this->load->helper(array('form', 'url', 'download'));
-        $this->load->model(array('user_model', 'useractionlog_model', 'course_model', 'teacher_model', 'homework_model', 'homeworklist_model', 'survey_model', 'surveylist_model', 'ratings_model', 'student_model', 'department_model'));
+        $this->load->model(array('user_model', 'useractionlog_model', 'course_model', 'teacher_model', 'homework_model', 'homeworklist_model', 'survey_model', 'surveylist_model', 'ratings_model','ratingslist_model', 'student_model', 'department_model'));
 
         $this->_logininfo = $this->session->userdata('loginInfo');
         if (empty($this->_logininfo)) {
@@ -66,7 +66,7 @@ class Course extends CI_Controller
             $sql .= " and c.ispublic = 1 and (isapply_open!=1 or unix_timestamp(now()) < unix_timestamp(c.apply_start) ) and unix_timestamp(now()) < unix_timestamp(c.time_start) ";
         }
         if (!empty($parm['keyword'])) {
-            $sql .= " and (c.title like '%" . $parm['keyword'] . "%' )";
+            $sql .= " and (c.title like '%" .  $this->db->escape_like_str($parm['keyword']) . "%' )";
         }
         if (!empty($parm['time_start'])) {
             $sql .= " and unix_timestamp(time_start) >= unix_timestamp(" . $pvalue['time_start']  . ") ";
@@ -234,6 +234,7 @@ class Course extends CI_Controller
     public function applyset($id)
     {
         $act = $this->input->post('act');
+        $msg = '';
         if (!empty($act)) {
             $oldcourse = $this->course_model->get_row(array('id' => $id,'company_code' => $this->_logininfo['company_code']));
             $c = array('isapply_open' => $this->input->post('isapply_open'),
@@ -252,10 +253,11 @@ class Course extends CI_Controller
                 $this->load->library(array('notifyclass'));
                 $this->notifyclass->applyopen($id);
             }
+            $msg='保存成功';
         }
         $course = $this->course_model->get_row(array('id' => $id));
         $this->load->view('header');
-        $this->load->view('course/apply_set', array('course' => $course));
+        $this->load->view('course/apply_set', compact('course','msg'));
         $this->load->view('footer');
     }
 
@@ -324,6 +326,7 @@ class Course extends CI_Controller
     public function signinset($id)
     {
         $act = $this->input->post('act');
+        $msg = '';
         if (!empty($act)) {
             $c = array('issignin_open' => $this->input->post('issignin_open'),
                 'signin_start' => $this->input->post('signin_start'),
@@ -337,6 +340,7 @@ class Course extends CI_Controller
                 $c['signout_end'] = NULL;
             }
             $this->course_model->update($c, $id);
+            $msg='保存成功,下载保存二维码,学员扫一扫即可签到';
         }
         $course = $this->course_model->get_row(array('id' => $id,'company_code' => $this->_logininfo['company_code']));
         if (empty($course['signin_qrcode'])) {
@@ -356,7 +360,7 @@ class Course extends CI_Controller
             $this->course_model->update($course, $course['id']);
         }
         $this->load->view('header');
-        $this->load->view('course/signin_set', array('course' => $course));
+        $this->load->view('course/signin_set', compact('course','msg'));
         $this->load->view('footer');
     }
 
@@ -410,6 +414,7 @@ class Course extends CI_Controller
     public function homeworkedit($id)
     {
         $act = $this->input->post('act');
+        $msg = '';
         if (!empty($act)) {
             $this->load->database();
             $this->db->where('course_id', $id);
@@ -422,12 +427,13 @@ class Course extends CI_Controller
                     $this->homeworklist_model->del(array('course_id' => $id));
                 }
             }
+            $msg='保存成功';
         }
         $anstotal = $this->homeworklist_model->count(array('course_id' => $id));
         $homeworks = $this->homework_model->get_all(array('course_id' => $id));
         $course = $this->course_model->get_row(array('id' => $id));
         $this->load->view('header');
-        $this->load->view('course/homework_edit', array('course' => $course, 'homeworks' => $homeworks, 'anstotal' => $anstotal));
+        $this->load->view('course/homework_edit', compact('course', 'homeworks','anstotal','msg'));
         $this->load->view('footer');
     }
 
@@ -471,10 +477,11 @@ class Course extends CI_Controller
 
     }
 
-    //课前作业编辑
+    //课前调研编辑
     public function surveyedit($id)
     {
         $act = $this->input->post('act');
+        $msg = '';
         if (!empty($act)) {
             $this->load->database();
             $this->db->where('course_id', $id);
@@ -487,12 +494,13 @@ class Course extends CI_Controller
                     $this->surveylist_model->del(array('course_id' => $id));
                 }
             }
+            $msg='保存成功';
         }
         $anstotal = $this->surveylist_model->count(array('course_id' => $id));
         $surveys = $this->survey_model->get_all(array('course_id' => $id));
         $course = $this->course_model->get_row(array('id' => $id));
         $this->load->view('header');
-        $this->load->view('course/survey_edit', array('course' => $course, 'surveys' => $surveys, 'anstotal' => $anstotal));
+        $this->load->view('course/survey_edit', compact('course', 'surveys', 'anstotal','msg'));
         $this->load->view('footer');
     }
 
@@ -540,6 +548,7 @@ class Course extends CI_Controller
     public function ratingsedit($id)
     {
         $act = $this->input->post('act');
+        $msg = '';
         if (!empty($act)) {
             $this->load->database();
             $this->db->where(array('course_id' => $id));
@@ -554,11 +563,13 @@ class Course extends CI_Controller
                     $this->ratings_model->create($o);
                 }
             }
+            $msg='保存成功';
         }
+        $anstotal = $this->ratingslist_model->count(array('course_id' => $id));
         $ratingses = $this->ratings_model->get_all(array('course_id' => $id));
         $course = $this->course_model->get_row(array('id' => $id));
         $this->load->view('header');
-        $this->load->view('course/ratings_edit', array('course' => $course, 'ratingses' => $ratingses));
+        $this->load->view('course/ratings_edit', compact('course', 'ratingses','anstotal','msg'));
         $this->load->view('footer');
     }
 

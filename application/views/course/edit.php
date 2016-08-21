@@ -12,7 +12,8 @@
                     required: true
                 },
                 time_end: {
-                    required: true
+                    required: true,
+                    compareDate: "input[name=time_start]"
                 },
                 address: {
                     required: true
@@ -34,7 +35,8 @@
                     required: "请输入开始时间"
                 },
                 time_end: {
-                    required: "请输入结束时间"
+                    required: "请输入结束时间",
+                    compareDate: "结束时间不能早于开始时间"
                 },
                 address: {
                     required: "请输入课程地点"
@@ -61,6 +63,9 @@
                 $('input[type=submit]').val('请稍后..').attr('disabled', 'disabled');
                 form.submit();
             }
+        });
+        $('#time_end').focus(function(){
+            $(this).val($.trim($(this).val())==''?$('#time_start').val():$(this).val());
         });
 
         $('#fileBtn').change(function () {
@@ -269,12 +274,7 @@
                         <th><span class="red">*</span>开课时间</th>
                         <td>
                             <span class="iptInner">
-                            <input placeholder="开始时间" name="time_start"
-                                   value="<?php echo empty($course['time_start'])?'':date("Y-m-d H:i",strtotime($course['time_start'])) ?>"
-                                   type="text" class="iptH37 mr10 DTdate w156" >至<input placeholder="结束时间" name="time_end"
-                                                              value="<?php echo empty($course['time_end'])?'':date('Y-m-d H:i',strtotime($course['time_end'])) ?>"
-                                                              type="text"
-                                                              class="iptH37 ml10 DTdate w156" >
+                            <input placeholder="开始时间" name="time_start" id="time_start" value="<?php echo empty($course['time_start'])?'':date("Y-m-d H:i",strtotime($course['time_start'])) ?>" type="text" class="iptH37 mr10 DTdate w156" >至<input placeholder="结束时间" name="time_end" id="time_end" value="<?php echo empty($course['time_end'])?'':date('Y-m-d H:i',strtotime($course['time_end'])) ?>" type="text" class="iptH37 ml10 DTdate w156" >
                             </span>
 
                         </td>

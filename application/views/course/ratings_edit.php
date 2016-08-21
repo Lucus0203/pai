@@ -1,15 +1,22 @@
 <script type="text/javascript">
-        $(document).ready(function(){
-                $('[js="addPingfen"]').click(function(){
-                    $('.zuoyeList').append('<li class="fengfen">评分题<input name="ratingses[]" type="text" class="iptH37 w600 ml10" value=""><input type="hidden" name="type[]" value="1" /><a href="javascript:;" js="removeZuoye" class="blue ml10">删除</a></li>');
-                })
-                $('[js="addKaifang"]').click(function(){
-                    $('.zuoyeList').append('<li class="kaifang">开放题<input name="ratingses[]" type="text" class="iptH37 w600 ml10" value=""><input type="hidden" name="type[]" value="2" /><a href="javascript:;" js="removeZuoye" class="blue ml10">删除</a></li>');
-                })
-                $('[js="removeZuoye"]').live('click',function(){
-                    $(this).parent().remove();
-                });
+    $(document).ready(function(){
+        $('[js="addPingfen"]').click(function(){
+            $('.zuoyeList').append('<li class="fengfen">评分题<input name="ratingses[]" type="text" class="iptH37 w600 ml10" value=""><input type="hidden" name="type[]" value="1" /><a href="javascript:;" js="removeZuoye" class="blue ml10">删除</a></li>');
         })
+        $('[js="addKaifang"]').click(function(){
+            $('.zuoyeList').append('<li class="kaifang">开放题<input name="ratingses[]" type="text" class="iptH37 w600 ml10" value=""><input type="hidden" name="type[]" value="2" /><a href="javascript:;" js="removeZuoye" class="blue ml10">删除</a></li>');
+        })
+        $('[js="removeZuoye"]').live('click',function(){
+            $(this).parent().remove();
+        });
+    });
+    function checkform(){
+        if($('#anstotal').val()*1>0){
+            return confirm('已提交的学员需要重新填写,确认保存吗?');
+        }else{
+            return true;
+        }
+    }
 </script>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
 <div class="wrap">
@@ -32,9 +39,13 @@
 
                         </div>
                         <div class="contRight">
-                        <form id="editForm" method="post" action="">
+                        <form id="editForm" method="post" action="" onsubmit="return checkform()">
                             <input name="act" type="hidden" value="act" />
-                                <p class="yellowTipBox mb20">课程结束前1小时，已设置的反馈问题将禁止再次修改，编辑</p>
+                            <input id="anstotal" type="hidden" value="<?php echo $anstotal ?>" />
+                            <?php if (!empty($msg)) {?>
+                                <p class="alertBox alert-success mb20"><span class="alert-msg"><?php echo $msg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
+                            <?php } ?>
+                                <p class="yellowTipBox mb20">如果已有学员提交，修改问题后需要学员重新填写</p>
                                 <ul class="zuoyeList">
                                     <?php foreach ($ratingses as $k=>$h){ ?>
                                     <li class="<?php echo $h['type']==1?'pingfen':'kaifang' ?>"><?php echo $h['type']==1?'评分题':'开放题' ?>

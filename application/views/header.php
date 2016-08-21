@@ -13,7 +13,8 @@
 		<script type="text/javascript" src="<?php echo base_url();?>js/jquery.validate.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>js/additional-methods.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>js/jquery.simple-dtpicker.js"></script>
-		<script type="text/javascript"  src="<?php echo base_url() ?>js/wdate/WdatePicker.js"></script>
+        <script type="text/javascript"  src="<?php echo base_url() ?>js/wdate/WdatePicker.js"></script>
+        <script type="text/javascript"  src="<?php echo base_url() ?>js/trainingpie.common.js"></script>
 <script type="text/javascript">
 var _hmt = _hmt || [];
 (function() {
@@ -22,31 +23,7 @@ var _hmt = _hmt || [];
   var s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(hm, s);
 })();
-    $(document).ready(function(){
-        $('.listBox').delegate('.listCont','hover',function(){
-            $(this).toggleClass('hover');
-        });
-        $('.delBtn').click(function(){
-            return confirm('确定删除吗?');
-        });
-        $('.logTabUl li').click(function(){
-            var i=$(this).index();
-            var lf=parseInt($(this).offset().left-$('.logTabUl').offset().left);
-            var w=parseInt($(this).css('width'));
-            $('.tabLine').animate({'left':lf,'width':w});
-            $('.tableBox').hide().eq(i).show();
-        });
-        $('.loginT').hover(function(){
-            $(this).find('.logoList').show();
-        },function(){
-            $(this).find('.logoList').hide();
-        })
-        $('.DTdate').focus(function(){
-            $(this).appendDtpicker({"locale": "cn","onInit": function(handler){handler.show();}});
-        });
-        $('.alert-remove').click(function(){$('.alertBox').hide()});
-    });
-    </script>
+</script>
 
 	</head>
 

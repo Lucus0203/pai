@@ -16,7 +16,7 @@
         
         function checkform(){
             if($('#anstotal').val()*1>0){
-                return confirm('保存之后需要学员重新填写调研,确认保存吗?');
+                return confirm('已提交的学员需要重新填写,确认保存吗?');
             }else{
                 return true;
             }
@@ -46,7 +46,10 @@
                             <form id="editForm" method="post" action="" onsubmit="return checkform()">
                             <input name="act" type="hidden" value="act" />
                             <input id="anstotal" type="hidden" value="<?php echo $anstotal ?>" />
-                                <p class="yellowTipBox mb20">为了避免数据冲突，调研问卷一旦发放，暂不支持重新编辑，修改，请在发布前仔细检查。</p>
+                                <?php if (!empty($msg)) {?>
+                                    <p class="alertBox alert-success mb20"><span class="alert-msg"><?php echo $msg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
+                                <?php } ?>
+                                <p class="yellowTipBox mb20">如果已有学员提交，修改问题后需要学员重新填写</p>
                                 <ul class="zuoyeList">
                                     <?php foreach ($surveys as $k=>$h){ ?>
                                         <li><span class="num"><?php echo ($k+1) ?></span>

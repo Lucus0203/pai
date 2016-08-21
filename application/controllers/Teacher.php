@@ -51,13 +51,13 @@ class Teacher extends CI_Controller
         $pvalue=array_map(array($this,'escapeVal'),$parm);//防sql注入
         $where = " company_code = '" . $logininfo['company_code'] . "' and isdel=2 ";
         if (!empty($parm['keyword'])) {
-            $where .= " and (name like '%" . $parm['keyword'] . "%' or title like '%" . $parm['keyword'] . "%' or info like '%" . $parm['keyword'] . "%' or specialty like '%" . $parm['keyword'] . "%') ";
+            $where .= " and (name like '%" . $this->db->escape_like_str($parm['keyword']) . "%' or title like '%" . $this->db->escape_like_str($parm['keyword']) . "%' or info like '%" . $this->db->escape_like_str($parm['keyword']) . "%' or specialty like '%" . $this->db->escape_like_str($parm['keyword']) . "%') ";
         }
         if (!empty($parm['type'])) {
             $where .= " and type = " . $pvalue['type'] ;
         }
         if (!empty($parm['specialty'])) {
-            $where .= " and specialty like '%" . $parm['specialty']."%' ";
+            $where .= " and specialty like '%" . $this->db->escape_like_str($parm['specialty'])."%' ";
         }
         if (!empty($parm['work_type'])) {
             $where .= " and work_type = " . $pvalue['work_type'] ;

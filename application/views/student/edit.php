@@ -84,7 +84,6 @@ $(document).ready(function(){
                 },
                 mobile: {
                         required: true,
-                        digits:true,
                         isMobile: true
                 },
                 email: {
@@ -103,7 +102,6 @@ $(document).ready(function(){
                 },
                 mobile: {
                         required: "请输入您的电话号码",
-                        digits: "只能输入数字",
                         isMobile: "请输入正确的手机号码",
                 },
                 email: {

@@ -1,46 +1,43 @@
 <script type="text/javascript">
-        $(document).ready(function(){
-                $( "#editForm" ).validate( {
-                        rules: {
-                                signin_start: {
-                                        required: true
-                                },
-                                signin_end: {
-                                        required: true
-                                }
-                        },
-                        messages: {
-                                signin_start: {
-                                        required: "请输入签到开始时间"
-                                },
-                                signin_end: {
-                                        required: "请输入签到结束时间"
-
-                                }
-                        },
-                        errorPlacement: function ( error, element ) {
-                                error.addClass( "ui red pointing label transition" );
-                                error.insertAfter( element.parent() );
-                        },
-                        highlight: function ( element, errorClass, validClass ) {
-                                $( element ).parents( ".row" ).addClass( errorClass );
-                        },
-                        unhighlight: function (element, errorClass, validClass) {
-                                $( element ).parents( ".row" ).removeClass( errorClass );
-                        }
-                });
-                
-                $('.Wdate').eq(1).focus(function(){
-                    if($('.Wdate').eq(1).val()==''){
-                        $('.Wdate').eq(1).val($('.Wdate').eq(0).val());
-                    }
-                });
-                $('.Wdate').eq(3).focus(function(){
-                    if($('.Wdate').eq(3).val()==''){
-                        $('.Wdate').eq(3).val($('.Wdate').eq(2).val());
-                    }
-                });
+    $(document).ready(function(){
+        $( "#editForm" ).validate( {
+            rules: {
+                signin_start: {
+                    required: true
+                },
+                signin_end: {
+                    required: true,
+                    compareDate: "input[name=signin_start]"
+                }
+            },
+            messages: {
+                signin_start: {
+                    required: "请输入签到开始时间"
+                },
+                signin_end: {
+                    required: "请输入签到结束时间",
+                    compareDate:"结束时间不能早于开始时间"
+                }
+            },
+            errorPlacement: function ( error, element ) {
+                error.addClass( "ui red pointing label transition" );
+                error.insertAfter( element.parent() );
+            },
+            highlight: function ( element, errorClass, validClass ) {
+                $( element ).parents( ".row" ).addClass( errorClass );
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $( element ).parents( ".row" ).removeClass( errorClass );
+            }
         });
+
+        $('#signin_end').focus(function(){
+            $(this).val($.trim($(this).val())==''?$('#signin_start').val():$(this).val());
+        });
+        $('#signout_end').focus(function(){
+            $(this).val($.trim($(this).val())==''?$('#signout_start').val():$(this).val());
+        });
+    });
 </script>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
 <div class="wrap">
@@ -64,6 +61,9 @@
 
                         </div>
                         <div class="contRight">
+                            <?php if (!empty($msg)) {?>
+                                <p class="alertBox alert-success"><span class="alert-msg"><?php echo $msg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
+                            <?php } ?>
                         <form id="editForm" method="post" action="">
                             <input name="act" type="hidden" value="act" />
                                 <table cellspacing="0" class="comTable">
@@ -85,28 +85,30 @@
                                                 </tr>
                                                 <tr>
                                                         <th><span class="red">*</span>签到时段</th>
-                                                        <td>
-                                                            <input type="text" name="signin_start" value="<?php echo $course['signin_start'] ?>" class="iptH37 DTdate" autocomplete="off"> 至 <input name="signin_end" value="<?php echo $course['signin_end'] ?>" type="text" class="iptH37 DTdate" autocomplete="off">
+                                                        <td><span class="iptInner">
+                                                                <input type="text" id="signin_start" name="signin_start" value="<?php echo !empty($course['signin_start'])?date("Y-m-d H:i",strtotime($course['signin_start'])):'' ?>" class="iptH37 DTdate" autocomplete="off"> 至 <input id="signin_end" name="signin_end" value="<?php echo !empty($course['signin_end'])?date("Y-m-d H:i",strtotime($course['signin_end'])):'' ?>" type="text" class="iptH37 DTdate" autocomplete="off">
+                                                            </span>
 
                                                         </td>
                                                 </tr>
                                                 <tr>
                                                         <th>签到二维码</th>
-                                                        <td><a href="<?php echo site_url('course/downloadqrcode/'.$course['id']) ?>?type=signin" target="_blank" ><img src="<?php echo base_url().'uploads/course_qrcode/'.$course['signin_qrcode'].'.png' ?>" height="120" /><p class="aCenter" style="width:120px">下载</p></a>
+                                                        <td><img src="<?php echo base_url().'uploads/course_qrcode/'.$course['signin_qrcode'].'.png' ?>" height="120" /><p class="aCenter blue" style="width:120px"><a class="blue" href="<?php echo site_url('course/downloadqrcode/'.$course['id']) ?>?type=signin" target="_blank" >下载</a></p>
                                                         </td>
                                                 </tr>
                                                 <tr><td colspan="2"><p class="red">签退无需求可不设置</p></td></tr>
                                                 <tr>
                                                         <th>签退时段</th>
-                                                        <td>
-                                                            <input type="text" name="signout_start" value="<?php echo $course['signout_start'] ?>" class="iptH37 DTdate" autocomplete="off"> 至 <input name="signout_end" value="<?php echo $course['signout_end'] ?>" type="text" class="iptH37 DTdate" autocomplete="off">
+                                                        <td><span class="iptInner">
+                                                            <input type="text" id="signout_start" name="signout_start" value="<?php echo !empty($course['signout_start'])?date("Y-m-d H:i",strtotime($course['signout_start'])):'' ?>" class="iptH37 DTdate" autocomplete="off"> 至 <input id="signout_end" name="signout_end" value="<?php echo !empty($course['signout_end'])?date("Y-m-d H:i",strtotime($course['signout_end'])):'' ?>" type="text" class="iptH37 DTdate" autocomplete="off">
+                                                            </span>
                                                             
 
                                                         </td>
                                                 </tr>
                                                 <tr>
                                                         <th>签退二维码</th>
-                                                        <td><a href="<?php echo site_url('course/downloadqrcode/'.$course['id']) ?>?type=signout" target="_blank" ><img src="<?php echo base_url().'uploads/course_qrcode/'.$course['signout_qrcode'].'.png' ?>" height="120" /><p class="aCenter" style="width:120px">下载</p></a>
+                                                        <td><img src="<?php echo base_url().'uploads/course_qrcode/'.$course['signout_qrcode'].'.png' ?>" height="120" /><p class="aCenter" style="width:120px"><a class="blue" href="<?php echo site_url('course/downloadqrcode/'.$course['id']) ?>?type=signout" target="_blank" >下载</a></p>
                                                         </td>
                                                 </tr>
                                                 <tr>

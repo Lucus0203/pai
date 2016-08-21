@@ -20,7 +20,7 @@ class Login extends CI_Controller
         if ($act == 'act1') {
             $user = $this->input->post('user_name');
             $pass = $this->input->post('user_pass');
-            $userinfo = $this->user_model->get_row(array('user_name' => $user, 'role' => 1));
+            $userinfo = $this->user_model->get_row(" role=1 and (email = ".$this->db->escape($user)." or mobile=".$this->db->escape($user)." or user_name=".$this->db->escape($user)." ) ");
             if (count($userinfo) > 0 && is_array($userinfo)) {
                 $pwd = $userinfo ['user_pass'];
                 if ($pwd == md5($pass)) {
@@ -31,10 +31,10 @@ class Login extends CI_Controller
                     $this->userloginlog_model->create(array('user_id' => $userinfo['id']));
                     redirect('index', 'index');
                 } else {
-                    $error_msg = "密码错误";
+                    $error_msg = "密码错误!";
                 }
             } else {
-                $error_msg = "账号或密码错误";
+                $error_msg = "账号或密码错误!";
             }
         } else if ($act == 'act2') {
             $user = $this->input->post('user_name');
@@ -52,10 +52,10 @@ class Login extends CI_Controller
                     $this->userloginlog_model->create(array('user_id' => $userinfo['id']));
                     redirect('index', 'index');
                 } else {
-                    $error_msg = "密码错误";
+                    $error_msg = "密码错误!";
                 }
             } else {
-                $error_msg = "账号或密码错误";
+                $error_msg = "账号或密码错误!";
             }
         }
         $this->load->view('login/login', array('error_msg' => $error_msg, 'act' => $act));
@@ -69,7 +69,6 @@ class Login extends CI_Controller
         $res = array();
         $act = $this->input->post('act');
         if (!empty($act)) {
-            $user_name = $this->input->post('user_name');
             $pass = $this->input->post('user_pass');
             $company_name = $this->input->post('company_name');
             $industry_parent_id = $this->input->post('industry_parent_id');
@@ -79,7 +78,7 @@ class Login extends CI_Controller
             $mobile = $this->input->post('mobile');
             $mobile_code = $this->input->post('mobile_code');
             $invitation_code = $this->input->post('invitation_code');
-            $user = array('user_name' => $user_name,
+            $user = array('user_name' => $email,
                 'user_pass' => $pass,
                 'real_name' => $real_name,
                 'email' => $email,
@@ -90,9 +89,9 @@ class Login extends CI_Controller
             $res['user_industry_parent']=$this->industries_model->get_row(array('id'=>$industry_parent_id));
             $res['user_industrys']=$this->industries_model->get_all(array('parent_id'=>$industry_parent_id));
             $res['user_industry_id']=$industry_id;
-            $userinfo = $this->user_model->get_row(array('role' => 1, 'user_name' => $user_name, "mobile != '$mobile'"));
-            if (!empty($userinfo)) {
-                $res['msg'] = '账号已被使用';
+            $repeatuser = $this->user_model->get_row("role=1 and user_name = ".$this->db->escape($email)." and mobile != ".$this->db->escape($mobile));
+            if (!empty($repeatuser)) {
+                $res['msg'] = '邮箱已被使用';
             }elseif ($invitation_code != 8367) {//邀请码
                 $res['msg'] = '邀请码不正确';
             } else {
@@ -117,7 +116,7 @@ class Login extends CI_Controller
                         'name' => $real_name,
                         'mobile' => $mobile,
                         'email' => $email,
-                        'user_name' => $user_name,
+                        'user_name' => $mobile,
                         'user_pass' => md5($pass),
                         'role' => 9);
                     $this->student_model->create($student);
@@ -149,6 +148,43 @@ class Login extends CI_Controller
         $this->load->view('footer');
     }
 
+    public function forgot($sacount='')
+    {
+        $res = array();
+        $act = $this->input->post('act');
+        if (!empty($act)) {
+            $post = array('mobile' => $this->input->post('mobile'),
+                'user_pass' => $this->input->post('user_pass'),
+                'company_code' => $this->input->post('company_code'),
+                'mobile_code' => $this->input->post('mobile_code'));
+            $res['user']=$post;
+            $res['company'] = $company = $this->company_model->get_row(array('code' => $post['company_code']));
+            if (!empty($sacount)&&empty($company)) {
+                $msg = '公司编号错误';
+            } else{
+                $where=array('mobile' => $post['mobile'],'register_flag' => 2);
+                if(!empty($sacount)){
+                    $where['company_code']=$post['company_code'];
+                }
+                $userinfo = $this->user_model->get_row($where);
+                if (!empty($userinfo) && $userinfo['mobile_code'] == $post['mobile_code']) {
+                    $mobile_code = rand(1000, 9999);//换个验证码
+                    $user_pass = md5($post['user_pass']);
+                    $this->user_model->update(array('mobile_code'=>$mobile_code,'user_pass'=>$user_pass), $userinfo['id']);
+                    $msg = '密码修改成功,请返回登录';
+                    unset($res['user']);
+                } else {
+                    $msg = '短信验证码错误';
+                }
+            }
+            $res['msg']=$msg;
+        }
+        $res['cap']=$this->getCaptcha();
+        $res['sacount'] = $sacount;
+        $this->load->view('login/forgot', $res);
+        $this->load->view('footer');
+    }
+
     public function fromauth($userid, $token)
     {//管理员登录用户数据
         $this->load->database();
@@ -170,43 +206,46 @@ class Login extends CI_Controller
     }
 
     //初始化权限
+    /**
+     * @param $company_code
+     */
     private function initpurview($company_code)
     {
         $sql = "INSERT INTO `pai_purview` (`company_code`, `key`, `value`, `role`) VALUES
-                ('$company_code', 'courselist', '1', '2'),
-                ('$company_code', 'courseinfo', '1', '2'),
-                ('$company_code', 'coursecreate', '1', '2'),
-                ('$company_code', 'courseedit', '1', '2'),
-                ('$company_code', 'coursedel', '1', '2'),
-                ('$company_code', 'applyset', '1', '2'),
-                ('$company_code', 'applylist', '1', '2'),
-                ('$company_code', 'signinset', '1', '2'),
-                ('$company_code', 'signinlist', '1', '2'),
-                ('$company_code', 'surveyedit', '1', '2'),
-                ('$company_code', 'surveylist', '1', '2'),
-                ('$company_code', 'homeworkedit', '1', '2'),
-                ('$company_code', 'homeworklist', '1', '2'),
-                ('$company_code', 'ratingsedit', '1', '2'),
-                ('$company_code', 'ratingslist', '1', '2'),
-                ('$company_code', 'notifyset', '1', '2'),
-                ('$company_code', 'notifycustomize', '1', '2'),
-                ('$company_code', 'teacherlist', '1', '2'),
-                ('$company_code', 'teacherinfo', '1', '2'),
-                ('$company_code', 'teachercreate', '1', '2'),
-                ('$company_code', 'teacheredit', '1', '2'),
-                ('$company_code', 'teacherdel', '1', '2'),
-                ('$company_code', 'department', '1', '2'),
-                ('$company_code', 'student', '1', '2'),
-                ('$company_code', 'courselist', '1', '3'),
-                ('$company_code', 'courseinfo', '1', '3'),
-                ('$company_code', 'applylist', '1', '3'),
-                ('$company_code', 'signinlist', '1', '3'),
-                ('$company_code', 'surveylist', '1', '3'),
-                ('$company_code', 'homeworklist', '1', '3'),
-                ('$company_code', 'ratingslist', '1', '3'),
-                ('$company_code', 'teacherlist', '1', '3'),
-                ('$company_code', 'teacherinfo', '1', '3');
-                ";
+            ('$company_code', 'courselist', '1', '2'),
+            ('$company_code', 'courseinfo', '1', '2'),
+            ('$company_code', 'coursecreate', '1', '2'),
+            ('$company_code', 'courseedit', '1', '2'),
+            ('$company_code', 'coursedel', '1', '2'),
+            ('$company_code', 'applyset', '1', '2'),
+            ('$company_code', 'applylist', '1', '2'),
+            ('$company_code', 'signinset', '1', '2'),
+            ('$company_code', 'signinlist', '1', '2'),
+            ('$company_code', 'surveyedit', '1', '2'),
+            ('$company_code', 'surveylist', '1', '2'),
+            ('$company_code', 'homeworkedit', '1', '2'),
+            ('$company_code', 'homeworklist', '1', '2'),
+            ('$company_code', 'ratingsedit', '1', '2'),
+            ('$company_code', 'ratingslist', '1', '2'),
+            ('$company_code', 'notifyset', '1', '2'),
+            ('$company_code', 'notifycustomize', '1', '2'),
+            ('$company_code', 'teacherlist', '1', '2'),
+            ('$company_code', 'teacherinfo', '1', '2'),
+            ('$company_code', 'teachercreate', '1', '2'),
+            ('$company_code', 'teacheredit', '1', '2'),
+            ('$company_code', 'teacherdel', '1', '2'),
+            ('$company_code', 'department', '1', '2'),
+            ('$company_code', 'student', '1', '2'),
+            ('$company_code', 'courselist', '1', '3'),
+            ('$company_code', 'courseinfo', '1', '3'),
+            ('$company_code', 'applylist', '1', '3'),
+            ('$company_code', 'signinlist', '1', '3'),
+            ('$company_code', 'surveylist', '1', '3'),
+            ('$company_code', 'homeworklist', '1', '3'),
+            ('$company_code', 'ratingslist', '1', '3'),
+            ('$company_code', 'teacherlist', '1', '3'),
+            ('$company_code', 'teacherinfo', '1', '3');
+            ";
         $this->load->database();
         $this->db->query($sql);
     }
@@ -231,18 +270,19 @@ class Login extends CI_Controller
     }
 
     //获取验证码
-    public function getcode()
+    public function getcode($forgot='')
     {
         $s=$this->input->server(array('HTTP_REFERER'));
         if(empty($s['HTTP_REFERER'])){
             show_404();
             return false;
         }
-        $user = $this->input->post('user_name');
+        $company_code = $this->input->post('company_code');
+        $email = $this->input->post('email');
         $mobile = $this->input->post('mobile');
         $captcha = $this->input->post('captcha');
         if(empty($mobile)){
-            echo '手机号码获取失败,请联系管理员';
+            echo '请输入手机号';
             return false;
         }elseif($this->session->userdata('captcha')=='999999'){
             echo '验证码已过期';
@@ -252,15 +292,31 @@ class Login extends CI_Controller
             return false;
         }
         $code = rand(1000, 9999);
-        $userinfo = $this->user_model->get_row(array('mobile' => $mobile));
-        if ($userinfo['register_flag'] == 2) {
-            echo '此手机号已注册';
-            return false;
-        }
-        $repeatname = $this->user_model->get_row(array('user_name' => $user, "mobile != '$mobile'"));
-        if (!empty($repeatname)) {
-            echo '账号已被使用';
-            return false;
+        if($forgot=='forgot'){
+            if($company_code=='sacount'){
+                $userinfo = $this->user_model->get_row(array('mobile' => $mobile,'register_flag'=>2,'role'=>1));
+                if(empty($userinfo)){
+                    echo '此手机号还未注册';
+                    return false;
+                }
+            }else{
+                $userinfo = $this->user_model->get_row(array('mobile' => $mobile,'company_code'=>$company_code,'register_flag'=>2,'role'=>2));
+                if(empty($userinfo)){
+                    echo '此手机号还未注册';
+                    return false;
+                }
+            }
+        }else {
+            $userinfo = $this->user_model->get_row(array('mobile' => $mobile));
+            if ($userinfo['register_flag'] == 2) {
+                echo '此手机号已注册';
+                return false;
+            }
+            $repeatname = $this->user_model->get_row(" user_name = " . $this->db->escape($email) . " and mobile != " . $this->db->escape($mobile));
+            if (!empty($repeatname)) {
+                echo '邮箱已被使用';
+                return false;
+            }
         }
         if (!empty($userinfo['id'])) {
             $this->user_model->update(array('mobile_code' => $code), $userinfo['id']);

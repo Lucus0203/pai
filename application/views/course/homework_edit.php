@@ -15,7 +15,7 @@
         })
         function checkform(){
             if($('#anstotal').val()*1>0){
-                return confirm('保存之后需要学员重新填写作业,确认保存吗?');
+                return confirm('已提交的学员需要重新填写,确认保存吗?');
             }else{
                 return true;
             }
@@ -45,8 +45,11 @@
                             <form id="editForm" method="post" action="" onsubmit="return checkform()">
                             <input name="act" type="hidden" value="act" />
                             <input id="anstotal" type="hidden" value="<?php echo $anstotal ?>" />
-                                <p class="titCom">作业题编辑</p>
+                                <?php if (!empty($msg)) {?>
+                                    <p class="alertBox alert-success mb20"><span class="alert-msg"><?php echo $msg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
+                                <?php } ?>
                                 <?php if(count($homeworks)==0){ ?><p class="f14 mb20 gray6">本课程暂未创建课前作业，请通过以下模板进行创建</p><?php } ?>
+                                <p class="yellowTipBox mb20">如果已有学员提交，修改作业后需要学员重新填写</p>
                                 <ul class="zuoyeList">
                                     <?php foreach ($homeworks as $k=>$h){ ?>
                                         <li><span class="num"><?php echo ($k+1) ?></span>

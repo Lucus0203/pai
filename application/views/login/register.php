@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>培训派</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/common.css"/>
     <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/login.css"/>
     <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery1.83.js"></script>
@@ -28,20 +27,15 @@
                 var mobile = /^((1[0-9][0-9])+\d{8})$/;
                 return this.optional(element) || (length == 11 && mobile.test(value));
             }, "请正确填写您的手机号码");
-            jQuery.validator.addMethod("chrnum", function (value, element) {
-                var chrnum = /^([a-zA-Z0-9]+)$/;
-                return this.optional(element) || (chrnum.test(value));
-            }, "只能输入数字和字母(字符A-Z, a-z, 0-9)");
             $("#signupForm").validate({
                 rules: {
-                    user_name: {
+                    email: {
                         required: true,
-                        chrnum: true,
-                        minlength: 6
+                        email: true
                     },
                     user_pass: {
                         required: true,
-                        minlength: 5
+                        minlength: 6
                     },
                     password_confirm: {
                         required: true,
@@ -62,12 +56,7 @@
                     },
                     mobile: {
                         required: true,
-                        digits: true,
                         isMobile: true
-                    },
-                    email: {
-                        required: true,
-                        email: true
                     },
                     mobile_code: {
                         required: true
@@ -77,15 +66,13 @@
                     }
                 },
                 messages: {
-
-                    user_name: {
-                        required: "用户名不能为空",
-                        chrnum: "用户名必须是字母或数字",
-                        minlength: "用户名必须大于6个字符"
+                    email: {
+                        required: "请输入您的邮箱地址",
+                        email: "请输入正确的邮箱地址",
                     },
                     user_pass: {
                         required: "请输入密码",
-                        minlength: "密码的长度要大于5个字符"
+                        minlength: "密码的长度要大于6个字符"
                     },
                     password_confirm: {
                         required: "请再输入一次密码",
@@ -106,17 +93,12 @@
 
                     },
                     mobile: {
-                        required: "请输入您的电话号码",
-                        digits: "只能输入数字",
+                        required: "请输入您的手机号码",
                         isMobile: "请输入正确的手机号码",
                     },
-                    email: {
-                        required: "请输入您的邮箱地址",
-                        email: "请输入正确的邮箱地址",
-                    },
                     mobile_code: {
-                        required: "请输入验证码",
-                        digits: "只能输入数字"
+                        required: "请输入短信验证码",
+                        digits: "请输入正确的短信验证码"
                     },
                     invitation_code: {
                         required: "请输入邀请码"
@@ -134,23 +116,39 @@
                 }
             });
 
-            $('#get_captcha_btn,#get_captcha').click(function(){$.ajax({
-                type: "get",
-                url: '<?php echo site_url('login/updateCaptcha') ?>',
-                success: function (res) {
-                    $('#get_captcha').html(res);
-                }
-            })
+            $('#get_captcha_btn,#get_captcha').click(function(){
+                $.ajax({
+                    type: "get",
+                    url: '<?php echo site_url('login/updateCaptcha') ?>',
+                    success: function (res) {
+                        $('#get_captcha').html(res);
+                    }
+                })
             });
             $('#get_mobile_code').click(function () {
-                var username = $('#username').val();
+                var email = $('#email').val();
                 var mobile = $('#mobile').val();
                 var captcha = $('#captcha').val();
+                if ($.trim(email)=='') {
+                    alert('请输入邮箱账号！');
+                    $('#email').focus();
+                    return false;
+                }
+                if ($.trim(mobile)=='') {
+                    alert('请输入手机号码！');
+                    $('#mobile').focus();
+                    return false;
+                }
+                if ($.trim(captcha)=='') {
+                    alert('请输入验证码！');
+                    $('#captcha').focus();
+                    return false;
+                }
                 if (ismobile(mobile) && $('#get_mobile_code').attr('rel') <= 0) {
                     $.ajax({
                         type: "post",
                         url: '<?php echo site_url('login/getcode') ?>',
-                        data: {'mobile': mobile, 'user_name': username,'captcha':captcha},
+                        data: {'mobile': mobile, 'email': email,'captcha':captcha},
                         success: function (res) {
                             if (res == 1) {
                                 alert('验证码已发送,请注意查收')
@@ -192,21 +190,11 @@
                     timing();
                 }, 1000);
             } else {
-                $('#get_mobile_code').css('background-color', '#67d0de').text('获取手机验证码').attr('rel', 0);
+                $('#get_mobile_code').css('background-color', '#67d0de').text('获取短信验证码').attr('rel', 0);
+                $('#get_captcha_btn').trigger('click');
             }
         }
         function ismobile(mobile) {
-            if (mobile.length == 0) {
-                alert('请输入手机号码！');
-                $('input [name=mobile]').focus();
-                return false;
-            }
-            if (mobile.length != 11) {
-                alert('请输入有效的手机号码！');
-                $('input [name=mobile]').focus();
-                return false;
-            }
-
             var myreg = /^0?1[0-9][0-9]\d{8}$/;
             if (!myreg.test(mobile)) {
                 alert('请输入有效的手机号码！');
@@ -227,23 +215,23 @@
     <div class="logCont">
         <div class="tit">企业管理员注册</div>
         <div class="logInner">
-            <p class="red"><?php echo $msg ?></p>
+            <p class="red f14 mb10 aCenter"><?php echo $msg ?></p>
             <form id="signupForm" action="" method="post">
                 <input type="hidden" name="act" value="act"/>
                 <div class="iptBox">
                     <div class="iptInner">
-                        <input type="text" name="user_name" value="<?php echo $user['user_name'] ?>" class="ipt"
-                               placeholder="用户名"/>
+                        <input type="text" name="email" id="email" value="<?php echo $user['email'] ?>" class="ipt"
+                               placeholder="您的邮箱地址" autocomplete="off" />
                     </div>
                 </div>
                 <div class="iptBox">
                     <div class="iptInner">
-                        <input type="password" name="user_pass" value="<?php echo $user['user_pass'] ?>" class="ipt" placeholder="密码"/>
+                        <input type="password" name="user_pass" value="<?php echo $user['user_pass'] ?>" class="ipt" placeholder="请输入密码" autocomplete="off" />
                     </div>
                 </div>
                 <div class="iptBox">
                     <div class="iptInner">
-                        <input type="password" name="password_confirm" value="<?php echo $user['user_pass'] ?>" class="ipt" placeholder="再输入一次密码"/>
+                        <input type="password" name="password_confirm" value="<?php echo $user['user_pass'] ?>" class="ipt" placeholder="请再输入一次密码" autocomplete="off" />
                     </div>
                 </div>
 
@@ -255,17 +243,13 @@
                 </div>
                 <div class="iptBox">
                     <div class="iptInner">
-                        <select id="industry_parent_id" name="industry_parent_id" class="iptH37">
+                        <select id="industry_parent_id" name="industry_parent_id" class="iptH37 mr5">
                             <option value="">请选择所属行业</option>
                             <?php foreach ($industry_parent as $pindus) { ?>
                                 <option value="<?php echo $pindus['id'] ?>" <?php if($pindus['id']==$user_industry_parent['id']){ ?>selected<?php } ?> ><?php echo $pindus['name'] ?></option>
                             <?php } ?>
                         </select>
-                    </div>
-                </div>
-                <div class="iptBox">
-                    <div class="iptInner">
-                        <select id="industry_id" name="industry_id" class="iptH37">
+                        <select id="industry_id" name="industry_id" class="iptH37 w156">
                             <option value="">请选择行业领域</option>
                             <?php if(!empty($user_industry_id)){
                                     foreach ($user_industrys as $ind){
@@ -283,14 +267,8 @@
                 </div>
                 <div class="iptBox">
                     <div class="iptInner">
-                        <input type="text" name="email" value="<?php echo $user['email'] ?>" class="ipt"
-                               placeholder="电子邮箱 "/>
-                    </div>
-                </div>
-                <div class="iptBox">
-                    <div class="iptInner">
                         <input type="text" id="mobile" value="<?php echo $user['mobile'] ?>" name="mobile" class="ipt"
-                               placeholder="手机号码 "/>
+                               placeholder="手机号码" autocomplete="off" />
                     </div>
                 </div>
                 <div class="iptBox">
@@ -301,8 +279,8 @@
                 <div class="iptBox">
                     <div class="iptInner">
                         <input type="text" name="mobile_code" value="<?php echo $user['mobile_code'] ?>"
-                               class="ipt w157" placeholder="手机验证码" autocomplete="off"/>
-                        <a id="get_mobile_code" href="javascript:void(0)" class="coBtn fRight" rel="0">获取手机验证码</a>
+                               class="ipt w157" placeholder="短信验证码" autocomplete="off"/>
+                        <a id="get_mobile_code" href="javascript:void(0)" class="coBtn fRight" rel="0">获取短信验证码</a>
                     </div>
                 </div>
                 <div class="iptBox">

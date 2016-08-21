@@ -6,7 +6,8 @@
                                         required: true
                                 },
                                 apply_end: {
-                                        required: true
+                                        required: true,
+                                        compareDate: "input[name=apply_start]"
                                 },
                                 apply_num: {
                                         required: true
@@ -17,7 +18,8 @@
                                         required: "请输入报名开始时间"
                                 },
                                 apply_end: {
-                                        required: "请输入报名结束时间"
+                                        required: "请输入报名结束时间",
+                                        compareDate: "结束时间不能早于开始时间"
 
                                 },
                                 apply_num: {
@@ -40,17 +42,16 @@
                             form.submit();
                         }
                 });
+
+                $('#apply_end').focus(function(){
+                    $(this).val($.trim($(this).val())==''?$('#apply_start').val():$(this).val());
+                });
                 
                 $('#selectSomeone').click(function(){
                     $('#conWindow').show();
                 });
                 $('a.calBtn,div.popmap,a.closeBtn').click(function(){
                     $('#conWindow').hide();
-                });
-                $('.Wdate').eq(1).focus(function(){
-                    if($('.Wdate').eq(1).val()==''){
-                        $('.Wdate').eq(1).val($('.Wdate').eq(0).val());
-                    }
                 });
         });
 </script>
@@ -78,6 +79,9 @@
 
                 </div>
                 <div class="contRight">
+                    <?php if (!empty($msg)) {?>
+                        <p class="alertBox alert-success"><span class="alert-msg"><?php echo $msg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
+                    <?php } ?>
                     <form id="editForm" method="post" action="">
                         <input name="act" type="hidden" value="act" />
                         <table cellspacing="0" class="comTable">
@@ -96,8 +100,9 @@
                                 </tr>
                                 <tr>
                                         <th><span class="red">*</span>报名时间</th>
-                                        <td>
-                                            <input type="text" name="apply_start" value="<?php echo $course['apply_start'] ?>" class="iptH37 DTdate" autocomplete="off"> 至 <input name="apply_end" value="<?php echo $course['apply_end'] ?>" type="text" class="iptH37 DTdate" autocomplete="off">
+                                        <td><span class="iptInner">
+                                            <input type="text" name="apply_start" id="apply_star" value="<?php echo !empty($course['apply_start'])?date("Y-m-d H:i",strtotime($course['apply_start'])):'' ?>" class="iptH37 DTdate" autocomplete="off"> 至 <input name="apply_end" id="apply_end" value="<?php echo !empty($course['apply_start'])?date("Y-m-d H:i",strtotime($course['apply_end'])):'' ?>" type="text" class="iptH37 DTdate" autocomplete="off">
+                                                </span>
 
                                         </td>
                                 </tr>

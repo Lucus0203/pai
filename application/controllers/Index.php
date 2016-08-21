@@ -27,7 +27,7 @@ class Index extends CI_Controller
     {
         $logininfo = $this->_logininfo;
         $company = $this->company_model->get_row(array('code'=>$logininfo['company_code']));
-        $sql = "select count(*) as num from " . $this->db->dbprefix('course') . " c where c.company_code = " . $logininfo['company_code'] . " and c.isdel=2 ";
+        $sql = "select count(*) as num from " . $this->db->dbprefix('course') . " c where c.company_code = '{$logininfo['company_code']}' and c.isdel=2 ";
         $query = $this->db->query($sql)->row_array();
         $courses_num = $query['num'];
         $query = $this->db->query(" select count(*) num from " . $this->db->dbprefix('teacher') . " t where company_code='{$logininfo['company_code']}' and isdel=2 ")->row_array();
