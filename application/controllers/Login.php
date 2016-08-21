@@ -172,6 +172,7 @@ class Login extends CI_Controller
                     $user_pass = md5($post['user_pass']);
                     $this->user_model->update(array('mobile_code'=>$mobile_code,'user_pass'=>$user_pass), $userinfo['id']);
                     $msg = '密码修改成功,请返回登录';
+                    $res['success']='ok';
                     unset($res['user']);
                 } else {
                     $msg = '短信验证码错误';

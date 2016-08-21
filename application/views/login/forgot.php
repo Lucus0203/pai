@@ -152,6 +152,11 @@
         <div class="tit">忘记密码</div>
         <div class="logInner">
             <p class="red f14 mb10 aCenter"><?php echo $msg ?></p>
+            <?php if($success=='ok'){?>
+            <div class="iptBox aCenter p40">
+                <a class="borBlueH37 w72" href="<?php echo site_url('login/index') ?>">返回登录</a>
+            </div>
+            <?php }else{ ?>
             <form id="signupForm" action="" method="post">
                 <input type="hidden" name="act" value="act"/>
                 <input type="hidden" id="sacount" value="<?php echo $sacount ?>" />
@@ -189,6 +194,7 @@
                     </div>
                 </div>
             </form>
+            <?php } ?>
         </div>
     </div>
 
