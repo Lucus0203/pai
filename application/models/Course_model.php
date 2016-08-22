@@ -62,11 +62,17 @@ class Course_model extends CI_Model {
 		$this->db->where ( 'id', $id );
 		$this->db->delete ( 'course' );
 	}
-        
-        //SQL查询
-        public function get_sql($sql){
-                $query = $this->db->query($sql);
-                return $query->result_array();
-        }
+
+    //查找数量
+    public function get_count($where=FALSE){
+        $this->db->where ($where);
+        return $this->db->count_all_results('course');
+    }
+
+    //SQL查询
+    public function get_sql($sql){
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
 	
 }

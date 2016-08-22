@@ -162,6 +162,7 @@ class Course extends CI_Controller
     //课程编辑
     public function courseedit($id)
     {
+        $this->isAllowCourseid($id);
         $logininfo = $this->_logininfo;
         $act = $this->input->post('act');
         if (!empty($act)) {
@@ -223,6 +224,7 @@ class Course extends CI_Controller
     //课程详情
     public function courseinfo($id)
     {
+        $this->isAllowCourseid($id);
         $course = $this->course_model->get_row(array('id' => $id,'company_code' => $this->_logininfo['company_code']));
         $teacher = $this->teacher_model->get_row(array('id' => $course['teacher_id']));
         $this->load->view('header');
@@ -233,6 +235,7 @@ class Course extends CI_Controller
     //报名设置
     public function applyset($id)
     {
+        $this->isAllowCourseid($id);
         $act = $this->input->post('act');
         $msg = '';
         if (!empty($act)) {
@@ -264,6 +267,7 @@ class Course extends CI_Controller
     //报名名单
     public function applylist($id)
     {
+        $this->isAllowCourseid($id);
         $course = $this->course_model->get_row(array('id' => $id,'company_code' => $this->_logininfo['company_code']));
         $pargram['applystatus'] = $this->input->get('applystatus', true);
         $page = $this->input->get('per_page', true);
@@ -325,6 +329,7 @@ class Course extends CI_Controller
     //签到设置
     public function signinset($id)
     {
+        $this->isAllowCourseid($id);
         $act = $this->input->post('act');
         $msg = '';
         if (!empty($act)) {
@@ -367,6 +372,7 @@ class Course extends CI_Controller
     //下载签到二维码
     public function downloadqrcode($courseid)
     {
+        $this->isAllowCourseid($courseid);
         $type = $this->input->get('type');
         $course = $this->course_model->get_row(array('id' => $courseid,'company_code' => $this->_logininfo['company_code']));
         if ($type == 'signin') {
@@ -380,6 +386,7 @@ class Course extends CI_Controller
     //签到名单
     public function signinlist($id)
     {
+        $this->isAllowCourseid($id);
         $course = $this->course_model->get_row(array('id' => $id,'company_code' => $this->_logininfo['company_code']));
         $page = $this->input->get('per_page', true);
         $page = $page * 1 < 1 ? 1 : $page;
@@ -413,6 +420,7 @@ class Course extends CI_Controller
     //课前作业编辑
     public function homeworkedit($id)
     {
+        $this->isAllowCourseid($id);
         $act = $this->input->post('act');
         $msg = '';
         if (!empty($act)) {
@@ -440,6 +448,7 @@ class Course extends CI_Controller
     //课前作业提交名单
     public function homeworklist($courseid)
     {
+        $this->isAllowCourseid($courseid);
         $page = $this->input->get('per_page', true);
         $page = $page * 1 < 1 ? 1 : $page;
         $page_size = 10;
@@ -465,6 +474,7 @@ class Course extends CI_Controller
     //查看作业详情
     public function homeworkdetail($courseid, $studentid)
     {
+        $this->isAllowCourseid($courseid);
         $this->load->database();
         $student = $this->student_model->get_row(array('id' => $studentid,'company_code'=>$this->_logininfo['company_code']));
         $sql = "select * from " . $this->db->dbprefix('course_homework_list') . " hwlist "
@@ -479,6 +489,7 @@ class Course extends CI_Controller
 
     //课前准备
     public function prepare($courseid){
+        $this->isAllowCourseid($courseid);
         $act = $this->input->post('act');
         $note = $this->input->post('note');
         $msg = '';
@@ -505,8 +516,8 @@ class Course extends CI_Controller
                 $this->prepare_model->create($prepare);
             }
         }
-        $prepare=$this->prepare_model->get_row(array('course_id'=>$courseid));
-        $course = $this->course_model->get_row(array('id' => $courseid));
+        $course = $this->course_model->get_row(array('id' => $courseid,'company_code'=>$this->_logininfo['company_code']));
+        $prepare=$this->prepare_model->get_row(array('course_id'=>$course['id']));
         $this->load->view('header');
         $this->load->view('course/prepare', compact('course','prepare','msg','success'));
         $this->load->view('footer');
@@ -515,19 +526,36 @@ class Course extends CI_Controller
     //下载课前准备附件
     public function preparefile($courseid)
     {
-        $prepare=$this->prepare_model->get_row(array('course_id'=>$courseid));
-        if(file_exists('./uploads/course_file/' . $prepare['file'])){
-            $data = file_get_contents('./uploads/course_file/' . $prepare['file']); // Read the file's contents
+        $this->isAllowCourseid($courseid);
+        $course = $this->course_model->get_row(array('id' => $courseid,'company_code'=>$this->_logininfo['company_code']));
+        $prepare=$this->prepare_model->get_row(array('course_id'=>$course['id']));
+        $file_path='./uploads/course_file/' . $prepare['file'];
+        if(file_exists($file_path)){
+            $data = file_get_contents($file_path); // Read the file's contents
             force_download($prepare['filename'], $data);
         }else{
             echo '文档不存在,请联系客服人员';
         }
+    }
 
+    //删除文档
+    public function preparedelfile($courseid){
+        $this->isAllowCourseid($courseid);
+        $prepare=$this->prepare_model->get_row(array('course_id'=>$courseid));
+        $file_path='./uploads/course_file/' . $prepare['file'];
+        if(file_exists($file_path)){
+            unlink($file_path);
+        }
+        $prepare['file']='';
+        $prepare['filename']='';
+        $this->prepare_model->update($prepare,$prepare['id']);
+        redirect($_SERVER['HTTP_REFERER']);
     }
 
     //课前调研编辑
     public function surveyedit($id)
     {
+        $this->isAllowCourseid($id);
         $act = $this->input->post('act');
         $msg = '';
         if (!empty($act)) {
@@ -555,6 +583,7 @@ class Course extends CI_Controller
     //课前作业提交名单
     public function surveylist($courseid)
     {
+        $this->isAllowCourseid($courseid);
         $page = $this->input->get('per_page', true);
         $page = $page * 1 < 1 ? 1 : $page;
         $page_size = 10;
@@ -580,6 +609,7 @@ class Course extends CI_Controller
     //查看作业详情
     public function surveydetail($courseid, $studentid)
     {
+        $this->isAllowCourseid($courseid);
         $this->load->database();
         $student = $this->student_model->get_row(array('id' => $studentid));
         $sql = "select * from " . $this->db->dbprefix('course_survey_list') . " hwlist "
@@ -595,6 +625,7 @@ class Course extends CI_Controller
     //课前反馈编辑
     public function ratingsedit($id)
     {
+        $this->isAllowCourseid($id);
         $act = $this->input->post('act');
         $msg = '';
         if (!empty($act)) {
@@ -624,6 +655,7 @@ class Course extends CI_Controller
     //课前反馈提交名单
     public function ratingslist($courseid)
     {
+        $this->isAllowCourseid($courseid);
         $page = $this->input->get('per_page', true);
         $page = $page * 1 < 1 ? 1 : $page;
         $page_size = 10;
@@ -653,6 +685,7 @@ class Course extends CI_Controller
     //查看评价详情
     public function ratingsdetail($courseid, $studentid)
     {
+        $this->isAllowCourseid($courseid);
         $this->load->database();
         $student = $this->student_model->get_row(array('id' => $studentid));
         $sql = "select hw.type,hw.num,hw.title,hw.type,hwlist.star,hwlist.content,hwlist.created from " . $this->db->dbprefix('course_ratings_list') . " hwlist "
@@ -669,6 +702,7 @@ class Course extends CI_Controller
     //通知设置
     public function notifyset($id)
     {
+        $this->isAllowCourseid($id);
         $act = $this->input->post('act');
         if (!empty($act)) {
             $c = array('isnotice_open' => $this->input->post('isnotice_open'));
@@ -698,6 +732,7 @@ class Course extends CI_Controller
     //课程删除
     public function coursedel($id)
     {
+        $this->isAllowCourseid($id);
         if (!empty($id)) {
             $c = $this->course_model->get_row(array('id' => $id));
             if ($c['company_code'] == $this->_logininfo['company_code']) {
@@ -709,6 +744,7 @@ class Course extends CI_Controller
 
     //课程发布
     public function coursepublic($id){
+        $this->isAllowCourseid($id);
         if (!empty($id)) {
             $c = $this->course_model->get_row(array('id' => $id));
             if ($c['company_code'] == $this->_logininfo['company_code']) {
@@ -716,6 +752,14 @@ class Course extends CI_Controller
             }
         }
         redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    //是否是自己公司下的课程
+    private function isAllowCourseid($courseid){
+        if(empty($courseid)||$this->course_model->get_count(array('id' => $courseid,'company_code'=>$this->_logininfo['company_code']))<=0){
+            redirect(site_url('course/courselist'));
+            return false;
+        }
     }
 
 

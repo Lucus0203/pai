@@ -38,7 +38,9 @@
             }else{
                 $('#filename').text(simpleFile.name);
             }
-
+        });
+        $('#delfile').click(function(){
+            return confirm('删除文档不可恢复,确定删除吗?');
         });
     })
 </script>
@@ -83,7 +85,7 @@
                                            style="display: none;" id="fileBtn"/><a
                                         href="javascript:;" onclick="$('#fileBtn').click()"
                                         class="borBlueH37 mb10 mr10">上传文档</a>
-                                    <span id="filename" class="mr10"></span><?php if(!empty($prepare['filename'])){ ?><a href="<?php echo site_url('course/preparefile/'.$course['id']) ?>" class="blue" target="_blank">下载文档(<?php echo $prepare['filename'] ?>)</a><?php } ?>
+                                    <span id="filename" class="mr10"></span><?php if(!empty($prepare['filename'])){ ?><a href="<?php echo site_url('course/preparefile/'.$course['id']) ?>" class="blue mr10" target="_blank">下载文档(<?php echo $prepare['filename'] ?>)</a><a class="red" id="delfile" href="<?php echo site_url('course/preparedelfile/'.$course['id']) ?>">删除文档</a><?php } ?>
                                 </span>
                                 <p class="gray9">大小不超过10M</p>
                             </td>

@@ -44,14 +44,14 @@ class Student_model extends CI_Model {
 		$this->db->delete ( 'student' );
 	}
 	//查找数量
-        public function get_count($where=FALSE){
-		$this->db->where ($where);
-                return $this->db->count_all_results('student');
-        }
+    public function get_count($where=FALSE){
+        $this->db->where ($where);
+        return $this->db->count_all_results('student');
+    }
         
-        //SQL查询
-        public function get_sql($sql){
-                $query = $this->db->query($sql);
-                return $query->result_array();
-        }
+    //SQL查询
+    public function get_sql($sql){
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
 }
