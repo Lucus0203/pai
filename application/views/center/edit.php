@@ -351,7 +351,7 @@
                             <th>员工经理</th>
                         </tr>
                         <tr>
-                            <td rowspan="16">课程管理</td>
+                            <td rowspan="14">课程管理</td>
                             <td rowspan="5">课程管理</td>
                             <td>列表</td>
                             <td class="aCenter"><input name="role2[courselist]" value="1"
@@ -484,29 +484,6 @@
                                 } ?> /></td>
                             <td class="aCenter"><input name="role3[surveylist]" value="1"
                                                        type="checkbox" <?php if ($role['role3']['surveylist'] == 1) {
-                                    echo 'checked';
-                                } ?> /></td>
-                        </tr>
-                        <tr>
-                            <td rowspan="2">课前作业</td>
-                            <td>作业编辑</td>
-                            <td class="aCenter"><input name="role2[homeworkedit]" value="1"
-                                                       type="checkbox" <?php if ($role['role2']['homeworkedit'] == 1) {
-                                    echo 'checked';
-                                } ?> /></td>
-                            <td class="aCenter"><input name="role3[homeworkedit]" value="1"
-                                                       type="checkbox" <?php if ($role['role3']['homeworkedit'] == 1) {
-                                    echo 'checked';
-                                } ?> /></td>
-                        </tr>
-                        <tr>
-                            <td>提交名单</td>
-                            <td class="aCenter"><input name="role2[homeworklist]" value="1"
-                                                       type="checkbox" <?php if ($role['role2']['homeworklist'] == 1) {
-                                    echo 'checked';
-                                } ?> /></td>
-                            <td class="aCenter"><input name="role3[homeworklist]" value="1"
-                                                       type="checkbox" <?php if ($role['role3']['homeworklist'] == 1) {
                                     echo 'checked';
                                 } ?> /></td>
                         </tr>

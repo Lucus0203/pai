@@ -224,8 +224,6 @@ class Login extends CI_Controller
             ('$company_code', 'signinlist', '1', '2'),
             ('$company_code', 'surveyedit', '1', '2'),
             ('$company_code', 'surveylist', '1', '2'),
-            ('$company_code', 'homeworkedit', '1', '2'),
-            ('$company_code', 'homeworklist', '1', '2'),
             ('$company_code', 'ratingsedit', '1', '2'),
             ('$company_code', 'ratingslist', '1', '2'),
             ('$company_code', 'notifyset', '1', '2'),
@@ -242,7 +240,6 @@ class Login extends CI_Controller
             ('$company_code', 'applylist', '1', '3'),
             ('$company_code', 'signinlist', '1', '3'),
             ('$company_code', 'surveylist', '1', '3'),
-            ('$company_code', 'homeworklist', '1', '3'),
             ('$company_code', 'ratingslist', '1', '3'),
             ('$company_code', 'teacherlist', '1', '3'),
             ('$company_code', 'teacherinfo', '1', '3');
