@@ -73,7 +73,7 @@ class Upload extends CI_Controller
                         'mobile' => trim($mobile),
                         'email' => trim($email),
                         'user_name' => trim($mobile),
-                        'user_pass' => !empty($pass) ? md5($pass) : '',
+                        'user_pass' => !empty($pass) ? md5($pass) : md5(substr(trim($mobile),-6)),
                         'role' => 1,
                         'isdel' => 2);
                     //数据验证
@@ -120,11 +120,11 @@ class Upload extends CI_Controller
             $flag=false;
         }
         if(empty($data['mobile'])){
-            $msg .= '上传失败!第'.$row.'行的手机不能是空的<br/>';
+            $msg .= '上传失败!第'.$row.'行的手机号不能是空的<br/>';
             $flag=false;
         }
-        if(empty($data['user_pass'])){
-            $msg .= '上传失败!第'.$row.'行的密码不能是空的<br/>';
+        if(!preg_match("/^1[1-9]{2}\d{8}$/",$data['mobile'])){
+            $msg .= '上传失败!第'.$row.'行的手机号格式不正确<br/>';
             $flag=false;
         }
         if(empty($first_department)&&!empty($second_department)){
