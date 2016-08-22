@@ -228,11 +228,6 @@
                 if (arr[i].length == 0) arr.splice(i, 1);
             }
             $('input[name=' + inputname + ']').val(arr.join(','));
-            var targetstr = '';
-            $('ul.threeUl input:checked').each(function () {//ul.oneUl input:checked,ul.twoUl input:checked,
-                targetstr += $(this).parent().text() + ',';
-            });
-            $('input[name=target]').val(targetstr.slice(0, -1));
             resetconWindow();
         }
 
@@ -246,6 +241,24 @@
                 $('#conMessage .twoUl').show();
             }
         }
+
+        $('a.okBtn').click(function () {
+            $(this).text('请稍后..');
+            $.ajax({
+                type: "post",
+                url: '<?php echo site_url('course/updateTarget/'.$course['id']) ?>',
+                data: {
+                    'targetstudent': $('input[name=targetstudent]').val()
+                },
+                async: false,
+                success: function (res) {
+                    $('input[name=target]').val(res);
+                }
+            });
+            $(this).text('确定');
+            $('#conWindow').hide();
+            return false;
+        });
 
     });
 </script>

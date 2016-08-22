@@ -762,5 +762,27 @@ class Course extends CI_Controller
         }
     }
 
+    /**
+     * 匹配通知学员
+     */
+    public function updateTarget($courseid){
+        if(!empty($courseid)){
+            $data['company_code']=$this->_logininfo['company_code'];
+            $data['target_student']=$this->input->post('targetstudent');
+            $data['created']=date('Y-m-d H:i:s');
+            $target='';
+            if(!empty($data['target_student'])) {
+                $targetstudent = $this->student_model->get_all(' id in (' . $data['target_student'] . ') ');
+                if (!empty($targetstudent)) {
+                    $targetstudent = array_column($targetstudent, 'name');
+                    $target .= implode(",", $targetstudent);
+                }
+            }
+            $data['target']=$target;
+            $res = $target;//mb_strlen($target, 'utf-8') > 20 ? mb_substr( $target,0,40,"utf-8").'...':$target;
+            echo $res;
+        }
+    }
+
 
 }
