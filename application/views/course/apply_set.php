@@ -131,7 +131,7 @@
                                         <th>报名提示</th>
 
                                         <td>
-                                            <textarea name="apply_tip" class="iptare"><?php echo $course['apply_tip'] ?></textarea>
+                                            <textarea name="apply_tip" class="iptare pt10"><?php echo $course['apply_tip'] ?></textarea>
 
                                         </td>
                                 </tr>

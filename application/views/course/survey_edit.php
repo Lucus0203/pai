@@ -49,7 +49,7 @@
                                 <?php if (!empty($msg)) {?>
                                     <p class="alertBox alert-success mb20"><span class="alert-msg"><?php echo $msg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
                                 <?php } ?>
-                                <p class="yellowTipBox mb20">如果已有学员提交，修改问题后需要学员重新填写</p>
+                                <?php if($anstotal>0){?><p class="yellowTipBox mb20">已有学员提交，修改问题后需要学员重新填写</p><?php } ?>
                                 <ul class="zuoyeList">
                                     <?php foreach ($surveys as $k=>$h){ ?>
                                         <li><span class="num"><?php echo ($k+1) ?></span>

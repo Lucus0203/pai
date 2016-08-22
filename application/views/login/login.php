@@ -51,7 +51,7 @@
                 </div>
                 <div class="iptBox">
                     <input name="user_pass" type="password" value="" class="ipt" placeholder="密码" />
-                    <p class="aRight"><a class="blue" href="<?php echo site_url('login/forgot') ?>">忘记密码？</a></p>
+                    <p class="aRight mt5"><a class="blue" href="<?php echo site_url('login/forgot') ?>">忘记密码？</a></p>
                 </div>
                 <div class="iptBox">
                     <input type="submit" value="提交" class="blueBtn" />
@@ -70,7 +70,7 @@
                 </div>
                 <div class="iptBox">
                     <input name="user_pass" type="password" value="" class="ipt" placeholder="密码" />
-                    <p class="aRight"><a class="blue" href="<?php echo site_url('login/forgot/sacount') ?>">忘记密码？</a></p>
+                    <p class="aRight mt5"><a class="blue" href="<?php echo site_url('login/forgot/sacount') ?>">忘记密码？</a></p>
                 </div>
                 <div class="iptBox">
                     <input type="submit" value="提交" class="blueBtn"/>

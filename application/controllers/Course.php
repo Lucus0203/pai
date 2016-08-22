@@ -9,7 +9,7 @@ class Course extends CI_Controller
         parent::__construct();
         $this->load->library(array('session', 'pagination'));
         $this->load->helper(array('form', 'url', 'download'));
-        $this->load->model(array('user_model', 'useractionlog_model', 'course_model', 'teacher_model', 'homework_model', 'homeworklist_model', 'survey_model', 'surveylist_model', 'ratings_model','ratingslist_model', 'student_model', 'department_model'));
+        $this->load->model(array('user_model', 'useractionlog_model', 'course_model', 'teacher_model', 'homework_model', 'homeworklist_model', 'survey_model', 'surveylist_model', 'ratings_model','ratingslist_model', 'student_model', 'department_model','prepare_model'));
 
         $this->_logininfo = $this->session->userdata('loginInfo');
         if (empty($this->_logininfo)) {
@@ -474,6 +474,54 @@ class Course extends CI_Controller
         $depart = $this->department_model->get_row(array('id', $student['department_id']));
         $student['department'] = $depart['name'];
         $this->load->view('course/homework_detail', array('homework' => $homework, 'student' => $student));
+
+    }
+
+    //课前准备
+    public function prepare($courseid){
+        $act = $this->input->post('act');
+        $note = $this->input->post('note');
+        $msg = '';
+        $success='ok';
+        if (!empty($act)) {
+            $msg='保存成功';
+            $config['max_size'] = 10*1024;
+            $config['upload_path'] = './uploads/course_file';
+            $config['allowed_types'] = '*';
+            $config['file_name'] = $file_name = $this->_logininfo['id'] . date("YmdHis");
+            $prepare=array('note'=>$note);
+            $this->load->library('upload', $config);
+            if ($this->upload->do_upload('file')) {
+                $uploadFile = $this->upload->data();
+                $prepare['file'] = $file_name .$uploadFile['file_ext'];
+                $prepare['filename'] = $uploadFile['client_name'];
+            }
+            $oprepare=$this->prepare_model->get_row(array('course_id'=>$courseid));
+            if(!empty($oprepare)){
+                $this->prepare_model->update($prepare,$oprepare['id']);
+            }else{
+                $prepare['course_id']=$courseid;
+                $prepare['created']=date("Y-m-d H:i:s");
+                $this->prepare_model->create($prepare);
+            }
+        }
+        $prepare=$this->prepare_model->get_row(array('course_id'=>$courseid));
+        $course = $this->course_model->get_row(array('id' => $courseid));
+        $this->load->view('header');
+        $this->load->view('course/prepare', compact('course','prepare','msg','success'));
+        $this->load->view('footer');
+    }
+
+    //下载课前准备附件
+    public function preparefile($courseid)
+    {
+        $prepare=$this->prepare_model->get_row(array('course_id'=>$courseid));
+        if(file_exists('./uploads/course_file/' . $prepare['file'])){
+            $data = file_get_contents('./uploads/course_file/' . $prepare['file']); // Read the file's contents
+            force_download($prepare['filename'], $data);
+        }else{
+            echo '文档不存在,请联系客服人员';
+        }
 
     }
 

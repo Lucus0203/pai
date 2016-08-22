@@ -1272,9 +1272,9 @@ textarea:after {
 .nengTable{ width:  600px; margin:  0 auto; border-spacing: 0; border-collapse: collapse; border-radius: 5px; line-height:  1.8;}
 .nengTable th{ color: #fff; background-color:  #00bbd3; border: 1px solid #eee; font-weight:  normal; padding: 5px 0; }
 .nengTable td{ text-align: center; border: 1px solid #eee; padding: 5px 0;}
-.alertBox{font-size: 14px;padding: 15px;}
+.alertBox{font-size: 14px;padding: 15px; position: relative;}
 .alertBox .alert-msg{padding-left: 5px;}
-.alertBox .alert-remove{float:right;color: #468847;}
+.alertBox .alert-remove{color: #468847; position: absolute; top: 10px; right: 10px;}
 .alert-success{color: #468847;background-color: #dff0d8;border: solid 1px #46e99e;}
 .alert-danger{color: #b94a48;background-color: #f2dede;border: solid 1px #eed3d7;}
 .captchaBtn{display: block;float: right;font-size: 15px;}
