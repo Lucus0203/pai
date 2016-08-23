@@ -45,6 +45,7 @@
                             <?php if (!empty($msg)) {?>
                                 <p class="alertBox alert-success mb20"><span class="alert-msg"><?php echo $msg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
                             <?php } ?>
+                            <?php if(count($ratingses)==0){ ?><p class="f14 mb20 gray6">本课程暂未创建课程反馈，请通过以下模板进行创建</p><?php } ?>
                             <?php if($anstotal>0){?><p class="yellowTipBox mb20">已有学员提交，修改问题后需要学员重新填写</p><?php } ?>
                                 <ul class="zuoyeList">
                                     <?php foreach ($ratingses as $k=>$h){ ?>
