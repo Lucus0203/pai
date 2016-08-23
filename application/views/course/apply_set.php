@@ -39,7 +39,15 @@
             },
             submitHandler:function(form){
                 $('input[type=submit]').val('请稍后..').attr('disabled','disabled');
-                form.submit();
+                if($('#ispublic').val()!=1&&$('input[name=isapply_open]:checked').val()==1){
+                    if(confirm('课程暂未发布,是否发布课程并开启报名')){
+                        form.submit();
+                    }else{
+                        $('input[type=submit]').val('保存').removeAttr('disabled');
+                    }
+                }else{
+                    form.submit();
+                }
             }
         });
 
@@ -54,14 +62,6 @@
             $('#conWindow').hide();
         });
     });
-
-    function checkForm(){
-        if($('#ispublic').val()!=1&&$('input[name=isapply_open]:checked').val()==1){
-            return confirm('课程暂未发布,是否发布课程并开启报名');
-        }else{
-            return true;
-        }
-    }
 </script>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
 <div class="wrap">
@@ -90,7 +90,7 @@
                     <?php if (!empty($msg)) {?>
                         <p class="alertBox alert-success"><span class="alert-msg"><?php echo $msg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
                     <?php } ?>
-                    <form id="editForm" method="post" action="" onsubmit="return checkForm()">
+                    <form id="editForm" method="post" action="">
                         <input name="act" type="hidden" value="act" />
                         <input id="ispublic" type="hidden" value="<?php echo $course['ispublic'] ?>" />
                         <table cellspacing="0" class="comTable">
