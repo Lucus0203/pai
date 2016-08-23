@@ -246,6 +246,9 @@ class Course extends CI_Controller
                 'apply_num' => $this->input->post('apply_num'),
                 'apply_check_type' => $this->input->post('apply_check_type'),
                 'apply_tip' => $this->input->post('apply_tip'));
+            if($c['isapply_open'] == 1){
+                $c['ispublic']=1;
+            }
             if ($this->input->post('apply_check') == 1) {
                 $c['apply_check'] = 1;
             } else {

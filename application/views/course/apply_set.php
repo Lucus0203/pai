@@ -1,59 +1,66 @@
 <script type="text/javascript">
-        $(document).ready(function(){
-                $( "#editForm" ).validate( {
-                        rules: {
-                                apply_start: {
-                                        required: true
-                                },
-                                apply_end: {
-                                        required: true,
-                                        compareDate: "input[name=apply_start]"
-                                },
-                                apply_num: {
-                                        required: true
-                                }
-                        },
-                        messages: {
-                                apply_start: {
-                                        required: "请输入报名开始时间"
-                                },
-                                apply_end: {
-                                        required: "请输入报名结束时间",
-                                        compareDate: "结束时间不能早于开始时间"
+    $(document).ready(function(){
+        $( "#editForm" ).validate( {
+            rules: {
+                apply_start: {
+                    required: true
+                },
+                apply_end: {
+                    required: true,
+                    compareDate: "input[name=apply_start]"
+                },
+                apply_num: {
+                    required: true
+                }
+            },
+            messages: {
+                apply_start: {
+                    required: "请输入报名开始时间"
+                },
+                apply_end: {
+                    required: "请输入报名结束时间",
+                    compareDate: "结束时间不能早于开始时间"
 
-                                },
-                                apply_num: {
-                                        required: "请输入报名人数"
+                },
+                apply_num: {
+                    required: "请输入报名人数"
 
-                                }
-                        },
-                        errorPlacement: function ( error, element ) {
-                                error.addClass( "ui red pointing label transition" );
-                                error.insertAfter( element.parent() );
-                        },
-                        highlight: function ( element, errorClass, validClass ) {
-                                $( element ).parents( ".row" ).addClass( errorClass );
-                        },
-                        unhighlight: function (element, errorClass, validClass) {
-                                $( element ).parents( ".row" ).removeClass( errorClass );
-                        },
-                        submitHandler:function(form){
-                            $('input[type=submit]').val('请稍后..').attr('disabled','disabled');
-                            form.submit();
-                        }
-                });
-
-                $('#apply_end').focus(function(){
-                    $(this).val($.trim($(this).val())==''?$('#apply_start').val():$(this).val());
-                });
-                
-                $('#selectSomeone').click(function(){
-                    $('#conWindow').show();
-                });
-                $('a.calBtn,div.popmap,a.closeBtn').click(function(){
-                    $('#conWindow').hide();
-                });
+                }
+            },
+            errorPlacement: function ( error, element ) {
+                error.addClass( "ui red pointing label transition" );
+                error.insertAfter( element.parent() );
+            },
+            highlight: function ( element, errorClass, validClass ) {
+                $( element ).parents( ".row" ).addClass( errorClass );
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $( element ).parents( ".row" ).removeClass( errorClass );
+            },
+            submitHandler:function(form){
+                $('input[type=submit]').val('请稍后..').attr('disabled','disabled');
+                form.submit();
+            }
         });
+
+        $('#apply_end').focus(function(){
+            $(this).val($.trim($(this).val())==''?$('#apply_start').val():$(this).val());
+        });
+
+        $('#selectSomeone').click(function(){
+            $('#conWindow').show();
+        });
+        $('a.calBtn,div.popmap,a.closeBtn').click(function(){
+            $('#conWindow').hide();
+        });
+    });
+
+    function checkForm(){
+        if($('#ispublic').val()!=1&&$('input[name=isapply_open]:checked').val()==1){
+            return confirm('课程暂未发布,是否发布课程并开启报名');
+        }
+        return true;
+    }
 </script>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
 <div class="wrap">
@@ -82,65 +89,66 @@
                     <?php if (!empty($msg)) {?>
                         <p class="alertBox alert-success"><span class="alert-msg"><?php echo $msg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
                     <?php } ?>
-                    <form id="editForm" method="post" action="">
+                    <form id="editForm" method="post" action="" onsubmit="return checkForm()">
                         <input name="act" type="hidden" value="act" />
+                        <input id="ispublic" type="hidden" value="<?php echo $course['ispublic'] ?>" />
                         <table cellspacing="0" class="comTable">
-                                <colgroup><col width="100">
-                                </colgroup><tbody><tr>
-                                        <th><span class="red">*</span>开启报名</th>
-                                        <td>
-                                                <ul class="lineUl">
-                                                        <li>
-                                                            <input name="isapply_open" value="1" checked="checked" type="radio">开启</li>
-                                                        <li>
-                                                            <input name="isapply_open" value="2" <?php if($course['isapply_open']==2){echo 'checked="checked"';} ?> type="radio">关闭</li>
-                                                </ul>
+                            <colgroup><col width="100">
+                            </colgroup><tbody><tr>
+                                <th><span class="red">*</span>开启报名</th>
+                                <td>
+                                    <ul class="lineUl">
+                                        <li>
+                                            <label><input name="isapply_open" value="1" checked="checked" type="radio">开启</label></li>
+                                        <li>
+                                            <label><input name="isapply_open" value="2" <?php if($course['isapply_open']==2){echo 'checked="checked"';} ?> type="radio">关闭</label></li>
+                                    </ul>
 
-                                        </td>
-                                </tr>
-                                <tr>
-                                        <th><span class="red">*</span>报名时间</th>
-                                        <td><span class="iptInner">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><span class="red">*</span>报名时间</th>
+                                <td><span class="iptInner">
                                             <input type="text" name="apply_start" id="apply_star" value="<?php echo !empty($course['apply_start'])?date("Y-m-d H:i",strtotime($course['apply_start'])):'' ?>" class="iptH37 DTdate" autocomplete="off"> 至 <input name="apply_end" id="apply_end" value="<?php echo !empty($course['apply_start'])?date("Y-m-d H:i",strtotime($course['apply_end'])):'' ?>" type="text" class="iptH37 DTdate" autocomplete="off">
                                                 </span>
 
-                                        </td>
-                                </tr>
-                                <tr>
-                                        <th><span class="red">*</span>报名人数</th>
-                                        <td>
-                                            <input type="text" name="apply_num" value="<?php echo $course['apply_num']>0?$course['apply_num']:0 ?>" class="iptH37 w157">人时，停止报名 <span class="gray9">(0表示不限人数)</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><span class="red">*</span>报名人数</th>
+                                <td>
+                                    <input type="text" name="apply_num" value="<?php echo $course['apply_num']>0?$course['apply_num']:0 ?>" class="iptH37 w157">人时，停止报名 <span class="gray9">(0表示不限人数)</span>
 
 
-                                        </td>
-                                </tr>
-                                <tr>
-                                        <th>其他设置</th>
-                                        <td>
-                                            <label><input name="apply_check" value="1" <?php if($course['apply_check']==1){echo 'checked="checked"';} ?> type="checkbox" class="mr10" />报名需审核</label>
-                                                <!--<ul class="lineUl">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>其他设置</th>
+                                <td>
+                                    <label><input name="apply_check" value="1" <?php if($course['apply_check']==1){echo 'checked="checked"';} ?> type="checkbox" class="mr10" />报名需审核</label>
+                                    <!--<ul class="lineUl">
                                                         <li>
                                                             <input name="apply_check_type" <?php if($course['apply_check_type']==1){echo 'checked="checked"';} ?> value="1" type="radio">管理员审核</li>
                                                         <li>
                                                             <input name="apply_check_type" <?php if($course['apply_check_type']==2){echo 'checked="checked"';} ?> value="2" type="radio">部门经理审核(分级管理员)</li>
                                                 </ul>-->
 
-                                        </td>
-                                </tr>
-                                <tr>
-                                        <th>报名提示</th>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>报名提示</th>
 
-                                        <td>
-                                            <textarea name="apply_tip" class="iptare pt10"><?php echo $course['apply_tip'] ?></textarea>
+                                <td>
+                                    <textarea name="apply_tip" class="iptare pt10"><?php echo $course['apply_tip'] ?></textarea>
 
-                                        </td>
-                                </tr>
-                                <tr>
-                                        <th></th>
-                                        <td>
-                                                <input type="submit" class="coBtn" value="保存">
-                                        </td>
-                                </tr>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td>
+                                    <input type="submit" class="coBtn" value="保存">
+                                </td>
+                            </tr>
                         </tbody></table>
                     </form>
                 </div>

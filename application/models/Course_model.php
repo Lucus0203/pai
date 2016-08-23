@@ -42,6 +42,9 @@ class Course_model extends CI_Model {
                         $course['status_str']='已结束';
                         $course['status_class']='grayH25';
                     }
+                }else{
+                    $course['status_str']='待发布';
+                    $course['status_class']='orangeH25';
                 }
 		return $course;
 	}
