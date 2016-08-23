@@ -40,8 +40,9 @@ class Notifyclass
         $user = $this->CI->user_model->get_row(array('id' => $course['user_id']));
         $company = $this->CI->company_model->get_row(array('code'=>$user['company_code']));
         $ischeckmsg=($course['apply_check']==1)?'报名需经您的上级领导审核，通过后另行通知。':'报名成功后我们将另行通知。';
-        $t1 = date('m月d日H时', strtotime($course['time_start']));//举行时间
-        $t2 = date('m月d日H时', strtotime($course['apply_end']));//截止时间
+        $t1 = date('m月d日H:i', strtotime($course['time_start']));//举行时间
+        $t2 = date('m月d日H:i', strtotime($course['apply_start']));//报名开始时间
+        $t3 = date('m月d日H:i', strtotime($course['apply_end']));//报名截止时间
         $link = $this->CI->config->item('web_url') . 'course/info/'.$course['id'].'.html';//链接
         $link_short='course/info/'.$course['id'].'.html';
         $sign=$company['name'];
@@ -79,8 +80,8 @@ class Notifyclass
                 $msg.="
 ". date("Y年m月d日");
                 $this->CI->zhidingsms->sendSMS($student['mobile'], $msg);*/
-                $content='@1@='.$student['name'].',@2@='.$course['title'].',@3@='.$t1.',@4@='.$t2.',@5@='.$link_short.',@6@='.$accountmsg.',@7@='.$ischeckmsg.',@8@='.$sign.',@9@='.date("Y年m月d日");
-                $this->CI->zhidingsms->sendTPSMS($student['mobile'], $content,'ZD30018-0002');
+                $content='@1@='.$student['name'].',@2@='.$course['title'].',@3@='.$t1.',@4@='.$t2.',@5@='.$t3.',@6@='.$link_short.',@7@='.$accountmsg.',@8@='.$ischeckmsg.',@9@='.$sign.',@10@='.date("Y年m月d日");
+                $this->CI->zhidingsms->sendTPSMS($student['mobile'], $content,'ZD30018-0007');
             }
         }
 
@@ -134,7 +135,7 @@ EOF;
         $student = $this->CI->student_model->get_row(array('id' => $studentid));
         $company = $this->CI->company_model->get_row(array('code' => $student['company_code']));
 
-        $t = date('Y年m月d日H时', strtotime($course['time_start']));//举行时间
+        $t = date('Y年m月d日H:i', strtotime($course['time_start']));//举行时间
         $link = $this->CI->config->item('web_url') .'course/survey/' . $course['id'] . '.html';//链接
         $link_short='course/survey/' . $course['id'].'.html';
         $sign=$company['name'];
