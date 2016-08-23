@@ -33,7 +33,7 @@ $(document).ready(function(){
                                                     <input name="time_end" type="text" value="<?php echo $parm['time_end'] ?>" class="ipt w156 ml10 DTdate" autocomplete="off">
 						</li>
 
-                                                <li class="btn fRight"><input type="submit" class="borBlueH37 w100 mt3" value="查   询" /></li>
+                                                <li class="btn fRight"><input type="submit" class="borBlueH37 w100 mt3" value="搜索" /></li>
 					</ul>
                                         </form>
 				</div>

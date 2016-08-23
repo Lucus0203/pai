@@ -765,8 +765,7 @@ class Course extends CI_Controller
     /**
      * 匹配通知学员
      */
-    public function updateTarget($courseid){
-        if(!empty($courseid)){
+    public function updateTarget(){
             $data['company_code']=$this->_logininfo['company_code'];
             $data['target_student']=$this->input->post('targetstudent');
             $data['created']=date('Y-m-d H:i:s');
@@ -782,7 +781,6 @@ class Course extends CI_Controller
             $res = $target;//mb_strlen($target, 'utf-8') > 20 ? mb_substr( $target,0,40,"utf-8").'...':$target;
             echo $res;
         }
-    }
 
 
 }

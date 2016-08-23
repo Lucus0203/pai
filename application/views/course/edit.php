@@ -246,7 +246,7 @@
             $(this).text('请稍后..');
             $.ajax({
                 type: "post",
-                url: '<?php echo site_url('course/updateTarget/'.$course['id']) ?>',
+                url: '<?php echo site_url('course/updateTarget') ?>',
                 data: {
                     'targetstudent': $('input[name=targetstudent]').val()
                 },

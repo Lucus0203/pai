@@ -36,7 +36,7 @@
 								<option value="2" <?php if($parm['work_type']==2){ ?>selected=""<?php } ?>>兼职</option>
 							</select>
 						</li>
-                                                <li class="btn fRight"><input type="submit" value="查询" class="borBlueH37 w100 mt3" /></li>
+                                                <li class="btn fRight"><input type="submit" value="搜索" class="borBlueH37 w100 mt3" /></li>
 					</ul>
                                         </form>
 				</div>
