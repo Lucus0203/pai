@@ -484,7 +484,7 @@ class Course extends CI_Controller
             . " where hwlist.course_id=$courseid and hwlist.student_id=$studentid order by hwlist.id ";
         $query = $this->db->query($sql);
         $homework = $query->result_array();
-        $depart = $this->department_model->get_row(array('id', $student['department_id']));
+        $depart = $this->department_model->get_row(array('id'=>$student['department_id']));
         $student['department'] = $depart['name'];
         $this->load->view('course/homework_detail', array('homework' => $homework, 'student' => $student));
 
@@ -583,7 +583,7 @@ class Course extends CI_Controller
         $this->load->view('footer');
     }
 
-    //课前作业提交名单
+    //课前调研提交名单
     public function surveylist($courseid)
     {
         $this->isAllowCourseid($courseid);
@@ -609,7 +609,7 @@ class Course extends CI_Controller
         $this->load->view('footer');
     }
 
-    //查看作业详情
+    //查看调研详情
     public function surveydetail($courseid, $studentid)
     {
         $this->isAllowCourseid($courseid);
@@ -619,7 +619,7 @@ class Course extends CI_Controller
             . " where hwlist.course_id=$courseid and hwlist.student_id=$studentid order by hwlist.id ";
         $query = $this->db->query($sql);
         $survey = $query->result_array();
-        $depart = $this->department_model->get_row(array('id', $student['department_id']));
+        $depart = $this->department_model->get_row(array('id'=>$student['department_id']));
         $student['department'] = $depart['name'];
         $this->load->view('course/survey_detail', array('survey' => $survey, 'student' => $student));
 

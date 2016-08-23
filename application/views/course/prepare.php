@@ -67,10 +67,12 @@
                     <?php } ?>
                     <p class="f14 mb20 gray6">提前告知学员所需要了解的课程内容及准备事项</p>
                     <table cellspacing="0" class="comTable">
-                        <colgroup><col width="100">
+                        <colgroup>
+                            <col width="9%">
+                            <col width="95%">
                         </colgroup><tbody>
                         <tr>
-                            <th>准备内容</th>
+                            <th style="padding-left: 0;">准备内容</th>
                             <td>
                                 <span class="iptInner">
                                 <textarea name="note" class="iptare pt10" placeholder="请输入学员课前需要了解的内容及准备事项"><?php echo $prepare['note']; ?></textarea>
@@ -78,7 +80,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>附件文档</th>
+                            <th style="padding-left: 0;">附件文档</th>
                             <td>
                                 <span class="iptInner">
                                     <input name="file" type="file"
