@@ -58,8 +58,9 @@
     function checkForm(){
         if($('#ispublic').val()!=1&&$('input[name=isapply_open]:checked').val()==1){
             return confirm('课程暂未发布,是否发布课程并开启报名');
+        }else{
+            return true;
         }
-        return true;
     }
 </script>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
