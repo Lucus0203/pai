@@ -44,6 +44,7 @@ $(document).ready(function(){
                         }else{
                             id=res;
                             $('.textureSide').append('<div class="fnavi"><a href="<?php echo base_url() ?>department/index/'+res+'.html" class="flink"><i class="iup"></i>'+departname+'</a><ul class="clink departChildren'+res+'"></ul></div>');
+                            $('select[name=department_parent_id]').append('<option value="'+res+'">'+departname+'</option>');
                             $('#conWindow').hide();
                         }
                 }
