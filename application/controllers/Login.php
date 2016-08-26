@@ -9,7 +9,7 @@ class Login extends CI_Controller
         parent::__construct();
         $this->load->library(array('session'));
         $this->load->helper(array('form', 'url','captcha'));
-        $this->load->model(array('user_model','student_model', 'userloginlog_model', 'company_model', 'purview_model', 'industries_model'));
+        $this->load->model(array('user_model','student_model','department_model','userloginlog_model', 'company_model', 'purview_model', 'industries_model'));
     }
 
 
@@ -110,6 +110,9 @@ class Login extends CI_Controller
                     $user['register_flag'] = 2;
                     $this->user_model->update($user, $userinfo['id']);
                     $userinfo = $this->user_model->get_row(array('mobile' => $mobile,'role'=>1));
+                    //创建人力资源部
+                    $d = array('company_code' => $company_code, 'name' => '人力资源');
+                    $departmentid = $this->department_model->create($d);
                     //管理员学员账号
                     $student = array('company_code' => $company_code,
                         'sex' => 1,
@@ -118,6 +121,8 @@ class Login extends CI_Controller
                         'email' => $email,
                         'user_name' => $mobile,
                         'user_pass' => md5(substr($mobile,-6)),
+                        'department_parent_id'=>$departmentid,
+                        'department_id'=>$departmentid,
                         'role' => 9);
                     $this->student_model->create($student);
                     //公司信息

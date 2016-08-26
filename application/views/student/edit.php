@@ -131,7 +131,7 @@ $(document).ready(function(){
 </script>
 <div class="wrap clearfix">
     <div class="textureSide">
-        <a id="addDeart" href="javascript:void(0)" class="topbtn">新增一级部门</a>
+        <a id="addDeart" href="javascript:void(0)" class="topbtn">新增部门</a>
         <div class="fnavi">
             <a class="flink mb10 <?php echo empty($current_department['id'])?'on':'' ?>" href="<?php echo site_url('department/index') ?>">所有学员</a>
         </div>

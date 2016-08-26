@@ -30,7 +30,8 @@
                 },
                 scale: {
                     ticks: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        backdropColor:'rgba(255, 255, 255, 0)'
                     }
                 }
             }
