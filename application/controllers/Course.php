@@ -241,7 +241,7 @@ class Course extends CI_Controller
         $act = $this->input->post('act');
         $msg = '';
         if (!empty($act)) {
-            $oldcourse = $this->course_model->get_row(array('id' => $id,'company_code' => $this->_logininfo['company_code']));
+            //$oldcourse = $this->course_model->get_row(array('id' => $id,'company_code' => $this->_logininfo['company_code']));
             $c = array('isapply_open' => $this->input->post('isapply_open'),
                 'apply_start' => $this->input->post('apply_start'),
                 'apply_end' => $this->input->post('apply_end'),
@@ -257,11 +257,13 @@ class Course extends CI_Controller
                 $c['apply_check'] = 2;
             }
             $this->course_model->update($c, $id);
-            if ($oldcourse['isapply_open'] != 1 && $c['isapply_open'] == 1) {
+            $notify_check=$this->input->post('notify_check');
+            if (!empty($notify_check) && $c['isapply_open'] == 1) {//$oldcourse['isapply_open'] != 1
                 $this->load->library(array('notifyclass'));
                 $this->notifyclass->applyopen($id);
+                $msg='通知已发送,';
             }
-            $msg='保存成功';
+            $msg.='保存成功';
         }
         $course = $this->course_model->get_row(array('id' => $id));
         $this->load->view('header');

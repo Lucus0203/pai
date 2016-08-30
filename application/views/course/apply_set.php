@@ -61,6 +61,19 @@
         $('a.calBtn,div.popmap,a.closeBtn').click(function(){
             $('#conWindow').hide();
         });
+        $('input[name=isapply_open]').change(function(){
+            if($(this).val()==2){
+                $('#notifysubmitBtn').css({'background-color':'#ccc'}).attr('disabled','disabled');
+            }else{
+                $('#notifysubmitBtn').css({'background-color':'#67d0de'}).removeAttr('disabled');
+            }
+        });
+        $('#notifysubmitBtn').click(function(){
+            $('#notify_check').val('1');
+        });
+        $('#submit').click(function(){
+            $('#notify_check').val('');
+        });
     });
 </script>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
@@ -147,7 +160,9 @@
                             <tr>
                                 <th></th>
                                 <td>
-                                    <input type="submit" class="coBtn" value="保存">
+                                    <input id="notify_check" type="hidden" name="notify_check" value="" />
+                                    <input id="notifysubmitBtn" type="submit" class="coBtn mr20" <?php if($course['isapply_open']!=1){echo 'style="background-color:#ccc;color:#fff;" disabled="disabled;"';} ?> value="保存并发送通知">
+                                    <input id="submit" type="submit" class="coBtn" value="仅保存">
                                 </td>
                             </tr>
                         </tbody></table>
