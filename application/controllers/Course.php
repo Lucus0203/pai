@@ -789,7 +789,7 @@ class Course extends CI_Controller
         $data['target_student']=$this->input->post('targetstudent');
         $target='';
         if(!empty($data['target_student'])) {
-            $targetstudent = empty($course['target_student'])?array():$this->student_model->get_all(" id in (" . $data['target_student'] . ") and company_code='".$this->_logininfo['company_code']."' and isdel=2 ");
+            $targetstudent = $this->student_model->get_all(" id in (" . $data['target_student'] . ") and company_code='".$this->_logininfo['company_code']."' and isdel=2 ");
             if (!empty($targetstudent)) {
                 $targetstudent = array_column($targetstudent, 'name');
                 $target .= implode(",", $targetstudent);
