@@ -272,8 +272,12 @@ class Course extends CI_Controller
         $course = $this->course_model->get_row(array('id' => $id));
         //培训对象数据
         $deparone = $this->department_model->get_all(" id in (" . $course['targetone'] . ") and company_code='".$this->_logininfo['company_code']."' and level=0 ");
+        echo $this->db->last_query();
+        print_r($deparone);
         if (!empty($deparone[0]['id'])) {
             $departwo = $this->department_model->get_all(" id in (" . $course['targettwo'] . ") and company_code='".$this->_logininfo['company_code']."' and parent_id=".$deparone[0]['id']);
+            echo $this->db->last_query();
+            print_r($departwo);
         }
         if (!empty($departwo[0]['id'])) {
             $students = $this->student_model->get_all(" id in (" . $course['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and department_id=".$departwo[0]['id']." and isdel=2 ");
