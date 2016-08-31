@@ -214,8 +214,9 @@ class Course extends CI_Controller
         if (!empty($deparone[0]['id'])) {
             $departwo = $this->department_model->get_all(array('parent_id' => $deparone[0]['id']));
         }
-        if (!empty($departwo[0]['id'])) {
-            $students = $this->student_model->get_all(array('department_id' => $departwo[0]['id'],'isdel'=>2));
+        $student_departmentid=$departwo[0]['id']??$deparone[0]['id'];
+        if (!empty($student_departmentid)) {
+            $students = $this->student_model->get_all(array('department_id' => $student_departmentid,'isdel'=>2));
         }
         $course = $this->course_model->get_row(array('id' => $id,'company_code' => $logininfo['company_code']));
         $this->load->view('header');
@@ -273,8 +274,9 @@ class Course extends CI_Controller
         if (!empty($deparone[0]['id'])) {
             $departwo = empty($course['targettwo'])?array():$this->department_model->get_all(" id in (" . $course['targettwo'] . ") and company_code='".$this->_logininfo['company_code']."' and parent_id=".$deparone[0]['id']);
         }
-        if (!empty($departwo[0]['id'])) {
-            $students = empty($course['targetstudent'])?array():$this->student_model->get_all(" id in (" . $course['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and department_id=".$departwo[0]['id']." and isdel=2 ");
+        $student_departmentid=$departwo[0]['id']??$deparone[0]['id'];
+        if (!empty($student_departmentid)) {
+            $students = empty($course['targetstudent'])?array():$this->student_model->get_all(" id in (" . $course['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and department_id=".$student_departmentid." and isdel=2 ");
         }
         $this->load->view('header');
         $this->load->view('course/apply_set', compact('course','msg','deparone','departwo','students'));

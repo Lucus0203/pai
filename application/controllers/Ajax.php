@@ -26,8 +26,11 @@ class Ajax extends CI_Controller {
         $departmentid = $this->input->post('departmentid');
         $departs = empty($course['targettwo'])?array():$this->department_model->get_all(" id in (" . $course['targettwo'] . ") and company_code='".$this->_logininfo['company_code']."' and parent_id=".$departmentid);
 
-        $departmentid=!empty($departs[0])?$departs[0]['id']:$departmentid;
-        $students = empty($course['targetstudent'])?array():$this->student_model->get_all(" id in (" . $course['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and department_id=".$departmentid." and isdel=2 ");
+        $departmentid=$departs[0]['id']??$departmentid;
+        $students=array();
+        if(!empty($departmentid)){
+            $students = empty($course['targetstudent'])?array():$this->student_model->get_all(" id in (" . $course['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and department_id=".$departmentid." and isdel=2 ");
+        }
         echo json_encode(array('departs' => $departs, 'students' => $students));
     }
 
