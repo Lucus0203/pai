@@ -43,6 +43,17 @@
                     <?php } ?>
                 </p>
                 <table cellspacing="0" class="listTable">
+                    <colgroup>
+                        <col width="10%">
+                        <col width="10%">
+                        <col width="20%">
+                        <col width="20%">
+                        <col width="10%">
+                        <col width="20%">
+                        <col width="20%">
+                        <col width="5%">
+                        <col width="5%">
+                    </colgroup>
                     <tbody>
                     <tr>
                         <th class="aLeft">姓名</th>

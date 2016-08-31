@@ -143,8 +143,12 @@
         $('.threeUl .students input').live('click', function () {
             if ($('ul.threeUl').find('input:checked').length === 0) {
                 $('.twoUl .secIpt').find('input').removeAttr('checked', 'checked');
+                if ($('ul.twoUl').find('input:checked').length === 0) {
+                    $('.oneUl .secIpt').find('input').removeAttr('checked', 'checked');
+                }
             } else {
                 $('.twoUl .secIpt').find('input').attr('checked', 'checked');
+                $('.oneUl .secIpt').find('input').attr('checked', 'checked');
             }
 
             //遍历赋值隐藏域
@@ -218,10 +222,12 @@
         <div class="p15">
             <p class="clearfix f14 mb20">共<?php echo $total_rows ?>个岗位</p>
             <table cellspacing="0" class="listTable">
-                <col width="20%">
-                <col width="50%">
-                <col width="10%">
-                <col width="10%">
+                <colgroup>
+                    <col width="20%">
+                    <col width="50%">
+                    <col width="10%">
+                    <col width="10%">
+                </colgroup>
                 <tbody>
                 <tr>
                     <th class="aLeft">岗位</th>

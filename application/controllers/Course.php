@@ -296,8 +296,8 @@ class Course extends CI_Controller
         //报名人数
         $this->db->where('course_id', $id)->from('course_apply_list');
         $total = $this->db->count_all_results();
-        //拒绝人数
-        $this->db->where(array('course_id' => $id, 'status' => 2))->from('course_apply_list');
+        //未通过人数
+        $this->db->where("course_id = ".$this->db->escape($id)." and status !=1 ")->from('course_apply_list');
         $refusetotal = $this->db->count_all_results();
 
         $sql = "select s.*,d.name as department,a.id as apply_id,a.status as apply_status,a.note "

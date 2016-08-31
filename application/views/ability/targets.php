@@ -11,10 +11,12 @@
         <div class="p15">
             <p class="clearfix f14 mb20">共<?php echo $total_rows ?>评估学员</p>
             <table cellspacing="0" class="listTable">
+                <colgroup>
                 <col width="20%">
                 <col width="30%">
                 <col width="20%">
                 <col width="10%">
+                </colgroup>
                 <tbody>
                 <tr>
                     <th class="center">学员</th>
