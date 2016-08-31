@@ -238,6 +238,7 @@ class Course extends CI_Controller
     public function applyset($id)
     {
         error_reporting(-1);
+        ini_set('display_errors', 1);
         $this->isAllowCourseid($id);
         $act = $this->input->post('act');
         $msg = '';
