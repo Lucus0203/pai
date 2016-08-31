@@ -125,6 +125,9 @@ class Login extends CI_Controller
                         'department_id'=>$departmentid,
                         'role' => 9);
                     $this->student_model->create($student);
+                    //其他部门
+                    $d = array('company_code' => $company_code, 'name' => '其他');
+                    $this->department_model->create($d);
                     //公司信息
                     $this->company_model->create(array('code' => $company_code,
                         'name' => $company_name,
