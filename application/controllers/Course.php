@@ -237,8 +237,6 @@ class Course extends CI_Controller
     //报名设置
     public function applyset($id)
     {
-        error_reporting(-1);
-        ini_set('display_errors', 1);
         $this->isAllowCourseid($id);
         $act = $this->input->post('act');
         $msg = '';
@@ -271,16 +269,12 @@ class Course extends CI_Controller
 
         $course = $this->course_model->get_row(array('id' => $id));
         //培训对象数据
-        $deparone = $this->department_model->get_all(" id in (" . $course['targetone'] . ") and company_code='".$this->_logininfo['company_code']."' and level=0 ");
-        echo $this->db->last_query();
-        print_r($deparone);
+        $deparone = empty($course['targetone'])?array():$this->department_model->get_all(" id in (" . $course['targetone'] . ") and company_code='".$this->_logininfo['company_code']."' and level=0 ");
         if (!empty($deparone[0]['id'])) {
-            $departwo = $this->department_model->get_all(" id in (" . $course['targettwo'] . ") and company_code='".$this->_logininfo['company_code']."' and parent_id=".$deparone[0]['id']);
-            echo $this->db->last_query();
-            print_r($departwo);
+            $departwo = empty($course['targettwo'])?array():$this->department_model->get_all(" id in (" . $course['targettwo'] . ") and company_code='".$this->_logininfo['company_code']."' and parent_id=".$deparone[0]['id']);
         }
         if (!empty($departwo[0]['id'])) {
-            $students = $this->student_model->get_all(" id in (" . $course['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and department_id=".$departwo[0]['id']." and isdel=2 ");
+            $students = empty($course['targetstudent'])?array():$this->student_model->get_all(" id in (" . $course['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and department_id=".$departwo[0]['id']." and isdel=2 ");
         }
         $this->load->view('header');
         $this->load->view('course/apply_set', compact('course','msg','deparone','departwo','students'));
@@ -793,7 +787,7 @@ class Course extends CI_Controller
         $data['target_student']=$this->input->post('targetstudent');
         $target='';
         if(!empty($data['target_student'])) {
-            $targetstudent = $this->student_model->get_all(" id in (" . $data['target_student'] . ") and company_code='".$this->_logininfo['company_code']."' and isdel=2 ");
+            $targetstudent = empty($course['target_student'])?array():$this->student_model->get_all(" id in (" . $data['target_student'] . ") and company_code='".$this->_logininfo['company_code']."' and isdel=2 ");
             if (!empty($targetstudent)) {
                 $targetstudent = array_column($targetstudent, 'name');
                 $target .= implode(",", $targetstudent);

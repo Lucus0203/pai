@@ -24,13 +24,10 @@ class Ajax extends CI_Controller {
     {
         $course = $this->course_model->get_row(array('id' => $courseid));
         $departmentid = $this->input->post('departmentid');
-        $departs = $this->department_model->get_all(" id in (" . $course['targettwo'] . ") and company_code='".$this->_logininfo['company_code']."' and parent_id=".$departmentid);
-        $students = array();
-        if (!empty($departs[0])) {
-            $students = $this->student_model->get_all(" id in (" . $course['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and department_id=".$departs[0]['id']." and isdel=2 ");
-        } else {
-            $students = $this->student_model->get_all(" id in (" . $course['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and department_id=".$departmentid." and isdel=2 ");
-        }
+        $departs = empty($course['targettwo'])?array():$this->department_model->get_all(" id in (" . $course['targettwo'] . ") and company_code='".$this->_logininfo['company_code']."' and parent_id=".$departmentid);
+
+        $departmentid=!empty($departs[0])?$departs[0]['id']:$departmentid;
+        $students = empty($course['targetstudent'])?array():$this->student_model->get_all(" id in (" . $course['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and department_id=".$departmentid." and isdel=2 ");
         echo json_encode(array('departs' => $departs, 'students' => $students));
     }
 
@@ -39,7 +36,7 @@ class Ajax extends CI_Controller {
     {
         $course = $this->course_model->get_row(array('id' => $courseid));
         $departmentid = $this->input->post('departmentid');
-        $students = $this->student_model->get_all(" id in (" . $course['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and department_id=".$departmentid." and isdel=2 ");
+        $students = empty($course['targetstudent'])?array():$this->student_model->get_all(" id in (" . $course['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and department_id=".$departmentid." and isdel=2 ");
         echo json_encode(array('students' => $students));
     }
 
