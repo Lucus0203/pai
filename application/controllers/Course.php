@@ -237,6 +237,7 @@ class Course extends CI_Controller
     //报名设置
     public function applyset($id)
     {
+        error_reporting(-1);
         $this->isAllowCourseid($id);
         $act = $this->input->post('act');
         $msg = '';
