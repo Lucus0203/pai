@@ -31,7 +31,7 @@ class Notifyclass
 
 
     //开启报名 //人工触发
-    public function applyopen($courseid)
+    public function applyopen($courseid,$notifyTarget="")
     {
         $course = $this->CI->course_model->get_row(array('id' => $courseid));
         if($course['isnotice_open']!=1){//自动通知关闭
@@ -49,7 +49,7 @@ class Notifyclass
         $sign.=($company['code']=='100276')?' 人力资源部':'';
         //短信通知
         if($course['notice_type_msg']==1){
-            $studentsarr = explode(',', $course['targetstudent']);
+            $studentsarr = explode(',', $notifyTarget);//explode(',', $course['targetstudent']);
             $students=array();
             foreach ($studentsarr as $s) {
                 $student = $this->CI->student_model->get_row(array('id' => $s));

@@ -200,8 +200,12 @@
         $('.threeUl .students input').live('click', function () {
             if ($('ul.threeUl').find('input:checked').length === 0) {
                 $('.twoUl .secIpt').find('input').removeAttr('checked', 'checked');
+                if ($('ul.twoUl').find('input:checked').length === 0) {
+                    $('.oneUl .secIpt').find('input').removeAttr('checked', 'checked');
+                }
             } else {
                 $('.twoUl .secIpt').find('input').attr('checked', 'checked');
+                $('.oneUl .secIpt').find('input').attr('checked', 'checked');
             }
 
             //遍历赋值隐藏域
@@ -318,17 +322,17 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>通知学员</th>
+                        <th>学员名单</th>
                         <td>
                             <span class="iptInner">
                             <input type="hidden" name="targetone" value="<?php echo $course['targetone'] ?>"/><input
                                 type="hidden" name="targettwo" value="<?php echo $course['targettwo'] ?>"/><input
                                 type="hidden" name="targetstudent" value="<?php echo $course['targetstudent'] ?>"/>
-                            <input readonly="true" placeholder="请选择通知学员" name="target" value="<?php echo $course['target'] ?>" type="text"
+                            <input readonly="true" placeholder="请选择学员" name="target" value="<?php echo $course['target'] ?>" type="text"
                                    class="iptH37 w237"><a id="addTarget" class="borBlueH37 ml20"
                                                           href="javascript:void(0)">选择学员</a>
                             </span>
-                            <p class="gray9 mt15">通知学员将在报名开启后收到报名通知</p>
+                            <p class="gray9 mt15">学员将在报名开启后收到报名通知</p>
 
                         </td>
                     </tr>

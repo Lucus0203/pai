@@ -14,9 +14,8 @@ $(document).ready(function(){
     jQuery.validator.methods.compareDate = function(value, element, param) {
         var startDate = jQuery(param).val() + ":00";
         value = value + ":00";
-        var startDate = jQuery(param).val();
-        var date1 = new Date(Date.parse(startDate.replace("-", "/")));
-        var date2 = new Date(Date.parse(value.replace("-", "/")));
+        var date1 = new Date(Date.parse(startDate.replace(/\-/g, "/")));
+        var date2 = new Date(Date.parse(value.replace(/\-/g, "/")));
         return date1 < date2;
     };
     $('.alert-remove').click(function(){$('.alertBox').hide()});

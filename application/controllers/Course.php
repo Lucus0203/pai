@@ -258,16 +258,26 @@ class Course extends CI_Controller
             }
             $this->course_model->update($c, $id);
             $notify_check=$this->input->post('notify_check');
-            if (!empty($notify_check) && $c['isapply_open'] == 1) {//$oldcourse['isapply_open'] != 1
+            $notify_target=$this->input->post('targetstudent');
+            if (!empty($notify_check) && $c['isapply_open'] == 1 && !empty($notify_target)) {//$oldcourse['isapply_open'] != 1
                 $this->load->library(array('notifyclass'));
-                $this->notifyclass->applyopen($id);
-                $msg='通知已发送,';
+                $this->notifyclass->applyopen($id,$notify_target);
+                $msg='通知已发送至'.count(explode(",", $notify_target)).'位学员,';
             }
             $msg.='保存成功';
         }
+
         $course = $this->course_model->get_row(array('id' => $id));
+        //培训对象数据
+        $deparone = $this->department_model->get_all(" id in (" . $course['targetone'] . ") and company_code='".$this->_logininfo['company_code']."' and level=0 ");
+        if (!empty($deparone[0]['id'])) {
+            $departwo = $this->department_model->get_all(" id in (" . $course['targettwo'] . ") and company_code='".$this->_logininfo['company_code']."' and parent_id=".$deparone[0]['id']);
+        }
+        if (!empty($departwo[0]['id'])) {
+            $students = $this->student_model->get_all(" id in (" . $course['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and department_id=".$departwo[0]['id']." and isdel=2 ");
+        }
         $this->load->view('header');
-        $this->load->view('course/apply_set', compact('course','msg'));
+        $this->load->view('course/apply_set', compact('course','msg','deparone','departwo','students'));
         $this->load->view('footer');
     }
 
@@ -773,21 +783,20 @@ class Course extends CI_Controller
      * 匹配通知学员
      */
     public function updateTarget(){
-            $data['company_code']=$this->_logininfo['company_code'];
-            $data['target_student']=$this->input->post('targetstudent');
-            $data['created']=date('Y-m-d H:i:s');
-            $target='';
-            if(!empty($data['target_student'])) {
-                $targetstudent = $this->student_model->get_all(' id in (' . $data['target_student'] . ') ');
-                if (!empty($targetstudent)) {
-                    $targetstudent = array_column($targetstudent, 'name');
-                    $target .= implode(",", $targetstudent);
-                }
+        $data['company_code']=$this->_logininfo['company_code'];
+        $data['target_student']=$this->input->post('targetstudent');
+        $target='';
+        if(!empty($data['target_student'])) {
+            $targetstudent = $this->student_model->get_all(" id in (" . $data['target_student'] . ") and company_code='".$this->_logininfo['company_code']."' and isdel=2 ");
+            if (!empty($targetstudent)) {
+                $targetstudent = array_column($targetstudent, 'name');
+                $target .= implode(",", $targetstudent);
             }
-            $data['target']=$target;
-            $res = $target;//mb_strlen($target, 'utf-8') > 20 ? mb_substr( $target,0,40,"utf-8").'...':$target;
-            echo $res;
         }
+        $data['target']=$target;
+        $res = $target;//mb_strlen($target, 'utf-8') > 20 ? mb_substr( $target,0,40,"utf-8").'...':$target;
+        echo $res;
+    }
 
 
 }
