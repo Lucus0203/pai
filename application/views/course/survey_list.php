@@ -39,8 +39,8 @@
                         <tr>
                             <td class="blue"><?php echo $h['name'] ?></td>
                             <td><?php echo $h['job_code'] ?></td>
-                            <td><?php echo $h['job_name'] ?></td>
-                            <td><?php echo $h['department'] ?></td>
+                            <td class="wordBreak"><?php echo $h['job_name'] ?></td>
+                            <td class="wordBreak"><?php echo $h['department'] ?></td>
                             <td><?php echo $h['mobile'] ?></td>
                             <td class="aCenter"><?php echo date("m-d H:i",strtotime($h['created'])) ?></td>
                             <td class="aCenter"><a href="<?php echo site_url('course/surveydetail/'.$h['course_id'].'/'.$h['student_id']) ?>" class="blue" target="_blank">查看调研</a></td>

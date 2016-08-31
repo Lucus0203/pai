@@ -59,8 +59,8 @@
                         <tr>
                             <td class="blue"><?php echo $a['name'] ?></td>
                             <td><?php echo $a['job_code'] ?></td>
-                            <td><?php echo $a['job_name'] ?></td>
-                            <td><?php echo $a['department'] ?></td>
+                            <td class="wordBreak"><?php echo $a['job_name'] ?></td>
+                            <td class="wordBreak"><?php echo $a['department'] ?></td>
                             <td><?php echo $a['mobile'] ?></td>
                             <td class="wordBreak"><?php echo $a['note'] ?></td>
                             <td><?php echo date("m-d H:i",strtotime($a['created'])) ?></td>

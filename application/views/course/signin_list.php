@@ -49,8 +49,8 @@
                         <tr>
                             <td class="blue"><?php echo $h['name'] ?></td>
                             <td><?php echo $h['job_code'] ?></td>
-                            <td><?php echo $h['job_name'] ?></td>
-                            <td><?php echo $h['department'] ?></td>
+                            <td class="wordBreak"><?php echo $h['job_name'] ?></td>
+                            <td class="wordBreak"><?php echo $h['department'] ?></td>
                             <td><?php echo $h['mobile'] ?></td>
                             <td class="aCenter"><?php echo date("m-d H:i",strtotime($h['signin_time'])) ?></td>
                             <td class="aCenter"><?php echo !empty($h['signout_time'])?date("m-d H:i",strtotime($h['signout_time'])):'' ?></td>

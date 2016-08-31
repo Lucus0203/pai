@@ -46,8 +46,8 @@
                         <tr>
                             <td class="blue"><?php echo $h['name'] ?></td>
                             <td><?php echo $h['job_code'] ?></td>
-                            <td><?php echo $h['job_name'] ?></td>
-                            <td><?php echo $h['department'] ?></td>
+                            <td class="wordBreak"><?php echo $h['job_name'] ?></td>
+                            <td class="wordBreak"><?php echo $h['department'] ?></td>
                             <td><?php echo $h['mobile'] ?></td>
                             <td class="aCenter"><span class="blue">
                                 <?php for($i=1;$i<6;$i++){?>
