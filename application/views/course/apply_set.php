@@ -92,7 +92,6 @@
                 type: "post",
                 url: '<?php echo site_url('ajax/ApplyTargetDepartmentAndStudent/'.$course['id']) ?>',
                 data: {'departmentid': $(this).find('input').val()},
-                async:false,
                 datatype: 'jsonp',
                 success: function (res) {
                     var json_obj = $.parseJSON(res);
