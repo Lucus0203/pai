@@ -303,9 +303,7 @@
                 <ul class="threeUl">
                     <?php
                     foreach ($students as $k => $s) { ?>
-                        <li class="students <?php if ($k == 0) {
-                            echo 'secIpt';
-                        } ?>"><label><input class="studentscheckbox" type="checkbox" value="<?php echo $s['id']; ?>"/><?php echo $s['name']; ?></label>
+                        <li class="students"><label><input class="studentscheckbox" type="checkbox" value="<?php echo $s['id']; ?>"/><?php echo $s['name']; ?></label>
                         </li>
                     <?php } ?>
 

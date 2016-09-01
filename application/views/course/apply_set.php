@@ -411,9 +411,7 @@
                     <?php
                     $arr = explode(",", $course['targetstudent']);
                     foreach ($students as $k => $s) { ?>
-                        <li class="students <?php if ($k == 0) {
-                            echo 'secIpt';
-                        } ?>"><label><input class="studentscheckbox" <?php if (in_array($s['id'], $arr)) {
+                        <li class="students"><label><input class="studentscheckbox" <?php if (in_array($s['id'], $arr)) {
                                     echo 'checked';
                                 } ?> type="checkbox" value="<?php echo $s['id']; ?>"/><?php echo $s['name']; ?></label>
                         </li>

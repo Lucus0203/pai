@@ -53,8 +53,9 @@ class Ability extends CI_Controller {
         if (!empty($deparone[0]['id'])) {
             $departwo = $this->department_model->get_all(array('parent_id' => $deparone[0]['id']));
         }
-        if (!empty($departwo[0]['id'])) {
-            $students = $this->student_model->get_all(array('department_id' => $departwo[0]['id'],'isdel'=>2));
+        $student_departmentid=$departwo[0]['id']??$deparone[0]['id'];
+        if (!empty($student_departmentid)) {
+            $students = $this->student_model->get_all(array('department_id' => $student_departmentid,'isdel'=>2));
         }
         $this->load->view ( 'header' );
         $this->load->view ( 'ability/index',compact('jobs','deparone','departwo','students','total_rows','links'));
