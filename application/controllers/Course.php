@@ -135,12 +135,21 @@ class Course extends CI_Controller
                 $this->image_lib->resize();
             }
             $c['ispublic'] = $this->input->post('public') == 1 ? 1 : 2;
+            //学员名单同步
+            if(!empty($c['targetstudent'])){
+                $target=$targetid='';
+                $targetstudent = $this->student_model->get_all(" id in (" . $c['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and isdel=2 ");
+                if (!empty($targetstudent)) {
+                    $targetstudentid = array_column($targetstudent, 'id');
+                    $targetid .= implode(",", $targetstudentid);
+                    $targetstudent = array_column($targetstudent, 'name');
+                    $target .= implode(",", $targetstudent);
+                }
+                $c['targetstudent']=$targetid;
+                $c['target']=$target;
+            }
             $id = $this->course_model->create($c);
             if ($c['ispublic'] == 1) {//如果发布则开启报名
-//                $apply = array('isapply_open' => 1, 'apply_start' => date("Y-m-d H:i:s", strtotime("-1months", strtotime($c['time_start']))), 'apply_end' => date("Y-m-d H:i:s", strtotime("-1days", strtotime($c['time_start']))), 'apply_num' => 0, 'apply_check' => 2);
-//                $this->course_model->update($apply, $id);
-//                $this->load->library(array('notifyclass'));
-//                $this->notifyclass->applyopen($id);
                 redirect(site_url('course/applyset/'.$id));
                 return;
             }
@@ -205,6 +214,19 @@ class Course extends CI_Controller
                 $this->image_lib->resize();
             }
             $c['ispublic'] = $this->input->post('public') == 1 ? 1 : 2;
+            //学员名单同步
+            if(!empty($c['targetstudent'])){
+                $target=$targetid='';
+                $targetstudent = $this->student_model->get_all(" id in (" . $c['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and isdel=2 ");
+                if (!empty($targetstudent)) {
+                    $targetstudentid = array_column($targetstudent, 'id');
+                    $targetid .= implode(",", $targetstudentid);
+                    $targetstudent = array_column($targetstudent, 'name');
+                    $target .= implode(",", $targetstudent);
+                }
+                $c['targetstudent']=$targetid;
+                $c['target']=$target;
+            }
             $this->course_model->update($c, $id);
             $msg = '课程保存成功';
         }
