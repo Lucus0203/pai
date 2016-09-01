@@ -322,7 +322,7 @@ class Course extends CI_Controller
         $this->db->where("course_id = ".$this->db->escape($id)." and status !=1 ")->from('course_apply_list');
         $refusetotal = $this->db->count_all_results();
 
-        $sql = "select s.*,d.name as department,a.id as apply_id,a.status as apply_status,a.note "
+        $sql = "select s.name,s.job_code,s.job_name,s.mobile,d.name as department,a.id as apply_id,a.status as apply_status,a.note,a.created "
             . "from " . $this->db->dbprefix('course_apply_list') . " a left join " . $this->db->dbprefix('student') . " s on a.student_id=s.id "
             . "left join " . $this->db->dbprefix('department') . " d on s.department_id = d.id "
             . "where a.course_id=$id ";
