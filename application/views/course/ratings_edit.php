@@ -44,6 +44,7 @@
                         }
                     }
                 });
+                $('#excelFileBtn').replaceWith($('#excelFileBtn').clone(true));
             }
         });
     });
