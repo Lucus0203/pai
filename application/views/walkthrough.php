@@ -16,7 +16,7 @@
                         position: 'bottom',
                         offsetHorizontal: 0,
                         offsetVertical: 0,
-                        width: '500'
+                        width: '800'
                     }
                 }
 
@@ -73,9 +73,8 @@
 <!--        <a href="javascript:;" class="next-step" style="float:right;">下一步</a>-->
 <!--    </div>-->
     <div id="navi-course" style="display:none;">
-        <p class="tooltipTitle">第一步：创建课程</p>
+        <p class="tooltipTitle">您的高效培训管理<br>从创建第一个课程开始</p>
         <p><img src="<?php echo base_url();?>images/walkthrough03.png" width="80%" /></p>
-        <p style="text-align: center;padding: 0 25px;">您的高效培训管理,从创建第一个课程开始.</p>
         <a href="javascript:;" class="close-step" style="float:right;">清楚了</a>
     </div>
 </div>

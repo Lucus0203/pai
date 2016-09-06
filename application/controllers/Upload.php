@@ -106,10 +106,6 @@ class Upload extends CI_Controller
 
         redirect($_SERVER['HTTP_REFERER']);
     }
-    //下载学员模板
-    public function downloadstudentexample(){
-        force_download('./uploads/studentdata/uploadExample.xlsx', NULL);
-    }
 
     //学员数据验证
     private  function validateStudent($data,$row,$first_department,$second_department){
@@ -134,6 +130,7 @@ class Upload extends CI_Controller
         echo $msg;
         return $flag;
     }
+
     //查找部门id,没有则创建
     private function searchDepartId($name,&$arr,$fdepart_id=null){
         $key=array_search($name,$arr);
@@ -153,6 +150,90 @@ class Upload extends CI_Controller
             $arr[$key]=$depart['name'];
         }
         return $key;
+    }
+
+    //下载学员模板
+    public function downloadstudentexample(){
+        $data = file_get_contents('./uploads/studentdata/uploadExample.xlsx'); // Read the file's contents
+        force_download('学员导入模板.xlsx', $data);
+    }
+
+    //上传课程反馈
+    public function uploadratings()
+    {
+        $this->load->database ();
+        $config['max_size'] =80*1024;
+        $config['upload_path'] = './uploads/ratingsdata/';
+        $config['allowed_types'] = 'xls|xlsx';
+        $config['file_name'] = $file_name = $this->_logininfo['id'] . date("YmdHis");
+        $this->load->library('upload', $config);
+        $res=array('err_code'=>0);
+        if ($this->upload->do_upload('excelFile')) {
+            $file = $this->upload->data();
+            $excelfile = $file_name . $file['file_ext'];
+            $this->load->library('PHPExcel');
+            $objPHPExcel = PHPExcel_IOFactory::load($config['upload_path'] . $excelfile);
+            $sheet = $objPHPExcel->setActiveSheetIndex(0);
+            $highestRow = $sheet->getHighestRow(); // 取得总行数
+            $highestCol = $sheet->getHighestColumn(); // 取得总列数
+            if($highestCol=='B') {
+                for ($row = 2; $row <= $highestRow; $row++) {
+                    $title = $objPHPExcel->getActiveSheet()->getCell('A' . $row)->getValue();//标题
+                    $type = $objPHPExcel->getActiveSheet()->getCell('B' . $row)->getValue();//类型
+                    $data=array('title'=>trim($title),'type'=>trim($type));
+                    //数据验证
+                    if(!empty($title)||!empty($type)){
+                        $vres = $this->validateRatings($row, $data);
+                        if (!$vres['flag']) {//验证不通过则跳出程序
+                            $res=array('err_code'=>3,'msg'=>$vres['msg']);
+                            echo json_encode($res);
+                            return false;
+                        }
+                    }
+                    $res['data'][]=$data;
+                }
+                unlink($config['upload_path'] . $excelfile);
+                echo json_encode($res);
+                return false;
+            }else{
+                $res=array('err_code'=>2,'msg'=>'文件上传失败,数据内容不正确');
+                echo json_encode($res);
+                return false;
+            }
+        }else{
+            $res=array('err_code'=>1,'msg'=>'文件上传失败,文件大小不能大于80M');
+            echo json_encode($res);
+            return false;
+        }
+    }
+
+    //课程反馈数据验证
+    private  function validateRatings($row, $data){
+        $flag=true;
+        $msg='';
+        if(empty($data['title'])){
+            $msg .= '上传失败!第'.$row.'行的标题不能是空的
+';
+            $flag=false;
+        }
+        if(empty($data['type'])){
+            $msg .= '上传失败!第'.$row.'行的题目类型不能是空的
+';
+            $flag=false;
+        }
+        if(strpos($data['type'],'评分')===false&&strpos($data['type'],'开放')===false){
+            $msg .= '上传失败!第'.$row.'行的题目类型不正确
+';
+            $flag=false;
+        }
+        $res=array('flag'=>$flag,'msg'=>$msg);
+        return $res;
+    }
+
+    //下载课程反馈模板
+    public function downloadratingsexample(){
+        $data = file_get_contents('./uploads/ratingsdata/uploadExample.xlsx'); // Read the file's contents
+        force_download('课程反馈导入模板.xlsx', $data);
     }
 
 

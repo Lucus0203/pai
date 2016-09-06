@@ -272,7 +272,7 @@
         <?php if (!empty($msg)) {?>
             <p class="alertBox alert-success"><span class="alert-msg"><?php echo $msg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
         <?php } ?>
-        <div class="tableBox">
+        <div class="tableBox"  data-intro="第二步:创建课程">
             <form id="editForm" method="post" action="" enctype="multipart/form-data">
                 <input name="act" type="hidden" value="act"/>
                 <table cellspacing="0" class="comTable">
@@ -451,3 +451,11 @@
     </div>
     <div class="popmap" style="z-index: 100000;"></div>
 </div>
+
+<!--<link type="text/css" rel="stylesheet" href="--><?php //echo base_url(); ?><!--css/introjs.css"/>-->
+<!--<script type="text/javascript" src="--><?php //echo base_url(); ?><!--js/intro.js"></script>-->
+<!--<script type="text/javascript">-->
+<!--    $(document).ready(function () {-->
+<!--        introJs().setOptions({'showButtons':false,'showBullets':false,'showStepNumbers':false}).start();-->
+<!--    });-->
+<!--</script>-->

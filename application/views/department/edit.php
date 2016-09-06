@@ -158,9 +158,6 @@
             return true;
         }
     }
-    $( window ).unload(function() {
-        alert(1);
-    });
 </script>
 <div class="wrap">
     <div class="textureSide">

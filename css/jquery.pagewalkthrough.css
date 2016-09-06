@@ -275,7 +275,8 @@
 }
 
 #jpWalkthrough #jpwTooltip #tooltipInner .tooltipTitle{
-    font-size: 35px;
+    font-size: 30px;
+    margin-bottom: 20px;
 }
 
 #jpWalkthrough a.prev-step{

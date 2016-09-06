@@ -9,7 +9,7 @@ class Login extends CI_Controller
         parent::__construct();
         $this->load->library(array('session'));
         $this->load->helper(array('form', 'url','captcha'));
-        $this->load->model(array('user_model','student_model','department_model','userloginlog_model', 'company_model', 'purview_model', 'industries_model'));
+        $this->load->model(array('user_model','student_model','teacher_model','department_model','userloginlog_model', 'company_model', 'purview_model', 'industries_model'));
     }
 
 
@@ -125,6 +125,8 @@ class Login extends CI_Controller
                         'department_id'=>$departmentid,
                         'role' => 9);
                     $this->student_model->create($student);
+                    //创建讲师
+                    $this->teacher_model->create(array('name'=>$real_name));
                     //其他部门
                     $d = array('company_code' => $company_code, 'name' => '其他');
                     $this->department_model->create($d);

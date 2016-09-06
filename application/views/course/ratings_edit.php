@@ -9,6 +9,43 @@
         $('[js="removeZuoye"]').live('click',function(){
             $(this).parent().remove();
         });
+
+        $('#excelFileBtn').change(function(){
+            // 检查是否为图像类型
+            var simpleFile = document.getElementById("excelFileBtn").files[0];
+            var name=simpleFile.name;
+            var ext=name.slice(name.indexOf('.'));
+            if(!/xls/.test(name)) {
+                alert("请确保文件类型为excel");
+                return false;
+            }else{
+                //ajax upload
+                var file_data = $('#excelFileBtn').prop('files')[0];
+                var form_data = new FormData();
+                form_data.append('excelFile', file_data);
+                $.ajax({
+                    url: '<?php echo site_url('upload/uploadratings') ?>', // point to server-side PHP script
+                    dataType: 'json',
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: form_data,
+                    type: 'post',
+                    success: function(res){
+                        if(res.err_code=='0'){
+                            $.each(res.data,function(k,obj){
+                                var type=(obj.type.indexOf('开放')!=-1)?'2':'1';
+                                var classname=(type==2)?'kaifang':'pingfen';
+                                var typename=(type==2)?'开放题':'评分题';
+                                $('ul.zuoyeList').append('<li class="'+classname+'">'+typename+'<input name="ratingses[]" type="text" class="iptH37 w600 ml10" value="'+obj.title+'"><input type="hidden" name="type[]" value="'+type+'" /><a href="javascript:;" js="removeZuoye" class="blue ml10">删除</a></li>');
+                            });
+                        }else{
+                            alert(res.msg)
+                        }
+                    }
+                });
+            }
+        });
     });
     function checkform(){
         if($('#anstotal').val()*1>0){
@@ -45,7 +82,9 @@
                             <?php if (!empty($msg)) {?>
                                 <p class="alertBox alert-success mb20"><span class="alert-msg"><?php echo $msg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
                             <?php } ?>
-                            <?php if(count($ratingses)==0){ ?><p class="f14 mb20 gray6">本课程暂未创建课程反馈，请通过以下模板进行创建</p><?php } ?>
+                            <?php if(count($ratingses)==0){ ?>
+                                <p class="f14 mb20 gray6">暂未创建课程反馈，请创建或通过模板导入</p>
+                            <?php } ?>
                             <?php if($anstotal>0){?><p class="yellowTipBox mb20">已有学员提交，修改问题后需要学员重新填写</p><?php } ?>
                                 <ul class="zuoyeList">
                                     <?php foreach ($ratingses as $k=>$h){ ?>
@@ -66,10 +105,10 @@
                                     <?php } ?>
                                 </ul>
 
-                                <div class="ml50 mb20"><a href="javascript:;" class="borBlueH37 mr10" js="addPingfen">添加评分题</a><a href="javascript:;" class="borBlueH37" js="addKaifang">添加开放题</a></div>
-                                
+                                <div class="ml50 mb20"><a href="javascript:;" class="borBlueH37 mr10" js="addPingfen">添加评分题</a><a href="javascript:;" class="borBlueH37 mr10" js="addKaifang">添加开放题</a><a href="javascript:;" onclick="$('#excelFileBtn').click();" class="borBlueH37 mr10 w72 aCenter">导入模板</a><input id="excelFileBtn" type="file" name="excelFile" style="display: none;" autocomplete="off" /><a href="<?php echo site_url('upload/downloadratingsexample') ?>" class="blue">下载模板</a></div>
                                 <div class="aCenter"><input type="submit" class="coBtn" value="保存" /></div>
                         </form>
+
                         </div>
 
                 </div>
