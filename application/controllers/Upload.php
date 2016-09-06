@@ -201,7 +201,7 @@ class Upload extends CI_Controller
                 return false;
             }
         }else{
-            $res=array('err_code'=>1,'msg'=>'文件上传失败,文件大小不能大于80M');
+            $res=array('err_code'=>1,'msg'=>'文件上传失败');
             echo json_encode($res);
             return false;
         }

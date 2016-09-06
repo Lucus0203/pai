@@ -88,19 +88,15 @@
                             <?php if($anstotal>0){?><p class="yellowTipBox mb20">已有学员提交，修改问题后需要学员重新填写</p><?php } ?>
                                 <ul class="zuoyeList">
                                     <?php foreach ($ratingses as $k=>$h){ ?>
-                                    <li class="<?php echo $h['type']==1?'pingfen':'kaifang' ?>"><?php echo $h['type']==1?'评分题':'开放题' ?>
-                                            <input name="ratingses[]" type="text" class="iptH37 w600 ml10 <?php echo ($k==0)?'gray9':'' ?>" <?php echo ($k==0)?'readonly':'' ?> value="<?php echo $h['title'] ?>"><input type="hidden" name="type[]" value="<?php echo $h['type'] ?>" /><?php if($k>0){ ?><a href="javascript:;" js='removeZuoye' class="blue ml10">删除</a><?php } ?>
+                                    <li class="<?php echo $h['type']==1?'pingfen':'kaifang' ?>"><?php echo $h['type']==1?'评分题':'开放题' ?><input name="ratingses[]" type="text" class="iptH37 w600 ml10 <?php echo ($k==0)?'gray9':'' ?>" <?php echo ($k==0)?'readonly':'' ?> value="<?php echo $h['title'] ?>"><input type="hidden" name="type[]" value="<?php echo $h['type'] ?>" /><?php if($k>0){ ?><a href="javascript:;" js='removeZuoye' class="blue ml10">删除</a><?php } ?>
                                         </li>
                                     <?php } ?>
                                     <?php if(count($ratingses)==0){ ?>
-                                        <li class="pingfen">评分题
-                                            <input name="ratingses[]" type="text" class="iptH37 w600 ml10 gray9" value="您对课程的总体评分" readonly ><input type="hidden" name="type[]" value="1" />
+                                        <li class="pingfen">评分题<input name="ratingses[]" type="text" class="iptH37 w600 ml10 gray9" value="您对课程的总体评分" readonly ><input type="hidden" name="type[]" value="1" />
                                         </li>
-                                        <li class="pingfen">评分题
-                                                <input name="ratingses[]" type="text" class="iptH37 w600 ml10" value="这个课程的目标清楚明确"><input type="hidden" name="type[]" value="1" /><a href="javascript:;" js='removeZuoye' class="blue ml10">删除</a>
+                                        <li class="pingfen">评分题<input name="ratingses[]" type="text" class="iptH37 w600 ml10" value="这个课程的目标清楚明确"><input type="hidden" name="type[]" value="1" /><a href="javascript:;" js='removeZuoye' class="blue ml10">删除</a>
                                         </li>
-                                        <li class="kaifang">开放题
-                                            <input name="ratingses[]" type="text" class="iptH37 w600 ml10" value="您认为本次培训有哪些方面给您留下较深的印象？"><input type="hidden" name="type[]" value="2" /><a href="javascript:;" js='removeZuoye' class="blue ml10">删除</a>
+                                        <li class="kaifang">开放题<input name="ratingses[]" type="text" class="iptH37 w600 ml10" value="您认为本次培训有哪些方面给您留下较深的印象？"><input type="hidden" name="type[]" value="2" /><a href="javascript:;" js='removeZuoye' class="blue ml10">删除</a>
                                         </li>
                                     <?php } ?>
                                 </ul>
