@@ -164,7 +164,7 @@ class Upload extends CI_Controller
         $this->load->database ();
         $config['max_size'] =80*1024;
         $config['upload_path'] = './uploads/ratingsdata/';
-        $config['allowed_types'] = 'xls|xlsx';
+        $config['allowed_types'] = '*';
         $config['file_name'] = $file_name = $this->_logininfo['id'] . date("YmdHis");
         $this->load->library('upload', $config);
         $res=array('err_code'=>0);
