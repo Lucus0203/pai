@@ -79,7 +79,7 @@
         var wechat=($('#wechat').attr('checked'))?1:0;
         var discount=$('input[name=discount]:checked').val();
         var numval=minbeds>1000?minbeds*13:minbeds*15;
-        var amount=(numval+200*minbeds01+2000*minbeds02+trainPlan*5000+wechat*500)*discount;
+        var amount=(200*minbeds01+2000*minbeds02+trainPlan*5000+wechat*500)*discount;
         $('.minbedsnum').text(minbeds+'人');
         $('.minbedsAmount').text(numval);
         $('.minbeds01num').text(minbeds01+'个');
@@ -113,7 +113,7 @@
                         <td>培训流程管理</td>
                         <td>培训流程管理，课程发布、报名、签到、课前调研、课前公告、短信通知、课后反馈</td>
                         <td rowspan="4">
-                            <p class="mb10">1、学员数1000人以下，按<span class="red">1500元</span>/100人/年。<br> 2、学员数1500~5000人，按<span class="red">6500元</span>/500人/年。 <br>3、超过5000人请咨询客服详谈。
+                            <p class="mb10">1、学员数1000人以下，按<span class="red">1500元</span>/100人/年。<br> 2、学员数1000~5000人，按<span class="red">6500元</span>/500人/年。 <br>3、超过5000人请咨询客服详谈。
                             </p>
                             <p>
                                 2017年1月1日前免费。</p>
@@ -268,14 +268,14 @@
                     </tr>
                     <tr>
                         <td>年度需求调研</td>
-                        <td>年度需求调研问卷的制作，需求调研的实施与结果收集。</td>
+                        <td>年度需求问卷的制作、调研发放与结果收集。</td>
                         <td>
                             2017年1月1日前免费使用。
                         </td>
                     </tr>
                     <tr>
                         <td>年度培训计划</td>
-                        <td>年度培训开课安排、预算计划及分析。</td>
+                        <td>年度培训计划、年度预算评估与培训计划分析，内训师与供应商资源整合。</td>
                         <td>
                             <span class="red">5000</span>元/年，2017年1月1日前免费使用。
                         </td>
@@ -336,38 +336,38 @@
                     </tr>
                     <tr>
                         <td>职业发展通道</td>
-                        <td>员工职业发展通道</td>
+                        <td>员工职业发展通道。</td>
 
                     </tr>
                     <tr>
                         <td>人才发展计划</td>
-                        <td>梯队建设</td>
+                        <td>人才发展计划、学习地图的开发和人才梯队建设。</td>
 
                     </tr>
                     <tr>
                         <td>直播平台</td>
-                        <td>直播和录播平台，含学员互动和课程管理</td>
+                        <td>E-Learning平台，包括直播、录播、讲师与学员互动、视频资料管理、知识管理等功能。</td>
 
                     </tr>
                     <tr>
                         <td>微课开发工具</td>
-                        <td>微课的开发工具，快速将PPT和语音转化为课程</td>
+                        <td>一键微课开发工具，高效和轻松的课程制作小能手。</td>
 
                     </tr>
                     <tr>
                         <td>考试</td>
-                        <td>考题设计、题库管理、一键发布、考试统计、报表分析</td>
+                        <td>考题设计、题库管理、一键发布、考试统计、报表分析。</td>
 
                     </tr>
                     <tr>
                         <td>学员成长轨迹</td>
-                        <td>企业私有数据分析</td>
+                        <td>企业私有数据分析。</td>
 
                     </tr>
 
                     <tr>
                         <td>课后跟进</td>
-                        <td></td>
+                        <td>培训结果跟进</td>
 
                     </tr>
 
@@ -386,7 +386,7 @@
                     <tr>
                         <td>基础功能 </td>
                         <td class="minbedsnum">100人 </td>
-                        <td class="red minbedsAmount">1500元</td>
+                        <td class="red minbedsAmount" style="text-decoration:line-through;">1500元</td>
                     </tr>
                     <tr class="minbeds01Tr" style="display: none;">
                         <td>基础能力模型 </td>
@@ -417,15 +417,15 @@
                         <td colspan="3">
                             <ul class="listRadio">
                                 <li><label><input name="discount" type="radio" checked value="1">一年</label></li>
-                                <li><label><input name="discount" type="radio" value="0.9">两年(<span class="red">9</span>折)</label></li>
-                                <li><label><input name="discount" type="radio" value="0.85">三年(<span class="red">8.5</span>折)</label></li>
+                                <li><label><input name="discount" type="radio" value="1.8">两年(<span class="red">9</span>折)</label></li>
+                                <li><label><input name="discount" type="radio" value="1.7">三年(<span class="red">8.5</span>折)</label></li>
                             </ul>
 
                         </td>
 
                     </tr>
                 </table>
-                <p class="f16 aRight p15">总价：<span class="red" id="amount">1500</span></p>
+                <p class="f16 aRight p15">总价：<span class="red" id="amount">0</span></p>
 
             </div>
 
