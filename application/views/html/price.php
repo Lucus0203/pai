@@ -388,17 +388,17 @@
                     <tr>
                         <td>基础功能 </td>
                         <td class="minbedsnum">100人 </td>
-                        <td class="red minbedsAmount" style="text-decoration:line-through;">1500元</td>
+                        <td class="red minbedsAmount" style="text-decoration:line-through;">1500</td>
                     </tr>
                     <tr class="minbeds01Tr" style="display: none;">
                         <td>基础能力模型 </td>
                         <td class="minbeds01num">1个 </td>
-                        <td class="red minbeds01Amount">200元</td>
+                        <td class="red minbeds01Amount">200</td>
                     </tr>
                     <tr class="minbeds02Tr" style="display: none;">
                         <td>定制能力模型 </td>
                         <td>1个 </td>
-                        <td class="red minbeds02Amount">2000元</td>
+                        <td class="red minbeds02Amount">2000</td>
                     </tr>
                     <tr class="surveyTr" style="display: none;">
                         <td>年度需求调研</td>
@@ -408,12 +408,12 @@
                     <tr class="trainPlanTr" style="display: none;">
                         <td>年度培训计划</td>
                         <td>1年</td>
-                        <td class="red trainPlanAmount">5000元</td>
+                        <td class="red trainPlanAmount">5000</td>
                     </tr>
                     <tr class="wechatTr" style="display: none;">
                         <td>个性化微信号</td>
                         <td>1个</td>
-                        <td class="red wechatAmount">500元</td>
+                        <td class="red wechatAmount">500</td>
                     </tr>
                     <tr>
                         <td colspan="3">
