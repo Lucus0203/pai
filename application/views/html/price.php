@@ -137,24 +137,24 @@
                 <form id="reservation" class="sidebox">
                     <label for="minbeds">学员数</label>
                     <div id='slider' class="sideList">
-                        <span class="sliderSpan">100</span>
+                        <span class="sliderSpan gray9">100</span>
                         <span class="sliderSpan">&nbsp;</span>
                         <span class="sliderSpan">&nbsp;</span>
                         <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan">500</span>
+                        <span class="sliderSpan gray9">500</span>
                         <span class="sliderSpan">&nbsp;</span>
                         <span class="sliderSpan">&nbsp;</span>
                         <span class="sliderSpan">&nbsp;</span>
                         <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan">1000</span>
+                        <span class="sliderSpan gray9">1000</span>
                         <span class="sliderSpan">&nbsp;</span>
                         <span class="sliderSpan">&nbsp;</span>
                         <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan">3000</span>
+                        <span class="sliderSpan gray9">3000</span>
                         <span class="sliderSpan">&nbsp;</span>
                         <span class="sliderSpan">&nbsp;</span>
                         <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan" style="width: 25px;">5000</span>
+                        <span class="sliderSpan gray9 noborder" style="width: 25px;">5000</span>
                     </div>
                     <select name="minbeds" id="minbeds" class="sectside">
                         <option value="100">100</option>
@@ -203,7 +203,13 @@
                 <form id="reservation01" class="sidebox">
                     <label for="minbeds01">能力模型基础版</label>
                     <div id='slider01' class="sideList" style="width: 400px;">
-                        <span class="aRight" style="display: block">6</span>
+                        <span class="gray9" style="display: block">
+                            <span class="sliderSpan" style="width: 64px;">1</span>
+                            <span class="sliderSpan" style="width: 64px;">2</span>
+                            <span class="sliderSpan" style="width: 63px;">3</span>
+                            <span class="sliderSpan" style="width: 62px;">4</span>
+                            <span class="sliderSpan" style="width: 62px;">5</span>
+                            <span class="sliderSpan noborder" style="width: 58px;">6</span></span>
                     </div>
 
                     <select name="minbeds01" id="minbeds01" class="sectside">
@@ -221,7 +227,17 @@
                 <form id="reservation02" class="sidebox">
                     <label for="minbeds02">能力模型定制版</label>
                     <div id='slider02' class="sideList" style="width: 400px;">
-                        <span class="aRight" style="display: block">10</span>
+                        <span class="gray9" style="display: block">
+                            <span class="sliderSpan" style="width: 35px;">1</span>
+                            <span class="sliderSpan" style="width: 35px;">2</span>
+                            <span class="sliderSpan" style="width: 35px;">3</span>
+                            <span class="sliderSpan" style="width: 35px;">4</span>
+                            <span class="sliderSpan" style="width: 35px;">5</span>
+                            <span class="sliderSpan" style="width: 35px;">6</span>
+                            <span class="sliderSpan" style="width: 35px;">7</span>
+                            <span class="sliderSpan" style="width: 35px;">8</span>
+                            <span class="sliderSpan" style="width: 35px;">9</span>
+                            <span class="sliderSpan noborder" style="width: 38px;">10</span></span>
                     </div>
 
                     <select name="minbeds02" id="minbeds02" class="sectside">
