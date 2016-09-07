@@ -53,23 +53,18 @@
                                 <?php if($anstotal>0){?><p class="yellowTipBox mb20">已有学员提交，修改问题后需要学员重新填写</p><?php } ?>
                                 <ul class="zuoyeList">
                                     <?php foreach ($surveys as $k=>$h){ ?>
-                                        <li><span class="num"><?php echo ($k+1) ?></span>
-                                            <input name="surveys[]" type="text" class="iptH37 w600 ml10" value="<?php echo $h['title'] ?>"><a href="javascript:;" js='removeZuoye' class="blue ml10">删除</a>
+                                        <li><span class="num"><?php echo ($k+1) ?></span><input name="surveys[]" type="text" class="iptH37 w600 ml10" value="<?php echo $h['title'] ?>"><a href="javascript:;" js='removeZuoye' class="blue ml10">删除</a>
                                         </li>
                                     <?php } ?>
                                     <?php if(count($surveys)==0){ ?>
-                                        <li><span class="num">1</span>
-                                                <input name="surveys[]" type="text" class="iptH37 w600 ml10" value="请描述培训要解决的主要问题？"><a href="javascript:;" js="removeZuoye" class="blue ml10">删除</a>
+                                        <li><span class="num">1</span><input name="surveys[]" type="text" class="iptH37 w600 ml10" value="请描述培训要解决的主要问题？"><a href="javascript:;" js="removeZuoye" class="blue ml10">删除</a>
                                         </li>
-                                        <li><span class="num">2</span>
-                                                <input name="surveys[]" type="text" class="iptH37 w600 ml10" value="您期望的培训效果？"><a href="javascript:;" js="removeZuoye" class="blue ml10">删除</a>
+                                        <li><span class="num">2</span><input name="surveys[]" type="text" class="iptH37 w600 ml10" value="您期望的培训效果？"><a href="javascript:;" js="removeZuoye" class="blue ml10">删除</a>
                                         </li>
-                                        <li><span class="num">3</span>
-                                            <input name="surveys[]" type="text" class="iptH37 w600 ml10" value=""><a href="javascript:;" js="removeZuoye" class="blue ml10">删除</a>
+                                        <li><span class="num">3</span><input name="surveys[]" type="text" class="iptH37 w600 ml10" value=""><a href="javascript:;" js="removeZuoye" class="blue ml10">删除</a>
                                         </li>
                                     <?php }else{ ?>
-                                        <li><span class="num"><?php echo ($k>=0)?($k+2):1 ?></span>
-                                            <input name="surveys[]" type="text" class="iptH37 w600 ml10" value=""><a href="javascript:;" js="removeZuoye" class="blue ml10">删除</a>
+                                        <li><span class="num"><?php echo ($k>=0)?($k+2):1 ?></span><input name="surveys[]" type="text" class="iptH37 w600 ml10" value=""><a href="javascript:;" js="removeZuoye" class="blue ml10">删除</a>
                                         </li>
                                     <?php } ?>
                                 </ul>

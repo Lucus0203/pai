@@ -34,5 +34,11 @@ class Html extends CI_Controller {
         $this->load->view ( 'html/ability_custom');
         $this->load->view ( 'footer' );
     }
+
+    public function price(){
+        $this->load->view ( 'header' );
+        $this->load->view ( 'html/price');
+        $this->load->view ( 'footer' );
+    }
 	
 }
