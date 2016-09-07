@@ -91,7 +91,7 @@
         if(requireSurvey>0){$('.surveyTr').show();}else{$('.surveyTr').hide();}
         if(trainPlan>0){$('.trainPlanTr').show();}else{$('.trainPlanTr').hide();}
         if(wechat>0){$('.wechatTr').show();}else{$('.wechatTr').hide();}
-        $('#amount').text(amount+'元');
+        $('#amount').text(Math.round(amount)+'元');
 
     }
 </script>
