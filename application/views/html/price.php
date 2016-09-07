@@ -131,7 +131,7 @@
                     </tr>
                     <tr>
                         <td>师资管理</td>
-                        <td>师资管理</td>
+                        <td>内训师和外部讲师管理</td>
 
                     </tr>
                 </table>
@@ -148,15 +148,15 @@
                         <span class="sliderSpan">&nbsp;</span>
                         <span class="sliderSpan">&nbsp;</span>
                         <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan gray9">1000</span>
+                        <span class="sliderSpan gray9" style="font-size: 12px;">1千</span>
                         <span class="sliderSpan">&nbsp;</span>
                         <span class="sliderSpan">&nbsp;</span>
                         <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan gray9">3000</span>
+                        <span class="sliderSpan gray9" style="font-size: 12px;">3千</span>
                         <span class="sliderSpan">&nbsp;</span>
                         <span class="sliderSpan">&nbsp;</span>
                         <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan gray9 noborder" style="width: 25px;">5000</span>
+                        <span class="sliderSpan gray9 noborder" style="width: 25px;font-size: 12px;">5千</span>
                     </div>
                     <select name="minbeds" id="minbeds" class="sectside">
                         <option value="100">100</option>
@@ -277,7 +277,7 @@
                         <td>年度培训计划</td>
                         <td>年度培训计划、年度预算评估与培训计划分析，内训师与供应商资源整合。</td>
                         <td>
-                            <span class="red">5000</span>元/年，2017年1月1日前免费使用。
+                            <span class="red">5000</span>元/年。
                         </td>
 
                     </tr>
@@ -364,11 +364,13 @@
                         <td>企业私有数据分析。</td>
 
                     </tr>
-
                     <tr>
                         <td>课后跟进</td>
-                        <td>培训结果跟进</td>
-
+                        <td>培训结果跟进，增强培训落地性，员工经理和学员双角色版本。</td>
+                    </tr>
+                    <tr>
+                        <td>系统对接</td>
+                        <td>与企业现有ERP、OA、SAAS系统的对接。</td>
                     </tr>
 
                 </table>
