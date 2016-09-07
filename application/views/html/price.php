@@ -91,7 +91,7 @@
         if(requireSurvey>0){$('.surveyTr').show();}else{$('.surveyTr').hide();}
         if(trainPlan>0){$('.trainPlanTr').show();}else{$('.trainPlanTr').hide();}
         if(wechat>0){$('.wechatTr').show();}else{$('.wechatTr').hide();}
-        $('#amount').text(amount);
+        $('#amount').text(amount+'元');
 
     }
 </script>
@@ -427,7 +427,7 @@
 
                     </tr>
                 </table>
-                <p class="f16 aRight p15">总价：<span class="red" id="amount">0</span></p>
+                <p class="f16 aRight p15">总价：<span class="red" id="amount">0元</span></p>
 
             </div>
 
