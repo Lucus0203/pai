@@ -22,7 +22,9 @@
             }
         });
         $("#minbeds").on("change", function() {
-            slider.slider("value", this.selectedIndex);
+            var v=$(this).val();
+            v=(v>1000)?(1000+(v-1000)/5):v;
+            slider.slider("value", v );
             calculate();
         });
         /*精度条01*/
