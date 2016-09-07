@@ -116,7 +116,7 @@
                             <p class="mb10">1、学员数1000人以下，按<span class="red">1500元</span>/100人/年。<br> 2、学员数1000~5000人，按<span class="red">6500元</span>/500人/年。 <br>3、超过5000人请咨询客服详谈。
                             </p>
                             <p>
-                                2017年1月1日前免费。</p>
+                                2017年1月1日前注册企业长期免费。</p>
                         </td>
                     </tr>
                     <tr>
@@ -420,7 +420,7 @@
                             <ul class="listRadio">
                                 <li><label><input name="discount" type="radio" checked value="1">一年</label></li>
                                 <li><label><input name="discount" type="radio" value="1.8">两年(<span class="red">9</span>折)</label></li>
-                                <li><label><input name="discount" type="radio" value="1.7">三年(<span class="red">8.5</span>折)</label></li>
+                                <li><label><input name="discount" type="radio" value="2.55">三年(<span class="red">8.5</span>折)</label></li>
                             </ul>
 
                         </td>
