@@ -115,8 +115,7 @@
                         <td rowspan="4">
                             <p class="mb10">1、学员数1000人以下，按<span class="red">1500元</span>/100人/年。<br> 2、学员数1000~5000人，按<span class="red">6500元</span>/500人/年。 <br>3、超过5000人请咨询客服详谈。
                             </p>
-                            <p>
-                                2017年1月1日前注册企业长期免费。</p>
+                            <p class="red">2017年1月1日前注册企业长期免费。</p>
                         </td>
                     </tr>
                     <tr>
@@ -139,24 +138,24 @@
                 <form id="reservation" class="sidebox">
                     <label for="minbeds">学员数</label>
                     <div id='slider' class="sideList">
-                        <span class="sliderSpan gray9">100</span>
-                        <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan gray9">500</span>
-                        <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan">&nbsp;</span>
+                        <span class="sliderSpan gray9 noborder" style="font-size: 12px;">100</span>
+                        <span class="sliderSpan noborder">&nbsp;</span>
+                        <span class="sliderSpan noborder">&nbsp;</span>
+                        <span class="sliderSpan noborder">&nbsp;</span>
+                        <span class="sliderSpan gray9" style="font-size: 12px;">500</span>
+                        <span class="sliderSpan noborder">&nbsp;</span>
+                        <span class="sliderSpan noborder">&nbsp;</span>
+                        <span class="sliderSpan noborder">&nbsp;</span>
+                        <span class="sliderSpan noborder">&nbsp;</span>
                         <span class="sliderSpan gray9" style="font-size: 12px;">1千</span>
-                        <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan">&nbsp;</span>
+                        <span class="sliderSpan noborder">&nbsp;</span>
+                        <span class="sliderSpan noborder">&nbsp;</span>
+                        <span class="sliderSpan noborder">&nbsp;</span>
                         <span class="sliderSpan gray9" style="font-size: 12px;">3千</span>
-                        <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan">&nbsp;</span>
-                        <span class="sliderSpan gray9 noborder" style="width: 25px;font-size: 12px;">5千</span>
+                        <span class="sliderSpan noborder">&nbsp;</span>
+                        <span class="sliderSpan noborder">&nbsp;</span>
+                        <span class="sliderSpan noborder">&nbsp;</span>
+                        <span class="sliderSpan gray9 noborder" style="width: 23px;font-size: 12px;">5千</span>
                     </div>
                     <select name="minbeds" id="minbeds" class="sectside">
                         <option value="100">100</option>
