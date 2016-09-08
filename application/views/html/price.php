@@ -139,8 +139,8 @@
                     <label for="minbeds">学员数</label>
                     <div id='slider' class="sideList">
                         <span class="sliderSpan gray9" style="width:100px; font-size: 12px;">500</span>
-                        <span class="sliderSpan gray9" style="width:100px; font-size: 12px;">1千</span>
-                        <span class="sliderSpan gray9" style="width:128px; font-size: 12px;">3千</span>
+                        <span class="sliderSpan gray9" style="width:128px; font-size: 12px;">1千</span>
+                        <span class="sliderSpan gray9" style="width:100px; font-size: 12px;">3千</span>
                         <span class="sliderSpan gray9 noborder" style="width: 104px;font-size: 12px;">5千</span>
                     </div>
                     <select name="minbeds" id="minbeds" class="sectside">
