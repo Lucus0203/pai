@@ -145,6 +145,7 @@ class Html extends CI_Controller {
 //        $objWriter->save('php://output');
 
         //sendmail
+        print_r($this->_logininfo);
         $this->email->clear();
         $company = $this->company_model->get_row(array('code' => $this->_logininfo['company_code']));
         $tomail = '419993435@qq.com';//'service@trainingpie.com';
