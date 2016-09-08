@@ -384,45 +384,46 @@
                     <col width="40%" />
                     <tr>
                         <td>功能</td>
-                        <td>数量</td>
-                        <td>价格</td>
+                        <td class="aCenter">数量</td>
+                        <td class="aRight">价格</td>
                     </tr>
                     <tr>
                         <td>基础功能 </td>
-                        <td class="minbedsnum">100人 </td>
-                        <td class="red minbedsAmount" style="text-decoration:line-through;">1500</td>
+                        <td class="aCenter minbedsnum">100人 </td>
+                        <td class="red minbedsAmount aRight" style="text-decoration:line-through;">1500</td>
                     </tr>
                     <tr class="minbeds01Tr" style="display: none;">
                         <td>基础能力模型 </td>
-                        <td class="minbeds01num">1个 </td>
-                        <td class="red minbeds01Amount">200</td>
+                        <td class="aCenter minbeds01num">1个 </td>
+                        <td class="red minbeds01Amount aRight">200</td>
                     </tr>
                     <tr class="minbeds02Tr" style="display: none;">
                         <td>定制能力模型 </td>
-                        <td class="minbeds02num">1个 </td>
-                        <td class="red minbeds02Amount">2000</td>
+                        <td class="aCenter minbeds02num">1个 </td>
+                        <td class="red minbeds02Amount aRight">2000</td>
                     </tr>
                     <tr class="surveyTr" style="display: none;">
                         <td>年度需求调研</td>
-                        <td>1年</td>
-                        <td class="red">免费</td>
+                        <td class="aCenter">1年</td>
+                        <td class="red aRight">免费</td>
                     </tr>
                     <tr class="trainPlanTr" style="display: none;">
                         <td>年度培训计划</td>
-                        <td>1年</td>
-                        <td class="red trainPlanAmount">3000</td>
+                        <td class="aCenter">1年</td>
+                        <td class="red trainPlanAmount aRight">3000</td>
                     </tr>
                     <tr class="wechatTr" style="display: none;">
                         <td>个性化微信号</td>
-                        <td>1个</td>
-                        <td class="red wechatAmount">500</td>
+                        <td class="aCenter">1个</td>
+                        <td class="red wechatAmount aRight">500</td>
                     </tr>
                     <tr>
-                        <td colspan="3">
-                            <ul class="listRadio">
-                                <li><label><input name="discount" type="radio" checked value="1">一年</label></li>
-                                <li><label><input name="discount" type="radio" value="1.8">两年(<span class="red">9</span>折)</label></li>
+                        <td colspan="3" class="aRight">
+                            <ul class="listRadio fRight">
                                 <li><label><input name="discount" type="radio" value="2.55">三年(<span class="red">8.5</span>折)</label></li>
+                                <li><label><input name="discount" type="radio" value="1.8">两年(<span class="red">9</span>折)</label></li>
+                                <li class="ml0"><label><input name="discount" type="radio" checked value="1">一年</label></li>
+
                             </ul>
 
                         </td>
@@ -430,7 +431,7 @@
                     </tr>
                 </table>
                 <p class="f16 aRight p15">总价：<span class="red" id="amount">0元</span></p>
-                <p class="mb20 f16 aCenter gray9">下单请联系:<a class="blue" href="tel:021-61723727">021-61723727</a></p>
+                <p class="p15 f14 aRight gray9" style="border-top:1px solid #dbdbdb;">下单请联系:<a class="ml10 f18 blue" href="tel:021-61723727">021-61723727</a></p>
             </div>
 
         </div>
