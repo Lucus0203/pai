@@ -314,48 +314,52 @@
                 <div class="ttl01">后续功能</div>
                 <table class="tableA mb20">
                     <col width="20%" />
+                    <col width="62%" />
+                    <col width="18%" />
                     <tr>
                         <th>功能</th>
                         <th>内容</th>
-
-                    </tr>
-                    <tr>
-                        <td>职业发展通道</td>
-                        <td>员工职业发展通道。</td>
-
-                    </tr>
-                    <tr>
-                        <td>人才发展计划</td>
-                        <td>人才发展计划、学习地图的开发和人才梯队建设。</td>
-
-                    </tr>
-                    <tr>
-                        <td>直播平台</td>
-                        <td>E-Learning平台，包括直播、录播、讲师与学员互动、视频资料管理、知识管理等功能。</td>
-
-                    </tr>
-                    <tr>
-                        <td>微课开发工具</td>
-                        <td>一键微课开发工具，高效和轻松的课程制作小能手。</td>
-
+                        <th>上线预计</th>
                     </tr>
                     <tr>
                         <td>考试</td>
                         <td>考题设计、题库管理、一键发布、考试统计、报表分析。</td>
-
+                        <td class="aCenter">2017年1月</td>
                     </tr>
                     <tr>
                         <td>学员成长轨迹</td>
                         <td>企业私有数据分析。</td>
-
+                        <td class="aCenter">2017年2月</td>
                     </tr>
                     <tr>
                         <td>课后跟进</td>
                         <td>培训结果跟进，增强培训落地性，员工经理和学员双角色版本。</td>
+                        <td class="aCenter">2017年2月</td>
                     </tr>
                     <tr>
                         <td>系统对接</td>
                         <td>与企业现有ERP、OA、SAAS系统的对接。</td>
+                        <td class="aCenter">2017年4月</td>
+                    </tr>
+                    <tr>
+                        <td>职业发展通道</td>
+                        <td>员工职业发展通道。</td>
+                        <td class="aCenter">2017年中旬</td>
+                    </tr>
+                    <tr>
+                        <td>人才发展计划</td>
+                        <td>人才发展计划、学习地图的开发和人才梯队建设。</td>
+                        <td class="aCenter">2017年中旬</td>
+                    </tr>
+                    <tr>
+                        <td>直播平台</td>
+                        <td>E-Learning平台，包括直播、录播、讲师与学员互动、视频资料管理、知识管理等功能。</td>
+                        <td class="aCenter">2017年下旬</td>
+                    </tr>
+                    <tr>
+                        <td>微课开发工具</td>
+                        <td>一键微课开发工具，高效和轻松的课程制作小能手。</td>
+                        <td class="aCenter">2017年下旬</td>
                     </tr>
 
                 </table>
