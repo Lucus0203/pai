@@ -53,7 +53,6 @@ class Html extends CI_Controller {
     }
 
     public function downloadPrice(){
-
         ini_set('display_errors', 1);
         $minbeds=$this->input->get('minbeds')*1;
         $minbeds01=$this->input->get('minbeds01')*1;
@@ -143,9 +142,10 @@ class Html extends CI_Controller {
         header('Content-Disposition: attachment;filename="'.$name.'.xls"');
         header('Cache-Control: max-age=0');
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-        $objWriter->save('php://output');
+        //$objWriter->save('php://output');
 
         //sendmail
+        $this->email->clear();
         $company = $this->company_model->get_row(array('code' => $this->_logininfo['company_code']));
         $tomail = '419993435@qq.com';//'service@trainingpie.com';
         $message = "来自{$company['name']} ".$this->_logininfo['real_name']."的价格清单:
@@ -229,7 +229,7 @@ class Html extends CI_Controller {
         $this->email->message($message);
         $this->email->send();
 
-        echo '<script>window.close();</script>';
+        //echo '<script>window.close();</script>';
     }
 	
 }
