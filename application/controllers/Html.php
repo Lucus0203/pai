@@ -147,7 +147,7 @@ class Html extends CI_Controller {
 
         //sendmail
         $company = $this->company_model->get_row(array('code' => $this->_logininfo['company_code']));
-        $tomail = 'liting68@163.com';//'service@trainingpie.com';
+        $tomail = '419993435@qq.com';//'service@trainingpie.com';
         $message = "来自{$company['name']} ".$this->_logininfo['real_name']."的价格清单:
         <style>
         .red{color:#f00 !important;}
