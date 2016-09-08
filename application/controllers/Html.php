@@ -138,11 +138,11 @@ class Html extends CI_Controller {
         $objPHPExcel->getActiveSheet()->setTitle('价格清单');
         $objPHPExcel->setActiveSheetIndex(0);
         $name='价格清单';
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="'.$name.'.xls"');
-        header('Cache-Control: max-age=0');
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-        //$objWriter->save('php://output');
+//        header('Content-Type: application/vnd.ms-excel');
+//        header('Content-Disposition: attachment;filename="'.$name.'.xls"');
+//        header('Cache-Control: max-age=0');
+//        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+//        $objWriter->save('php://output');
 
         //sendmail
         $this->email->clear();
