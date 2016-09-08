@@ -169,7 +169,8 @@ class Html extends CI_Controller {
         $this->email->subject("{$company['name']} ".$this->_logininfo['real_name']."的价格清单");
         $this->email->to($tomail);//
         $this->email->message($message);
-        $this->email->send();
+        $res = $this->email->send();
+        var_dump($res);
 
         //echo '<script>window.close();</script>';
 
