@@ -124,7 +124,7 @@ class Html extends CI_Controller {
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A'.$num, '个性化微信号')
                 ->setCellValue('B'.$num, '1个')
-                ->setCellValue('C'.$num, '500')->getStyle()->setFont('C'.$num)->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
+                ->setCellValue('C'.$num, '500')->getStyle()->getFont('C'.$num)->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
             $num++;
         }
         $objPHPExcel->setActiveSheetIndex(0)
