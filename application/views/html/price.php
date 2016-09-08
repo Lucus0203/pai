@@ -79,7 +79,7 @@
         var wechat=($('#wechat').attr('checked'))?1:0;
         var discount=$('input[name=discount]:checked').val();
         var numval=minbeds>1000?minbeds*13:minbeds*15;
-        var amount=(200*minbeds01+2000*minbeds02+trainPlan*5000+wechat*500)*discount;
+        var amount=(200*minbeds01+2000*minbeds02+trainPlan*3000+wechat*500)*discount;
         $('.minbedsnum').text(minbeds+'人');
         $('.minbedsAmount').text(numval);
         $('.minbeds01num').text(minbeds01+'个');
@@ -262,7 +262,7 @@
                         <td>年度培训计划</td>
                         <td>年度培训计划、年度预算评估与培训计划分析，内训师与供应商资源整合。</td>
                         <td>
-                            <span class="red">5000</span>元/年。
+                            <span class="red">3000</span>元/年。
                         </td>
 
                     </tr>
@@ -393,7 +393,7 @@
                     <tr class="trainPlanTr" style="display: none;">
                         <td>年度培训计划</td>
                         <td>1年</td>
-                        <td class="red trainPlanAmount">5000</td>
+                        <td class="red trainPlanAmount">3000</td>
                     </tr>
                     <tr class="wechatTr" style="display: none;">
                         <td>个性化微信号</td>
