@@ -60,6 +60,7 @@ class Html extends CI_Controller {
     }
 
     public function downloadPrice(){
+        ini_set('display_errors', 1);
         $minbeds=$this->input->get('minbeds')*1;
         $minbeds01=$this->input->get('minbeds01')*1;
         $minbeds02=$this->input->get('minbeds02')*1;
