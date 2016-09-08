@@ -53,6 +53,8 @@ class Html extends CI_Controller {
     }
 
     public function downloadPrice(){
+
+        ini_set('display_errors', 1);
         $minbeds=$this->input->get('minbeds')*1;
         $minbeds01=$this->input->get('minbeds01')*1;
         $minbeds02=$this->input->get('minbeds02')*1;
@@ -145,7 +147,7 @@ class Html extends CI_Controller {
 
         //sendmail
         $company = $this->company_model->get_row(array('code' => $this->_logininfo['company_code']));
-        $tomail = 'service@trainingpie.com';
+        $tomail = 'liting68@163.com';//'service@trainingpie.com';
         $message = "来自{$company['name']} ".$this->_logininfo['real_name']."的价格清单:
         <style>
         .red{color:#f00 !important;}
