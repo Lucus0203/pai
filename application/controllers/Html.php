@@ -47,13 +47,19 @@ class Html extends CI_Controller {
     }
 
     public function price(){
-        $this->load->view ( 'header' );
-        $this->load->view ( 'html/price');
-        $this->load->view ( 'footer' );
+        $this->_logininfo = $this->session->userdata('loginInfo');
+        if (empty($this->_logininfo)) {
+            $this->session->set_userdata('action_uri', current_url());
+            redirect('login', 'index');
+        } else {
+            $this->session->unset_userdata('action_uri');
+            $this->load->view ( 'header' );
+            $this->load->view ( 'html/price');
+            $this->load->view ( 'footer' );
+        }
     }
 
     public function downloadPrice(){
-        ini_set('display_errors', 1);
         $minbeds=$this->input->get('minbeds')*1;
         $minbeds01=$this->input->get('minbeds01')*1;
         $minbeds02=$this->input->get('minbeds02')*1;
@@ -155,82 +161,82 @@ class Html extends CI_Controller {
                 </tr>
             </table>
             <p class=\"f16 aRight p15\">总价：<span class=\"red\" id=\"amount\">".$amount."元</span></p>";
-        $message.='<p>发送时间'. date("Y年m月d日").'</p>';
+        $message.='<p>发送时间'. date("Y年m月d日 H:i:s").'</p>';
         $this->email->clear();
-        $tomail = '419993435@qq.com';
-        $this->email->from('service@trainingpie.com', '培训派');
-        $this->email->to($tomail);//
+        $tomail = 'service@trainingpie.com';
+        $this->email->from($this->_logininfo['email'], $company['name']);
         $this->email->subject("{$company['name']} ".$this->_logininfo['real_name']."的价格清单");
+        $this->email->to($tomail);//
         $this->email->message($message);
         $this->email->send();
 
         //echo '<script>window.close();</script>';
 
         //export
-//        $this->load->library('PHPExcel');
-//        $objPHPExcel = new PHPExcel();
-//        $objPHPExcel -> getDefaultStyle() -> getFont() -> setName("微软雅黑") -> setSize("14");//设置默认字体为微软雅黑，大小为14
-//        $objPHPExcel->setActiveSheetIndex(0)
-//            ->setCellValue('A1', '功能')
-//            ->setCellValue('B1', '数量')
-//            ->setCellValue('C1', '价格')
-//            ->setCellValue('A2', '基础功能')
-//            ->setCellValue('B2', $minbeds.'人')
-//            ->setCellValue('C2', $numval)->getStyle('C2')->getFont()->setStrikethrough(true)->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
-//        $num=3;
-//        if($minbeds01>0){
-//            $objPHPExcel->setActiveSheetIndex(0)
-//                ->setCellValue('A'.$num, '基础能力模型')
-//                ->setCellValue('B'.$num, $minbeds01.'个')
-//                ->setCellValue('C'.$num, 200*$minbeds01)->getStyle('C'.$num)->getFont()->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
-//            $num++;
-//        }
-//        if($minbeds02>0){
-//            $objPHPExcel->setActiveSheetIndex(0)
-//                ->setCellValue('A'.$num, '定制能力模型')
-//                ->setCellValue('B'.$num, $minbeds02.'个')
-//                ->setCellValue('C'.$num, 2000*$minbeds02)->getStyle('C'.$num)->getFont()->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
-//            $num++;
-//        }
-//        if($requireSurvey>0){
-//            $objPHPExcel->setActiveSheetIndex(0)
-//                ->setCellValue('A'.$num, '年度需求调研')
-//                ->setCellValue('B'.$num, '1年')
-//                ->setCellValue('C'.$num, '免费')->getStyle()->getFont('C'.$num)->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
-//            $num++;
-//        }
-//        if($trainPlan>0){
-//            $objPHPExcel->setActiveSheetIndex(0)
-//                ->setCellValue('A'.$num, '年度培训计划')
-//                ->setCellValue('B'.$num, '1年')
-//                ->setCellValue('C'.$num, '3000')->getStyle()->getFont('C'.$num)->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
-//            $num++;
-//        }
-//        if($wechat>0){
-//            $objPHPExcel->setActiveSheetIndex(0)
-//                ->setCellValue('A'.$num, '个性化微信号')
-//                ->setCellValue('B'.$num, '1个')
-//                ->setCellValue('C'.$num, '500')->getStyle()->getFont('C'.$num)->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
-//            $num++;
-//        }
-//        $objPHPExcel->setActiveSheetIndex(0)
-//            ->setCellValue('A'.$num, '时间')
-//            ->setCellValue('B'.$num, $year.'年')
-//            ->setCellValue('C'.$num, $free)->getStyle('C'.$num)->getFont()->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
-//        $objPHPExcel->setActiveSheetIndex(0)
-//            ->setCellValue('A'.($num+1), '总计')
-//            ->setCellValue('C'.($num+1), $amount)->getStyle('C'.($num+1))->getFont()->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
-//
-//
-//        $objPHPExcel->getActiveSheet()->setTitle('价格清单');
-//        $objPHPExcel->setActiveSheetIndex(0);
-//        $name='价格清单';
-//        header('Content-Type: application/vnd.ms-excel');
-//        header('Content-Disposition: attachment;filename="'.$name.'.xls"');
-//        header('Cache-Control: max-age=0');
-//        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-//        $objWriter->save('php://output');
-//
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel -> getDefaultStyle() -> getFont() -> setName("微软雅黑") -> setSize("14");//设置默认字体为微软雅黑，大小为14
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', '功能')
+            ->setCellValue('B1', '数量')
+            ->setCellValue('C1', '价格')
+            ->setCellValue('A2', '基础功能')
+            ->setCellValue('B2', $minbeds.'人')
+            ->setCellValue('C2', $numval)->getStyle('C2')->getFont()->setStrikethrough(true)->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
+        $num=3;
+        if($minbeds01>0){
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$num, '基础能力模型')
+                ->setCellValue('B'.$num, $minbeds01.'个')
+                ->setCellValue('C'.$num, 200*$minbeds01)->getStyle('C'.$num)->getFont()->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
+            $num++;
+        }
+        if($minbeds02>0){
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$num, '定制能力模型')
+                ->setCellValue('B'.$num, $minbeds02.'个')
+                ->setCellValue('C'.$num, 2000*$minbeds02)->getStyle('C'.$num)->getFont()->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
+            $num++;
+        }
+        if($requireSurvey>0){
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$num, '年度需求调研')
+                ->setCellValue('B'.$num, '1年')
+                ->setCellValue('C'.$num, '免费')->getStyle()->getFont('C'.$num)->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
+            $num++;
+        }
+        if($trainPlan>0){
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$num, '年度培训计划')
+                ->setCellValue('B'.$num, '1年')
+                ->setCellValue('C'.$num, '3000')->getStyle()->getFont('C'.$num)->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
+            $num++;
+        }
+        if($wechat>0){
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$num, '个性化微信号')
+                ->setCellValue('B'.$num, '1个')
+                ->setCellValue('C'.$num, '500')->getStyle()->getFont('C'.$num)->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
+            $num++;
+        }
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A'.$num, '时间')
+            ->setCellValue('B'.$num, $year.'年')
+            ->setCellValue('C'.$num, $free)->getStyle('C'.$num)->getFont()->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A'.($num+1), '总计')
+            ->setCellValue('C'.($num+1), $amount)->getStyle('C'.($num+1))->getFont()->setColor( new PHPExcel_Style_Color( PHPExcel_Style_Color::COLOR_RED ) );
+
+
+        $objPHPExcel->getActiveSheet()->setTitle('价格清单');
+        $objPHPExcel->setActiveSheetIndex(0);
+        $name='价格清单';
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'.$name.'.xls"');
+        header('Cache-Control: max-age=0');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+
     }
 	
 }
