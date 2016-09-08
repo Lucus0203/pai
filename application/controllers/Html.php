@@ -164,7 +164,7 @@ class Html extends CI_Controller {
         $message.='<p>发送时间'. date("Y年m月d日 H:i:s").'</p>';
         $this->email->clear();
         $tomail = 'service@trainingpie.com';//'service@trainingpie.com';
-        $this->email->from('service@trainingpie.com', $company['name']);//$this->_logininfo['email']
+        $this->email->from('419993435@qq.com', $company['name']);//$this->_logininfo['email']
         $this->email->subject("{$company['name']} ".$this->_logininfo['real_name']."的价格清单");
         $this->email->to($tomail);//
         $this->email->message($message);
