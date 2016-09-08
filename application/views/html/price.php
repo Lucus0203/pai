@@ -69,6 +69,18 @@
             zIndex: 999
         });
         $('#requireSurvey,#trainPlan,#wechat,input[name=discount]').change(function(){calculate();});
+        $('#downloadPrice').click(function(){
+            var minbeds=$('#minbeds').val()*1;
+            var minbeds01=$('#minbeds01').val()*1;
+            var minbeds02=$('#minbeds02').val()*1;
+            var requireSurvey=($('#requireSurvey').attr('checked'))?1:0;
+            var trainPlan=($('#trainPlan').attr('checked'))?1:0;
+            var wechat=($('#wechat').attr('checked'))?1:0;
+            var discount=$('input[name=discount]:checked').val();
+            var str='<?php echo site_url('html/downloadPrice')?>?minbeds='+minbeds+'&minbeds01='+minbeds01+'&minbeds02='+minbeds02+'&requireSurvey='+requireSurvey+'&trainPlan='+trainPlan+'&wechat='+wechat+'&discount='+discount;
+            window.open(str);
+            return false;
+        });
     })
     function calculate(){
         var minbeds=$('#minbeds').val()*1;
@@ -366,7 +378,8 @@
             </div>
 
             <div class="zifeiRight">
-                <div class="ttl01">价格清单：</div>
+                <div class="ttl01" style="padding-right: 0;">价格清单：<a id="downloadPrice" href="#" class="borBlueBtnH28 f14 fRight">下载清单</a>
+                </div>
                 <table class="tableB">
                     <col width="40%" />
                     <tr>
@@ -386,7 +399,7 @@
                     </tr>
                     <tr class="minbeds02Tr" style="display: none;">
                         <td>定制能力模型 </td>
-                        <td>1个 </td>
+                        <td class="minbeds02num">1个 </td>
                         <td class="red minbeds02Amount">2000</td>
                     </tr>
                     <tr class="surveyTr" style="display: none;">
@@ -417,7 +430,7 @@
                     </tr>
                 </table>
                 <p class="f16 aRight p15">总价：<span class="red" id="amount">0元</span></p>
-
+                <p class="mb20 f16 aCenter gray9">下单请联系:<a class="blue" href="tel:021-61723727">021-61723727</a></p>
             </div>
 
         </div>
