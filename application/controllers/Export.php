@@ -189,7 +189,7 @@ class Export extends CI_Controller
             $query = $this->db->query($sql . " order by h.created desc ");
             $ratingslist = $query->result_array();
             //反馈问题
-            $ratsql="select * from ". $this->db->dbprefix('course_ratings')." rat where course_id=$courseid order by id asc ";
+            $ratsql="select * from ". $this->db->dbprefix('course_ratings')." rat where course_id=$courseid order by num asc ";
             $query = $this->db->query($ratsql);
             $ratques = $query->result_array();
             foreach ($ratques as $k=>$q){
@@ -206,7 +206,7 @@ class Export extends CI_Controller
                     ->setCellValue('E'.$num, $r['mobile'])
                     ->setCellValue('F'.$num, date("m-d H:i",strtotime($r['created'])));
 
-                    $ratanswersql="select ratans.*,ratque.type from ". $this->db->dbprefix('course_ratings_list')." ratans left join ". $this->db->dbprefix('course_ratings') ." ratque on ratans.ratings_id=ratque.id where course_id=$courseid and student_id='".$r['student_id']."' order by id asc ";
+                    $ratanswersql="select ratans.*,ratque.type from ". $this->db->dbprefix('course_ratings_list')." ratans left join ". $this->db->dbprefix('course_ratings') ." ratque on ratans.ratings_id=ratque.id where ratans.course_id=$courseid and ratans.student_id='".$r['student_id']."' order by num asc ";
                     $query = $this->db->query($ratanswersql);
                     $ratanswer = $query->result_array();
                     foreach ($ratanswer as $k=>$ans){
