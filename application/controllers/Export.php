@@ -206,12 +206,12 @@ class Export extends CI_Controller
                     ->setCellValue('E'.$num, $r['mobile'])
                     ->setCellValue('F'.$num, date("m-d H:i",strtotime($r['created'])));
 
-                    $ratanswersql="select * from ". $this->db->dbprefix('course_ratings_list')." ratans where course_id=$courseid and student_id='".$r['student_id']."' order by id asc ";
+                    $ratanswersql="select ratans.*,ratque.type from ". $this->db->dbprefix('course_ratings_list')." ratans left join ". $this->db->dbprefix('course_ratings') ." ratque on ratans.ratings_id=ratque.id where course_id=$courseid and student_id='".$r['student_id']."' order by id asc ";
                     $query = $this->db->query($ratanswersql);
                     $ratanswer = $query->result_array();
                     foreach ($ratanswer as $k=>$ans){
                         $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValueByColumnAndRow(($k+6), $num, !empty($ans['content'])?$ans['content']:$ans['star']);
+                            ->setCellValueByColumnAndRow(($k+6), $num, ($ans['type']==2)?$ans['content']:$ans['star']);
                     }
             }
 
