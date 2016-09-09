@@ -163,7 +163,7 @@ class Html extends CI_Controller {
             <p class=\"f16 aRight p15\">总价：<span class=\"red\" id=\"amount\">".$amount."元</span></p>";
         $message.='<p>发送时间'. date("Y年m月d日 H:i:s").'</p>';
         $this->email->clear();
-        $tomail = 'service@trainingpie.com';
+        $tomail = 'trainingpie@practizer.com';
         $this->email->from('service@trainingpie.com', $company['name']);
         $this->email->subject("{$company['name']} ".$this->_logininfo['real_name']."的价格清单");
         $this->email->to($tomail);//
