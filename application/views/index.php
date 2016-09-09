@@ -62,11 +62,4 @@
 
     </div>
 </div>
-<!--<link type="text/css" rel="stylesheet" href="--><?php //echo base_url(); ?><!--css/introjs.css"/>-->
-<!--<script type="text/javascript" src="--><?php //echo base_url(); ?><!--js/intro.js"></script>-->
-<!--<script type="text/javascript">-->
-<!--    $(document).ready(function () {-->
-<!--        introJs().setOptions({'showButtons':false,'showBullets':false,'showStepNumbers':false}).start();-->
-<!--    });-->
-<!--</script>-->
 <?php if($loginInfo['guid_step']!=4){$this->load->view ( 'walkthrough' );} ?>

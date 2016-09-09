@@ -27,7 +27,7 @@
                                         <?php } ?>
                                     </span>
                     <?php if($total>0){ ?>
-                        <a href="<?php echo site_url('export/ratingslist/'.$course['id']) ?>" target="_blank" class="borBlueH37 ml10">导出名单</a>
+                        <a href="<?php echo site_url('export/ratingslist/'.$course['id']) ?>" target="_blank" class="borBlueH37 ml10">导出结果</a>
                     <?php } ?>
                 </p>
                 <table cellspacing="0" class="listTable">

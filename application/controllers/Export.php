@@ -174,20 +174,28 @@ class Export extends CI_Controller
             $course=$this->course_model->get_row(array('id'=>$courseid));
             $this->load->library('PHPExcel');
             $objPHPExcel = new PHPExcel();
+            //$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, 8, 'Some value');
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A1', '姓名')
                 ->setCellValue('B1', '工号')
                 ->setCellValue('C1', '职务')
                 ->setCellValue('D1', '部门')
                 ->setCellValue('E1', '手机')
-                ->setCellValue('F1', '评分星值')
-                ->setCellValue('G1', '提交时间');
+                ->setCellValue('F1', '提交时间');
             $listsql = "select h.* from " . $this->db->dbprefix('course_ratings_list') . " h "
                 . "left join " . $this->db->dbprefix('course_ratings') . " rats on h.ratings_id=rats.id where h.course_id=$courseid and rats.num=1 ";
             $sql = "select h.*,s.name,s.job_code,s.job_name,d.name as department,s.mobile from ($listsql) h left join " . $this->db->dbprefix('student') . " s on h.student_id = s.id "
                 . "left join " . $this->db->dbprefix('department') . " d on s.department_id = d.id ";
             $query = $this->db->query($sql . " order by h.created desc ");
             $ratingslist = $query->result_array();
+            //反馈问题
+            $ratsql="select * from ". $this->db->dbprefix('course_ratings')." rat where course_id=$courseid order by id asc ";
+            $query = $this->db->query($ratsql);
+            $ratques = $query->result_array();
+            foreach ($ratques as $k=>$q){
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValueByColumnAndRow(($k+6), 1, $q['title']);
+            }
             foreach($ratingslist as $k => $r){
                 $num=$k+2;
                 $objPHPExcel->setActiveSheetIndex(0)
@@ -196,8 +204,15 @@ class Export extends CI_Controller
                     ->setCellValue('C'.$num, $r['job_name'])
                     ->setCellValue('D'.$num, $r['department'])
                     ->setCellValue('E'.$num, $r['mobile'])
-                    ->setCellValue('F'.$num, round($r['star']))
-                    ->setCellValue('G'.$num, date("m-d H:i",strtotime($r['created'])));
+                    ->setCellValue('F'.$num, date("m-d H:i",strtotime($r['created'])));
+
+                    $ratanswersql="select * from ". $this->db->dbprefix('course_ratings_list')." ratans where course_id=$courseid and student_id='".$r['student_id']."' order by id asc ";
+                    $query = $this->db->query($ratanswersql);
+                    $ratanswer = $query->result_array();
+                    foreach ($ratanswer as $k=>$ans){
+                        $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValueByColumnAndRow(($k+6), $num, !empty($ans['content'])?$ans['content']:$ans['star']);
+                    }
             }
 
             $objPHPExcel->getActiveSheet()->setTitle('课程反馈名单');

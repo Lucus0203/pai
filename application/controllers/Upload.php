@@ -56,6 +56,7 @@ class Upload extends CI_Controller
                 for ($row = 2; $row <= $highestRow; $row++) {
                     $name = $objPHPExcel->getActiveSheet()->getCell('A' . $row)->getValue();//姓名
                     $mobile = $objPHPExcel->getActiveSheet()->getCell('B' . $row)->getValue();//手机
+                    $mobile = substr($mobile, 0,11);
                     $email = $objPHPExcel->getActiveSheet()->getCell('C' . $row)->getValue();//邮箱
                     $pass = $objPHPExcel->getActiveSheet()->getCell('D' . $row)->getValue();//密码
                     $sex = $objPHPExcel->getActiveSheet()->getCell('E' . $row)->getValue();//性别

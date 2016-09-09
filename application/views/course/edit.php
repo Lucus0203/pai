@@ -402,7 +402,7 @@
 
 <div id="conWindow" style="z-index: 99999;display:none;" class="popWinBox">
     <div class="pop_div" style="z-index: 100001;">
-        <div class="title_div"><a class="closeBtn" id="popConClose" href="javascript:;">X</a><span id="title_divSpan"
+        <div class="title_div"><a class="closeBtn" id="popConClose" href="javascript:;"><i class="fa fa-close fa-lg"></i></a><span id="title_divSpan"
                                                                                                    class="title_divText">请选择学员</span>
         </div>
         <div id="conMessage" class="pop_txt01">
@@ -451,11 +451,3 @@
     </div>
     <div class="popmap" style="z-index: 100000;"></div>
 </div>
-
-<!--<link type="text/css" rel="stylesheet" href="--><?php //echo base_url(); ?><!--css/introjs.css"/>-->
-<!--<script type="text/javascript" src="--><?php //echo base_url(); ?><!--js/intro.js"></script>-->
-<!--<script type="text/javascript">-->
-<!--    $(document).ready(function () {-->
-<!--        introJs().setOptions({'showButtons':false,'showBullets':false,'showStepNumbers':false}).start();-->
-<!--    });-->
-<!--</script>-->

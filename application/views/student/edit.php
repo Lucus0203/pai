@@ -234,7 +234,6 @@ $(document).ready(function(){
                                     <td>
                                         <span class="iptInner">
                                         <input name="mobile" value="<?php echo $student['mobile'] ?>" type="text" class="iptH37 w250" <?php if($student['role']==9){ echo ' readonly'; }?> >
-                                        <input type="text" name="user_name" value="" disabled style="display: none;"><input type="password" name="user_pass" value="" disabled style="display: none;">
                                         <input name="user_name" value="<?php echo $student['user_name'] ?>" type="hidden" class="iptH37 w250" readonly >
                                         </span>
 
@@ -243,6 +242,7 @@ $(document).ready(function(){
                             <tr>
                                 <th><span class="red">*</span>登录密码</th>
                                 <td><span class="iptInner">
+                                        <input type="password" value="" style="display: none;">
                                         <input name="user_pass" value="<?php echo $student['user_pass'] ?>" type="password" class="iptH37 w250" autocomplete="off" ><br><span style="color:#ccc">默认手机号码后6位</span>
                                         </span>
 
@@ -279,7 +279,7 @@ $(document).ready(function(){
 <!--tankuang de yangshi -->
 <div id="conWindow" style="z-index: 99999; display: none;" class="popWinBox">
         <div class="pop_div" style="z-index: 100001;">
-                <div class="title_div"><a class="closeBtn" href="javascript:;">X</a><span id="title_divSpan" class="title_divText">增加一级部门</span> </div>
+                <div class="title_div"><a class="closeBtn" href="javascript:;"><i class="fa fa-close fa-lg"></i></a><span id="title_divSpan" class="title_divText">增加一级部门</span> </div>
                 <div id="conMessage" class="pop_txt01">
                         <table class="comTable">
                                 <col width="150" />

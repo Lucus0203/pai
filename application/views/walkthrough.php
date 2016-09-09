@@ -1,80 +1,59 @@
-<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/jquery.pagewalkthrough.css"/>
-<script type="text/javascript" src="<?php echo base_url(); ?>js/jquery.pagewalkthrough-1.1.0.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>js/jquery-powerSwitch.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-
-        //$('#walkthrough').pagewalkthrough({
-        $('body').pagewalkthrough({
-
-            steps: [
-                {
-                    wrapper: '#naviCourse',
-                    margin: '0',
-                    popup: {
-                        content: '#navi-course',
-                        type: 'tooltip',
-                        position: 'bottom',
-                        offsetHorizontal: 0,
-                        offsetVertical: 0,
-                        width: '800'
-                    }
-                }
-
-            ],
-            name: 'Walkthrough',
-            onLoad: true
-
+        $(".cricalList li").powerSwitch({
+            classAdd: "cur",
+            animation: "fade",
+            eventType: "hover",
+            autoTime: 3000
         });
-
-
-        /***
-         * NAVIGATION
-         */
-
-        $('.prev-step').live('click', function (e) {
-            $.pagewalkthrough('prev', e);
-            return false;
-        });
-
-        $('#navi-department,#navi-teacher,.next-step').live('click', function (e) {
-            $.pagewalkthrough('next', e);
-            return false;
-        });
-
-        $('#navi-course,.close-step').live('click', function (e) {
-            $.pagewalkthrough('close');
+        $('.guideBtn,.closeBtn').click(function (e) {
+            $('.noviceGuide').hide();
             $.ajax({
                 type: "post",
                 url: '<?php echo site_url('index/guidReaded') ?>',
                 success: function (res) {
                 }
             });
-            return false;
+            return true;
         });
-
 
     });
 </script>
-<!-- walkthrough -->
-<div id="walkthrough">
-<!--    <div id="navi-department" style="display:none;">-->
-<!--        <p class="tooltipTitle">第一步：创建学员</p>-->
-<!--        <p><img src="--><?php //echo base_url();?><!--images/walkthrough01.png" width="80%" /></p>-->
-<!--        <p style="text-align: left;padding: 0 25px;">为您的课程创建第一个学员.</p>-->
-<!--        <br>-->
-<!--        <a href="javascript:;" class="next-step" style="float:right;">下一步</a>-->
-<!--    </div>-->
-<!--    <div id="navi-teacher" style="display:none;">-->
-<!--        <p class="tooltipTitle">第二步：创建讲师</p>-->
-<!--        <p><img src="--><?php //echo base_url();?><!--images/walkthrough02.png" width="80%" /></p>-->
-<!--        <p style="text-align: left;padding: 0 25px;">谁来上课呢?</p>-->
-<!--        <br>-->
-<!--        <a href="javascript:;" class="prev-step" style="float:left;">上一步</a>-->
-<!--        <a href="javascript:;" class="next-step" style="float:right;">下一步</a>-->
-<!--    </div>-->
-    <div id="navi-course" style="display:none;">
-        <p class="tooltipTitle">您的高效培训管理<br>从创建第一个课程开始</p>
-        <p><img src="<?php echo base_url();?>images/walkthrough03.png" width="80%" /></p>
-        <a href="javascript:;" class="close-step" style="float:right;">清楚了</a>
+<div class="noviceGuide">
+    <div class="bg"></div>
+    <div class="noviceGuideInner">
+        <a href="javascript:;" class="closeBtn"><i class="fa fa-close fa-lg"></i></a>
+        <div class="guideBox" id="slide_tab1">
+            <div class="boxL pt20">
+                <div class="guideTtl">快速创建课程</div>
+                <p>加班、熬夜排课简直OUT了，1分钟创建一个测试课程，体验啥叫高效的培训管理。</p>
+                <a href="<?php echo site_url('course/courselist') ?>" class="guideBtn">立即体验</a>
+            </div>
+            <div class="boxR"><img src="<?php echo base_url(); ?>images/guideImg.png" width="450" alt=""></div>
+        </div>
+        <div class="guideBox" style="display: none;" id="slide_tab2">
+            <div class="boxL fRight pt20">
+                <div class="guideTtl">手机通知学员</div>
+                <p>EMAIL、电话、签到表、反馈表都省省了，一键发送全体学员，管他在不在工位，手机查收报名提醒、快速审批和秒速签到。</p>
+                <a href="<?php echo site_url('course/courselist') ?>" class="guideBtn">立即体验</a>
+            </div>
+            <div class="boxR fLeft"><img src="<?php echo base_url(); ?>images/guideImg03.png" width="450" alt=""></div>
+        </div>
+
+        <div class="guideBox" style="display: none;" id="slide_tab3">
+            <div class="boxL">
+                <div class="guideTtl">数据一键导出</div>
+                <p>EXCEL玩不转？哭晕在厕所？且看培训小白小手抖一抖，完成数据导出。</p>
+                <a href="<?php echo site_url('course/courselist') ?>" class="guideBtn">立即体验</a>
+            </div>
+            <div class="boxR"><img src="<?php echo base_url(); ?>images/guideImg02.png" width="450" alt=""></div>
+        </div>
+        <ul class="cricalList">
+            <li data-rel="slide_tab1" class="cur"></li>
+            <li data-rel="slide_tab2"></li>
+            <li data-rel="slide_tab3"></li>
+        </ul>
     </div>
+
 </div>

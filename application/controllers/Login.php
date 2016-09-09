@@ -9,7 +9,7 @@ class Login extends CI_Controller
         parent::__construct();
         $this->load->library(array('session'));
         $this->load->helper(array('form', 'url','captcha'));
-        $this->load->model(array('user_model','student_model','teacher_model','department_model','userloginlog_model', 'company_model', 'purview_model', 'industries_model'));
+        $this->load->model(array('user_model','student_model','teacher_model','department_model','userloginlog_model', 'company_model', 'purview_model', 'industries_model','course_model'));
     }
 
 
@@ -115,36 +115,15 @@ class Login extends CI_Controller
                     $user['register_flag'] = 2;
                     $this->user_model->update($user, $userinfo['id']);
                     $userinfo = $this->user_model->get_row(array('mobile' => $mobile,'role'=>1));
-                    //创建人力资源部
-                    $d = array('company_code' => $company_code, 'name' => '人力资源');
-                    $departmentid = $this->department_model->create($d);
-                    //管理员学员账号
-                    $student = array('company_code' => $company_code,
-                        'sex' => 1,
-                        'name' => $real_name,
-                        'mobile' => $mobile,
-                        'email' => $email,
-                        'user_name' => $mobile,
-                        'user_pass' => md5(substr($mobile,-6)),
-                        'department_parent_id'=>$departmentid,
-                        'department_id'=>$departmentid,
-                        'role' => 9);
-                    $this->student_model->create($student);
-                    //创建讲师
-                    $this->teacher_model->create(array('name'=>$real_name));
-                    //其他部门
-                    $d = array('company_code' => $company_code, 'name' => '其他');
-                    $this->department_model->create($d);
                     //公司信息
-                    $this->company_model->create(array('code' => $company_code,
+                    $this->company_model->create(array('code' => $userinfo['company_code'],
                         'name' => $company_name,
                         'contact' => $real_name,
                         'mobile' => $mobile,
                         'industry_parent_id' => $industry_parent_id,
                         'industry_id' => $industry_id,
                         'email' => $email));
-
-                    $this->initpurview($company_code);//初始化权限
+                    $this->initBaseData($userinfo);
                     $this->db->trans_complete();//事务结束
                     $this->setpurview($company_code, $userinfo['role']);//权限全局化
                     $this->session->set_userdata('loginInfo', $userinfo);
@@ -161,6 +140,62 @@ class Login extends CI_Controller
 
         $this->load->view('login/register', $res);
         $this->load->view('footer');
+    }
+
+    private function initBaseData($userinfo){
+        //创建人力资源部
+        $d = array('company_code' => $userinfo['company_code'], 'name' => '人力资源');
+        $departmentid = $this->department_model->create($d);
+        //管理员学员账号
+        $student = array('company_code' => $userinfo['company_code'],
+            'sex' => 1,
+            'name' => $userinfo['real_name'],
+            'mobile' => $userinfo['mobile'],
+            'email' => $userinfo['email'],
+            'user_name' => $userinfo['mobile'],
+            'user_pass' => md5(substr($userinfo['mobile'],-6)),
+            'department_parent_id'=>$departmentid,
+            'department_id'=>$departmentid,
+            'role' => 9);
+        $studentid=$this->student_model->create($student);
+        //创建讲师
+        $teacherid=$this->teacher_model->create(array('company_code'=>$userinfo['company_code'],'name'=>$userinfo['real_name']));
+        //其他部门
+        $d = array('company_code' => $userinfo['company_code'], 'name' => '其他');
+        $this->department_model->create($d);
+        $this->initpurview($userinfo['company_code']);//初始化权限
+
+        //创建一个模拟课程
+
+        $c = array('user_id' => $userinfo['id'],
+            'company_code' => $userinfo['company_code'],
+            'title' => '【模板】新员工入职培训',
+            'time_start' => date('Y-m-d H:i:s', strtotime(date("Y-m-d 08:00:00") . ' +1 day')),
+            'time_end' => date('Y-m-d H:i:s', strtotime(date("Y-m-d 17:00:00") . ' +1 day')),
+            'address' => '公司会议室',
+            'teacher_id' => $teacherid,
+            'target' => $userinfo['real_name'],
+            'targetone' => $departmentid,
+            'targettwo' => $departmentid,
+            'targetstudent' => $studentid,
+            'outline' => '1、公司的发展历史、公司业务、企业文化；  
+2、公司组织结构图；部门设置及部门职责及业务范围；主要领导介绍及分管业务； 
+3、公司所在集团概览；
+4、公司福利概览（如健康体检、保险、休假、病假、报销等）；
+5、公司绩效考核管理系统，即绩效考核的方式，何时、由谁来评估，总体的绩效期望 ；
+6、公司薪酬程序：发薪日，如何发放；
+7、职位或工作说明书和具体工作规范；  
+8、员工体检日程安排和体检项目；
+9、职业发展信息（如潜在的晋升机会，职业通道，如何获得职业资源信息）
+10、员工手册、公司有关政策、程序、财务制度及相关流程；
+11、有关公司门禁系统、办公场所、电子邮箱帐户的获取、电脑上网密码、公司内部电话、办公用品申领规则等； 
+12、参观公司办公设施和公司相关服务场所，如餐厅、卫生间、会议室、各部门及项目办公场所等； 
+13、具体与工作相关的岗位部门信息（如何与相关上级主管或同事尽快融入团队的日程安排）； 
+14、工作外的活动（如工会活动、特殊活动等）。',
+            'info' => '欢迎加入我们的大家庭，为了使新同事了解本公司概况及规章制度，认识并认同企业文化； 并让新同事明确自己的岗位职责、工作任务和工作目标，尽快进入岗位角色，融入新的环境中来，特组织此次培训。',
+            'ispublic'=>2);
+        $this->course_model->create($c);
+
     }
 
     public function forgot($sacount='')

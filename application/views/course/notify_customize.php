@@ -113,7 +113,7 @@
 
 <div id="conWindow" style="z-index: 99999;display:none;" class="popWinBox">
         <div class="pop_div" style="z-index: 100001;">
-                <div class="title_div"><a class="closeBtn" onclick="popConClose();" href="javascript:;">X</a><span id="title_divSpan" class="title_divText">请选择对象</span> </div>
+                <div class="title_div"><a class="closeBtn" onclick="popConClose();" href="javascript:;"><i class="fa fa-close fa-lg"></i></a><span id="title_divSpan" class="title_divText">请选择对象</span> </div>
                 <div id="conMessage" class="pop_txt01">
                         <ul class="secList">
                                 <li><label><input type="radio">从组织成员中选择</label></li>

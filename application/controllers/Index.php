@@ -32,7 +32,7 @@ class Index extends CI_Controller
         $courses_num = $query['num'];
         $query = $this->db->query(" select count(*) num from " . $this->db->dbprefix('teacher') . " t where company_code='{$logininfo['company_code']}' and isdel=2 ")->row_array();
         $teachers_num = $query['num'];
-        $query = $this->db->query(" select count(*) num from " . $this->db->dbprefix('student') . " s where company_code='{$logininfo['company_code']}' and (role=1 or role=2) and isdel = 2 ")->row_array();
+        $query = $this->db->query(" select count(*) num from " . $this->db->dbprefix('student') . " s where company_code='{$logininfo['company_code']}' and isdel = 2 ")->row_array();
         $students_num = $query['num'];
         $query = $this->db->query(" select count(*) num from " . $this->db->dbprefix('student') . " s where company_code='{$logininfo['company_code']}' and role=2 ")->row_array();
         $adms_num = $query['num'];
@@ -59,8 +59,7 @@ class Index extends CI_Controller
         $this->load->view('footer');
     }
 
-    public function guidReaded()
-    {
+    public function guidReaded(){
         $userinfo = $this->_logininfo;
         $this->user_model->update(array('guid_step' => 4), $userinfo['id']);
         $userinfo['guid_step'] = 4;

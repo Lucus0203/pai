@@ -272,7 +272,7 @@
 <!--tankuang de yangshi -->
 <div id="conWindow" style="z-index: 99999; display: none;" class="popWinBox">
     <div class="pop_div" style="z-index: 100001;">
-        <div class="title_div"><a class="closeBtn" href="javascript:;">X</a><span id="title_divSpan"
+        <div class="title_div"><a class="closeBtn" href="javascript:;"><i class="fa fa-close fa-lg"></i></a><span id="title_divSpan"
                                                                                   class="title_divText">增加一级部门</span>
         </div>
         <div id="conMessage" class="pop_txt01">

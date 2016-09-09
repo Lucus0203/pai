@@ -1894,20 +1894,21 @@ input:checked+ .slider:before {
 	overflow: hidden;
 	zoom: 1;
 }
-
-.closeBtn {
+.closeBtn{
+    color:#666666;
+    font-size: 14px;
+}
+.noviceGuide .closeBtn {
 	position: absolute;
 	right: 10px;
 	top: 10px;
 	width: 21px;
 	height: 19px;
+    font-size: 18px;
 	letter-spacing: 3;
-	color: #333;
 	text-indent: 99999;
 	display:  block;
-	background: url(../images/close.png) no-repeat left top;
 	z-index: 99999;
-	
 }
 
 .noviceGuideInner .boxL {
@@ -1930,20 +1931,23 @@ input:checked+ .slider:before {
 	background-color: #00bbd3;
 	color: #fff;
 	width: 150px;
-	line-height: 30px;
+	line-height: 40px;
 	display: inline-block;
 	text-align: center;
-	border-radius: 15px;
+	border-radius: 25px;
+    font-size: 20px;
+    margin-top: 20px;
 }
 
 .guideTtl {
 	color: #00bbd3;
-	font-size: 20px;
-	margin-bottom: 20px;
+	font-size: 36px;
+	margin-bottom: 10px;
 }
 
 .noviceGuideInner .boxL p {
-	height: 150px;
+    font-size: 20px;
+    color: #666666;
 }
 
 .noviceGuideInner .boxR {
@@ -1979,4 +1983,10 @@ input:checked+ .slider:before {
 	background-color: #00bbd3;
 }
 
-.guideBox{ padding: 70px 30px; width: 850px;}
+.guideBox{ padding: 70px 50px; width: 820px;}
+.guideBox .boxL{
+    padding-top: 70px;
+}
+.guideBox .pt20{
+    padding-top: 20px;
+}
