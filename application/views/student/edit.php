@@ -56,25 +56,13 @@ $(document).ready(function(){
         var mobile = /^((1[0-9]{2})+\d{8})$/; 
         return this.optional(element) || (length == 11 && mobile.test(value)); 
     }, "请正确填写您的手机号码");
-//    $("input[name=role]").change(function(){
-//        if($("input[name=role]:checked").val()!=1){
-//            $('input[name=user_name]').removeAttr('readonly').css('color','#666');
-//        }else{
-//            $('input[name=user_name]').val($('input[name=mobile]').val()).attr('readonly','readonly').css('color','#ccc');
-//        }
-//
-//    });
-    $('input[name=mobile]').keyup(function(){
-        //if($("input[name=role]:checked").val()==1){
-        $('input[name=user_name]').val($('input[name=mobile]').val());
-        //}
-    })
-    <?php if(empty($student)){ ?>
     $('input[name=mobile]').blur(function(){
         var mobile=$('input[name=mobile]').val();
-        $('input[name=user_pass]').val(mobile.slice(-6));
+        $('input[name=user_name]').val(mobile);
+        if($.trim($('input[name=user_pass]').val())==''){
+            $('input[name=user_pass]').val(mobile.slice(-6));
+        }
     });
-    <?php } ?>
     $( "#editForm" ).validate( {
         rules: {
                 name: {
@@ -162,7 +150,8 @@ $(document).ready(function(){
         <p class="alertBox alert-danger"><span class="alert-msg"><?php echo $msg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
 <?php } ?>
             <div class="p15">
-                    <form id="editForm" method="post" action=""  enctype="multipart/form-data">
+                    <form id="editForm" method="post" action=""  enctype="multipart/form-data" autocomplete="off">
+                        <div style="visibility: hidden;height: 0;"><input type="text"> <input type="password"></div>
                     <input name="act" type="hidden" value="act" />
                     <table cellspacing="0" class="comTable mb20">
                             <colgroup><col width="100">
@@ -233,8 +222,8 @@ $(document).ready(function(){
 
                                     <td>
                                         <span class="iptInner">
-                                        <input name="mobile" value="<?php echo $student['mobile'] ?>" type="text" class="iptH37 w250" <?php if($student['role']==9){ echo ' readonly'; }?> >
-                                        <input name="user_name" value="<?php echo $student['user_name'] ?>" type="hidden" class="iptH37 w250" readonly >
+                                        <input name="mobile" value="<?php echo $student['mobile'] ?>" type="text" class="iptH37 w250" <?php if($student['role']==9){ echo ' readonly'; }?> autocomplete="off" >
+                                        <input name="user_name" value="<?php echo $student['user_name'] ?>" type="hidden" class="iptH37 w250" autocomplete="off" >
                                         </span>
 
                                     </td>
@@ -242,7 +231,6 @@ $(document).ready(function(){
                             <tr>
                                 <th><span class="red">*</span>登录密码</th>
                                 <td><span class="iptInner">
-                                        <input type="password" value="" style="display: none;">
                                         <input name="user_pass" value="<?php echo $student['user_pass'] ?>" type="password" class="iptH37 w250" autocomplete="off" ><br><span style="color:#ccc">默认手机号码后6位</span>
                                         </span>
 

@@ -354,10 +354,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>课程价格</th>
+                        <th>课程预算</th>
                         <td>
                             <span class="iptInner">
-                            <input name="price" placeholder="请输入课程价格" value="<?php echo $course['price'] ?>" type="text" class="iptH37 w157 mr20 w237">元/课时
+                            <input name="price" placeholder="请输入课程预算" value="<?php echo $course['price'] ?>" type="text" class="iptH37 w157 mr20 w237">元/课时
                             </span>
 
                         </td>

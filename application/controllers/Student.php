@@ -50,7 +50,7 @@ class Student extends CI_Controller
                 'department_parent_id' => $this->input->post('department_parent_id'),
                 'mobile' => $this->input->post('mobile'),
                 'email' => $this->input->post('email'),
-                'user_name' => $this->input->post('user_name'),
+                'user_name' => $this->input->post('mobile'),
                 'user_pass' => $this->input->post('user_pass'),
                 'role' => $this->input->post('role'));
             $s['department_id']=$this->input->post('department_id')??$this->input->post('department_parent_id');
@@ -65,7 +65,7 @@ class Student extends CI_Controller
                 //创建下级管理员账号
                 if ($s['role'] != 1) {
                     $useracount = array('student_id' => $id,
-                        'user_name' => $s['user_name'],
+                        'user_name' => $s['mobile'],
                         'user_pass' => $s['user_pass'],
                         'company_code' => $logininfo['company_code'],
                         'real_name' => $s['name'],
@@ -134,10 +134,10 @@ class Student extends CI_Controller
             } else {
                 $this->student_model->update($s, $id);
                 //创建/更新下级管理员账号
-                if ($s['role'] != 1) {
+                if ($s['role'] != 1 && $s['role'] != 9) {
                     $u = $this->user_model->get_row(" student_id = $id ");
                     $useracount = array(
-                        'user_name' => $s['user_name'],
+                        'user_name' => $s['mobile'],
                         'user_pass' => $s['user_pass'],
                         'real_name' => $s['name'],
                         'email' => $s['email'],
@@ -182,6 +182,7 @@ class Student extends CI_Controller
         $s = $this->student_model->get_row(array('id' => $id));
         if ($s['company_code'] == $this->_logininfo['company_code']) {
             $this->student_model->update(array('isdel' => 1), $id);
+            $this->user_model->del(array('student_id' => $id));
         }
         redirect($_SERVER['HTTP_REFERER']);
     }

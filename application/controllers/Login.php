@@ -45,7 +45,7 @@ class Login extends CI_Controller
             $user = $this->input->post('user_name');
             $pass = $this->input->post('user_pass');
             $company_code = $this->input->post('company_code');
-            $userinfo = $this->user_model->get_row(" user_name = '$user' and company_code = '$company_code' and role <> 1 ");
+            $userinfo = $this->user_model->get_row(" (user_name = ".$this->db->escape($user)." or mobile=".$this->db->escape($user)." ) and company_code = ".$this->db->escape($company_code)." and role <> 1 ");
             if (count($userinfo) > 0 && is_array($userinfo)) {
                 $pwd = $userinfo ['user_pass'];
                 if ($pwd == md5($pass)) {

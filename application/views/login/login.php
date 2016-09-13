@@ -22,6 +22,7 @@
                 var w=parseInt($(this).css('width'));
                 $('.tabLine').css({'left':lf+'px','width':w+'px'});
                 $('.logInner').hide().eq(i).show();
+                $('.red').hide();
             })
         })
     </script>
@@ -45,7 +46,7 @@
         <div class="logInner" <?php if($act=='act2'){ ?> style="display:none;" <?php } ?>>
             <form method="post" action="">
                 <input type="hidden" name="act" value="act1" />
-                <p class="red f14 mb10"><?php echo $error_msg; ?></p>
+                <p class="red f14 mb10 aCenter"><?php echo $error_msg; ?></p>
                 <div class="iptBox">
                     <input name="user_name" type="text" value="" class="ipt" placeholder="用户名/邮箱地址/手机号" />
                 </div>
@@ -61,7 +62,7 @@
         <div class="logInner" <?php if($act!='act2'){ ?> style="display:none;" <?php } ?> >
             <form method="post" action="">
                 <input type="hidden" name="act" value="act2" />
-                <p class="red"><?php echo $error_msg; ?></p>
+                <p class="red mb10 aCenter f14"><?php echo $error_msg; ?></p>
                 <div class="iptBox">
                     <input name="company_code" type="text" value="" class="ipt" placeholder="公司编号" />
                 </div>
