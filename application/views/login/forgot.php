@@ -49,7 +49,7 @@
                     },
                     mobile: {
                         required: "请输入您的手机号码",
-                        isMobile: "请输入正确的手机号码",
+                        isMobile: "请输入正确的手机号码"
                     },
                     mobile_code: {
                         required: "请输入短信验证码"

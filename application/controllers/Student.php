@@ -51,7 +51,7 @@ class Student extends CI_Controller
                 'mobile' => $this->input->post('mobile'),
                 'email' => $this->input->post('email'),
                 'user_name' => $this->input->post('mobile'),
-                'user_pass' => $this->input->post('user_pass'),
+                'user_pass' => $this->input->post('student_pass'),
                 'role' => $this->input->post('role'));
             $s['department_id']=$this->input->post('department_id')??$this->input->post('department_parent_id');
 
@@ -121,7 +121,7 @@ class Student extends CI_Controller
                 'mobile' => $this->input->post('mobile'),
                 'email' => $this->input->post('email'),
                 'user_name' => $this->input->post('user_name'),
-                'user_pass' => $this->input->post('user_pass'),
+                'user_pass' => $this->input->post('student_pass'),
                 'role' => $this->input->post('role'));
             $s['department_id']=$this->input->post('department_id')??$this->input->post('department_parent_id');
             if ($res['student']['user_pass'] != $s['user_pass']) {

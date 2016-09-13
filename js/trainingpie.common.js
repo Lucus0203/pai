@@ -19,4 +19,5 @@ $(document).ready(function(){
         return date1 < date2;
     };
     $('.alert-remove').click(function(){$('.alertBox').hide()});
+    setTimeout(function(){$('.alertBox').fadeOut(500);},1500);
 });

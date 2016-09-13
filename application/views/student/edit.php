@@ -63,42 +63,49 @@ $(document).ready(function(){
             $('input[name=user_pass]').val(mobile.slice(-6));
         }
     });
+    $('#student_pass').keyup(function(){
+       $('input[name=student_pass]').val($(this).val());
+        return false;
+    });
     $( "#editForm" ).validate( {
+        ignore: ".ignore",
         rules: {
-                name: {
-                        required: true
-                },
-                department_parent_id:{
-                        required: true,
-                },
-                mobile: {
-                        required: true,
-                        isMobile: true
-                },
-                email: {
-                        email: true
-                },
-                user_pass: {
-                        required: true
-                }
+            name: {
+                required: true
+            },
+            department_parent_id:{
+                required: true
+            },
+            mobile: {
+                required: true,
+                isMobile: true
+            },
+            email: {
+                email: true
+            },
+            student_pass:{
+                required: true,
+                minlength:6
+            }
         },
         messages: {
-                name: {
-                        required: "请输入学员姓名"
-                },
-                department_parent_id:{
-                        required: "请选择您的部门",
-                },
-                mobile: {
-                        required: "请输入您的电话号码",
-                        isMobile: "请输入正确的手机号码",
-                },
-                email: {
-                        email: "请输入正确的邮箱地址",
-                },
-                user_pass: {
-                        required: "请输入登录密码"
-                }
+            name: {
+                required: "请输入学员姓名"
+            },
+            department_parent_id:{
+                required: "请选择您的部门"
+            },
+            mobile: {
+                required: "请输入您的电话号码",
+                isMobile: "请输入正确的手机号码"
+            },
+            email: {
+                email: "请输入正确的邮箱地址"
+            },
+            student_pass:{
+                required: "请输入密码",
+                minlength:"最少{0}位密码"
+            }
         },
         errorPlacement: function ( error, element ) {
                 error.addClass( "ui red pointing label transition" );
@@ -125,14 +132,14 @@ $(document).ready(function(){
         </div>
             <?php foreach ($departments as $d){ ?>
                 <div class="fnavi">
-                        <a href="<?php echo site_url('department/index/'.$d['id']) ?>" class="flink <?php echo $current_department['id']==$d['id']?'on':'' ?>"><i class="iup"></i><?php echo $d['name'] ?></a>
-                        <ul class="clink departChildren<?php echo $d['id'] ?>">
-                                <?php if(!empty($d['departs'])){
-                                    foreach ($d['departs'] as $dp){ ?>
+                    <a href="<?php echo site_url('department/index/'.$d['id']) ?>" class="flink <?php echo $current_department['id']==$d['id']?'on':'' ?>"><i class="iup"></i><?php echo $d['name'] ?></a>
+                    <ul class="clink departChildren<?php echo $d['id'] ?>">
+                        <?php if(!empty($d['departs'])){
+                            foreach ($d['departs'] as $dp){ ?>
                                 <li class="<?php echo $current_department['id']==$dp['id']?'on':'' ?>"><a href="<?php echo site_url('department/index/'.$dp['id']) ?>"><?php echo $dp['name'] ?></a></li>
-                                <?php }
-                                } ?>
-                        </ul>
+                            <?php }
+                        } ?>
+                    </ul>
                 </div>
             <?php } ?>
 
@@ -231,7 +238,8 @@ $(document).ready(function(){
                             <tr>
                                 <th><span class="red">*</span>登录密码</th>
                                 <td><span class="iptInner">
-                                        <input name="user_pass" value="<?php echo $student['user_pass'] ?>" type="password" class="iptH37 w250" autocomplete="off" ><br><span style="color:#ccc">默认手机号码后6位</span>
+                                        <input name="student_pass" value="<?php echo $student['user_pass'] ?>" type="hidden" >
+                                        <input id="student_pass" value="<?php echo $student['user_pass'] ?>" type="password" class="iptH37 w250" autocomplete="off" ><br><span style="color:#ccc">默认手机号码后6位</span>
                                         </span>
 
                                 </td>
