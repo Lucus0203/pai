@@ -68,7 +68,7 @@ $(document).ready(function(){
 							</div>
 						<?php } ?>
 					<?php }else{
-						echo '<div class="listBox"><div class="listCont"><div class="listText"><p>暂无符合条件的课程</p></div></div></div>';
+						echo '<div class="listCont"><div class="listText"><p>暂无符合条件的课程</p></div></div>';
 					} ?>
 				</div>
                                 <div class="pageNavi">
