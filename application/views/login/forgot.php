@@ -158,6 +158,7 @@
             </div>
             <?php }else{ ?>
             <form id="signupForm" action="" method="post">
+                <div style="visibility: hidden;height: 0;"><input type="text"> <input type="password"></div>
                 <input type="hidden" name="act" value="act"/>
                 <input type="hidden" id="sacount" value="<?php echo $sacount ?>" />
                 <div class="iptBox" <?php if(empty($sacount)){echo 'style="display:none;"';} ?> >

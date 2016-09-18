@@ -6,16 +6,12 @@
 <div class="wrap">
     <div class="comBox">
         <div class="topNavi">
-            <?php if($loginInfo['role']==1||$roleInfo['coursecreate']==1){ ?>
-                <a href="<?php echo site_url('course/coursecreate') ?>" class="fRight borBlueH37 aCenter">创建新课程</a>
-            <?php } ?>
+                <a href="<?php echo site_url('annualsurvey/create') ?>" class="fRight borBlueH37 aCenter">创建调研问卷</a>
             <ul class="topNaviUl">
-                <li <?php if(empty($parm['status'])){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('course/courselist') ?>">全部课程</a></li>
-                <li <?php if($parm['status']==4){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('course/courselist').'?status=4' ?>">待发布</a></li>
-                <li <?php if($parm['status']==5){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('course/courselist').'?status=5' ?>">报名未开始</a></li>
-                <li <?php if($parm['status']==1){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('course/courselist').'?status=1' ?>">报名中</a></li>
-                <li <?php if($parm['status']==2){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('course/courselist').'?status=2' ?>">进行中</a></li>
-                <li <?php if($parm['status']==3){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('course/courselist').'?status=3' ?>">已结束</a></li>
+                <li <?php if(empty($parm['status'])){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('annualsurvey/index') ?>">全部调研问卷</a></li>
+                <li <?php if($parm['status']==2){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('annualsurvey/index').'?status=2' ?>">待发布</a></li>
+                <li <?php if($parm['status']==1){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('annualsurvey/index').'?status=1' ?>">已发布</a></li>
+                <li <?php if($parm['status']==3){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('annualsurvey/index').'?status=3' ?>">已结束</a></li>
             </ul>
 
         </div>
@@ -35,37 +31,29 @@
             </form>
         </div>
         <div class="listBox">
-            <?php if(count($courses)>0){?>
-                <?php foreach ($courses as $c){ ?>
+            <?php if(count($surveies)>0){?>
+                <?php foreach ($surveies as $c){ ?>
                     <div class="listCont">
                         <p class="operaBtn">
-                            <?php if($loginInfo['role']==1||$roleInfo['courseedit']==1){ ?><a href="<?php echo site_url('course/courseedit/'.$c['id']);?>" class="editBtn"><i class="iedit"></i>编辑</a><a href="<?php echo site_url('course/coursedel/'.$c['id']);?>" class="delBtn"><i class="idel"></i>删除</a><?php } ?><?php if($c['status']==4){ ?><a href="<?php echo site_url('course/coursepublic/'.$c['id']);?>" class="shareBtn"><i class="ishar"></i>发布</a><?php } ?></p>
-                        <div class="imgBox"><span class="helper"></span><a href="<?php echo site_url('course/courseinfo/'.$c['id']);?>"><img src="<?php echo empty($c['page_img'])?base_url().'images/course_default_img.jpg':base_url('uploads/course_img/'.$c['page_img']) ?>" alt="" width="160"></a></div>
+                            <a href="<?php echo site_url('annualsurvey/edit/'.$c['id']);?>" class="editBtn"><i class="iedit"></i>编辑</a><a href="<?php echo site_url('annualsurvey/del/'.$c['id']);?>" class="delBtn"><i class="idel"></i>删除</a><?php if($c['status']==2){ ?><a href="<?php echo site_url('annualsurvey/public/'.$c['id']);?>" class="shareBtn"><i class="ishar"></i>发布</a><?php } ?></p>
                         <div class="listText">
-                            <p class="titp"><a class="blue" href="<?php echo site_url('course/courseinfo/'.$c['id']);?>"><?php echo $c['title'] ?></a></p>
+                            <p class="titp"><a class="blue" href="<?php echo site_url('annualsurvey/info/'.$c['id']);?>"><?php echo $c['title'] ?></a></p>
                             <p class="titp">
-                                <?php if($c['status']==1){//1报名中2进行中3结束4待发布5待开启报名9其他 ?>
-                                    <span class="greenH25">报名中</span>
+                                <?php if($c['status']==1){ ?>
+                                    <span class="greenH25">已发布</span>
                                 <?php }elseif($c['status']==2){ ?>
-                                    <span class="greenH25">进行中</span>
+                                    <span class="greenH25">未发布</span>
                                 <?php }elseif($c['status']==3){ ?>
                                     <span class="grayH25">已结束</span>
-                                <?php }elseif($c['status']==4){ ?>
-                                    <span class="orangeH25">待发布</span>
-                                <?php }elseif($c['status']==5){ ?>
-                                    <span class="orangeH25">报名未开始</span>
                                 <?php } ?>
                             </p>
-                            <?php if(!empty($c['teacher'])){ ?>
-                                <p>课程讲师：<a class="blue" href="<?php echo site_url('teacher/teacherinfo/'.$c['teacher_id']); ?>"><?php echo $c['teacher'] ?></a> </p><?php } ?>
-                            <p><span class="mr30">开课时间：<?php echo date('Y-m-d H:i',strtotime($c['time_start'])) ?>&nbsp;至&nbsp;<?php echo date('Y-m-d H:i',strtotime($c['time_end'])) ?></span><?php echo !empty($c['time_endregister_end'])?'报名截止：'.$c['time_endregister_end']:'' ?></p>
-                            <p>开课地点：<?php echo $c['address'] ?></p>
-                            <?php if(!empty($c['info'])){ ?><p>讲师介绍：<?php echo mb_strlen($c['info'],'utf-8')>30?mb_substr($c['info'],0,30,'utf-8').'……':mb_substr($c['info'],0,30,'utf-8') ?></p><?php } ?>
+                            <p><span class="mr30">开始时间：<?php echo date('Y-m-d H:i',strtotime($c['time_start'])) ?>&nbsp;至&nbsp;<?php echo date('Y-m-d H:i',strtotime($c['time_end'])) ?></span></p>
+                            <?php if(!empty($c['info'])){ ?><p>问卷备注：<?php echo mb_strlen($c['info'],'utf-8')>30?mb_substr($c['info'],0,30,'utf-8').'……':mb_substr($c['info'],0,30,'utf-8') ?></p><?php } ?>
                         </div>
                     </div>
                 <?php } ?>
             <?php }else{
-                echo '<div class="listBox"><div class="listCont"><div class="listText"><p>暂无符合条件的课程</p></div></div></div>';
+                echo '<div class="listCont"><div class="listText"><p>暂无符合条件的调研问卷</p></div></div>';
             } ?>
         </div>
         <div class="pageNavi">

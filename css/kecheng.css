@@ -48,3 +48,13 @@ body{ background: #f6f6f6;}
 }
 
 .tabLine{ border-bottom: 1px solid #00bbd3; width: 100px; position:  absolute;left: 502px;}
+
+.topNaviKec01{ clear:  both; overflow:  hidden; font-size: 16px; color: #8e8e8e; margin-bottom: -1px;  background-color:  #fff; border: 1px solid #e9e9e9;}
+.topNaviKec01 .topNaviUlKec li{ float: left; background-color: #fff; padding: 0px 15px; line-height: 45px; margin-right: -1px; }
+.topNaviKec01 .topNaviUlKec li a{ color: #8e8e8e;}
+.topNaviKec01 .topNaviUlKec li.cur{ padding: 0px 15px 3px; line-height: 41px; border-bottom: 2px solid #2fe7ff; background-color: #fff; }
+
+/*问券*/
+.ewmBox{ background-color: #f6f6f6; margin: 20px; padding: 20px; line-height: 2; overflow: hidden; zoom:1; }
+.ewmBox .boxl { float: left; width: 600px; }
+.ewmBox .boxr { float: right; width: 250px; }
