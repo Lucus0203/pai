@@ -18,6 +18,7 @@ $(document).ready(function(){
         var date2 = new Date(Date.parse(value.replace(/\-/g, "/")));
         return date1 < date2;
     };
+    $('input, textarea').placeholder();
     $('.alert-remove').click(function(){$('.alertBox').hide()});
     setTimeout(function(){$('.alertBox').fadeOut(500);},1500);
 });

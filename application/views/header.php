@@ -12,7 +12,8 @@
 		<script type="text/javascript" src="<?php echo base_url();?>js/jquery1.83.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>js/jquery.validate.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>js/additional-methods.min.js"></script>
-		<script type="text/javascript" src="<?php echo base_url();?>js/jquery.simple-dtpicker.js"></script>
+        <script type="text/javascript" src="<?php echo base_url();?>js/jquery.simple-dtpicker.js"></script>
+        <script type="text/javascript" src="<?php echo base_url();?>js/jquery.placeholder.min.js"></script>
         <script type="text/javascript"  src="<?php echo base_url() ?>js/trainingpie.common.js"></script>
 <script type="text/javascript">
 var _hmt = _hmt || [];
@@ -44,7 +45,7 @@ var _hmt = _hmt || [];
 					<ul class="logoList">
 						<li><a href="<?php echo site_url('center/index/1') ?>">公司信息</a></li>
 						<li><a href="<?php echo site_url('center/index/2') ?>">密码修改</a></li>
-                                                <?php if($loginInfo['role']==1){ ?><li><a href="<?php echo site_url('center/index/3') ?>">权限设置</a></li><?php } ?>
+                        <?php if($loginInfo['role']==1){ ?><li><a href="<?php echo site_url('center/index/3') ?>">权限设置</a></li><?php } ?>
 						<li><a href="<?php echo site_url('login/loginout') ?>">退出登陆</a></li>
 					</ul>
                                     <?php } ?>
