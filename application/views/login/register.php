@@ -6,6 +6,7 @@
     <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/common.css"/>
     <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/login.css"/>
     <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery1.83.js"></script>
+    <script type="text/javascript" src="<?php echo base_url();?>js/jquery.placeholder.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery.validate.min.js"></script>
     <script type="text/javascript">
         var _hmt = _hmt || [];
@@ -21,6 +22,7 @@
             } else {
                 $('.ieTxt').hide()
             }
+            $('input, textarea').placeholder();
             // 手机号码验证
             jQuery.validator.addMethod("isMobile", function (value, element) {
                 var length = value.length;
