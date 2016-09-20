@@ -95,7 +95,15 @@ class Login extends CI_Controller
             $res['user_industrys']=$this->industries_model->get_all(array('parent_id'=>$industry_parent_id));
             $res['user_industry_id']=$industry_id;
             $repeatuser = $this->user_model->get_row("role=1 and user_name = ".$this->db->escape($email)." and mobile != ".$this->db->escape($mobile));
-            if (!empty($repeatuser)) {
+            if (empty($email)) {
+                $res['msg'] = '请输入邮箱';
+            }elseif (empty($pass)) {
+                $res['msg'] = '请输入密码';
+            }elseif (empty($company_name)) {
+                $res['msg'] = '请输入企业注册名称';
+            }elseif (empty($mobile)) {
+                $res['msg'] = '请输入手机号码';
+            }elseif (!empty($repeatuser)) {
                 $res['msg'] = '邮箱已被使用';
             }elseif ($invitation_code != 8367) {//邀请码
                 $res['msg'] = '邀请码不正确';
