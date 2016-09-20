@@ -96,7 +96,7 @@ class Login extends CI_Controller
             $res['user_industry_id']=$industry_id;
             $repeatuser = $this->user_model->get_row("role=1 and user_name = ".$this->db->escape($email)." and mobile != ".$this->db->escape($mobile));
             if (empty($email)) {
-                $res['msg'] = '请输入邮箱';
+                $res['msg'] = '请输入您的邮箱地址';
             }elseif (empty($pass)) {
                 $res['msg'] = '请输入密码';
             }elseif (empty($company_name)) {
