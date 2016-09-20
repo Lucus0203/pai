@@ -53,8 +53,7 @@
                         required: true
                     },
                     real_name: {
-                        required: true,
-
+                        required: true
                     },
                     mobile: {
                         required: true,
@@ -70,7 +69,7 @@
                 messages: {
                     email: {
                         required: "请输入您的邮箱地址",
-                        email: "请输入正确的邮箱地址",
+                        email: "请输入正确的邮箱地址"
                     },
                     user_pass: {
                         required: "请输入密码",
@@ -81,8 +80,7 @@
                         equalTo: "两次密码不一致"
                     },
                     company_name: {
-                        required: "请输入您的企业名称",
-
+                        required: "请输入您的企业名称"
                     },
                     industry_parent_id:{
                         required: "请选择所属行业"
@@ -91,12 +89,11 @@
                         required: "请选择行业领域"
                     },
                     real_name: {
-                        required: "请输入您的姓名",
-
+                        required: "请输入您的姓名"
                     },
                     mobile: {
                         required: "请输入您的手机号码",
-                        isMobile: "请输入正确的手机号码",
+                        isMobile: "请输入正确的手机号码"
                     },
                     mobile_code: {
                         required: "请输入短信验证码",
