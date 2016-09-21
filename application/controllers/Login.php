@@ -139,7 +139,7 @@ class Login extends CI_Controller
                     redirect('index', 'index');
                     //redirect(base_url('login/register_success'));
                 } else {
-                    $res['msg'] = '验证码错误,请重新获取';
+                    $res['msg'] = '短信验证码错误,请重新获取';
                 }
             }
         }
