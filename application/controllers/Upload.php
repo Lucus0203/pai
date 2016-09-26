@@ -120,7 +120,7 @@ class Upload extends CI_Controller
             $msg .= '上传失败!第'.$row.'行的手机号不能是空的<br/>';
             $flag=false;
         }
-        if(!preg_match("/^1[1-9]{2}\d{8}$/",$data['mobile'])){
+        if(!preg_match("/^1[0-9]{10}$/",$data['mobile'])){
             $msg .= '上传失败!第'.$row.'行的手机号格式不正确<br/>';
             $flag=false;
         }
