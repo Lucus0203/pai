@@ -45,7 +45,7 @@
 					<div class="listCont">
                                                 <?php if($loginInfo['role']==1||$roleInfo['teacheredit']==1){ ?>
 						<p class="operaBtn">
-                                                    <a href="<?php echo site_url('teacher/teacheredit/'.$t['id']); ?>" class="editBtn"><i class="iedit"></i>编辑</a><a href="<?php echo site_url('teacher/teacherdel/'.$t['id']);?>" class="delBtn"><i class="idel"></i>删除</a></p>
+                                                    <a href="<?php echo site_url('teacher/teacheredit/'.$t['id']); ?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑</a><a href="<?php echo site_url('teacher/teacherdel/'.$t['id']);?>" class="delBtn"><i class="fa fa-trash-o fa-lg mr5"></i>删除</a></p>
                                                 <?php } ?>
 
                                                 <div class="imgBox">

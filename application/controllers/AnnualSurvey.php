@@ -9,7 +9,7 @@ class AnnualSurvey extends CI_Controller
         parent::__construct();
         $this->load->library(array('session','pagination'));
         $this->load->helper(array('form', 'url'));
-        $this->load->model(array('user_model','useractionlog_model', 'company_model', 'purview_model', 'industries_model','student_model','annualsurvey_model'));
+        $this->load->model(array('user_model','useractionlog_model', 'company_model', 'purview_model', 'industries_model','student_model','department_model','annualsurvey_model','annualquestion_model','annualoption_model','annualanswer_model','annualanswerdetail_model','annualcoursetype_model','annualcourse_model','annualcourselibrary_model','annualcourselibrarytype_model'));
 
         $this->_logininfo = $this->session->userdata('loginInfo');
         if (empty($this->_logininfo)) {
@@ -37,15 +37,15 @@ class AnnualSurvey extends CI_Controller
         $parm['time_end'] = $this->input->get('time_end');
         $pvalue=array_map(array($this,'escapeVal'),$parm);//防sql注入
         $this->load->database();
-        //status 1已发布2未发布3结束
-        $sql = "select a.*,if( a.ispublic != 1,2,if( unix_timestamp(now()) > unix_timestamp(a.time_end),3,1) ) as status from " . $this->db->dbprefix('annual_survey') . " a "
+        //status 1进行中2未开始3已结束
+        $sql = "select a.*,if( unix_timestamp(now()) < unix_timestamp(a.time_start),2,if( unix_timestamp(now()) > unix_timestamp(a.time_end),3,1) ) as status from " . $this->db->dbprefix('annual_survey') . " a "
             . "where a.company_code = " . $this->_logininfo['company_code'] . " and a.isdel=2 ";
-        if ($parm['status'] == 2) {//待发布
-            $sql .= " and a.ispublic != 1";
-        } elseif ($parm['status'] == 3) {//已发布并结束
-            $sql .= " and a.ispublic = 1 and unix_timestamp(now()) > unix_timestamp(a.time_end) ";
-        } elseif ($parm['status'] == 1) {//已发布未结束
-            $sql .= " and a.ispublic = 1 and unix_timestamp(now()) <= unix_timestamp(a.time_end) ";
+        if ($parm['status'] == 2) {//未开始
+            $sql .= " and unix_timestamp(now()) < unix_timestamp(a.time_start) ";
+        } elseif ($parm['status'] == 3) {//已结束
+            $sql .= " and unix_timestamp(now()) > unix_timestamp(a.time_end) ";
+        } elseif ($parm['status'] == 1) {//进行中
+            $sql .= " and unix_timestamp(now()) >= unix_timestamp(a.time_start) and unix_timestamp(now()) <= unix_timestamp(a.time_end) ";
         }
         if (!empty($parm['keyword'])) {
             $sql .= " and (a.title like '%" .  $this->db->escape_like_str($parm['keyword']) . "%' )";
@@ -74,8 +74,8 @@ class AnnualSurvey extends CI_Controller
 
     public function create(){
         $act = $this->input->post('act');
-        $msg = '';
-        $c = array();
+        $errmsg = '';
+        $survey = array();
         if (!empty($act)) {
             $logininfo = $this->_logininfo;
             $c = array('company_code' => $logininfo['company_code'],
@@ -84,23 +84,138 @@ class AnnualSurvey extends CI_Controller
                 'time_end' => $this->input->post('time_end'),
                 'info' => $this->input->post('info'),
                 'created'=>date("Y-m-d H:i:s"));
-            $c['ispublic'] = $this->input->post('public') == 1 ? 1 : 2;
-            $id = $this->annualsurvey_model->create($c);
-            //二维码
-            $survey = array('qrcode'=>$id . rand(1000, 9999));
-            $this->load->library('ciqrcode');
-            $params['data'] = $this->config->item('web_url') . 'annualsurvey/' . $id . '/' . $survey['qrcode'];
-            $params['level'] = 'H';
-            $params['size'] = 1024;
-            $params['savename'] = './uploads/annualqrcode/' . $survey['qrcode'] . '.png';
-            $this->ciqrcode->generate($params);
-            $this->annualsurvey_model->update($survey, $id);
-            redirect(site_url('annualsurvey/info/'.$id));
-            return;
+            $countSql = "select count(*) as total from " . $this->db->dbprefix('annual_survey') . " a where (unix_timestamp('".$c['time_start'].":00') < unix_timestamp(a.time_start) and unix_timestamp('".$c['time_end'].":00') > unix_timestamp(a.time_start)) or 
+            (unix_timestamp('".$c['time_start'].":00') < unix_timestamp(a.time_end) and unix_timestamp('".$c['time_end'].":00') > unix_timestamp(a.time_end)) or 
+            (unix_timestamp('".$c['time_start'].":00') > unix_timestamp(a.time_start) and unix_timestamp('".$c['time_end'].":00') < unix_timestamp(a.time_end)) ";
+            //判断时间是否有重复的问卷
+            $query=$this->db->query($countSql);
+            $count=$query->row_array();
+            if($count['total']>0){
+                $errmsg='同一时间仅可发布一份年度需求调研,请修改您的调查时间';
+                $survey=$c;
+            }else{
+                $id = $this->annualsurvey_model->create($c);
+                //二维码
+                $survey = array('qrcode'=>$id . rand(1000, 9999));
+                $this->load->library('ciqrcode');
+                $params['data'] = $this->config->item('web_url') . 'annual/answer/'.$id.'.html';
+                $params['level'] = 'H';
+                $params['size'] = 1024;
+                $params['savename'] = './uploads/annualqrcode/' . $survey['qrcode'] . '.png';
+                $this->ciqrcode->generate($params);
+                $this->annualsurvey_model->update($survey, $id);
+                redirect(site_url('annualsurvey/info/'.$id));
+                return;
+            }
         }
         $this->load->view('header');
-        $this->load->view('annual_survey/edit', array());
+        $this->load->view('annual_survey/edit',compact('errmsg','survey'));
         $this->load->view('footer');
+    }
+
+    //编辑
+    public function edit($surveyid){
+        $act = $this->input->post('act');
+        $msg = $errmsg = '';
+        if (!empty($act)) {
+            $survey = array('title' => $this->input->post('title'),
+                'time_start' => $this->input->post('time_start'),
+                'time_end' => $this->input->post('time_end'),
+                'info' => $this->input->post('info'));
+            $countSql = "select count(*) as total from " . $this->db->dbprefix('annual_survey') . " a where ( (unix_timestamp('".$c['time_start'].":00') < unix_timestamp(a.time_start) and unix_timestamp('".$c['time_end'].":00') > unix_timestamp(a.time_start)) or 
+            (unix_timestamp('".$c['time_start'].":00') < unix_timestamp(a.time_end) and unix_timestamp('".$c['time_end'].":00') > unix_timestamp(a.time_end)) or 
+            (unix_timestamp('".$c['time_start'].":00') > unix_timestamp(a.time_start) and unix_timestamp('".$c['time_end'].":00') < unix_timestamp(a.time_end)) ) and id <> $surveyid ";
+            //判断时间是否有重复的问卷
+            $query=$this->db->query($countSql);
+            $count=$query->row_array();
+            if($count['total']>0){
+                $errmsg='同一时间仅可发布一份年度需求调研,请修改您的调查时间';
+            }else {
+                $this->annualsurvey_model->update($survey, $surveyid);
+                $msg = '保存成功';
+                redirect(site_url('annualsurvey/info/'.$surveyid));
+            }
+        }
+        $survey=$this->annualsurvey_model->get_row(array('id'=>$surveyid));
+        $this->load->view('header');
+        $this->load->view('annual_survey/edit',compact('survey','msg'));
+        $this->load->view('footer');
+    }
+
+    public function copy($surveyid){
+        $act = $this->input->post('act');
+        $errmsg = '';
+        $survey=$this->annualsurvey_model->get_row(array('id'=>$surveyid));
+        unset($survey['time_start']);
+        unset($survey['time_end']);
+        if (!empty($act)) {
+            $logininfo = $this->_logininfo;
+            $c = array('company_code' => $logininfo['company_code'],
+                'title' => $this->input->post('title'),
+                'time_start' => $this->input->post('time_start'),
+                'time_end' => $this->input->post('time_end'),
+                'info' => $this->input->post('info'),
+                'created'=>date("Y-m-d H:i:s"));
+            $countSql = "select count(*) as total from " . $this->db->dbprefix('annual_survey') . " a where (unix_timestamp('".$c['time_start'].":00') < unix_timestamp(a.time_start) and unix_timestamp('".$c['time_end'].":00') > unix_timestamp(a.time_start)) or 
+            (unix_timestamp('".$c['time_start'].":00') < unix_timestamp(a.time_end) and unix_timestamp('".$c['time_end'].":00') > unix_timestamp(a.time_end)) or 
+            (unix_timestamp('".$c['time_start'].":00') > unix_timestamp(a.time_start) and unix_timestamp('".$c['time_end'].":00') < unix_timestamp(a.time_end)) ";
+            //判断时间是否有重复的问卷
+            $query=$this->db->query($countSql);
+            $count=$query->row_array();
+            if($count['total']>0){
+                $errmsg='同一时间仅可发布一份年度需求调研,请修改您的调查时间';
+                $survey=$c;
+            }else{
+                $id = $this->annualsurvey_model->create($c);
+                //二维码
+                $survey = array('qrcode'=>$id . rand(1000, 9999));
+                $this->load->library('ciqrcode');
+                $params['data'] = $this->config->item('web_url') . 'annual/answer/'.$id.'.html';
+                $params['level'] = 'H';
+                $params['size'] = 1024;
+                $params['savename'] = './uploads/annualqrcode/' . $survey['qrcode'] . '.png';
+                $this->ciqrcode->generate($params);
+                $this->annualsurvey_model->update($survey, $id);
+                //复制课程类型
+                $types=$this->annualcoursetype_model->get_all(array('company_code'=>$this->_logininfo['company_code'],'annual_survey_id'=>$surveyid));
+                foreach($types as $t){
+                    $typdid=$this->annualcoursetype_model->create(array('annual_survey_id'=>$id,'company_code'=>$t['company_code'],'annual_course_library_type_id'=>$t['annual_course_library_type_id'],'name'=>$t['name']));
+                    $courses=$this->annualcourse_model->get_all(array('annual_survey_id'=>$surveyid,'annual_course_type_id'=>$t['id']));
+                    foreach ($courses as $c){
+                        //复制课程
+                        $this->annualcourse_model->create(array('annual_survey_id'=>$id,'company_code'=>$c['company_code'],'title'=>$c['title'],'annual_course_type_id'=>$typdid));
+                    }
+                }
+                //复制问题
+                $questions=$this->annualquestion_model->get_all(array('annual_survey_id'=>$surveyid));
+                foreach ($questions as $q){
+                    $questionid=$this->annualquestion_model->create(array('annual_survey_id'=>$id,'type'=>$q['type'],'module'=>$q['module'],'title'=>$q['title'],'required'=>$q['required']));
+                    $options=$this->annualoption_model->get_all(array('annual_survey_id'=>$surveyid,'annual_question_id'=>$q['id']));
+                    foreach ($options as $o){
+                        //复制选项
+                        $this->annualoption_model->create(array('annual_survey_id'=>$id,'annual_question_id'=>$questionid,'content'=>$o['content']));
+                    }
+                }
+                redirect(site_url('annualsurvey/info/'.$id));
+                return;
+            }
+        }
+        $this->load->view('header');
+        $this->load->view('annual_survey/edit',compact('errmsg','survey','iscopay'));
+        $this->load->view('footer');
+    }
+
+    public function isExistSurvey($surveyid=null){
+        $time_start=$this->input->post('time_start');
+        $time_end=$this->input->post('time_end');
+        $countSql = "select count(*) as total from " . $this->db->dbprefix('annual_survey') . " a where a.isdel=2 and ( (unix_timestamp('".$time_start.":00') < unix_timestamp(a.time_start) and unix_timestamp('".$time_end.":00') > unix_timestamp(a.time_start)) or 
+            (unix_timestamp('".$time_start.":00') < unix_timestamp(a.time_end) and unix_timestamp('".$time_end.":00') > unix_timestamp(a.time_end)) or 
+            (unix_timestamp('".$time_start.":00') > unix_timestamp(a.time_start) and unix_timestamp('".$time_end.":00') < unix_timestamp(a.time_end)) ) ";
+        $countSql .= !empty($surveyid)?" and id <> $surveyid ":'';
+        //判断时间是否有重复的问卷
+        $query=$this->db->query($countSql);
+        $count=$query->row_array();
+        echo $count['total'];
     }
 
     public function info($surveyid){
@@ -111,36 +226,351 @@ class AnnualSurvey extends CI_Controller
         $this->load->view('footer');
     }
 
-    //发布
-    public function public($surveyid){
-        $this->isAllowAnnualid($surveyid);
-        if (!empty($surveyid)) {
-            $c = $this->annualsurvey_model->get_row(array('id' => $surveyid));
-            if ($c['company_code'] == $this->_logininfo['company_code']) {
-                $this->annualsurvey_model->update(array('ispublic' => 1), $surveyid);
-            }
-        }
-        redirect($_SERVER['HTTP_REFERER']);
-    }
-
-    //课程删除
+    //问卷删除
     public function del($surveyid)
     {
         $this->isAllowAnnualid($surveyid);
         if (!empty($surveyid)) {
-            $c = $this->annualsurvey_model->get_row(array('id' => $surveyid));
-            if ($c['company_code'] == $this->_logininfo['company_code']) {
+            $a = $this->annualsurvey_model->get_row(array('id' => $surveyid));
+            if(strtotime($a['time_start'])<time()&&strtotime($a['time_end'])>time()){
+                echo '问卷进行中不可删除';
+                return false;
+            }
+            if ($a['company_code'] == $this->_logininfo['company_code']) {
                 $this->annualsurvey_model->update(array('isdel' => 1), $surveyid);
             }
         }
+        redirect(site_url('annualsurvey/index'));
+    }
+
+    //QA设置
+    public function qa($qatype,$surveyid){
+        $this->isAllowAnnualid($surveyid);
+        $module=1;
+        switch ($qatype){
+            case 'acceptance':
+                $module=1;
+                break;
+            case 'organization':
+                $module=2;
+                break;
+            case 'requirement':
+                $module=3;
+                break;
+            default :
+                break;
+        }
+        $survey = $this->annualsurvey_model->get_row(array('id' => $surveyid,'company_code' => $this->_logininfo['company_code']));
+        $questions=$this->annualquestion_model->get_all(array('annual_survey_id'=>$surveyid,'module'=>$module));
+        foreach ($questions as $k=>$q){
+            $questions[$k]['options']=$this->annualoption_model->get_all(array('annual_question_id'=>$q['id']));
+        }
+        $isStarted=strtotime("now")>strtotime($survey['time_start'])?true:false;//问卷是否已开始
+        $this->load->view('header');
+        $this->load->view('annual_survey/qa', compact('survey','qatype','questions','isStarted'));
+        $this->load->view('footer');
+    }
+
+    //QA保存
+    public function saveQa($qatype,$surveyid){
+        $this->isAllowAnnualid($surveyid,false);
+        $question=$this->input->post('question');
+        $required=$this->input->post('required');
+        $type=$this->input->post('type');
+        $no=$this->input->post('no');
+
+        $module=1;
+        switch ($qatype){
+            case 'acceptance':
+                $module=1;
+                break;
+            case 'organization':
+                $module=2;
+                break;
+            case 'requirement':
+                $module=3;
+                break;
+            default :
+                break;
+        }
+        //已开始过的问卷不可修改问题
+        $survey = $this->annualsurvey_model->get_row(array('id' => $surveyid,'company_code' => $this->_logininfo['company_code']));
+        $isStarted=strtotime($survey['time_start']) < strtotime("now")?true:false;
+        if($isStarted){
+            echo 0;
+        }else{
+            $deldatasql="delete question,opt from ". $this->db->dbprefix('annual_question') ." question left join ". $this->db->dbprefix('annual_option') ." opt on question.id=opt.annual_question_id where question.annual_survey_id=".$this->db->escape($surveyid)." and module=$module ";
+            $this->db->query($deldatasql);
+
+            foreach ($question as $k=>$title){
+                $q=array('annual_survey_id'=>$surveyid,'title'=>$title,'type'=>$type[$k],'module'=>$module,'required'=>$required[$k]);
+                $qid=$this->annualquestion_model->create($q);
+                $options=$this->input->post('option'.$no[$k]);
+                foreach ($options as $op){
+                    $o=array('annual_survey_id'=>$surveyid,'annual_question_id'=>$qid,'content'=>$op);
+                    $this->annualoption_model->create($o);
+                }
+            }
+            echo 1;
+        }
+    }
+
+    //课程选择
+    public function course($surveyid,$coursetypeid=null){
+        $this->isAllowAnnualid($surveyid);
+        $survey = $this->annualsurvey_model->get_row(array('id' => $surveyid,'company_code' => $this->_logininfo['company_code']));
+        $courselibrarytypes=$this->annualcourselibrarytype_model->get_all(array('ispublic'=>1));
+        $coursetypes=$this->annualcoursetype_model->get_all(array('annual_survey_id'=>$surveyid,'company_code'=>$this->_logininfo['company_code']));
+        if(!empty($coursetypeid)){
+            $currentcoursetype=$this->annualcoursetype_model->get_row(array('id'=>$coursetypeid));
+        }
+        //查找课程
+        $page = $this->input->get('per_page', true);
+        $page = $page * 1 < 1 ? 1 : $page;
+        $page_size = 10;
+        $this->load->database();
+        $sql = "select ac.*,act.name as typename from " . $this->db->dbprefix('annual_course') . " ac left join 
+            " . $this->db->dbprefix('annual_course_type') . " act on ac.annual_course_type_id = act.id "
+            . " where ac.company_code = " . $this->_logininfo['company_code'] . " and ac.annual_survey_id=$surveyid ";
+        if(!empty($coursetypeid)){
+            $sql.=" and ac.annual_course_type_id = ".$this->db->escape($coursetypeid);
+        }
+        $query = $this->db->query("select count(*) as num from ($sql) s ");
+        $num = $query->row_array();
+        $total_rows = $num['num'];
+        $config['base_url'] = site_url('annualsurvey/course/'.$surveyid.'/'.$coursetypeid);
+        $config['per_page'] = $page_size;
+        $config['total_rows'] = $total_rows;
+        $this->pagination->initialize($config);
+        $query = $this->db->query($sql . " order by ac.id desc limit " . ($page - 1) * $page_size . "," . $page_size);
+        $courses = $query->result_array();
+        $links = $this->pagination->create_links();
+
+        $isStarted=strtotime("now")>strtotime($survey['time_start'])?true:false;//问卷是否已开始
+        $res=$this->session->userdata('res_status');//返回状态
+        $this->session->unset_userdata('res_status');
+        $this->load->view('header');
+        $this->load->view('annual_survey/course', compact('survey','courselibrarytypes','coursetypes','currentcoursetype','courses','links','total_rows','res','isStarted'));
+        $this->load->view('footer');
+    }
+
+    //ajax课程选择
+    public function courseSelect($surveyid){
+        $library_type_id=$this->input->post('annual_course_library_type_id');
+        $library_type=$this->annualcourselibrarytype_model->get_row(array('id'=>$library_type_id));
+        if(!empty($library_type_id)&&!empty($surveyid)&&$this->isAllowAnnualid($surveyid,false)){
+            $count=$this->annualcoursetype_model->get_count(array('annual_survey_id'=>$surveyid,'annual_course_library_type_id'=>$library_type_id));
+            $type_name=$count>0?$library_type['name'].($count+1):$library_type['name'];
+            $coursetypeid=$this->annualcoursetype_model->create(array('annual_survey_id'=>$surveyid,'company_code'=>$this->_logininfo['company_code'],'annual_course_library_type_id'=>$library_type_id,'name'=>$type_name));
+            $insertSql="insert into ".$this->db->dbprefix('annual_course')." (`annual_survey_id`, `company_code`, `title`, `annual_course_type_id`, `created`) select $surveyid,'".$this->_logininfo['company_code']."' , title, $coursetypeid, CURRENT_TIMESTAMP from ".$this->db->dbprefix('annual_course_library')." cl where cl.type_id=$library_type_id ;";
+            $this->db->query($insertSql);
+            echo site_url('annualsurvey/course/'.$surveyid.'/'.$coursetypeid);
+        }else{
+            echo 0;
+        }
+    }
+
+    //ajax课程添加
+    public function courseTypeAdd($surveyid){
+        $name=$this->input->post('name');
+        if(!empty($name)&&!empty($surveyid)&&$this->isAllowAnnualid($surveyid,false)){
+            $coursetypeid=$this->annualcoursetype_model->create(array('annual_survey_id'=>$surveyid,'company_code'=>$this->_logininfo['company_code'],'name'=>$name));
+            echo site_url('annualsurvey/course/'.$surveyid.'/'.$coursetypeid);
+        }else{
+            echo 0;
+        }
+    }
+
+    //删除课程类型
+    public function delType($surveyid,$coursetypeid){
+        if(!empty($coursetypeid)&&!empty($surveyid)&&$this->isAllowAnnualid($surveyid,false)){
+            $this->annualcoursetype_model->del($coursetypeid);
+            $this->annualcourse_model->del(array('company_code'=>$this->_logininfo['company_code'],'annual_survey_id'=>$surveyid,'	annual_course_type_id'=>$coursetypeid));
+            redirect(site_url('annualsurvey/course/'.$surveyid).'?res=success');
+        }else{
+            redirect(site_url('annualsurvey/course/'.$surveyid).'?res=fail');
+        }
+    }
+    //删除课程
+    public function delCourse($surveyid,$courseid){
+        if(!empty($courseid)&&!empty($surveyid)&&$this->isAllowAnnualid($surveyid,false)){
+            $this->annualcourse_model->del(array('company_code'=>$this->_logininfo['company_code'],'id'=>$courseid));
+            $this->session->set_userdata('res_status','success');
+        }else{
+            $this->session->set_userdata('res_status','fail');
+        }
         redirect($_SERVER['HTTP_REFERER']);
+    }
+    //ajax课程类型编辑
+    public function courseTypeEdit($surveyid){
+        $name=$this->input->post('name');
+        $coursetypeid=$this->input->post('coursetypeid');
+        if(!empty($name)&&!empty($coursetypeid)&&!empty($surveyid)&&$this->isAllowAnnualid($surveyid,false)){
+            $this->annualcoursetype_model->update(array('name'=>$name),$coursetypeid);
+            $this->session->set_userdata('res_status','success');
+        }else{
+            $this->session->set_userdata('res_status','fail');
+        }
+        echo $_SERVER['HTTP_REFERER'];
+    }
+    //ajax保存课程
+    public function courseSave($surveyid,$coursetypeid){
+        $title=$this->input->post('title');
+        $courseid=$this->input->post('courseid');
+        if(!empty($title)&&!empty($surveyid)&&$this->isAllowAnnualid($surveyid,false)){
+            if(empty($courseid)){
+                $this->annualcourse_model->create(array('annual_survey_id'=>$surveyid,'company_code'=>$this->_logininfo['company_code'],'title'=>$title,'annual_course_type_id'=>$coursetypeid));
+            }else{
+                $this->annualcourse_model->update(array('title'=>$title),$courseid);
+            }
+            $this->session->set_userdata('res_status','success');
+        }else{
+            $this->session->set_userdata('res_status','fail');
+        }
+        echo $_SERVER['HTTP_REFERER'];
+
+    }
+
+    //提交名单
+    public function surveylist($surveyid){
+        $this->isAllowAnnualid($surveyid);
+        $survey = $this->annualsurvey_model->get_row(array('id' => $surveyid,'company_code' => $this->_logininfo['company_code']));
+
+        //提交学员
+        $page = $this->input->get('per_page', true);
+        $page = $page * 1 < 1 ? 1 : $page;
+        $page_size = 10;
+        $this->load->database();
+        $sql = "select s.name,s.job_code,s.job_name,s.mobile,d.name as department,a.id as answer_id,a.created "
+            . "from " . $this->db->dbprefix('annual_answer') . " a left join " . $this->db->dbprefix('student') . " s on a.student_id=s.id "
+            . "left join " . $this->db->dbprefix('department') . " d on s.department_id = d.id "
+            . " where a.company_code = " . $this->_logininfo['company_code'] . " and a.annual_survey_id=$surveyid ";
+        $query = $this->db->query("select count(*) as num from ($sql) s ");
+        $num = $query->row_array();
+        $total_rows = $num['num'];
+        $config['base_url'] = site_url('annualsurvey/surveylist/'.$surveyid);
+        $config['per_page'] = $page_size;
+        $config['total_rows'] = $total_rows;
+        $this->pagination->initialize($config);
+        $query = $this->db->query($sql . " order by a.created desc limit " . ($page - 1) * $page_size . "," . $page_size);
+        $students = $query->result_array();
+        $links = $this->pagination->create_links();
+        $this->load->view('header');
+        $this->load->view('annual_survey/surveylist', compact('survey','students','links','total_rows'));
+        $this->load->view('footer');
+    }
+
+    //问卷详情
+    public function answerdetail($answerid){
+        $answer=$this->annualanswer_model->get_row(array('id'=>$answerid));
+        $survey=$this->annualsurvey_model->get_row(array('id'=>$answer['annual_survey_id']));
+        $student=$this->student_model->get_row(array('id'=>$answer['student_id']));
+        $depart = $this->department_model->get_row(array('id'=>$student['department_id']));
+        $student['department'] = $depart['name'];
+        $step=array('1'=>'acceptance','2'=>'organization','3'=>'requirement');
+        foreach ($step as $sk=>$s){
+            $questions=$this->annualquestion_model->get_all(array('annual_survey_id'=>$survey['id'],'module'=>$sk));
+            foreach ($questions as $k=>$q){
+                $answersql="select d.answer_content,o.content as option_title from " . $this->db->dbprefix('annual_answer_detail') . " d left join " . $this->db->dbprefix('annual_option') . " o on d.annual_option_id=o.id "
+                    . " where d.annual_answer_id = " . $answerid . " and d.annual_question_id = ".$q['id'];
+                $query = $this->db->query($answersql);
+                $questions[$k]['answer']=($q['type']==2)?$query->result_array():$query->row_array();
+            }
+            $answer[$s]=$questions;
+        }
+        $sql = "select c.title "
+            . "from " . $this->db->dbprefix('annual_answer_course') . " a left join " . $this->db->dbprefix('annual_course') . " c on a.annual_course_id=c.id "
+            . " where a.company_code = " . $this->_logininfo['company_code'] . " and a.annual_answer_id=$answerid ";
+        $query = $this->db->query($sql . " order by a.created asc ");
+        $answer['courses'] = $query->result_array();
+        $this->load->view('annual_survey/answer_detail', compact('survey','answer','student','step'));
+    }
+
+    //答案统计
+    public function answeranalysis($surveyid){
+        $this->isAllowAnnualid($surveyid);
+        $parm['keyword'] = $this->input->get('keyword');
+        $parm['department_parent_id'] = $this->input->get('department_parent_id');
+        $parm['department_id'] = $this->input->get('department_id');
+        $pvalue=array_map(array($this,'escapeVal'),$parm);//防sql注入
+        $where = "parent_id is null and company_code = '{$this->_logininfo['company_code']}' ";
+        $departments = $this->department_model->get_all($where);
+        $second_departments = !empty($parm['department_id'])?$this->department_model->get_all(array('parent_id' => $pvalue['department_id'])):array();
+
+        $keyword = !empty($parm['keyword'])?" and (q.title like '%" .  $this->db->escape_like_str($parm['keyword']) . "%' )":'';
+        $departWhere = !empty($parm['department_parent_id'])?" and s.department_parent_id = ".$pvalue['department_parent_id']:'';
+        $departWhere .= !empty($parm['department_id'])?" and s.department_id = ".$pvalue['department_id']:'';
+
+
+        $survey = $this->annualsurvey_model->get_row(array('id' => $surveyid,'company_code' => $this->_logininfo['company_code']));
+        $step=array('1'=>'acceptance','2'=>'organization','3'=>'requirement');
+        foreach ($step as $sk=>$s){
+            $questionsql="select * from ".$this->db->dbprefix('annual_question')." q "
+                ." where annual_survey_id=$surveyid and module = $sk";
+            $questionsql .= $keyword;
+            $questionsql.=" order by id asc ";
+            $query=$this->db->query($questionsql);
+            $questions=$query->result_array();
+            foreach ($questions as $k=>$q){
+                if($q['type']==1||$q['type']==2){
+                    $answersql="select o.content as option_title,count(d.id) as num from " . $this->db->dbprefix('annual_option') . " o "
+                        . "left join " . $this->db->dbprefix('annual_answer_detail') . " d on d.annual_option_id=o.id "
+                        . "left join " . $this->db->dbprefix('student') . " s on d.student_id = s.id ".$departWhere
+                        . " where o.annual_question_id = " . $q['id'];
+                    $answersql.= " group by o.id ";
+                    $query = $this->db->query($answersql);
+                    $questions[$k]['answer']=$query->result_array();
+                }elseif($q['type']==3){
+                    $answersql="select s.name,d.answer_content from " . $this->db->dbprefix('annual_answer_detail') . " d  "
+                        . "left join " . $this->db->dbprefix('student') . " s on d.student_id = s.id ".$departWhere
+                        . " where d.annual_question_id = ".$q['id'];
+                    $query = $this->db->query($answersql);
+                    $questions[$k]['answer']=$query->result_array();
+                }
+                $answersql="select d.* from " . $this->db->dbprefix('annual_answer_detail') . " d  "
+                    . "left join " . $this->db->dbprefix('student') . " s on d.student_id = s.id "
+                    . " where d.annual_question_id = ".$q['id'];
+                $answersql.=$departWhere;
+                $answersql.=" group by d.student_id ";
+                $query = $this->db->query("select count(a.id) as total from ($answersql) a ");
+                $total=$query->row_array();
+                $questions[$k]['total']=$total['total'];
+            }
+            $answer[$s]=$questions;
+        }
+        //课程统计
+        $sql = "select c.title,count(a.id) as num "
+            . "from " . $this->db->dbprefix('annual_course') . " c "
+            . "left join " . $this->db->dbprefix('annual_answer_course') . " a on a.annual_course_id=c.id "
+            . "left join " . $this->db->dbprefix('student') . " s on a.student_id = s.id "
+            . " where c.company_code = " . $this->_logininfo['company_code'] . " and c.annual_survey_id=$surveyid ";
+        $sql.=$departWhere;
+        $query = $this->db->query($sql . " group by c.id order by c.created asc ");
+        $answer['courses']['detail'] = $query->result_array();
+
+        $answersql="select c.id from " . $this->db->dbprefix('annual_answer_course') . " c  "
+            . "left join " . $this->db->dbprefix('student') . " s on c.student_id = s.id "
+            . " where c.annual_survey_id = ".$surveyid;
+        $answersql.=$departWhere;
+        $answersql.=" group by c.student_id ";
+        $query = $this->db->query("select count(a.id) as total from ($answersql) a ");
+        $total=$query->row_array();
+        $answer['courses']['total']=$total['total'];
+
+
+        $this->load->view('header');
+        $this->load->view('annual_survey/answer_analysis', compact('parm','survey','departments','second_departments','answer'));
+        $this->load->view('footer');
+
     }
 
     //是否是自己公司下的问卷
-    private function isAllowAnnualid($surveyid){
+    private function isAllowAnnualid($surveyid,$redirect=true){
         if(empty($surveyid)||$this->annualsurvey_model->get_count(array('id' => $surveyid,'company_code'=>$this->_logininfo['company_code']))<=0){
-            redirect(site_url('annualsurvey/list'));
+            if($redirect){redirect(site_url('annualsurvey/list'));}
             return false;
+        }else{
+            return true;
         }
     }
 

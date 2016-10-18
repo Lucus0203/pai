@@ -1,22 +1,17 @@
-<script type="text/javascript">
-    $(document).ready(function(){
-        $(function(){$('.shareBtn').click(function(){return confirm('确定发布吗?');});});
-    });
-</script>
 <div class="wrap">
     <div class="comBox">
         <div class="topNavi">
-                <a href="<?php echo site_url('annualsurvey/create') ?>" class="fRight borBlueH37 aCenter">创建调研问卷</a>
+                <a href="<?php echo site_url('annualsurvey/create') ?>" class="fRight borBlueH37 aCenter">创建新问卷</a>
             <ul class="topNaviUl">
                 <li <?php if(empty($parm['status'])){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('annualsurvey/index') ?>">全部调研问卷</a></li>
-                <li <?php if($parm['status']==2){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('annualsurvey/index').'?status=2' ?>">待发布</a></li>
-                <li <?php if($parm['status']==1){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('annualsurvey/index').'?status=1' ?>">已发布</a></li>
+                <li <?php if($parm['status']==2){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('annualsurvey/index').'?status=2' ?>">未开始</a></li>
+                <li <?php if($parm['status']==1){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('annualsurvey/index').'?status=1' ?>">进行中</a></li>
                 <li <?php if($parm['status']==3){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('annualsurvey/index').'?status=3' ?>">已结束</a></li>
             </ul>
 
         </div>
 
-        <div class="seachBox clearfix bgGray">
+        <div class="seachBox clearfix borderTop">
             <form method="get" action="">
                 <ul>
                     <li class="w250 mr60">
@@ -35,14 +30,14 @@
                 <?php foreach ($surveies as $c){ ?>
                     <div class="listCont">
                         <p class="operaBtn">
-                            <a href="<?php echo site_url('annualsurvey/edit/'.$c['id']);?>" class="editBtn"><i class="iedit"></i>编辑</a><a href="<?php echo site_url('annualsurvey/del/'.$c['id']);?>" class="delBtn"><i class="idel"></i>删除</a><?php if($c['status']==2){ ?><a href="<?php echo site_url('annualsurvey/public/'.$c['id']);?>" class="shareBtn"><i class="ishar"></i>发布</a><?php } ?></p>
+                            <a href="<?php echo site_url('annualsurvey/edit/'.$c['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑</a><?php if($c['status']!=1){ ?><a href="<?php echo site_url('annualsurvey/del/'.$c['id']);?>" class="delBtn"><i class="fa fa-trash-o fa-lg mr5"></i>删除</a><?php } ?><a href="<?php echo site_url('annualsurvey/copy/'.$c['id']);?>" class="shareBtn"><i class="fa fa-copy fa-lg mr5"></i>复制</a></p>
                         <div class="listText">
                             <p class="titp"><a class="blue" href="<?php echo site_url('annualsurvey/info/'.$c['id']);?>"><?php echo $c['title'] ?></a></p>
                             <p class="titp">
                                 <?php if($c['status']==1){ ?>
-                                    <span class="greenH25">已发布</span>
+                                    <span class="greenH25">进行中</span>
                                 <?php }elseif($c['status']==2){ ?>
-                                    <span class="greenH25">未发布</span>
+                                    <span class="orangeH25">未开始</span>
                                 <?php }elseif($c['status']==3){ ?>
                                     <span class="grayH25">已结束</span>
                                 <?php } ?>

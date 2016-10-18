@@ -445,7 +445,7 @@ class Course extends CI_Controller
         $sql = "select s.*,d.name as department,siginlist.id as siginlist_id,siginlist.signin_time,siginlist.signout_time "
             . "from " . $this->db->dbprefix('course_signin_list') . " siginlist left join " . $this->db->dbprefix('student') . " s on siginlist.student_id=s.id "
             . "left join " . $this->db->dbprefix('department') . " d on s.department_id = d.id "
-            . "where siginlist.course_id=$id ";
+            . "where siginlist.course_id=$id and s.isdel=2 ";
         $query = $this->db->query("select count(*) as num from ($sql) s ");
         $num = $query->row_array();
         $total_rows = $num['num'];

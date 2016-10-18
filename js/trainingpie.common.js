@@ -20,5 +20,5 @@ $(document).ready(function(){
     };
     $('input, textarea').placeholder();
     $('.alert-remove').click(function(){$('.alertBox').hide()});
-    setTimeout(function(){$('.alertBox').fadeOut(500);},1500);
+    setTimeout(function(){$('.alertBox').fadeOut(500);},2000);
 });

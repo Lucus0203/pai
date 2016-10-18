@@ -4,7 +4,7 @@
         <div class="comBox">
                 <p class="opBtn">
 <?php if($loginInfo['role']==1||$roleInfo['teacheredit']==1){ ?>
-                    <a href="<?php echo site_url('teacher/teacheredit/'.$teacher['id']);?>" class="editBtn"><i class="iedit"></i>编辑讲师</a><a href="<?php echo site_url('teacher/teacherdel/'.$teacher['id']);?>" class="delBtn"><i class="idel"></i>删除讲师</a>
+                    <a href="<?php echo site_url('teacher/teacheredit/'.$teacher['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑讲师</a><a href="<?php echo site_url('teacher/teacherdel/'.$teacher['id']);?>" class="delBtn"><i class="fa fa-trash-o fa-lg mr5"></i>删除讲师</a>
 <?php } ?>
 
                 <div class="listBox teacherList">

@@ -5,4 +5,12 @@
 <li id="naviDepartmentStudent"><a href="<?php echo site_url('department/index') ?>">组织与学员</a></li>
 <?php } ?>
 <li id="naviDepartmentStudent"><a href="<?php echo site_url('ability/index') ?>">能力模型</a></li>
-<li><a href="<?php echo site_url('center/index') ?>">系统设置</a></li>
+<?php if($loginInfo['company_code']=='100005'){ ?>
+<li><a href="javascript:;">年度培训计划</a>
+    <ul>
+        <li>
+            <a href="<?php echo site_url('annualsurvey/index') ?>">年度调研</a>
+        </li>
+    </ul>
+</li>
+<?php } ?>

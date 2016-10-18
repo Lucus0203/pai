@@ -23,26 +23,26 @@ $(document).ready(function(){
 
 				</div>
 
-				<div class="seachBox clearfix bgGray">
-                                    <form method="get" action="">
-					<ul>
-						<li class="w250 mr60">
-                                                    <input name="keyword" type="text" value="<?php echo $parm['keyword'] ?>" class="ipt w250" placeholder="关键字">
-						</li>
-						<li class="w496 btn"><span class="mr20">开课时间</span><input name="time_start" type="text" value="<?php echo $parm['time_start'] ?>" class="ipt w156 mr10 DTdate" autocomplete="off">至
-                                                    <input name="time_end" type="text" value="<?php echo $parm['time_end'] ?>" class="ipt w156 ml10 DTdate" autocomplete="off">
-						</li>
+				<div class="seachBox clearfix borderTop">
+                    <form method="get" action="">
+                        <ul>
+                            <li class="w250 mr60">
+                                <input name="keyword" type="text" value="<?php echo $parm['keyword'] ?>" class="ipt w250" placeholder="关键字">
+                            </li>
+                            <li class="w496 btn"><span class="mr20">开课时间</span><input name="time_start" type="text" value="<?php echo $parm['time_start'] ?>" class="ipt w156 mr10 DTdate" autocomplete="off">至
+                                <input name="time_end" type="text" value="<?php echo $parm['time_end'] ?>" class="ipt w156 ml10 DTdate" autocomplete="off">
+                            </li>
 
-                                                <li class="btn fRight"><input type="submit" class="borBlueH37 w100 mt3" value="搜索" /></li>
-					</ul>
-                                        </form>
+                            <li class="btn fRight"><input type="submit" class="borBlueH37 w100 mt3" value="搜索" /></li>
+                        </ul>
+                    </form>
 				</div>
 				<div class="listBox">
 					<?php if(count($courses)>0){?>
 						<?php foreach ($courses as $c){ ?>
 							<div class="listCont">
 								<p class="operaBtn">
-								<?php if($loginInfo['role']==1||$roleInfo['courseedit']==1){ ?><a href="<?php echo site_url('course/courseedit/'.$c['id']);?>" class="editBtn"><i class="iedit"></i>编辑</a><a href="<?php echo site_url('course/coursedel/'.$c['id']);?>" class="delBtn"><i class="idel"></i>删除</a><?php } ?><?php if($c['status']==4){ ?><a href="<?php echo site_url('course/coursepublic/'.$c['id']);?>" class="shareBtn"><i class="ishar"></i>发布</a><?php } ?></p>
+								<?php if($loginInfo['role']==1||$roleInfo['courseedit']==1){ ?><a href="<?php echo site_url('course/courseedit/'.$c['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑</a><a href="<?php echo site_url('course/coursedel/'.$c['id']);?>" class="delBtn"><i class="fa fa-trash-o fa-lg mr5"></i>删除</a><?php } ?><?php if($c['status']==4){ ?><a href="<?php echo site_url('course/coursepublic/'.$c['id']);?>" class="shareBtn"><i class="fa fa-link fa-lg mr5"></i>发布</a><?php } ?></p>
 								<div class="imgBox"><span class="helper"></span><a href="<?php echo site_url('course/courseinfo/'.$c['id']);?>"><img src="<?php echo empty($c['page_img'])?base_url().'images/course_default_img.jpg':base_url('uploads/course_img/'.$c['page_img']) ?>" alt="" width="160"></a></div>
 								<div class="listText">
 									<p class="titp"><a class="blue" href="<?php echo site_url('course/courseinfo/'.$c['id']);?>"><?php echo $c['title'] ?></a></p>
@@ -63,7 +63,7 @@ $(document).ready(function(){
 									<p>课程讲师：<a class="blue" href="<?php echo site_url('teacher/teacherinfo/'.$c['teacher_id']); ?>"><?php echo $c['teacher'] ?></a> </p><?php } ?>
 									<p><span class="mr30">开课时间：<?php echo date('Y-m-d H:i',strtotime($c['time_start'])) ?>&nbsp;至&nbsp;<?php echo date('Y-m-d H:i',strtotime($c['time_end'])) ?></span><?php echo !empty($c['time_endregister_end'])?'报名截止：'.$c['time_endregister_end']:'' ?></p>
 									<p>开课地点：<?php echo $c['address'] ?></p>
-									<?php if(!empty($c['info'])){ ?><p>讲师介绍：<?php echo mb_strlen($c['info'],'utf-8')>30?mb_substr($c['info'],0,30,'utf-8').'……':mb_substr($c['info'],0,30,'utf-8') ?></p><?php } ?>
+									<?php if(!empty($c['info'])){ ?><p>课程介绍：<?php echo mb_strlen($c['info'],'utf-8')>30?mb_substr($c['info'],0,30,'utf-8').'……':mb_substr($c['info'],0,30,'utf-8') ?></p><?php } ?>
 								</div>
 							</div>
 						<?php } ?>
