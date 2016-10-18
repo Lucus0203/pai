@@ -1,9 +1,7 @@
 <?php
 defined('BASEPATH') or exit ('No direct script access allowed');
 
-error_reporting(-1);
-ini_set('display_errors', 1);
-class AnnualSurvey extends CI_Controller
+class Annualsurvey extends CI_Controller
 {
 
     function __construct()

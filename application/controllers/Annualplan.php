@@ -6,7 +6,7 @@ defined('BASEPATH') or exit ('No direct script access allowed');
  * Date: 2016/10/14
  * Time: 下午2:49
  */
-class AnnualPlan extends CI_Controller
+class Annualplan extends CI_Controller
 {
 
     function __construct()
