@@ -84,13 +84,8 @@ class Annualsurvey extends CI_Controller
                 'time_end' => $this->input->post('time_end'),
                 'info' => $this->input->post('info'),
                 'created'=>date("Y-m-d H:i:s"));
-            $countSql = "select count(*) as total from " . $this->db->dbprefix('annual_survey') . " a where (unix_timestamp('".$c['time_start'].":00') < unix_timestamp(a.time_start) and unix_timestamp('".$c['time_end'].":00') > unix_timestamp(a.time_start)) or 
-            (unix_timestamp('".$c['time_start'].":00') < unix_timestamp(a.time_end) and unix_timestamp('".$c['time_end'].":00') > unix_timestamp(a.time_end)) or 
-            (unix_timestamp('".$c['time_start'].":00') > unix_timestamp(a.time_start) and unix_timestamp('".$c['time_end'].":00') < unix_timestamp(a.time_end)) ";
-            //判断时间是否有重复的问卷
-            $query=$this->db->query($countSql);
-            $count=$query->row_array();
-            if($count['total']>0){
+            $isexit=$this->exitSurveyCount();
+            if($isexit>0){
                 $errmsg='同一时间仅可发布一份年度需求调研,请修改您的调查时间';
                 $survey=$c;
             }else{
@@ -122,13 +117,8 @@ class Annualsurvey extends CI_Controller
                 'time_start' => $this->input->post('time_start'),
                 'time_end' => $this->input->post('time_end'),
                 'info' => $this->input->post('info'));
-            $countSql = "select count(*) as total from " . $this->db->dbprefix('annual_survey') . " a where ( (unix_timestamp('".$c['time_start'].":00') < unix_timestamp(a.time_start) and unix_timestamp('".$c['time_end'].":00') > unix_timestamp(a.time_start)) or 
-            (unix_timestamp('".$c['time_start'].":00') < unix_timestamp(a.time_end) and unix_timestamp('".$c['time_end'].":00') > unix_timestamp(a.time_end)) or 
-            (unix_timestamp('".$c['time_start'].":00') > unix_timestamp(a.time_start) and unix_timestamp('".$c['time_end'].":00') < unix_timestamp(a.time_end)) ) and id <> $surveyid ";
-            //判断时间是否有重复的问卷
-            $query=$this->db->query($countSql);
-            $count=$query->row_array();
-            if($count['total']>0){
+            $isexit=$this->exitSurveyCount($surveyid);
+            if($isexit>0){
                 $errmsg='同一时间仅可发布一份年度需求调研,请修改您的调查时间';
             }else {
                 $this->annualsurvey_model->update($survey, $surveyid);
@@ -156,13 +146,9 @@ class Annualsurvey extends CI_Controller
                 'time_end' => $this->input->post('time_end'),
                 'info' => $this->input->post('info'),
                 'created'=>date("Y-m-d H:i:s"));
-            $countSql = "select count(*) as total from " . $this->db->dbprefix('annual_survey') . " a where (unix_timestamp('".$c['time_start'].":00') < unix_timestamp(a.time_start) and unix_timestamp('".$c['time_end'].":00') > unix_timestamp(a.time_start)) or 
-            (unix_timestamp('".$c['time_start'].":00') < unix_timestamp(a.time_end) and unix_timestamp('".$c['time_end'].":00') > unix_timestamp(a.time_end)) or 
-            (unix_timestamp('".$c['time_start'].":00') > unix_timestamp(a.time_start) and unix_timestamp('".$c['time_end'].":00') < unix_timestamp(a.time_end)) ";
-            //判断时间是否有重复的问卷
-            $query=$this->db->query($countSql);
-            $count=$query->row_array();
-            if($count['total']>0){
+
+            $isexit=$this->exitSurveyCount();
+            if($isexit>0){
                 $errmsg='同一时间仅可发布一份年度需求调研,请修改您的调查时间';
                 $survey=$c;
             }else{
@@ -201,11 +187,15 @@ class Annualsurvey extends CI_Controller
             }
         }
         $this->load->view('header');
-        $this->load->view('annual_survey/edit',compact('errmsg','survey','iscopay'));
+        $this->load->view('annual_survey/edit',compact('errmsg','survey'));
         $this->load->view('footer');
     }
 
     public function isExistSurvey($surveyid=null){
+        echo $this->exitSurveyCount($surveyid);
+    }
+
+    private function exitSurveyCount($surveyid=null){
         $time_start=$this->input->post('time_start');
         $time_end=$this->input->post('time_end');
         $countSql = "select count(*) as total from " . $this->db->dbprefix('annual_survey') . " a where a.isdel=2 and ( (unix_timestamp('".$time_start.":00') < unix_timestamp(a.time_start) and unix_timestamp('".$time_end.":00') > unix_timestamp(a.time_start)) or 
@@ -215,7 +205,7 @@ class Annualsurvey extends CI_Controller
         //判断时间是否有重复的问卷
         $query=$this->db->query($countSql);
         $count=$query->row_array();
-        echo $count['total'];
+        return $count['total'];
     }
 
     public function info($surveyid){

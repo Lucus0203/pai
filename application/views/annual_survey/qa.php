@@ -42,7 +42,7 @@
                 '<select name="required[]" class="iptH37 w75 ml10">' +
                 '<option value="1">必答</option>' +
                 '<option value="2">选答</option>' +
-                '</select> <a href="#" class="copy gray9 ml20">复制</a><a href="#" class="delquestion gray9 ml10">删除</a></li>';
+                '</select> <a href="#" class="copy gray9 ml20">复制问题</a><a href="#" class="delquestion gray9 ml10">删除问题</a></li>';
             if(type==1||type==2){
                 queshtml+='<li><span class="w50 aRight">选项1</span> <input name="option1[]" type="text" class="iptH37 w345 ml10"></li>';
                 queshtml+='<li><span class="w50 aRight">选项2</span> <input name="option2[]" type="text" class="iptH37 w345 ml10"> <a href="#" class="deloption gray9 ml10">删除</a></li>';
@@ -64,17 +64,19 @@
     });
     function isEmptyInput(){
         var flag=true;
-        $('ul.zuoyeList:last').find('label.red').remove();
-        $('ul.zuoyeList:last').find('input').each(function(){
-            $(this).css('border-color','#f0f0f0');
-            if($(this).val()==''){
-                flag=false;
-                $(this).css('border-color','#f00');
-            }
-        });
+        if($('ul.zuoyeList').length > 0){
+            $('ul.zuoyeList:last').find('label.red').remove();
+            $('ul.zuoyeList:last').find('input').each(function(){
+                $(this).css('border-color','#f0f0f0');
+                if($(this).val()==''){
+                    flag=false;
+                    $(this).css('border-color','#f00');
+                }
+            });
+        }
         if(!flag){
             $('ul.zuoyeList:last').find('li:first').append('<label class="red ml10">问题或选项不能为空</label>');
-            $('html,body').animate({scrollTop: $('ul.zuoyeList:last').offset().top}, 600);
+            $('html,body').animate({scrollTop: $('label.red:first').offset().top}, 600);
         }
         return flag;
     }
@@ -147,7 +149,7 @@
                                 <option value="2" <?php if($q['required']==2){echo 'checked';} ?>>选答</option>
                             </select>
                             <?php if(!$isStarted){?>
-                            <a href="#" class="copy gray9 ml20">复制</a><a href="#" class="delquestion gray9 ml10">删除</a><?php } ?>
+                            <a href="#" class="copy gray9 ml20">复制问题</a><a href="#" class="delquestion gray9 ml10">删除问题</a><?php } ?>
                         </li>
                         <?php if($q['type']==1||$q['type']==2) {
                             foreach ($q['options'] as $ko=>$op){?>
@@ -167,37 +169,7 @@
                 </div>
             <?php }
             }else{ ?>
-            <div class="p20 borderBottom">
-                <ul class="zuoyeList">
-                    <li><span class="w50 aRight numtype">1.单选题</span><input class="type" type="hidden" name="type[]" value="1"><input class="no" type="hidden" name="no[]" value="1">
-                        <input name="question[]" type="text" class="iptH37 w345 ml10" value="">
-                        <select name="required[]" class="iptH37 w75 ml10">
-                            <option value="1">必答</option>
-                            <option value="2">选答</option>
-                        </select>
-                        <a href="#" class="copy gray9 ml20">复制</a><a href="#" class="delquestion gray9 ml10">删除</a>
-                    </li>
-                    <li><span class="w50 aRight">选项1</span>
-                        <input name="option1[]" type="text" class="iptH37 w345 ml10" value="">
-                    </li>
-                    <li><span class="w50 aRight">选项2</span>
-                        <input name="option1[]" type="text" class="iptH37 w345 ml10" value="">
-                        <a href="#" class="deloption gray9 ml10">删除</a>
-                    </li>
-                    <li><span class="w50 aRight">选项3</span>
-                        <input name="option1[]" type="text" class="iptH37 w345 ml10" value="">
-                        <a href="#" class="deloption gray9 ml10">删除</a>
-                    </li>
-                    <li><span class="w50 aRight">选项4</span>
-                        <input name="option1[]" type="text" class="iptH37 w345 ml10" value="">
-                        <a href="#" class="deloption gray9 ml10">删除</a>
-                    </li>
-                </ul>
-                <p class="f14 ml20 operational">
-                    <a href="#" class="addoption blue mr20">+ 添加选项</a>
-                    <a href="#" class="movedown blue mr20">下移</a>
-                </p>
-            </div>
+            <p class="emptyTxt">暂未添加问题</p>
             <?php } ?>
             <?php if(!$isStarted){?>
             <p class="f14 p20">

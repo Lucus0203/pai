@@ -1,11 +1,11 @@
 <script type="text/javascript">
-    jQuery.validator.methods.isexistsurvey = function(value, element, param) {
+    jQuery.validator.addMethod("isexistsurvey", function(value, element,params) {
         var flag = false;
         var time_start = $('#time_start').val();
         var time_end = $('#time_end').val();
         $.ajax({
             type:"POST",
-            url:'<?php echo site_url('annualsurvey/isExistSurvey/'.$survey['id']); ?>',
+            url:'<?php echo strpos(current_url(),'copy')?site_url('annualsurvey/isExistSurvey'):site_url('annualsurvey/isExistSurvey/'.$survey['id']); ?>',
             async:false,
             data:{'time_start':time_start,'time_end':time_end},
             success: function(res){
@@ -13,7 +13,7 @@
             }
         });
         return flag;
-    }
+    }, "此时间段存在正在调研的问卷,请更换时间段");
     $(document).ready(function () {
         $("#editForm").validate({
             rules: {
