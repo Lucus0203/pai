@@ -34,7 +34,6 @@
             return false;
         });
         $('.addQuestion').click(function(){
-            if(isEmptyInput()){return false;}
             var type=$(this).attr('rel');
             var queshtml='<div class="p20 borderBottom"><ul class="zuoyeList">' +
                 '<li><span class="w50 aRight numtype"></span><input class="type" type="hidden" name="type[]" value="'+type+'"><input class="no" type="hidden" name="no[]" value="">' +
@@ -56,32 +55,29 @@
             saveFormdata('保存成功');
             return false;
         });
-        $('.topNaviUlKec li a').click(function () {
-            return isEmptyInput();
+        $("input[name^='question']").live('focus',function(){
+            var v=$(this).val();
+            $(this).attr('lastval',v);
+            if(v=='单选题'||v=='多选题'||v=='开放题'){
+                $(this).val('');
+            }
+        }).live('blur',function(){
+            if($(this).val()==''){$(this).val($(this).attr('lastval'));}
+        });
+        $("input[name^='option']").live('focus',function(){
+            var v=$(this).val();
+            $(this).attr('lastval',v);
+            if(v==$(this).prev().text()){
+                $(this).val('');
+            }
+        }).live('blur',function(){
+            if($(this).val()==''){$(this).val($(this).attr('lastval'));}
         });
         setTimeout(autoSave,15000);
         resetAllQuestion();
     });
-    function isEmptyInput(){
-        var flag=true;
-        if($('ul.zuoyeList').length > 0){
-            $('ul.zuoyeList:last').find('label.red').remove();
-            $('ul.zuoyeList:last').find('input').each(function(){
-                $(this).css('border-color','#f0f0f0');
-                if($(this).val()==''){
-                    flag=false;
-                    $(this).css('border-color','#f00');
-                }
-            });
-        }
-        if(!flag){
-            $('ul.zuoyeList:last').find('li:first').append('<label class="red ml10">问题或选项不能为空</label>');
-            $('html,body').animate({scrollTop: $('label.red:first').offset().top}, 600);
-        }
-        return flag;
-    }
     function autoSave(){
-        saveFormdata('已自动保存成功');
+        saveFormdata('已自动保存');
         var autotime=setTimeout(autoSave,15000);
     }
     function saveFormdata(txt){
@@ -89,10 +85,6 @@
             .done(function(res) {
             if(res==1){
                 $('.surveySaveMsg').text(txt).show().fadeOut(3000);
-            }else if(res==0){
-                if(txt=='保存成功'){
-                    $('.surveySaveMsg').text('问卷已开始,无法修改').show().fadeOut(3000);
-                }
             }
         });
     }
@@ -100,19 +92,15 @@
         $('.zuoyeList').each(function(i){
             var type=$(this).find('input.type').val();
             $(this).find('input.no').val((i+1));
-            if(type==1){
-                $(this).find('.numtype').text((i+1)+'.单选题');
-            }
-            if(type==2){
-                $(this).find('.numtype').text((i+1)+'.多选题');
-            }
-            if(type==3){
-                $(this).find('.numtype').text((i+1)+'.开放题');
-            }
+            var qtxt=(type==1)?'单选题':(type==2)?'多选题':'开放题';
+            $(this).find('.numtype').text((i+1)+'.'+qtxt);
+            $(this).find("input[name^='question']").val(qtxt);
             var num=$(this).find("input[name^='option']").length;
             if(num>0){
                 $(this).find("input[name^='option']").each(function(o){
                     $(this).prop('name','option'+(i+1)+'[]').prev().text('选项'+(o+1));
+                    var r=new RegExp(/^选项\d+/g);
+                    if(r.test($(this).val())||$.trim($(this).val())==''){$(this).val($(this).prev().text());}
                 });
             }
             <?php if(!$isStarted){?>
@@ -125,6 +113,7 @@
         });
         $('.operational').first().find('.moveup').remove();
         $('.operational').last().find('.movedown').remove();
+        if($('.zuoyeList').length<=0){$('.emptyTxt').show();}else{$('.emptyTxt').hide();}
     }
 </script>
 <div class="wrap">
@@ -169,7 +158,7 @@
                 </div>
             <?php }
             }else{ ?>
-            <p class="emptyTxt">暂未添加问题</p>
+                <p class="emptyTxt yellowTipBox mt20">暂未添加问题</p>
             <?php } ?>
             <?php if(!$isStarted){?>
             <p class="f14 p20">
