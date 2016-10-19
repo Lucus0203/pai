@@ -190,13 +190,13 @@ $(document).ready(function(){
                                     <select name="department_parent_id" class="iptH37 w250">
                                         <option value="">请选择</option>
                                         <?php foreach($departments as $d){ ?>
-                                            <option <?php if(!empty($student['department_parent_id'])&&$d['id']==$student['department_parent_id']){ ?>selected=""<?php } ?> value="<?php echo $d['id'] ?>"><?php echo $d['name'] ?></option>
+                                            <option <?php if((!empty($student['department_parent_id'])&&$d['id']==$student['department_parent_id'])||empty($student['department_parent_id'])&&($d['id']==$current_department['id']||$d['id']==$current_department['parent_id'])){ ?>selected=""<?php } ?> value="<?php echo $d['id'] ?>"><?php echo $d['name'] ?></option>
                                         <?php } ?>
                                     </select>&nbsp;
                                     <select <?php if(count($second_departments)<=0){?>style="display: none;"<?php } ?> name="department_id" class="iptH37 w250">
                                         <option value="<?php echo $student['department_parent_id'] ?>" selected >请选择</option>
                                         <?php foreach($second_departments as $d){ ?>
-                                            <option <?php if($d['id']==$student['department_id']){ ?>selected<?php } ?> value="<?php echo $d['id'] ?>"><?php echo $d['name'] ?></option>
+                                            <option <?php if($d['id']==$student['department_id']||$d['id']==$current_department['id']){ ?>selected<?php } ?> value="<?php echo $d['id'] ?>"><?php echo $d['name'] ?></option>
                                         <?php } ?>
                                     </select>
                                     </span>
