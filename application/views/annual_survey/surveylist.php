@@ -3,7 +3,9 @@
 
 <div class="wrap">
     <div class="titCom clearfix">
-        <span class="titSpan"><?php echo $survey['title'] ?></span></div>
+        <span class="titSpan"><?php echo $survey['title'] ?></span>
+        <a href="<?php echo site_url('annualsurvey/index') ?>" class="fRight borBlueH37 w72 aCenter">返回列表</a>
+    </div>
 
     <div class="topNaviKec01">
         <?php $this->load->view ( 'annual_survey/top_navi' ); ?>

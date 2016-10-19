@@ -63,7 +63,7 @@
 <div class="wrap">
     <div class="titCom clearfix">
         <span class="titSpan"><?php if(strpos(current_url(),'copy')){echo '复制调研问卷';}else{echo empty($survey['id']) ? '创建调研问卷' : '编辑调研问卷';} ?></span>
-        <a href="<?php echo site_url('annualsurvey/index') ?>" class="fRight borBlueH37 aCenter">返回列表</a>
+        <a href="<?php echo site_url('annualsurvey/index') ?>" class="fRight borBlueH37 w72 aCenter">返回列表</a>
     </div>
     <div class="comBox">
         <?php if (!empty($msg)) {?>

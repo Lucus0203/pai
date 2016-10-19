@@ -46,7 +46,9 @@
 </script>
 <div class="wrap">
     <div class="titCom clearfix">
-        <span class="titSpan"><?php echo $survey['title'] ?></span></div>
+        <span class="titSpan"><?php echo $survey['title'] ?></span>
+        <a href="<?php echo site_url('annualsurvey/index') ?>" class="fRight borBlueH37 w72 aCenter">返回列表</a>
+    </div>
 
     <div class="topNaviKec01">
         <?php $this->load->view ( 'annual_survey/top_navi' ); ?>
@@ -83,10 +85,10 @@
         <div class="baoming">
             <div class="sideLeft">
                 <ul class="sideLnavi">
-                    <li class="cur"><a href="#acceptance">培训认同度<i class="ml10 fa fa-angle-right fa-lg"></i></a></li>
-                    <li><a href="#organization">培训组织性</a></li>
-                    <li ><a href="#requirement">需 求 信 息</a></li>
-                    <li ><a href="#coursechosen">课 程 选 择</a></li>
+                    <li class="cur" style="padding-left: 20px;"><a href="#acceptance">培训认同度<i class="ml10 fa fa-angle-right fa-lg"></i></a></li>
+                    <li style="padding-left: 20px;"><a href="#organization">培训组织性</a></li>
+                    <li style="padding-left: 20px;"><a href="#requirement">需 求 信 息</a></li>
+                    <li style="padding-left: 20px;"><a href="#coursechosen">课 程 选 择</a></li>
                 </ul>
             </div>
             <div class="contRight p20">

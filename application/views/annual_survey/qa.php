@@ -1,5 +1,8 @@
 <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
 <script type="text/javascript">
+    $(window).on('beforeunload',function(){
+        saveFormdata('已自动保存');
+    });
     $(document).ready(function(){
         $('.addoption').live('click',function(){
             var qeul=$(this).parent().prev();
@@ -118,7 +121,9 @@
 </script>
 <div class="wrap">
     <div class="titCom clearfix">
-        <span class="titSpan"><?php echo $survey['title'] ?></span></div>
+        <span class="titSpan"><?php echo $survey['title'] ?></span>
+        <a href="<?php echo site_url('annualsurvey/index') ?>" class="fRight borBlueH37 w72 aCenter">返回列表</a>
+    </div>
 
     <div class="topNaviKec01">
         <?php $this->load->view ( 'annual_survey/top_navi' ); ?>
@@ -158,7 +163,8 @@
                 </div>
             <?php }
             }else{ ?>
-                <p class="emptyTxt yellowTipBox mt20">暂未添加问题</p>
+                <div class="listBox emptyTxt">
+                    <div class="listCont"><div class="listText"><p>暂未添加问题</p></div></div>        </div>
             <?php } ?>
             <?php if(!$isStarted){?>
             <p class="f14 p20">
