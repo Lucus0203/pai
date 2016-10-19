@@ -57,10 +57,11 @@ $(document).ready(function(){
         return this.optional(element) || (length == 11 && mobile.test(value)); 
     }, "请正确填写您的手机号码");
     $('input[name=mobile]').blur(function(){
-        var mobile=$('input[name=mobile]').val();
+        var mobile=$(this).val();
         $('input[name=user_name]').val(mobile);
-        if($.trim($('input[name=user_pass]').val())==''){
-            $('input[name=user_pass]').val(mobile.slice(-6));
+        if($.trim($('input[name=student_pass]').val())==''){
+            $('input[name=student_pass]').val(mobile.slice(-6));
+            $('#student_pass').val(mobile.slice(-6));
         }
     });
     $('#student_pass').keyup(function(){
@@ -219,9 +220,9 @@ $(document).ready(function(){
                             <tr>
                                 <th>电子邮件</th>
 
-                                <td>
+                                <td><span class="iptInner">
                                     <input name="email" value="<?php echo $student['email'] ?>" type="text" class="iptH37 w250">
-
+                                    </span>
                                 </td>
                             </tr>
                             <tr>
