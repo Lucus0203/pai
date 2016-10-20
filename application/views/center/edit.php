@@ -61,7 +61,6 @@
                     required: true
                 },
                 logo: {
-                    required: true,
                     accept: "image/*",
                     filesize: 5 * 1048576
                 },
@@ -89,7 +88,6 @@
                     required: "请选择行业领域"
                 },
                 logo: {
-                    required: "请上传公司logo",
                     accept: "图片格式不正确",
                     filesize: "图片大小不能超过5M"
                 }, contact: {
@@ -223,7 +221,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <th><span class="red">*</span>公司Logo</th>
+                        <th>公司Logo</th>
                         <td>
                                             <span>
                                                     <?php if (!empty($company['logo'])) { ?><img width="200"

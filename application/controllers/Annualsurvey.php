@@ -557,7 +557,7 @@ class Annualsurvey extends CI_Controller
     //是否是自己公司下的问卷
     private function isAllowAnnualid($surveyid,$redirect=true){
         if(empty($surveyid)||$this->annualsurvey_model->get_count(array('id' => $surveyid,'company_code'=>$this->_logininfo['company_code']))<=0){
-            if($redirect){redirect(site_url('annualsurvey/list'));}
+            if($redirect){redirect(site_url('annualsurvey/index'));}
             return false;
         }else{
             return true;
