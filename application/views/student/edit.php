@@ -194,7 +194,7 @@ $(document).ready(function(){
                                         <?php } ?>
                                     </select>&nbsp;
                                     <select <?php if(count($second_departments)<=0){?>style="display: none;"<?php } ?> name="department_id" class="iptH37 w250">
-                                        <option value="<?php echo $current_department['id'] ?>" selected >请选择</option>
+                                        <option value="<?php echo !empty($current_department['parent_id'])?$current_department['parent_id']:$current_department['id'] ?>" selected >请选择</option>
                                         <?php foreach($second_departments as $d){ ?>
                                             <option <?php if($d['id']==$student['department_id']||$d['id']==$current_department['id']){ ?>selected<?php } ?> value="<?php echo $d['id'] ?>"><?php echo $d['name'] ?></option>
                                         <?php } ?>
