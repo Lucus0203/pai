@@ -62,7 +62,7 @@ $(document).ready(function(){
 									<?php if(!empty($c['teacher'])){ ?>
 									<p>课程讲师：<a class="blue" href="<?php echo site_url('teacher/teacherinfo/'.$c['teacher_id']); ?>"><?php echo $c['teacher'] ?></a> </p><?php } ?>
 									<p><span class="mr30">开课时间：<?php echo date('Y-m-d H:i',strtotime($c['time_start'])) ?>&nbsp;至&nbsp;<?php echo date('Y-m-d H:i',strtotime($c['time_end'])) ?></span><?php echo !empty($c['time_endregister_end'])?'报名截止：'.$c['time_endregister_end']:'' ?></p>
-									<p>开课地点：<?php echo $c['address'] ?></p>
+									<p>开课地点：<?php echo mb_strlen($c['address'],'utf-8')>30?mb_substr($c['address'],0,30,'utf-8').'……':mb_substr($c['address'],0,30,'utf-8') ?></p>
 									<?php if(!empty($c['info'])){ ?><p>课程介绍：<?php echo mb_strlen($c['info'],'utf-8')>30?mb_substr($c['info'],0,30,'utf-8').'……':mb_substr($c['info'],0,30,'utf-8') ?></p><?php } ?>
 								</div>
 							</div>

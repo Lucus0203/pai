@@ -94,9 +94,10 @@
             <div class="contRight p20">
                 <?php foreach ($answer as $ansk=>$a){
                     $qno=1;
-                    if($ansk!='courses'){?>
+                    if($ansk!='courses'){ ?>
                         <div id="<?php echo $ansk ?>" class="moduleBox" <?php if($ansk!='acceptance'){ echo 'style="display: none;"'; }?>>
-                        <?php foreach ($a as $ad){?>
+                        <?php if(count($a)>0){
+                            foreach ($a as $ad){?>
                             <p class="ttl01 pt0"><?php echo $qno++.'.'.$ad['title'];?></p>
                             <?php if($ad['type']==1||$ad['type']==2){ ?>
                                 <table class="tableA mb20">
@@ -144,6 +145,9 @@
 
                                 </table>
                             <?php } ?>
+                        <?php }
+                        }else{ ?>
+                            <p class="ttl01 pt0">暂无符合条件的问题</p>
                         <?php } ?>
                         </div>
                     <?php }else{ ?>
