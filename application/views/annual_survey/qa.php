@@ -137,7 +137,7 @@
                 <div class="p20 borderBottom">
                     <ul class="zuoyeList">
                         <li>
-                            <span class="w50 aRight numtype"></span><input class="type" type="hidden" name="type[]" value="<?php echo $q['type'] ?>"><input class="no" type="hidden" name="no[]" value="">
+                            <span class="w75 aRight numtype"></span><input class="type" type="hidden" name="type[]" value="<?php echo $q['type'] ?>"><input class="no" type="hidden" name="no[]" value="">
                             <input name="question[]" type="text" class="iptH37 w345 ml10" value="<?php echo $q['title'] ?>" <?php if($isStarted){?>disabled="disabled"<?php } ?>>
                             <select name="required[]" class="iptH37 w75 ml10" <?php if($isStarted){?>disabled="disabled"<?php } ?>>
                                 <option value="1" checked >必答</option>
@@ -148,7 +148,7 @@
                         </li>
                         <?php if($q['type']==1||$q['type']==2) {
                             foreach ($q['options'] as $ko=>$op){?>
-                                <li><span class="w50 aRight">选项<?php echo $ko+1 ?></span>
+                                <li><span class="w75 aRight">选项<?php echo $ko+1 ?></span>
                                     <input name="option<?php echo ($kq+1) ?>[]" type="text" class="iptH37 w345 ml10" value="<?php echo $op['content'] ?>"<?php if($isStarted){?>disabled="disabled"<?php } ?> ><?php if($ko>0){?> <?php if(!$isStarted){?><a href="#" class="deloption gray9 ml10">删除</a><?php } } ?>
                                 </li>
                             <?php }
