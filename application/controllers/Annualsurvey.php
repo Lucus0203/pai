@@ -434,7 +434,7 @@ class Annualsurvey extends CI_Controller
         $sql = "select s.name,s.job_code,s.job_name,s.mobile,d.name as department,a.id as answer_id,a.created "
             . "from " . $this->db->dbprefix('annual_answer') . " a left join " . $this->db->dbprefix('student') . " s on a.student_id=s.id "
             . "left join " . $this->db->dbprefix('department') . " d on s.department_id = d.id "
-            . " where a.company_code = " . $this->_logininfo['company_code'] . " and a.annual_survey_id=$surveyid ";
+            . " where a.company_code = " . $this->_logininfo['company_code'] . " and a.annual_survey_id=$surveyid and a.step=5 ";
         $query = $this->db->query("select count(*) as num from ($sql) s ");
         $num = $query->row_array();
         $total_rows = $num['num'];
