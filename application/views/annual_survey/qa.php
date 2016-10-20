@@ -97,7 +97,8 @@
             $(this).find('input.no').val((i+1));
             var qtxt=(type==1)?'单选题':(type==2)?'多选题':'开放题';
             $(this).find('.numtype').text((i+1)+'.'+qtxt);
-            $(this).find("input[name^='question']").val(qtxt);
+            var qval=$(this).find("input[name^='question']").val();
+            $(this).find("input[name^='question']").val(qval==''?qtxt:qval);
             var num=$(this).find("input[name^='option']").length;
             if(num>0){
                 $(this).find("input[name^='option']").each(function(o){
