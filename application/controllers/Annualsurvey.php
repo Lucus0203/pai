@@ -198,7 +198,7 @@ class Annualsurvey extends CI_Controller
     private function exitSurveyCount($surveyid=null){
         $time_start=$this->input->post('time_start');
         $time_end=$this->input->post('time_end');
-        $countSql = "select count(*) as total from " . $this->db->dbprefix('annual_survey') . " a where a.isdel=2 and ( (unix_timestamp('".$time_start.":00') < unix_timestamp(a.time_start) and unix_timestamp('".$time_end.":00') > unix_timestamp(a.time_start)) or 
+        $countSql = "select count(*) as total from " . $this->db->dbprefix('annual_survey') . " a where a.isdel=2 and a.company_code='".$this->_logininfo['company_code']."' and ( (unix_timestamp('".$time_start.":00') < unix_timestamp(a.time_start) and unix_timestamp('".$time_end.":00') > unix_timestamp(a.time_start)) or 
             (unix_timestamp('".$time_start.":00') < unix_timestamp(a.time_end) and unix_timestamp('".$time_end.":00') > unix_timestamp(a.time_end)) or 
             (unix_timestamp('".$time_start.":00') > unix_timestamp(a.time_start) and unix_timestamp('".$time_end.":00') < unix_timestamp(a.time_end)) ) ";
         $countSql .= !empty($surveyid)?" and id <> $surveyid ":'';
