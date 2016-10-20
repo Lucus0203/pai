@@ -231,6 +231,8 @@ class Course extends CI_Controller
             }
             $this->course_model->update($c, $id);
             $msg = '课程保存成功';
+            redirect(site_url('course/courseinfo/'.$id));
+            return;
         }
         $teachers = $this->teacher_model->get_all(array('company_code' => $logininfo['company_code'], 'isdel' => 2));
         //培训对象数据
