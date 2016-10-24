@@ -10,7 +10,7 @@
 		<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/font-awesome.min.css" />
 
 		<script type="text/javascript" src="<?php echo base_url();?>js/jquery1.83.js"></script>
-		<script type="text/javascript" src="<?php echo base_url();?>js/jquery.validate.min.js"></script>
+		<script type="text/javascript" src="<?php echo base_url();?>js/jquery.validate.min.1.8.0.1.js"></script>
 		<script type="text/javascript" src="<?php echo base_url();?>js/additional-methods.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url();?>js/jquery.simple-dtpicker.js"></script>
         <script type="text/javascript" src="<?php echo base_url();?>js/jquery.placeholder.min.js"></script>
