@@ -35,7 +35,7 @@ class Export extends CI_Controller
             ->setCellValue('F1', '职位')
             ->setCellValue('G1', '部门');
         $sql = "select student.*,department.name as department from " . $this->db->dbprefix('student') . " student left join " . $this->db->dbprefix('department') . " department on student.department_id=department.id where student.user_name <> '' and student.isdel = 2 and student.company_code='{$this->_logininfo['company_code']}' ";
-        $query = $this->db->query($sql . " order by student.id ");
+        $query = $this->db->query($sql . " order by student.department_parent_id,student.department_id,student.id ");
         $students = $query->result_array();
         foreach($students as $k => $s){
             $num=$k+2;
