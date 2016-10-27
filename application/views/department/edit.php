@@ -197,6 +197,7 @@
         <?php } else { ?>
             <div class="texturetip p2014 clearfix"><span class="fLeft">所有学员</span>
                 <div class="fRight">
+                    <?php if(count($students)>0){ ?><a href="<?php echo site_url('export/studentdata') ?>" target="_blank" class="borBlueBtnH28 w72 aCenter">导出全部学员</a><?php } ?>
                     <a id="addDeart2" href="javascript:;" class="borBlueBtnH28 w72 aCenter">添加一级部门</a>
                     <a href="<?php echo site_url('student/index/' . $current_department['id']) ?>" class="borBlueBtnH28 w72 aCenter">增加学员</a>
                 </div>
