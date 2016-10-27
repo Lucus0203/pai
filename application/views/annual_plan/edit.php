@@ -1,15 +1,45 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#editForm").validate({
+            rules: {
+                title: {
+                    required: true
+                },
+                annual_survey_id: {
+                    required: true
+                }
+            },
+            messages: {
+                title: {
+                    required: "请输入问卷名称"
+                },
+                annual_survey_id: {
+                    required: "请选择调查问卷"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.addClass("ui red pointing label transition");
+                error.insertAfter(element.parent());
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents(".row").addClass(errorClass);
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents(".row").removeClass(errorClass);
+            },
+            submitHandler: function (form) {
+                $('input[type=submit]').val('请稍后..').attr('disabled', 'disabled');
+                form.submit();
+            }
+        });
+    });
+</script>
 <div class="wrap">
     <div class="titCom clearfix">
         <span class="titSpan"><?php echo empty($survey['id']) ? '创建培训计划' : '编辑培训计划'; ?></span>
         <a href="<?php echo site_url('annualplan/index') ?>" class="fRight borBlueH37 aCenter">返回列表</a>
     </div>
     <div class="comBox">
-        <?php if (!empty($msg)) {?>
-            <p class="alertBox alert-success"><span class="alert-msg"><?php echo $msg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
-        <?php } ?>
-        <?php if (!empty($errmsg)) {?>
-            <p class="alertBox alert-danger"><span class="alert-msg"><?php echo $errmsg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
-        <?php } ?>
         <div class="tableBox">
             <form id="editForm" method="post" action="">
                 <input name="act" type="hidden" value="act"/>
@@ -25,9 +55,26 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>调查问卷</th>
+                        <th><span class="red">*</span>调查问卷</th>
                         <td>
-                            <span class="iptInner"><select name="annual_survey_id" class="iptH37 w250"></select><span class="f14 gray9">（请选择相应的调研问卷）</span></span>
+                            <?php if(!empty($survey['id'])){
+                                echo $survey['title'] ?>
+                                <input type="hidden" name="annual_survey_id" value="<?php echo $survey['id'] ?>">
+                            <?php }else{ ?>
+                                <span class="iptInner">
+                                <select name="annual_survey_id" class="iptH37 w250">
+                                    <option value="">请选择</option>
+                                    <?php foreach ($surveys as $s){?>
+                                        <option value="<?php echo $s['id']; ?>"><?php echo $s['title'];?></option>
+                                    <?php } ?>
+                                </select><span class="f14 gray9">（请选择相应的调研问卷）</span></span>
+                            <?php } ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>备注</th>
+                        <td>
+                            <textarea name="note" class="iptare pt10" placeholder="可输入备注内容"><?php echo $plan['note'] ?></textarea>
                         </td>
                     </tr>
                     <tr>

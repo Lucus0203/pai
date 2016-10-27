@@ -144,15 +144,14 @@
 </script>
 <div class="wrap">
     <div class="titCom clearfix">
-        <span class="titSpan"><?php echo $survey['title'] ?></span>
-        <a href="<?php echo site_url('annualsurvey/index') ?>" class="fRight borBlueH37 w72 aCenter">返回列表</a>
+        <?php $this->load->view ( 'annual_survey/top_tit' ); ?>
     </div>
 
     <div class="topNaviKec01">
         <?php $this->load->view ( 'annual_survey/top_navi' ); ?>
     </div>
     <div class="clearfix textureBox">
-        <?php if($isStarted){?><p class="yellowTipBox mt20 mb20">年度调研问卷开始后,内容不可修改</p><?php } ?>
+        <p class="yellowTipBox mt20">请注意您的调研时间,调研问卷开始后,内容不可修改</p>
         <div class="textureSide">
             <?php if(!$isStarted){?><a id="addType" href="javascript:void(0)" class="topbtn">添加课程类型</a><?php } ?>
             <div class="fnavi mb10">

@@ -8,7 +8,7 @@ class Annualsurvey extends CI_Controller
     {
         parent::__construct();
         $this->load->library(array('session','pagination'));
-        $this->load->helper(array('form', 'url'));
+        $this->load->helper(array('form', 'url','download'));
         $this->load->model(array('user_model','useractionlog_model', 'company_model', 'purview_model', 'industries_model','student_model','department_model','annualsurvey_model','annualquestion_model','annualoption_model','annualanswer_model','annualanswerdetail_model','annualcoursetype_model','annualcourse_model','annualcourselibrary_model','annualcourselibrarytype_model'));
 
         $this->_logininfo = $this->session->userdata('loginInfo');
@@ -352,7 +352,7 @@ class Annualsurvey extends CI_Controller
             $count=$this->annualcoursetype_model->get_count(array('annual_survey_id'=>$surveyid,'annual_course_library_type_id'=>$library_type_id));
             $type_name=$count>0?$library_type['name'].($count+1):$library_type['name'];
             $coursetypeid=$this->annualcoursetype_model->create(array('annual_survey_id'=>$surveyid,'company_code'=>$this->_logininfo['company_code'],'annual_course_library_type_id'=>$library_type_id,'name'=>$type_name));
-            $insertSql="insert into ".$this->db->dbprefix('annual_course')." (`annual_survey_id`, `company_code`, `title`, `annual_course_type_id`, `created`) select $surveyid,'".$this->_logininfo['company_code']."' , title, $coursetypeid, CURRENT_TIMESTAMP from ".$this->db->dbprefix('annual_course_library')." cl where cl.type_id=$library_type_id ;";
+            $insertSql="insert into ".$this->db->dbprefix('annual_course')." (`annual_survey_id`, `company_code`, `title`, `annual_course_library_id`,`annual_course_type_id`, `created`) select $surveyid,'".$this->_logininfo['company_code']."' , title,id, $coursetypeid, CURRENT_TIMESTAMP from ".$this->db->dbprefix('annual_course_library')." cl where cl.type_id=$library_type_id ;";
             $this->db->query($insertSql);
             echo site_url('annualsurvey/course/'.$surveyid.'/'.$coursetypeid);
         }else{
@@ -551,6 +551,15 @@ class Annualsurvey extends CI_Controller
         $this->load->view('header');
         $this->load->view('annual_survey/answer_analysis', compact('parm','survey','departments','second_departments','answer'));
         $this->load->view('footer');
+
+    }
+
+    //下载签到二维码
+    public function downloadqrcode($surveyid)
+    {
+        $this->isAllowAnnualid($surveyid);
+        $survey=$this->annualsurvey_model->get_row(array('id'=>$surveyid));
+        force_download($survey['title'].'.png',file_get_contents('uploads/annualqrcode/'.$survey['qrcode'].'.png'));
 
     }
 

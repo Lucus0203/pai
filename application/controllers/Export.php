@@ -9,7 +9,7 @@ class Export extends CI_Controller
         parent::__construct();
         $this->load->library(array('session'));
         $this->load->helper(array('form', 'url','download'));
-        $this->load->model(array('user_model', 'useractionlog_model', 'department_model','student_model','course_model'));
+        $this->load->model(array('user_model', 'useractionlog_model', 'department_model','student_model','course_model','annualplan_model','annualcoursetype_model'));
 
         $this->_logininfo = $this->session->userdata('loginInfo');
         if (empty($this->_logininfo)) {
@@ -20,6 +20,45 @@ class Export extends CI_Controller
             $this->load->vars(array('loginInfo' => $this->_logininfo, 'roleInfo' => $roleInfo));
         }
 
+    }
+
+    //导出全部学员
+    public function studentdata(){
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', '姓名')
+            ->setCellValue('B1', '手机号')
+            ->setCellValue('C1', '邮箱')
+            ->setCellValue('D1', '性别')
+            ->setCellValue('E1', '工号')
+            ->setCellValue('F1', '职位')
+            ->setCellValue('G1', '部门');
+        $sql = "select student.*,department.name as department from " . $this->db->dbprefix('student') . " student left join " . $this->db->dbprefix('department') . " department on student.department_id=department.id where student.user_name <> '' and student.isdel = 2 and student.company_code='{$this->_logininfo['company_code']}' ";
+        $query = $this->db->query($sql . " order by student.id ");
+        $students = $query->result_array();
+        foreach($students as $k => $s){
+            $num=$k+2;
+            $sex=!empty($s['sex'])?$s['sex']==1?'男':'女':'';
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$num, $s['name'])
+                ->setCellValue('B'.$num, $s['mobile'])
+                ->setCellValue('C'.$num, $s['email'])
+                ->setCellValue('D'.$num, $sex)
+                ->setCellValue('E'.$num, $s['job_code'])
+                ->setCellValue('F'.$num, $s['job_name'])
+                ->setCellValue('G'.$num, $s['department']);
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('学员名单');
+        $objPHPExcel->setActiveSheetIndex(0);
+        $name='所有学员名单';
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'.$name.'.xls"');
+        header('Cache-Control: max-age=0');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        exit;
     }
 
     //报名名单
@@ -229,9 +268,205 @@ class Export extends CI_Controller
         }
     }
 
+    //导出年度计划excel
+    public function exportplan($planid){
+        if($this->isAllowPlanid($planid)){
+            $plan=$this->annualplan_model->get_row(array('id'=>$planid));
+            $typies=$this->annualcoursetype_model->get_all(array('annual_survey_id'=>$plan['annual_survey_id']));
+            $res=array();
+            foreach ($typies as $k=>$t){
+                $where=" where pc.annual_plan_id = $planid ".
+                    " and pc.company_code = '".$this->_logininfo['company_code']."' ".
+                    " and pc.openstatus=1 ".
+                    " and pc.annual_course_type_id = ".$t['id'];
+                //课程统计
+                $tsql="select count(pc.id) as count_num , sum(people) as people_num,sum(price) as price_num from " . $this->db->dbprefix('annual_plan_course') . " pc ".$where;
+                $query = $this->db->query($tsql);
+                $t['total'] = $query->row_array();
+                //课程详细
+                $csql="select pc.*,teacher.name as teacher from " . $this->db->dbprefix('annual_plan_course') . " pc left join " . $this->db->dbprefix('teacher') . " teacher on pc.teacher_id=teacher.id ".$where;
+                $query = $this->db->query($csql." order by pc.year,pc.month ");
+                $t['courses'] = $query->result_array();
+                $res[$k]=$t;
+            }
+            //讲师
+            $teachersql="select teacher.* from ".$this->db->dbprefix('annual_plan_course')." plan_course left join ".$this->db->dbprefix('teacher')." teacher on plan_course.teacher_id=teacher.id where plan_course.openstatus=1 ";
+            $query = $this->db->query($teachersql . " order by plan_course.id asc ");
+            $teachers = $query->result_array();
+
+            $this->load->library('PHPExcel');
+            $objPHPExcel = new PHPExcel();
+            $objActSheet = $objPHPExcel->getActiveSheet()->setTitle('年度计划课程');
+            //excel style
+            $styleTitle = array(
+                'font' => array('color' => array('argb' => 'FFffffff')),
+                'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'startcolor' => array('argb' => 'FF00bbd3')
+                ),
+            );
+            $styleTh = array(
+                'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER),
+                'fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'startcolor' => array('argb' => 'FFf5f5f5')
+                ),
+            );
+            $styleTd = array(
+                'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER),
+            );
+            $styleTdLeft = array(
+                'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER),
+            );
+
+            //$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, 8, 'Some value');
+            $objActSheet->mergeCells('A1:I1')->setCellValue('A1', '总览')
+                ->mergeCells('A2:C2')->setCellValue('A2', '课程类型')
+                ->mergeCells('D2:E2')->setCellValue('D2', '开课数量')
+                ->mergeCells('F2:G2')->setCellValue('F2', '培训人次')
+                ->mergeCells('H2:I2')->setCellValue('H2', '培训预算');
+            $objActSheet->getStyle('A1')->applyFromArray($styleTitle);
+            $objActSheet->getStyle('A2')->applyFromArray($styleTh);
+            $objActSheet->getStyle('D2')->applyFromArray($styleTh);
+            $objActSheet->getStyle('F2')->applyFromArray($styleTh);
+            $objActSheet->getStyle('H2')->applyFromArray($styleTh);
+            $count_total=0;$people_total=0;$price_total=0;
+            $i=3;
+            foreach ($res as $r){
+                $count_total+=$r['total']['count_num'];
+                $people_total+=$r['total']['people_num'];
+                $price_total+=$r['total']['price_num'];
+                $objActSheet->mergeCells('A'.$i.':C'.$i)->setCellValue('A'.$i,$r['name']);
+                $objActSheet->mergeCells('D'.$i.':E'.$i)->setCellValue('D'.$i,round($r['total']['count_num']));
+                $objActSheet->mergeCells('F'.$i.':G'.$i)->setCellValue('F'.$i,round($r['total']['people_num']));
+                $objActSheet->mergeCells('H'.$i.':I'.$i)->setCellValue('H'.$i,round($r['total']['price_num']));
+                $objActSheet->getStyle('A'.$i)->applyFromArray($styleTd);
+                $objActSheet->getStyle('D'.$i)->applyFromArray($styleTd);
+                $objActSheet->getStyle('F'.$i)->applyFromArray($styleTd);
+                $objActSheet->getStyle('H'.$i)->applyFromArray($styleTd);
+                ++$i;
+            }
+            $objActSheet->mergeCells('A'.$i.':C'.$i)->setCellValue('A'.$i,'全部');
+            $objActSheet->mergeCells('D'.$i.':E'.$i)->setCellValue('D'.$i,"=SUM(D3:D".($i-1).")");
+            $objActSheet->mergeCells('F'.$i.':G'.$i)->setCellValue('F'.$i,"=SUM(F3:F".($i-1).")");
+            $objActSheet->mergeCells('H'.$i.':I'.$i)->setCellValue('H'.$i,"=SUM(H3:H".($i-1).")");
+            $objActSheet->getStyle('A'.$i)->applyFromArray($styleTd);
+            $objActSheet->getStyle('D'.$i)->applyFromArray($styleTd);
+            $objActSheet->getStyle('F'.$i)->applyFromArray($styleTd);
+            $objActSheet->getStyle('H'.$i)->applyFromArray($styleTd);
+
+            ++$i;
+            foreach ($res as $r){
+                $objActSheet->mergeCells('A' . $i . ':I' . $i)->setCellValue('A' . $i, '');
+                if($r['total']['count_num']>0){
+                    ++$i;
+                    $objActSheet->mergeCells('A'.$i.':I'.$i)->setCellValue('A'.$i, $r['name']);
+                    $objActSheet->getStyle('A'.$i)->applyFromArray($styleTitle);
+                    ++$i;
+                    $objActSheet->setCellValue('A'.$i,'课程名称');
+                    $objActSheet->setCellValue('B'.$i,'课程介绍');
+                    $objActSheet->setCellValue('C'.$i,'内训/外训');
+                    $objActSheet->setCellValue('D'.$i,'供应商');
+                    $objActSheet->setCellValue('E'.$i,'讲师');
+                    $objActSheet->setCellValue('F'.$i,'天数');
+                    $objActSheet->setCellValue('G'.$i,'人次');
+                    $objActSheet->setCellValue('H'.$i,'预算');
+                    $objActSheet->setCellValue('I'.$i,'时间');
+                    $objActSheet->getStyle('A'.$i)->applyFromArray($styleTh);
+                    $objActSheet->getStyle('B'.$i)->applyFromArray($styleTh);
+                    $objActSheet->getStyle('C'.$i)->applyFromArray($styleTh);
+                    $objActSheet->getStyle('D'.$i)->applyFromArray($styleTh);
+                    $objActSheet->getStyle('E'.$i)->applyFromArray($styleTh);
+                    $objActSheet->getStyle('F'.$i)->applyFromArray($styleTh);
+                    $objActSheet->getStyle('G'.$i)->applyFromArray($styleTh);
+                    $objActSheet->getStyle('H'.$i)->applyFromArray($styleTh);
+                    $objActSheet->getStyle('I'.$i)->applyFromArray($styleTh);
+                    foreach ($r['courses'] as $c){
+                        ++$i;
+                        $objActSheet->setCellValue('A'.$i,$c['title']);
+                        $objActSheet->setCellValue('B'.$i,$c['info']);
+                        $objActSheet->setCellValue('C'.$i,$c['external']==1?'外训':'内训');
+                        $objActSheet->setCellValue('D'.$i,$c['supplier']);
+                        $objActSheet->setCellValue('E'.$i,$c['teacher']);
+                        $objActSheet->setCellValue('F'.$i,$c['day']);
+                        $objActSheet->setCellValue('G'.$i,$c['people']);
+                        $objActSheet->setCellValue('H'.$i,$c['price']);
+                        $objActSheet->setCellValue('I'.$i,$c['year'].'.'.$c['month']);
+                        $objActSheet->getStyle('A'.$i)->applyFromArray($styleTdLeft);
+                        $objActSheet->getStyle('B'.$i)->applyFromArray($styleTdLeft);
+                        $objActSheet->getStyle('C'.$i)->applyFromArray($styleTd);
+                        $objActSheet->getStyle('D'.$i)->applyFromArray($styleTd);
+                        $objActSheet->getStyle('E'.$i)->applyFromArray($styleTd);
+                        $objActSheet->getStyle('F'.$i)->applyFromArray($styleTd);
+                        $objActSheet->getStyle('G'.$i)->applyFromArray($styleTd);
+                        $objActSheet->getStyle('H'.$i)->applyFromArray($styleTd);
+                        $objActSheet->getStyle('I'.$i)->applyFromArray($styleTd);
+                    }
+                    ++$i;
+                }
+            }
+            if(count($teachers)>0) {
+                $objActSheet->mergeCells('A' . $i . ':I' . $i)->setCellValue('A' . $i, '');
+                ++$i;
+                $objActSheet->mergeCells('A' . $i . ':I' . $i)->setCellValue('A' . $i, '讲师介绍');
+                $objActSheet->getStyle('A' . $i)->applyFromArray($styleTitle);
+                ++$i;
+                $objActSheet->setCellValue('A'.$i,'讲师');
+                $objActSheet->setCellValue('B'.$i,'工作形式');
+                $objActSheet->setCellValue('C'.$i,'工作年限');
+                $objActSheet->mergeCells('D'.$i.':I'.$i)->setCellValue('D'.$i,'简介');
+                $objActSheet->getStyle('A'.$i)->applyFromArray($styleTh);
+                $objActSheet->getStyle('B'.$i)->applyFromArray($styleTh);
+                $objActSheet->getStyle('C'.$i)->applyFromArray($styleTh);
+                $objActSheet->getStyle('D'.$i)->applyFromArray($styleTh);
+                foreach ($teachers as $t){
+                    ++$i;
+                    $objActSheet->setCellValue('A'.$i,$t['name']);
+                    $objActSheet->setCellValue('B'.$i,$t['work_type']==1?'专职':'兼职');
+                    $objActSheet->setCellValue('C'.$i,!empty($t['years'])?$t['years'].'年':'');
+                    $objActSheet->mergeCells('D'.$i.':I'.$i)->setCellValue('D'.$i,$t['info']);
+                    $objActSheet->getStyle('A'.$i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('B'.$i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('C'.$i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('D'.$i)->applyFromArray($styleTdLeft);
+                }
+                ++$i;
+            }
+            if(!empty($plan['note'])){
+                $objActSheet->mergeCells('A' . $i . ':I' . $i)->setCellValue('A' . $i, '');
+                ++$i;
+                $objActSheet->mergeCells('A' . $i . ':I' . $i)->setCellValue('A' . $i, '备注');
+                $objActSheet->getStyle('A' . $i)->applyFromArray($styleTitle);
+                ++$i;
+                $objActSheet->mergeCells('A' . $i . ':I' . $i)->setCellValue('A' . $i, $plan['note']);
+                $objActSheet->getStyle('A' . $i)->applyFromArray($styleTdLeft);
+            }
+
+
+            $name=$plan['title'];
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="'.$name.'.xls"');
+            header('Cache-Control: max-age=0');
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
+            exit;
+        }else{
+            echo '数据错误,导出失败';
+        }
+    }
+
     //是否是自己公司下的课程
     private function isAllowCourseid($courseid){
         if(empty($courseid)||$this->course_model->get_count(array('id' => $courseid,'company_code'=>$this->_logininfo['company_code']))<=0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    //是否是自己公司下的计划
+    private function isAllowPlanid($planid){
+        if(empty($planid)||$this->annualplan_model->get_count(array('id' => $planid,'company_code'=>$this->_logininfo['company_code']))<=0){
             return false;
         }else{
             return true;

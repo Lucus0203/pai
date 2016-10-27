@@ -1,8 +1,7 @@
 <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
 <div class="wrap">
     <div class="titCom clearfix">
-        <span class="titSpan"><?php echo $survey['title'] ?></span>
-        <a href="<?php echo site_url('annualsurvey/index') ?>" class="fRight borBlueH37 w72 aCenter">返回列表</a>
+        <?php $this->load->view ( 'annual_survey/top_tit' ); ?>
     </div>
 
     <div class="topNaviKec01">
@@ -18,7 +17,7 @@
                 <p class="f14 gray6 mb10">开始时间：<?php echo $survey['time_start'] ?> 至 <?php echo $survey['time_end'] ?></p>
                 <p class="borderTop f14 gray6 pt10">问卷备注：<?php echo nl2br($survey['info']) ?></p>
             </div>
-            <div class="fRight"><img src="<?php echo base_url('uploads/annualqrcode/'.$survey['qrcode'].'.png') ?>" alt="" width="160"><p class="aCenter gray9">扫一扫预览问卷</p></div>
+            <div class="fRight"><img src="<?php echo base_url('uploads/annualqrcode/'.$survey['qrcode'].'.png') ?>" alt="" width="160"><p class="aCenter gray9">扫一扫预览问卷</p><p class="aCenter gray9"><a href="<?php echo site_url('annualsurvey/downloadqrcode/'.$survey['id'])?>" class="blue">下载二维码</a>,邮箱发送给学员</p></div>
 
         </div>
         <dl class="kecDl">

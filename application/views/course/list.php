@@ -71,7 +71,7 @@ $(document).ready(function(){
 						echo '<div class="listCont"><div class="listText"><p>暂无符合条件的课程</p></div></div>';
 					} ?>
 				</div>
-                                <div class="pageNavi">
+                <div class="pageNavi">
 					<?php echo $links ?>
 				</div>
 			</div>
