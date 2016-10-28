@@ -329,7 +329,7 @@ textarea:after {
 	color: #09bed5 !important;
 }
 
-.red {
+.red,label.error {
 	color: #f55 !important;
 	;
 }

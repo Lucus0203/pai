@@ -42,10 +42,12 @@ $(document).ready(function(){
 						<?php foreach ($courses as $c){ ?>
 							<div class="listCont">
 								<p class="operaBtn">
-								<?php if($loginInfo['role']==1||$roleInfo['courseedit']==1){ ?><a href="<?php echo site_url('course/courseedit/'.$c['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑</a><a href="<?php echo site_url('course/coursedel/'.$c['id']);?>" class="delBtn"><i class="fa fa-trash-o fa-lg mr5"></i>删除</a><?php } ?><?php if($c['status']==4){ ?><a href="<?php echo site_url('course/coursepublic/'.$c['id']);?>" class="shareBtn"><i class="fa fa-link fa-lg mr5"></i>发布</a><?php } ?></p>
+								<?php if($loginInfo['role']==1||$roleInfo['courseedit']==1){ ?><a href="<?php echo site_url('course/courseedit/'.$c['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑</a><a href="<?php echo site_url('course/coursedel/'.$c['id']);?>" class="delBtn"><i class="fa fa-trash-o fa-lg mr5"></i>删除</a><?php } ?><?php if($c['status']==4){ ?><?php if(empty($c['time_start'])||empty($c['time_end'])||empty($c['address'])){?><a href="<?php echo site_url('course/courseedit/'.$c['id']); ?>"><i class="fa fa-link fa-lg mr5"></i>发布</a><?php }else{ ?><a href="<?php echo site_url('course/coursepublic/'.$c['id']); ?>" class="shareBtn"><i class="fa fa-link fa-lg mr5"></i>发布</a><?php } ?>
+
+                                    <?php } ?></p>
 								<div class="imgBox"><span class="helper"></span><a href="<?php echo site_url('course/courseinfo/'.$c['id']);?>"><img src="<?php echo empty($c['page_img'])?base_url().'images/course_default_img.jpg':base_url('uploads/course_img/'.$c['page_img']) ?>" alt="" width="160"></a></div>
 								<div class="listText">
-									<p class="titp"><a class="blue" href="<?php echo site_url('course/courseinfo/'.$c['id']);?>"><?php echo $c['title'] ?></a></p>
+									<p class="titp"><a class="blue" href="<?php echo site_url('course/courseinfo/'.$c['id']);?>"><?php echo $c['title'] ?></a><?php if(empty($c['time_start'])||empty($c['time_end'])||empty($c['address'])){echo '<span class="orange">(未完善)</span>';} ?></p>
 									<p class="titp">
 										<?php if($c['status']==1){//1报名中2进行中3结束4待发布5待开启报名9其他 ?>
 											<span class="greenH25">报名中</span>
@@ -61,8 +63,12 @@ $(document).ready(function(){
 									</p>
 									<?php if(!empty($c['teacher'])){ ?>
 									<p>课程讲师：<a class="blue" href="<?php echo site_url('teacher/teacherinfo/'.$c['teacher_id']); ?>"><?php echo $c['teacher'] ?></a> </p><?php } ?>
+                                <?php if(!empty($c['time_start'])&&!empty($c['time_end'])){ ?>
 									<p><span class="mr30">开课时间：<?php echo date('Y-m-d H:i',strtotime($c['time_start'])) ?>&nbsp;至&nbsp;<?php echo date('Y-m-d H:i',strtotime($c['time_end'])) ?></span><?php echo !empty($c['time_endregister_end'])?'报名截止：'.$c['time_endregister_end']:'' ?></p>
+                                <?php } ?>
+                                <?php if(!empty($c['address'])){ ?>
 									<p>开课地点：<?php echo mb_strlen($c['address'],'utf-8')>30?mb_substr($c['address'],0,30,'utf-8').'……':mb_substr($c['address'],0,30,'utf-8') ?></p>
+                                <?php } ?>
 									<?php if(!empty($c['info'])){ ?><p>课程介绍：<?php echo mb_strlen($c['info'],'utf-8')>30?mb_substr($c['info'],0,30,'utf-8').'……':mb_substr($c['info'],0,30,'utf-8') ?></p><?php } ?>
 								</div>
 							</div>

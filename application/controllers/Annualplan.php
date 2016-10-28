@@ -14,7 +14,7 @@ class Annualplan extends CI_Controller
         parent::__construct();
         $this->load->library(array('session','pagination'));
         $this->load->helper(array('form', 'url'));
-        $this->load->model(array('user_model','useractionlog_model', 'company_model','teacher_model', 'purview_model', 'industries_model','student_model','teacher_model','department_model','annualsurvey_model','annualplan_model','annualplancourse_model','annualcourse_model','annualcoursetype_model','annualcourselibrary_model'));
+        $this->load->model(array('user_model','useractionlog_model', 'company_model','teacher_model','course_model', 'purview_model', 'industries_model','student_model','teacher_model','department_model','annualsurvey_model','annualplan_model','annualplancourse_model','annualcourse_model','annualcoursetype_model','annualcourselibrary_model'));
 
         $this->_logininfo = $this->session->userdata('loginInfo');
         if (empty($this->_logininfo)) {
@@ -186,6 +186,45 @@ class Annualplan extends CI_Controller
         }
         $this->annualplancourse_model->update(array('openstatus'=>2),array('annual_plan_id'=>$planid,'annual_course_id'=>$annualcourseid));
         redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    //课程同步到课程管理
+    public function syncourse($planid){
+        //同步开设中的课程
+        $acourses=$this->annualplancourse_model->get_all("company_code = '".$this->_logininfo['company_code']."' and annual_plan_id = ".$planid." and openstatus = 1 ");
+        foreach ($acourses as $ac){
+            $c = array('company_code' => $this->_logininfo['company_code'],
+                'title' => $ac['title'],
+                'teacher_id' => $ac['teacher_id'],
+                'price' => $ac['price'],
+                'info' => $ac['info'],
+                'isdel'=>2);
+            if (empty($c['teacher_id'])) {
+                $c['teacher_id'] = NULL;
+            }
+            if(empty($ac['course_id'])){
+                $ac['course_id']=$this->course_model->create($c);
+                $this->annualplancourse_model->update($ac,array('id'=>$ac['id']));
+            }else{
+                $this->course_model->update($c,$ac['course_id']);
+            }
+        }
+        //同步取消开课的课程
+        $acourses=$this->annualplancourse_model->get_all("company_code = '".$this->_logininfo['company_code']."' and annual_plan_id = ".$planid." and openstatus = 2 and (course_id is not null or course_id != '') ");
+        foreach ($acourses as $ac){
+            $c = array('company_code' => $this->_logininfo['company_code'],
+                'title' => $ac['title'],
+                'teacher_id' => $ac['teacher_id'],
+                'price' => $ac['price'],
+                'info' => $ac['info'],
+                'isdel'=>1);
+            if (empty($c['teacher_id'])) {
+                $c['teacher_id'] = NULL;
+            }
+            $this->course_model->update($c,$ac['course_id']);
+        }
+        echo 1;
+
     }
 
     //年度培训计划

@@ -1,5 +1,6 @@
 <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/kecheng.css"/>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css"/>
+<script type="text/javascript"  src="<?php echo base_url() ?>js/jquery-ui.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         $('#open_status').change(function(){
@@ -13,6 +14,22 @@
         $('a.cancel').click(function(){
             return confirm('确定取消开课?');
         });
+        $('#syncourse').click(function(){
+            $(this).text('同步中,请稍后..');
+            $.ajax({
+                type: "post",
+                url: '<?php echo site_url('annualplan/syncourse/'.$plan['id']) ?>',
+                async: false,
+                success: function (res) {
+                    if (res == 1) {
+                        $('.surveySaveMsg').show().fadeOut(3000);
+                        $('#syncourse').text('同步到课程管理');
+                    }
+                }
+            });
+            return false;
+        });
+        $(document).tooltip();
     });
 </script>
 <div class="wrap">
@@ -24,7 +41,7 @@
         <?php $this->load->view ( 'annual_plan/top_navi' ); ?>
         <ul class="fRight proPrint">
             <li>
-                <a href="#" class="borBlueH37 aCenter">导出到课程管理</a><!--?已开设的课程将被添加到课程管理中-->
+                <a id="syncourse" href="#" class="borBlueH37 aCenter">同步到课程管理</a><a href="javascript:;" title="开设了的课程将被添加到课程管理中"><i class="fa fa-question-circle-o fa-lg ml10 blue"></i></a>
             </li>
         </ul>
     </div>
@@ -36,8 +53,8 @@
                 <p class="clearfix f14 mb20">共有<?php echo $total ?>个课程,其中<?php echo $total_open ?>个开课
                     <select id="open_status" class="iptH37 fRight">
                         <option value="">全部状态</option>
-                        <option value="1" <?php if($parm['openstatus']==1){?>selected<?php } ?> >开课</option>
-                        <option value="2" <?php if($parm['openstatus']==2){?>selected<?php } ?> >未开课</option>
+                        <option value="1" <?php if($parm['openstatus']==1){?>selected<?php } ?> >已开设</option>
+                        <option value="2" <?php if($parm['openstatus']==2){?>selected<?php } ?> >未开设</option>
                     </select>
                     <select id="typeid" class="iptH37 fRight mr10">
                         <option value="">全部类型</option>
@@ -81,7 +98,7 @@
                             <?php if($c['openstatus']==1){?>
                                 <a href="<?php echo site_url('annualplan/opencourse/'.$plan['id'].'/'.$c['id'])?>" class="blue mr10">编辑</a><a href="<?php echo site_url('annualplan/closecourse/'.$plan['id'].'/'.$c['id'])?>" class="blue cancel">取消开课</a>
                             <?php }else{ ?>
-                                <a href="<?php echo site_url('annualplan/opencourse/'.$plan['id'].'/'.$c['id'])?>" class="blue">开课</a>
+                                <a href="<?php echo site_url('annualplan/opencourse/'.$plan['id'].'/'.$c['id'])?>" class="blue">开设课程</a>
                             <?php } ?>
                         </td>
                     </tr>
@@ -97,3 +114,4 @@
         </div>
     </div>
 </div>
+<div class="surveySaveMsg">同步成功</div>
