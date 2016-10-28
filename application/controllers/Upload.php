@@ -113,10 +113,6 @@ class Upload extends CI_Controller
     private  function validateStudent($data,$row,$first_department,$second_department){
         $flag=true;
         $msg='';
-        if(empty($data['name'])){
-            $msg .= '上传失败!第'.$row.'行的姓名不能是空的<br/>';
-            $flag=false;
-        }
         if(empty($data['mobile'])){
             $msg .= '上传失败!第'.$row.'行的手机号不能是空的<br/>';
             $flag=false;
