@@ -98,6 +98,7 @@ class Upload extends CI_Controller
                     if (empty($s['id'])) {
                         $this->student_model->create($student);
                     } else {
+                        unset($student['user_pass']);
                         $this->student_model->update($student, $s['id']);
                     }
                 }

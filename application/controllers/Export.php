@@ -30,11 +30,13 @@ class Export extends CI_Controller
             ->setCellValue('A1', '姓名')
             ->setCellValue('B1', '手机号')
             ->setCellValue('C1', '邮箱')
-            ->setCellValue('D1', '性别')
-            ->setCellValue('E1', '工号')
-            ->setCellValue('F1', '职位')
-            ->setCellValue('G1', '部门');
-        $sql = "select student.*,department.name as department from " . $this->db->dbprefix('student') . " student left join " . $this->db->dbprefix('department') . " department on student.department_id=department.id where student.user_name <> '' and student.isdel = 2 and student.company_code='{$this->_logininfo['company_code']}' ";
+            ->setCellValue('D1', '密码(保密安全需要不做导出)')
+            ->setCellValue('E1', '性别')
+            ->setCellValue('F1', '工号')
+            ->setCellValue('G1', '职位')
+            ->setCellValue('H1', '一级部门')
+            ->setCellValue('I1', '二级部门');
+        $sql = "select student.*,department_parent.name as department_parent,department.name as department from " . $this->db->dbprefix('student') . " student left join " . $this->db->dbprefix('department') . " department_parent on student.department_parent_id=department_parent.id left join " . $this->db->dbprefix('department') . " department on student.department_id=department.id where student.user_name <> '' and student.isdel = 2 and student.company_code='{$this->_logininfo['company_code']}' ";
         $query = $this->db->query($sql . " order by student.department_parent_id,student.department_id,student.id ");
         $students = $query->result_array();
         foreach($students as $k => $s){
@@ -44,10 +46,12 @@ class Export extends CI_Controller
                 ->setCellValue('A'.$num, $s['name'])
                 ->setCellValue('B'.$num, $s['mobile'])
                 ->setCellValue('C'.$num, $s['email'])
-                ->setCellValue('D'.$num, $sex)
-                ->setCellValue('E'.$num, $s['job_code'])
-                ->setCellValue('F'.$num, $s['job_name'])
-                ->setCellValue('G'.$num, $s['department']);
+                ->setCellValue('D'.$num, '')
+                ->setCellValue('E'.$num, $sex)
+                ->setCellValue('F'.$num, $s['job_code'])
+                ->setCellValue('G'.$num, $s['job_name'])
+                ->setCellValue('H'.$num, $s['department'])
+                ->setCellValue('I'.$num, $s['department']);
         }
 
         $objPHPExcel->getActiveSheet()->setTitle('学员名单');
