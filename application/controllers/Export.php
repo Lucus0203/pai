@@ -30,7 +30,7 @@ class Export extends CI_Controller
             ->setCellValue('A1', '姓名')
             ->setCellValue('B1', '手机号')
             ->setCellValue('C1', '邮箱')
-            ->setCellValue('D1', '密码(保密安全需要不做导出)')
+            ->setCellValue('D1', '密码(保密安全需要,不被导出)')
             ->setCellValue('E1', '性别')
             ->setCellValue('F1', '工号')
             ->setCellValue('G1', '职位')
