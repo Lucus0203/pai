@@ -51,8 +51,10 @@ class Annualplan extends CI_Controller
         $query = $this->db->query($sql . " order by p.id desc limit " . ($page - 1) * $page_size . "," . $page_size);
         $plans = $query->result_array();
 
+        $isAccessAccount=$this->isAccessAccount();
+
         $this->load->view('header');
-        $this->load->view('annual_plan/list', array('plans' => $plans, 'links' => $this->pagination->create_links()));
+        $this->load->view('annual_plan/list', array('plans' => $plans,'isAccessAccount'=>$isAccessAccount, 'links' => $this->pagination->create_links()));
         $this->load->view('footer');
     }
 
@@ -316,6 +318,18 @@ class Annualplan extends CI_Controller
             return false;
         }else{
             return true;
+        }
+    }
+
+    //是否是正式账号
+    private function isAccessAccount(){
+        $ordersql="select count(*) as num FROM pai_company_order company_order where company_order.module='annualplan' and company_order.company_code=".$this->_logininfo['company_code']." and company_order.checked=1 and (company_order.use_num=0 or company_order.use_num_remain > 0) and (company_order.years=0 or (date_add(company_order.start_time, interval company_order.years year) > NOW() and company_order.start_time < NOW() ) )";
+        $query = $this->db->query($ordersql);
+        $res = $query->row_array();
+        if($res['num']>0){
+            return true;
+        }else{
+            return false;
         }
     }
 

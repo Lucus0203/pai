@@ -1,6 +1,14 @@
+<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css"/>
 <div class="wrap">
-    <div class="titCom clearfix"><span class="titSpan">年度培训计划</span><a href="<?php echo site_url('annualplan/create') ?>" class="fRight borBlueH37 aCenter">创建培训计划</a></div>
-    <div class="comBox">
+        <div class="textureCont w960">
+        <div class="texturetip p1524 clearfix">
+            <div class="fLeft"><span class="pt5">年度培训计划</span>
+                <?php if(!$isAccessAccount){ ?><p class="clearfix gray9">您正免费体验该功能,有5个体验名额,如需开通请联系<a class="blue" href="tel:021-61723727">021-61723727</a>,辛老师</p><?php } ?>
+            </div>
+            <div class="fRight">
+                <a class="borBlueH37 aCenter" href="<?php echo site_url('annualplan/create') ?>">创建培训计划</a>
+            </div>
+        </div>
         <div class="listBox">
             <?php if(count($plans)>0){?>
                 <?php foreach ($plans as $p){ ?>

@@ -1,7 +1,15 @@
+<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css"/>
 <div class="wrap">
-    <div class="comBox">
+    <div class="textureCont w960">
+        <div class="texturetip p1524 clearfix">
+            <div class="fLeft"><span class="pt5">年度调研</span>
+                <?php if(!$isAccessAccount){ ?><p class="clearfix gray9">您正免费体验该功能,有5个体验名额,如需开通请联系<a class="blue" href="tel:021-61723727">021-61723727</a>,辛老师</p><?php } ?>
+            </div>
+            <div class="fRight">
+                <a class="borBlueH37 aCenter" href="<?php echo site_url('annualsurvey/create') ?>">创建新问卷</a>
+            </div>
+        </div>
         <div class="topNavi">
-                <a href="<?php echo site_url('annualsurvey/create') ?>" class="fRight borBlueH37 aCenter">创建新问卷</a>
             <ul class="topNaviUl">
                 <li <?php if(empty($parm['status'])){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('annualsurvey/index') ?>">全部调研问卷</a></li>
                 <li <?php if($parm['status']==2){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('annualsurvey/index').'?status=2' ?>">未开始</a></li>
