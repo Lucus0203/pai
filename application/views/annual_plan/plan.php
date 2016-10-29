@@ -80,10 +80,10 @@
                             <th>内训/外训</th>
                             <th>供应商</th>
                             <th>讲师</th>
-                            <th>时间</th>
                             <th>天数</th>
                             <th>人次</th>
                             <th>预算</th>
+                            <th>时间</th>
                         </tr>
                         <?php foreach ($r['courses'] as $c){
                             $bbno=($c===end($r['courses']))?'style="border-bottom: none;"':''; ?>
