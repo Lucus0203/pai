@@ -1,4 +1,11 @@
 <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
+<script>
+    $(document).ready(function(){
+        $('#stoping').click(function () {
+            return confirm('确定暂停发布吗?');
+        });
+    });
+</script>
 <div class="wrap">
     <div class="titCom clearfix">
         <?php $this->load->view ( 'annual_survey/top_tit' ); ?>
@@ -6,9 +13,13 @@
 
     <div class="topNaviKec01">
         <?php $this->load->view ( 'annual_survey/top_navi' ); ?>
-        <a href="<?php echo site_url('annualplan/create/'.$survey['id']) ?>" class="fRight borBlueH37 mt5 mr5">继续发布</a>
-        <a href="<?php echo site_url('annualplan/create/'.$survey['id']) ?>" class="fRight borBlueH37 mt5 mr5">暂停发布</a>
-        <a href="<?php echo site_url('annualplan/create/'.$survey['id']) ?>" class="fRight borBlueH37 mt5 mr5">发布</a>
+        <?php if($survey['public']=='2'){ ?>
+        <a id="stoping" href="<?php echo site_url('annualsurvey/stoping/'.$survey['id']) ?>" class="fRight borBlueH37 mt5 mr5">暂停发布</a>
+        <?php }elseif($survey['public']=='3'){ ?>
+        <a href="<?php echo site_url('annualsurvey/goon/'.$survey['id']) ?>" class="fRight borBlueH37 mt5 mr5">继续发布</a>
+        <?php }else{ ?>
+            <a href="<?php echo site_url('annualsurvey/starting/'.$survey['id']) ?>" class="fRight borBlueH37 mt5 mr5">发布</a>
+        <?php } ?>
     </div>
 
     <div class="comBox">
@@ -17,7 +28,7 @@
         <div class="ewmBox">
             <div class="boxl">
                 <p class="blue f18"><?php echo $survey['title'] ?></p>
-                <p class="f14 gray6 mb10">开始时间：<?php echo $survey['time_start'] ?> 至 <?php echo $survey['time_end'] ?></p>
+                <p class="f14 gray6 mb10">开始时间：<?php if(empty($survey['time_start'])||empty($survey['time_end'])){echo '暂未设置';}else{ ?><?php echo $survey['time_start'] ?> 至 <?php echo $survey['time_end']; }?></p>
                 <p class="borderTop f14 gray6 pt10">问卷备注：<?php echo nl2br($survey['info']) ?></p>
             </div>
             <div class="fRight"><img src="<?php echo base_url('uploads/annualqrcode/'.$survey['qrcode'].'.png') ?>" alt="" width="160"><p class="aCenter gray9">扫一扫预览问卷</p><p class="aCenter gray9"><a href="<?php echo site_url('annualsurvey/downloadqrcode/'.$survey['id'])?>" class="blue">下载二维码</a>,邮箱发送给学员</p></div>

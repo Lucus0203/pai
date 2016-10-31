@@ -42,10 +42,10 @@
                         <div class="listText">
                             <p class="titp"><a class="blue" href="<?php echo site_url('annualsurvey/info/'.$c['id']);?>"><?php echo $c['title'] ?></a></p>
                             <p class="titp">
-                                <?php if($c['status']==1){ ?>
+                                <?php if($c['status']==1&&$c['public']==2){ ?>
                                     <span class="greenH25">进行中</span>
-                                <?php }elseif($c['status']==2){ ?>
-                                    <span class="orangeH25">未开始</span>
+                                <?php }elseif($c['status']==2||$c['public']!=2){ ?>
+                                    <span class="orangeH25">未发布</span>
                                 <?php }elseif($c['status']==3){ ?>
                                     <span class="grayH25">已结束</span>
                                 <?php } ?>

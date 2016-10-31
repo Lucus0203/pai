@@ -37,8 +37,7 @@
                                 if(res==0){
                                     alert('添加失败')
                                 }else{
-                                    alert(res);
-                                    //window.location=res;
+                                    window.location=res;
                                 }
                             }
                         });
@@ -57,8 +56,7 @@
                                 if (res == 0) {
                                     alert('添加失败');
                                 } else {
-                                    alert(res);
-                                    //window.location=res;
+                                    window.location=res;
                                 }
                             }
                         });
@@ -85,8 +83,7 @@
                                 if (res == 0) {
                                     alert('操作失败');
                                 } else {
-                                    alert(res);
-                                    //window.location=res;
+                                    window.location=res;
                                 }
                             }
                         });
@@ -100,8 +97,7 @@
                                 if (res == 0) {
                                     alert('操作失败');
                                 } else {
-                                    alert(res);
-                                    //window.location=res;
+                                    window.location=res;
                                 }
                             }
                         });
@@ -179,9 +175,9 @@
             <div class="texturetip textureWite clearfix mb10 mr20"><span class="fLeft"><?php if(empty($currentcoursetype)){echo '所有课程';}else{echo $currentcoursetype['name'];}?></span>
                 <?php if(!empty($currentcoursetype) && !$isStarted){ ?>
                 <div class="fRight">
+                    <a id="addCourse" href="#" class="borBlueBtnH28" style="margin-right:0;">添加课程</a>
                     <a id="editType" rel="<?php echo $currentcoursetype['id']; ?> " href="#" class="borBlueBtnH28">编辑类型</a>
                     <a id="delType" href="<?php echo site_url('annualsurvey/delType/' .$survey['id'].'/'.$currentcoursetype['id']) ?>" class="borBlueBtnH28">删除类型</a>
-                    <a id="addCourse" href="#" class="borBlueBtnH28" style="margin-right:0;">添加课程</a>
                 </div>
                 <?php } ?>
             </div>

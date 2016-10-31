@@ -328,9 +328,7 @@
                             <input type="hidden" name="targetone" value="<?php echo $course['targetone'] ?>"/><input
                                 type="hidden" name="targettwo" value="<?php echo $course['targettwo'] ?>"/><input
                                 type="hidden" name="targetstudent" value="<?php echo $course['targetstudent'] ?>"/>
-                            <input readonly="true" placeholder="请选择学员" name="target" value="<?php echo $course['target'] ?>" type="text"
-                                   class="iptH37 w237"><a id="addTarget" class="borBlueH37 ml20"
-                                                          href="javascript:void(0)">选择学员</a>
+                            <input readonly="true" placeholder="请选择学员" name="target" value="<?php echo $course['target'] ?>" type="text" class="iptH37 w237"><a id="addTarget" class="borBlueH37 ml20" href="javascript:void(0)">选择学员</a>
                             </span>
                             <p class="gray9 mt15">学员将在报名开启后收到报名通知</p>
 

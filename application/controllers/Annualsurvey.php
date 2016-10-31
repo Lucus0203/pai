@@ -82,28 +82,20 @@ class Annualsurvey extends CI_Controller
             $logininfo = $this->_logininfo;
             $c = array('company_code' => $logininfo['company_code'],
                 'title' => $this->input->post('title'),
-                'time_start' => $this->input->post('time_start'),
-                'time_end' => $this->input->post('time_end'),
                 'info' => $this->input->post('info'),
                 'created'=>date("Y-m-d H:i:s"));
-            $isexit=$this->exitSurveyCount();
-            if($isexit>0){
-                $errmsg='同一时间仅可发布一份年度需求调研,请修改您的调查时间';
-                $survey=$c;
-            }else{
-                $id = $this->annualsurvey_model->create($c);
-                //二维码
-                $survey = array('qrcode'=>$id . rand(1000, 9999));
-                $this->load->library('ciqrcode');
-                $params['data'] = $this->config->item('web_url') . 'annual/answer/'.$id.'.html';
-                $params['level'] = 'H';
-                $params['size'] = 1024;
-                $params['savename'] = './uploads/annualqrcode/' . $survey['qrcode'] . '.png';
-                $this->ciqrcode->generate($params);
-                $this->annualsurvey_model->update($survey, $id);
-                redirect(site_url('annualsurvey/info/'.$id));
-                return;
-            }
+            $id = $this->annualsurvey_model->create($c);
+            //二维码
+            $survey = array('qrcode'=>$id . rand(1000, 9999));
+            $this->load->library('ciqrcode');
+            $params['data'] = $this->config->item('web_url') . 'annual/answer/'.$id.'.html';
+            $params['level'] = 'H';
+            $params['size'] = 1024;
+            $params['savename'] = './uploads/annualqrcode/' . $survey['qrcode'] . '.png';
+            $this->ciqrcode->generate($params);
+            $this->annualsurvey_model->update($survey, $id);
+            redirect(site_url('annualsurvey/info/'.$id));
+            return;
         }
         $this->load->view('header');
         $this->load->view('annual_survey/edit',compact('errmsg','survey'));
@@ -112,21 +104,15 @@ class Annualsurvey extends CI_Controller
 
     //编辑
     public function edit($surveyid){
+        $this->isAllowAnnualid($surveyid);
         $act = $this->input->post('act');
         $msg = $errmsg = '';
         if (!empty($act)) {
             $survey = array('title' => $this->input->post('title'),
-                'time_start' => $this->input->post('time_start'),
-                'time_end' => $this->input->post('time_end'),
                 'info' => $this->input->post('info'));
-            $isexit=$this->exitSurveyCount($surveyid);
-            if($isexit>0){
-                $errmsg='同一时间仅可发布一份年度需求调研,请修改您的调查时间';
-            }else {
-                $this->annualsurvey_model->update($survey, $surveyid);
-                $msg = '保存成功';
-                redirect(site_url('annualsurvey/info/'.$surveyid));
-            }
+            $this->annualsurvey_model->update($survey, $surveyid);
+            $msg = '保存成功';
+            redirect(site_url('annualsurvey/info/'.$surveyid));
         }
         $survey=$this->annualsurvey_model->get_row(array('id'=>$surveyid));
         $this->load->view('header');
@@ -135,6 +121,7 @@ class Annualsurvey extends CI_Controller
     }
 
     public function copy($surveyid){
+        $this->isAllowAnnualid($surveyid);
         $act = $this->input->post('act');
         $errmsg = '';
         $survey=$this->annualsurvey_model->get_row(array('id'=>$surveyid));
@@ -144,53 +131,112 @@ class Annualsurvey extends CI_Controller
             $logininfo = $this->_logininfo;
             $c = array('company_code' => $logininfo['company_code'],
                 'title' => $this->input->post('title'),
-                'time_start' => $this->input->post('time_start'),
-                'time_end' => $this->input->post('time_end'),
                 'info' => $this->input->post('info'),
                 'created'=>date("Y-m-d H:i:s"));
-
-            $isexit=$this->exitSurveyCount();
-            if($isexit>0){
-                $errmsg='同一时间仅可发布一份年度需求调研,请修改您的调查时间';
-                $survey=$c;
-            }else{
-                $id = $this->annualsurvey_model->create($c);
-                //二维码
-                $survey = array('qrcode'=>$id . rand(1000, 9999));
-                $this->load->library('ciqrcode');
-                $params['data'] = $this->config->item('web_url') . 'annual/answer/'.$id.'.html';
-                $params['level'] = 'H';
-                $params['size'] = 1024;
-                $params['savename'] = './uploads/annualqrcode/' . $survey['qrcode'] . '.png';
-                $this->ciqrcode->generate($params);
-                $this->annualsurvey_model->update($survey, $id);
-                //复制课程类型
-                $types=$this->annualcoursetype_model->get_all(array('company_code'=>$this->_logininfo['company_code'],'annual_survey_id'=>$surveyid));
-                foreach($types as $t){
-                    $typdid=$this->annualcoursetype_model->create(array('annual_survey_id'=>$id,'company_code'=>$t['company_code'],'annual_course_library_type_id'=>$t['annual_course_library_type_id'],'name'=>$t['name']));
-                    $courses=$this->annualcourse_model->get_all(array('annual_survey_id'=>$surveyid,'annual_course_type_id'=>$t['id']));
-                    foreach ($courses as $c){
-                        //复制课程
-                        $this->annualcourse_model->create(array('annual_survey_id'=>$id,'company_code'=>$c['company_code'],'title'=>$c['title'],'annual_course_type_id'=>$typdid));
-                    }
+            $id = $this->annualsurvey_model->create($c);
+            //二维码
+            $survey = array('qrcode'=>$id . rand(1000, 9999));
+            $this->load->library('ciqrcode');
+            $params['data'] = $this->config->item('web_url') . 'annual/answer/'.$id.'.html';
+            $params['level'] = 'H';
+            $params['size'] = 1024;
+            $params['savename'] = './uploads/annualqrcode/' . $survey['qrcode'] . '.png';
+            $this->ciqrcode->generate($params);
+            $this->annualsurvey_model->update($survey, $id);
+            //复制课程类型
+            $types=$this->annualcoursetype_model->get_all(array('company_code'=>$this->_logininfo['company_code'],'annual_survey_id'=>$surveyid));
+            foreach($types as $t){
+                $typdid=$this->annualcoursetype_model->create(array('annual_survey_id'=>$id,'company_code'=>$t['company_code'],'annual_course_library_type_id'=>$t['annual_course_library_type_id'],'name'=>$t['name']));
+                $courses=$this->annualcourse_model->get_all(array('annual_survey_id'=>$surveyid,'annual_course_type_id'=>$t['id']));
+                foreach ($courses as $c){
+                    //复制课程
+                    $this->annualcourse_model->create(array('annual_survey_id'=>$id,'company_code'=>$c['company_code'],'title'=>$c['title'],'annual_course_type_id'=>$typdid,'annual_course_library_id'=>$c['annual_course_library_id']));
                 }
-                //复制问题
-                $questions=$this->annualquestion_model->get_all(array('annual_survey_id'=>$surveyid));
-                foreach ($questions as $q){
-                    $questionid=$this->annualquestion_model->create(array('annual_survey_id'=>$id,'type'=>$q['type'],'module'=>$q['module'],'title'=>$q['title'],'required'=>$q['required']));
-                    $options=$this->annualoption_model->get_all(array('annual_survey_id'=>$surveyid,'annual_question_id'=>$q['id']));
-                    foreach ($options as $o){
-                        //复制选项
-                        $this->annualoption_model->create(array('annual_survey_id'=>$id,'annual_question_id'=>$questionid,'content'=>$o['content']));
-                    }
-                }
-                redirect(site_url('annualsurvey/info/'.$id));
-                return;
             }
+            //复制问题
+            $questions=$this->annualquestion_model->get_all(array('annual_survey_id'=>$surveyid));
+            foreach ($questions as $q){
+                $questionid=$this->annualquestion_model->create(array('annual_survey_id'=>$id,'type'=>$q['type'],'module'=>$q['module'],'title'=>$q['title'],'required'=>$q['required']));
+                $options=$this->annualoption_model->get_all(array('annual_survey_id'=>$surveyid,'annual_question_id'=>$q['id']));
+                foreach ($options as $o){
+                    //复制选项
+                    $this->annualoption_model->create(array('annual_survey_id'=>$id,'annual_question_id'=>$questionid,'content'=>$o['content']));
+                }
+            }
+            redirect(site_url('annualsurvey/info/'.$id));
+            return;
         }
         $this->load->view('header');
         $this->load->view('annual_survey/edit',compact('errmsg','survey'));
         $this->load->view('footer');
+    }
+
+    //发布
+    public function starting($surveyid){
+        $this->isAllowAnnualid($surveyid);
+        $act = $this->input->post('act');
+        $msg = $errmsg = '';
+        if (!empty($act)) {
+            $survey = array('time_start'=>$this->input->post('time_start'),
+                'time_end'=>$this->input->post('time_end'),
+                'target' => $this->input->post('target'),
+                'targetone' => $this->input->post('targetone'),
+                'targettwo' => $this->input->post('targettwo'),
+                'targetstudent' => $this->input->post('targetstudent'),
+                'public' => 2);
+            $isexit=$this->exitSurveyCount($surveyid);
+            if($isexit>0){
+                $errmsg='同一时间仅可发布一份年度需求调研,请修改您的调查时间';
+            }else {
+                $this->annualsurvey_model->update($survey, $surveyid);
+                //学员名单同步
+                if(!empty($survey['targetstudent'])){
+                    $target=$targetid='';
+                    $targetstudent = $this->student_model->get_all(" id in (" . $survey['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and isdel=2 ");
+                    if (!empty($targetstudent)) {
+                        $targetstudentid = array_column($targetstudent, 'id');
+                        $targetid .= implode(",", $targetstudentid);
+                        $targetstudent = array_column($targetstudent, 'name');
+                        $target .= implode(",", $targetstudent);
+                    }
+                    $survey['targetstudent']=$targetid;
+                    $survey['target']=$target;
+                }
+                $this->annualsurvey_model->update($survey, $surveyid);
+                //创建回答日志并发送通知
+                $studentsarr = explode(',', $survey['targetstudent']);
+                foreach ($studentsarr as $s) {
+                    $this->annualanswer_model->create(array('company_code'=>$this->_logininfo['company_code'],'student_id'=>$s,'annual_survey_id'=>$surveyid));
+                }
+                $msg = '保存成功';
+                redirect(site_url('annualsurvey/info/'.$surveyid));
+            }
+
+        }
+        $survey=$this->annualsurvey_model->get_row(array('id'=>$surveyid));
+        //培训对象数据
+        $deparone = $this->department_model->get_all(array('company_code' => $this->_logininfo['company_code'], 'level' => 0));
+        if (!empty($deparone[0]['id'])) {
+            $departwo = $this->department_model->get_all(array('parent_id' => $deparone[0]['id']));
+        }
+        $student_departmentid=$departwo[0]['id']??$deparone[0]['id'];
+        if (!empty($student_departmentid)) {
+            $students = $this->student_model->get_all(array('department_id' => $student_departmentid,'isdel'=>2));
+        }
+        $this->load->view('header');
+        $this->load->view('annual_survey/public',compact('survey','msg','errmsg','deparone', 'departwo', 'students'));
+        $this->load->view('footer');
+    }
+
+    //暂停发布
+    public function stoping($surveyid){
+        $this->annualsurvey_model->update(array('public'=>3), $surveyid);
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+    //继续发布
+    public function goon($surveyid){
+        $this->annualsurvey_model->update(array('public'=>2), $surveyid);
+        redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function isExistSurvey($surveyid=null){
@@ -200,7 +246,7 @@ class Annualsurvey extends CI_Controller
     private function exitSurveyCount($surveyid=null){
         $time_start=$this->input->post('time_start');
         $time_end=$this->input->post('time_end');
-        $countSql = "select count(*) as total from " . $this->db->dbprefix('annual_survey') . " a where a.isdel=2 and a.company_code='".$this->_logininfo['company_code']."' and ( (unix_timestamp('".$time_start.":00') < unix_timestamp(a.time_start) and unix_timestamp('".$time_end.":00') > unix_timestamp(a.time_start)) or 
+        $countSql = "select count(*) as total from " . $this->db->dbprefix('annual_survey') . " a where a.isdel=2 and a.public=2 and a.company_code='".$this->_logininfo['company_code']."' and ( (unix_timestamp('".$time_start.":00') < unix_timestamp(a.time_start) and unix_timestamp('".$time_end.":00') > unix_timestamp(a.time_start)) or 
             (unix_timestamp('".$time_start.":00') < unix_timestamp(a.time_end) and unix_timestamp('".$time_end.":00') > unix_timestamp(a.time_end)) or 
             (unix_timestamp('".$time_start.":00') > unix_timestamp(a.time_start) and unix_timestamp('".$time_end.":00') < unix_timestamp(a.time_end)) ) ";
         $countSql .= !empty($surveyid)?" and id <> $surveyid ":'';
@@ -568,6 +614,26 @@ class Annualsurvey extends CI_Controller
         $survey=$this->annualsurvey_model->get_row(array('id'=>$surveyid));
         force_download($survey['title'].'.png',file_get_contents('uploads/annualqrcode/'.$survey['qrcode'].'.png'));
 
+    }
+
+
+    /**
+     * 匹配通知学员
+     */
+    public function updateTarget(){
+        $data['company_code']=$this->_logininfo['company_code'];
+        $data['target_student']=$this->input->post('targetstudent');
+        $target='';
+        if(!empty($data['target_student'])) {
+            $targetstudent = $this->student_model->get_all(" id in (" . $data['target_student'] . ") and company_code='".$this->_logininfo['company_code']."' and isdel=2 ");
+            if (!empty($targetstudent)) {
+                $targetstudent = array_column($targetstudent, 'name');
+                $target .= implode(",", $targetstudent);
+            }
+        }
+        $data['target']=$target;
+        $res = $target;//mb_strlen($target, 'utf-8') > 20 ? mb_substr( $target,0,40,"utf-8").'...':$target;
+        echo $res;
     }
 
     //是否是自己公司下的问卷
