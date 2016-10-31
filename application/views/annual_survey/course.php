@@ -37,7 +37,8 @@
                                 if(res==0){
                                     alert('添加失败')
                                 }else{
-                                    window.location=res;
+                                    alert(res);
+                                    //window.location=res;
                                 }
                             }
                         });
@@ -56,7 +57,8 @@
                                 if (res == 0) {
                                     alert('添加失败');
                                 } else {
-                                    window.location=res;
+                                    alert(res);
+                                    //window.location=res;
                                 }
                             }
                         });
