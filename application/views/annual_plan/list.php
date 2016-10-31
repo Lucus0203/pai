@@ -6,7 +6,7 @@
                 <?php if(!$isAccessAccount){ ?><p class="clearfix gray9">您正免费体验该功能,有5个体验名额,如需开通请联系<a class="blue" href="tel:021-61723727">021-61723727</a>,辛老师</p><?php } ?>
             </div>
             <div class="fRight">
-                <a class="borBlueH37 aCenter" href="<?php echo site_url('annualplan/create') ?>">创建培训计划</a>
+                <a class="borBlueH37" href="<?php echo site_url('annualplan/create') ?>">创建培训计划</a>
             </div>
         </div>
         <div class="listBox">

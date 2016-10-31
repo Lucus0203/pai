@@ -46,7 +46,7 @@
 </script>
 <div class="wrap">
     <div class="titCom clearfix"><span class="titSpan">课程信息</span>
-        <a href="<?php echo $preurl ?>" class="fRight borBlueH37 aCenter">返回列表</a>
+        <a href="<?php echo $preurl ?>" class="fRight borBlueH37">返回列表</a>
     </div>
     <div class="comBox">
         <div class="tableBox">
@@ -110,7 +110,7 @@
                     </tr>
                     <tr>
                         <th>课程天数</th>
-                        <td><input name="day" value="<?php echo !empty($course['day'])?$course['day']:1 ?>" placeholder="请输入天数" class="iptH37 w157 mr20 w237"></td>
+                        <td><input name="day" value="<?php echo !empty($course['day'])?$course['day']:$library['day'] ?>" placeholder="请输入天数" class="iptH37 w157 mr20 w237"></td>
                     </tr>
                     <tr>
                         <th>供应商</th>
@@ -119,7 +119,7 @@
                     <tr>
                         <th>课程人次</th>
                         <td><span class="iptInner">
-                                <input name="people" value="<?php echo $course['people'] ?>" placeholder="请输入人次" class="iptH37 w157 mr20 w237">
+                                <input name="people" value="<?php echo !empty($course['people'])?$course['people']:$chosennum; ?>" placeholder="请输入课程人次" class="iptH37 w157 mr20 w237">
                             </span>
                         </td>
                     </tr>

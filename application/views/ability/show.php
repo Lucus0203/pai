@@ -169,7 +169,7 @@
         <input id="jobid" type="hidden" value="<?php echo $abilityjob['id'] ?>" />
         <div class="texturetip clearfix"><span class="fLeft mr10"><?php echo $abilityjob['name'] ?>评估标准</span>
             <div class="fRight">
-                <a class="borBlueH37 aCenter w72" href="<?php echo site_url('html/ability') ?>">更多模型</a>
+                <a class="borBlueH37" href="<?php echo site_url('html/ability') ?>">更多模型</a>
             </div>
         </div>
         <p class="alertBox alert-success " style="display: none;"><span class="alert-msg">保存成功!</span><a href="javascript:;" class="alert-remove">X</a></p>

@@ -77,7 +77,7 @@
                         </select>
                     </li>
 
-                    <li class="btn fRight"><input type="submit" class="borBlueH37 w100 mt3" value="搜索" /></li>
+                    <li class="btn fRight"><input type="submit" class="borBlueH37 mt3" value="搜索" /></li>
                 </ul>
             </form>
         </div>
@@ -160,7 +160,7 @@
                                 </colgroup>
                                 <tr>
                                     <th>课程</th>
-                                    <th>小计</th>
+                                    <th>人数</th>
                                     <th>占比</th>
                                 </tr>
                                 <?php foreach ($a['detail'] as $ad){ ?>

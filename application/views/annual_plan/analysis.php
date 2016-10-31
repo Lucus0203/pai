@@ -52,7 +52,7 @@
                 type: 'column'
             },
             title: {
-                text: '培训人次统计图'
+                text: '课程选择人次'
             },
             yAxis: {
                 allowDecimals: false,
@@ -209,7 +209,7 @@
                             <?php } ?>
                         </tr>
                         <tr>
-                            <td style="border-bottom: none;">培训人次</td>
+                            <td style="border-bottom: none;">课程选择人次</td>
                             <?php foreach ($courses as $c){ ?>
                                 <td style="border-bottom: none;"><?php echo round($c['people_num']) ?></td>
                             <?php } ?>
@@ -242,19 +242,19 @@
 
                 <p class="f18 aCenter mb10"></p>
                 <div class="aCenter mb20"><div id="container4" style="min-width: 310px; height: 400px; margin: 0 auto"></div></div>
-                <div class="ml20 mr20" style="margin-bottom: 150px;">
+                <div class="ml20 mr20" style="margin-bottom: 150px;<?php if(count($datatrend)>12){echo 'overflow-x: scroll;';}?>">
                     <table class="tableC">
                         <tbody>
                         <tr>
-                            <th>时间</th>
+                            <th style="word-break:keep-all;">时间</th>
                             <?php foreach($datatrend as $tk=>$t){
-                                echo '<th>'.substr($tk,0,4).'.'.substr($tk,-2).'</th>';
+                                echo '<th style="padding: 5px;">'.substr($tk,0,4).'.'.substr($tk,-2).'</th>';
                             } ?>
                         </tr>
                         <tr>
-                            <td style="border-bottom: none;">课程数</td>
+                            <td style="border-bottom: none;word-break:keep-all;">课程数</td>
                             <?php foreach($datatrend as $tk=>$t){
-                                echo '<td style="border-bottom: none;">'.$t.'</td>';
+                                echo '<td style="border-bottom: none;padding: 5px;">'.$t.'</td>';
                             } ?>
                         </tr>
 

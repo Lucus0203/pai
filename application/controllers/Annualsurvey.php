@@ -212,9 +212,10 @@ class Annualsurvey extends CI_Controller
 
     public function info($surveyid){
         $this->isAllowAnnualid($surveyid);
+        $anscount=$this->annualanswer_model->get_count(array('company_code'=>$this->_logininfo['company_code'],'annual_survey_id'=>$surveyid,'step'=>5));
         $survey = $this->annualsurvey_model->get_row(array('id' => $surveyid,'company_code' => $this->_logininfo['company_code']));
         $this->load->view('header');
-        $this->load->view('annual_survey/info', compact('survey'));
+        $this->load->view('annual_survey/info', compact('survey','anscount'));
         $this->load->view('footer');
     }
 
@@ -257,9 +258,11 @@ class Annualsurvey extends CI_Controller
         foreach ($questions as $k=>$q){
             $questions[$k]['options']=$this->annualoption_model->get_all(array('annual_question_id'=>$q['id']));
         }
+        $anscount=$this->annualanswer_model->get_count(array('company_code'=>$this->_logininfo['company_code'],'annual_survey_id'=>$surveyid,'step'=>5));
         $isStarted=strtotime("now")>strtotime($survey['time_start'])?true:false;//问卷是否已开始
+        $view=!$isStarted?'annual_survey/qa':'annual_survey/qa_view';
         $this->load->view('header');
-        $this->load->view('annual_survey/qa', compact('survey','qatype','questions','isStarted'));
+        $this->load->view($view, compact('survey','qatype','questions','isStarted','anscount'));
         $this->load->view('footer');
     }
 
@@ -338,11 +341,12 @@ class Annualsurvey extends CI_Controller
         $courses = $query->result_array();
         $links = $this->pagination->create_links();
 
+        $anscount=$this->annualanswer_model->get_count(array('company_code'=>$this->_logininfo['company_code'],'annual_survey_id'=>$surveyid,'step'=>5));
         $isStarted=strtotime("now")>strtotime($survey['time_start'])?true:false;//问卷是否已开始
         $res=$this->session->userdata('res_status');//返回状态
         $this->session->unset_userdata('res_status');
         $this->load->view('header');
-        $this->load->view('annual_survey/course', compact('survey','courselibrarytypes','coursetypes','currentcoursetype','courses','links','total_rows','res','isStarted'));
+        $this->load->view('annual_survey/course', compact('survey','courselibrarytypes','coursetypes','currentcoursetype','courses','links','total_rows','res','isStarted','anscount'));
         $this->load->view('footer');
     }
 
@@ -356,7 +360,8 @@ class Annualsurvey extends CI_Controller
             $coursetypeid=$this->annualcoursetype_model->create(array('annual_survey_id'=>$surveyid,'company_code'=>$this->_logininfo['company_code'],'annual_course_library_type_id'=>$library_type_id,'name'=>$type_name));
             $insertSql="insert into ".$this->db->dbprefix('annual_course')." (`annual_survey_id`, `company_code`, `title`, `annual_course_library_id`,`annual_course_type_id`, `created`) select $surveyid,'".$this->_logininfo['company_code']."' , title,id, $coursetypeid, CURRENT_TIMESTAMP from ".$this->db->dbprefix('annual_course_library')." cl where cl.type_id=$library_type_id ;";
             $this->db->query($insertSql);
-            echo site_url('annualsurvey/course/'.$surveyid.'/'.$coursetypeid);
+            echo $insertSql;
+            //echo site_url('annualsurvey/course/'.$surveyid.'/'.$coursetypeid);
         }else{
             echo 0;
         }
@@ -447,8 +452,9 @@ class Annualsurvey extends CI_Controller
         $query = $this->db->query($sql . " order by a.created desc limit " . ($page - 1) * $page_size . "," . $page_size);
         $students = $query->result_array();
         $links = $this->pagination->create_links();
+        $anscount=$this->annualanswer_model->get_count(array('company_code'=>$this->_logininfo['company_code'],'annual_survey_id'=>$surveyid,'step'=>5));
         $this->load->view('header');
-        $this->load->view('annual_survey/surveylist', compact('survey','students','links','total_rows'));
+        $this->load->view('annual_survey/surveylist', compact('survey','students','links','total_rows','anscount'));
         $this->load->view('footer');
     }
 
@@ -548,10 +554,10 @@ class Annualsurvey extends CI_Controller
         $query = $this->db->query("select count(a.id) as total from ($answersql) a ");
         $total=$query->row_array();
         $answer['courses']['total']=$total['total'];
-
+        $anscount=$this->annualanswer_model->get_count(array('company_code'=>$this->_logininfo['company_code'],'annual_survey_id'=>$surveyid,'step'=>5));
 
         $this->load->view('header');
-        $this->load->view('annual_survey/answer_analysis', compact('parm','survey','departments','second_departments','answer'));
+        $this->load->view('annual_survey/answer_analysis', compact('parm','survey','departments','second_departments','answer','anscount'));
         $this->load->view('footer');
 
     }

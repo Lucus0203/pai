@@ -83,7 +83,8 @@
                                 if (res == 0) {
                                     alert('操作失败');
                                 } else {
-                                    window.location=res;
+                                    alert(res);
+                                    //window.location=res;
                                 }
                             }
                         });

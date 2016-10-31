@@ -6,6 +6,9 @@
 
     <div class="topNaviKec01">
         <?php $this->load->view ( 'annual_survey/top_navi' ); ?>
+        <a href="<?php echo site_url('annualplan/create/'.$survey['id']) ?>" class="fRight borBlueH37 mt5 mr5">继续发布</a>
+        <a href="<?php echo site_url('annualplan/create/'.$survey['id']) ?>" class="fRight borBlueH37 mt5 mr5">暂停发布</a>
+        <a href="<?php echo site_url('annualplan/create/'.$survey['id']) ?>" class="fRight borBlueH37 mt5 mr5">发布</a>
     </div>
 
     <div class="comBox">

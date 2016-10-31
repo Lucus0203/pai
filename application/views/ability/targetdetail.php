@@ -80,7 +80,7 @@
 
         <div class="texturetip clearfix"><span class="fLeft pt5"><?php echo $student['name'].'《'.$abilityjob['name'] ?>》能力评估</span>
             <div class="fRight">
-                <a class="borBlueH37 aCenter w72" href="<?php echo $_SERVER['HTTP_REFERER'] ?>">返回</a>
+                <a class="borBlueH37" href="<?php echo $_SERVER['HTTP_REFERER'] ?>">返回</a>
             </div>
         </div>
 

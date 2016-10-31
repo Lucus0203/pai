@@ -156,7 +156,7 @@
             <p class="red f14 mb10 aCenter"><?php echo $msg ?></p>
             <?php if($success=='ok'){?>
             <div class="iptBox aCenter p40">
-                <a class="borBlueH37 w72" href="<?php echo site_url('login/index') ?>">返回登录</a>
+                <a class="borBlueH37" href="<?php echo site_url('login/index') ?>">返回登录</a>
             </div>
             <?php }else{ ?>
             <form id="signupForm" action="" method="post">

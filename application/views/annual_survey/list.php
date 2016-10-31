@@ -6,7 +6,7 @@
                 <?php if(!$isAccessAccount){ ?><p class="clearfix gray9">您正免费体验该功能,有5个体验名额,如需开通请联系<a class="blue" href="tel:021-61723727">021-61723727</a>,辛老师</p><?php } ?>
             </div>
             <div class="fRight">
-                <a class="borBlueH37 aCenter" href="<?php echo site_url('annualsurvey/create') ?>">创建新问卷</a>
+                <a class="borBlueH37" href="<?php echo site_url('annualsurvey/create') ?>">创建新问卷</a>
             </div>
         </div>
         <div class="topNavi">
@@ -29,7 +29,7 @@
                         <input name="time_end" type="text" value="<?php echo $parm['time_end'] ?>" class="ipt w156 ml10 DTdate" autocomplete="off">
                     </li>
 
-                    <li class="btn fRight"><input type="submit" class="borBlueH37 w100 mt3" value="搜索" /></li>
+                    <li class="btn fRight"><input type="submit" class="borBlueH37 mt3" value="搜索" /></li>
                 </ul>
             </form>
         </div>

@@ -41,7 +41,7 @@
         <?php $this->load->view ( 'annual_plan/top_navi' ); ?>
         <ul class="fRight proPrint">
             <li>
-                <a id="syncourse" href="#" class="borBlueH37 aCenter">同步到课程管理</a><a href="javascript:;" title="开设了的课程将被添加到课程管理中"><i class="fa fa-question-circle-o fa-lg ml10 blue"></i></a>
+                <a id="syncourse" href="#" class="borBlueH37 f13" >同步到课程管理</a><a href="javascript:;" title="开设了的课程将被添加到课程管理中"><i class="fa fa-question-circle-o fa-lg ml10 blue"></i></a>
             </li>
         </ul>
     </div>

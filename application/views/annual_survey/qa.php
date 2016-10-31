@@ -138,6 +138,7 @@
         <?php $this->load->view ( 'annual_survey/top_navi' ); ?>
     </div>
     <div class="comBox">
+        <p class="yellowTipBox mt20">请注意您的调研时间,调研问卷开始后,内容不可修改</p>
         <div class="baoming">
             <div class="sideLeft">
                 <ul class="sideLnavi">
@@ -147,7 +148,6 @@
                 </ul>
             </div>
             <div class="contRight">
-                <p class="yellowTipBox">请注意您的调研时间,调研问卷开始后,内容不可修改</p>
                 <form id="qsForm" method="post" action="<?php echo site_url('annualsurvey/saveQa/'.$qatype.'/'.$survey['id'])?>">
                     <?php if(count($questions)>0){
                         foreach ($questions as $kq=>$q ){?>

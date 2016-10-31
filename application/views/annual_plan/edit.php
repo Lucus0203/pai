@@ -37,7 +37,7 @@
 <div class="wrap">
     <div class="titCom clearfix">
         <span class="titSpan"><?php echo empty($survey['id']) ? '创建培训计划' : '编辑培训计划'; ?></span>
-        <a href="<?php echo site_url('annualplan/index') ?>" class="fRight borBlueH37 aCenter">返回列表</a>
+        <a href="<?php echo site_url('annualplan/index') ?>" class="fRight borBlueH37">返回列表</a>
     </div>
     <div class="comBox">
         <div class="tableBox">

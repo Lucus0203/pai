@@ -10,7 +10,7 @@ $(document).ready(function(){
 			<div class="comBox">
 				<div class="topNavi">
 <?php if($loginInfo['role']==1||$roleInfo['coursecreate']==1){ ?>
-                                    <a href="<?php echo site_url('course/coursecreate') ?>" class="fRight borBlueH37 aCenter">创建新课程</a>
+                                    <a href="<?php echo site_url('course/coursecreate') ?>" class="fRight borBlueH37">创建新课程</a>
 <?php } ?>
 					<ul class="topNaviUl">
                                                 <li <?php if(empty($parm['status'])){ ?>class="cur"<?php } ?>><a href="<?php echo site_url('course/courselist') ?>">全部课程</a></li>
@@ -33,7 +33,7 @@ $(document).ready(function(){
                                 <input name="time_end" type="text" value="<?php echo $parm['time_end'] ?>" class="ipt w156 ml10 DTdate" autocomplete="off">
                             </li>
 
-                            <li class="btn fRight"><input type="submit" class="borBlueH37 w100 mt3" value="搜索" /></li>
+                            <li class="btn fRight"><input type="submit" class="borBlueH37 mt3" value="搜索" /></li>
                         </ul>
                     </form>
 				</div>

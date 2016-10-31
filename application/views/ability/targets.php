@@ -4,7 +4,7 @@
 
         <div class="texturetip p2015 clearfix"><span class="fLeft pt5"><?php echo $abilityjob['name'] ?>评估</span>
             <div class="fRight">
-                <a class="borBlueH37 aCenter w72" href="<?php echo site_url('ability/index') ?>">返回</a>
+                <a class="borBlueH37" href="<?php echo site_url('ability/index') ?>">返回</a>
             </div>
         </div>
 

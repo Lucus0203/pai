@@ -146,6 +146,7 @@ textarea:after {
 	width: 960px;
 	margin: 0 auto;
 	padding-top: 20px;
+    min-height: 500px;
 }
 
 .comBox {
@@ -546,7 +547,9 @@ textarea:after {
 	border-radius: 2px;
 	border: 1px solid #3ec2d3;
 	font-size: 14px;
-	padding: 0 15px;
+	padding: 0 !important;
+    width: 98px !important;
+    text-align: center;
 	display: inline-block;
 	background-color: #FFFFFF;
 	cursor: pointer;
@@ -1690,8 +1693,12 @@ textarea:after {
 	background-color: #f8f8f8;
 }
 
+.f13 {
+    font-size: 13px !important;
+}
+
 .f16 {
-	font-size: 16px !important;
+    font-size: 16px !important;
 }
 
 .f18 {

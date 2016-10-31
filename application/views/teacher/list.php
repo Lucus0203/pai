@@ -10,7 +10,7 @@
 			<div class="comBox">
 				<div class="texturetip clearfix p1524"><span class="fLeft pt5">讲师列表</span>
 					<div class="fRight">
-						<a class="borBlueH37 w72 aCenter" href="<?php echo site_url('teacher/teachercreate') ?>">创建讲师</a>
+						<a class="borBlueH37 aCenter" href="<?php echo site_url('teacher/teachercreate') ?>">创建讲师</a>
 					</div>
 				</div>
 				<div class="seachBox clearfix">
@@ -36,7 +36,7 @@
 								<option value="2" <?php if($parm['work_type']==2){ ?>selected=""<?php } ?>>兼职</option>
 							</select>
 						</li>
-                                                <li class="btn fRight"><input type="submit" value="搜索" class="borBlueH37 w100 mt3" /></li>
+                                                <li class="btn fRight"><input type="submit" value="搜索" class="borBlueH37 mt3" /></li>
 					</ul>
                                         </form>
 				</div>

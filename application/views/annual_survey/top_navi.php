@@ -9,10 +9,10 @@
         <a href="<?php echo site_url('annualsurvey/course/'.$survey['id']);?>">课程列表</a>
     </li>
     <li class="<?php if(strpos(current_url(),'annualsurvey/surveylist/'.$survey['id'])){?>cur<?php } ?>">
-        <a href="<?php echo site_url('annualsurvey/surveylist/'.$survey['id']);?>">提交名单</a>
+        <a <?php if($anscount>0){ ?>href="<?php echo site_url('annualsurvey/surveylist/'.$survey['id']);?>"<?php }else{ ?>style="color:#cccccc;cursor: no-drop;" href="javascript:;"<?php } ?> >提交名单</a>
     </li>
     <li class="<?php if(strpos(current_url(),'annualsurvey/answeranalysis/'.$survey['id'])){?>cur<?php } ?>">
-        <a href="<?php echo site_url('annualsurvey/answeranalysis/'.$survey['id']);?>">答案统计</a>
+        <a <?php if($anscount>0){ ?>href="<?php echo site_url('annualsurvey/answeranalysis/'.$survey['id']);?>"<?php }else{ ?>style="color:#cccccc;cursor: no-drop;" href="javascript:;"<?php } ?>>答案统计</a>
     </li>
 
 </ul>

@@ -215,7 +215,7 @@
 
         <div class="texturetip p2015 clearfix"><span class="fLeft pt5">所有能力模型</span>
             <div class="fRight">
-                <a class="borBlueH37 aCenter w72" href="<?php echo site_url('html/ability') ?>">更多模型</a>
+                <a class="borBlueH37" href="<?php echo site_url('html/ability') ?>">更多模型</a>
             </div>
         </div>
 

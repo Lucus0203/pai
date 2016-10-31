@@ -14,7 +14,7 @@ class Annualplan extends CI_Controller
         parent::__construct();
         $this->load->library(array('session','pagination'));
         $this->load->helper(array('form', 'url'));
-        $this->load->model(array('user_model','useractionlog_model', 'company_model','teacher_model','course_model', 'purview_model', 'industries_model','student_model','teacher_model','department_model','annualsurvey_model','annualplan_model','annualplancourse_model','annualcourse_model','annualcoursetype_model','annualcourselibrary_model'));
+        $this->load->model(array('user_model','useractionlog_model', 'company_model','teacher_model','course_model', 'purview_model', 'industries_model','student_model','teacher_model','department_model','annualsurvey_model','annualplan_model','annualplancourse_model','annualcourse_model','annualanswercourse_model','annualcoursetype_model','annualcourselibrary_model'));
 
         $this->_logininfo = $this->session->userdata('loginInfo');
         if (empty($this->_logininfo)) {
@@ -169,13 +169,14 @@ class Annualplan extends CI_Controller
             redirect($this->input->post('preurl'));
             return;
         }
+        $chosennum=$this->annualanswercourse_model->get_count(array('company_code'=>$this->_logininfo['company_code'],'annual_survey_id'=>$plan['annual_survey_id'],'annual_course_id'=>$annualcourseid));
         $course=$this->annualplancourse_model->get_row(array('annual_plan_id'=>$planid,'annual_course_id'=>$annualcourseid));
         $teachers = $this->teacher_model->get_all(array('company_code' => $this->_logininfo['company_code'], 'isdel' => 2));
         $library=$this->annualcourselibrary_model->get_row(array('id'=>$annualcourse['annual_course_library_id']));
         $preurl=$_SERVER['HTTP_REFERER'];
 
         $this->load->view('header');
-        $this->load->view('annual_plan/course_open',compact('course','annualcourse','teachers','library','preurl','plan'));
+        $this->load->view('annual_plan/course_open',compact('course','annualcourse','teachers','library','preurl','plan','chosennum'));
         $this->load->view('footer');
     }
 
@@ -290,10 +291,17 @@ class Annualplan extends CI_Controller
         if(count($data)>0){
             $first=$data[0];
             $last=end($data);
-            $firstym=$first['ym'];
-            $lastym=$last['ym'];
-            for($ym=$firstym;$ym<=$lastym;$ym++){
-                $datatrend[$ym]=!empty($trend[$ym])?$trend[$ym]:0;
+            $firsty=substr($first['ym'],0,4);
+            $firstm=substr($first['ym'],-2);
+            $lasty=substr($last['ym'],0,4);
+            $lastm=substr($last['ym'],-2);
+            for($y=$firsty;$y<=$lasty;$y++){
+                $fm=($firsty==$y)?$firstm:1;
+                $lm=($lasty==$y)?$lastm:12;
+                for($m=$fm;$m<=$lm;$m++){
+                    $ym=$m<10?$y.'0'.$m:$y.$m;
+                    $datatrend[$ym]=!empty($trend[$ym])?$trend[$ym]:0;
+                }
             }
         }
         $this->load->view('header');
