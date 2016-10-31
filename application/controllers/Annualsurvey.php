@@ -360,8 +360,7 @@ class Annualsurvey extends CI_Controller
             $coursetypeid=$this->annualcoursetype_model->create(array('annual_survey_id'=>$surveyid,'company_code'=>$this->_logininfo['company_code'],'annual_course_library_type_id'=>$library_type_id,'name'=>$type_name));
             $insertSql="insert into ".$this->db->dbprefix('annual_course')." (`annual_survey_id`, `company_code`, `title`, `annual_course_library_id`,`annual_course_type_id`, `created`) select $surveyid,'".$this->_logininfo['company_code']."' , title,id, $coursetypeid, CURRENT_TIMESTAMP from ".$this->db->dbprefix('annual_course_library')." cl where cl.type_id=$library_type_id ;";
             $this->db->query($insertSql);
-            echo $insertSql;
-            //echo site_url('annualsurvey/course/'.$surveyid.'/'.$coursetypeid);
+            echo site_url('annualsurvey/course/'.$surveyid.'/'.$coursetypeid);
         }else{
             echo 0;
         }
