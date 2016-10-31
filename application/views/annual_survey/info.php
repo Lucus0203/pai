@@ -10,7 +10,7 @@
 
     <div class="comBox">
         <p class="opBtn pb0">
-            <a href="<?php echo site_url('annualsurvey/copy/'.$survey['id']);?>" class="editBtn"><i class="fa fa-copy fa-lg mr5"></i>复制问卷</a><a href="<?php echo site_url('annualsurvey/edit/'.$survey['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑问卷</a><a href="<?php echo site_url('annualsurvey/del/'.$survey['id']);?>" class="delBtn"><i class="fa  fa-trash-o fa-lg mr5"></i>删除问卷</a>
+            <a href="<?php echo site_url('annualsurvey/edit/'.$survey['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑信息</a><a href="<?php echo site_url('annualsurvey/copy/'.$survey['id']);?>" class="editBtn"><i class="fa fa-copy fa-lg mr5"></i>复制问卷</a><a href="<?php echo site_url('annualsurvey/del/'.$survey['id']);?>" class="delBtn"><i class="fa  fa-trash-o fa-lg mr5"></i>删除问卷</a>
         <div class="ewmBox">
             <div class="boxl">
                 <p class="blue f18"><?php echo $survey['title'] ?></p>

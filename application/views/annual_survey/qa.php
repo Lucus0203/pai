@@ -1,9 +1,18 @@
+<script type="text/javascript" src="<?php echo base_url(); ?>js/jquery-scrolltofixed-min.js"></script>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
 <script type="text/javascript">
     $(window).on('beforeunload',function(){
         saveFormdata('已自动保存');
     });
     $(document).ready(function(){
+        $('.sideLeft').scrollToFixed({
+            marginTop: $('.baoming').offsetTop + 10,
+            limit: function() {
+                var limit = $('.footer').offset().top - $(this).outerHeight(true) - 30;
+                return limit;
+            },
+            zIndex: 999
+        });
         $('.addoption').live('click',function(){
             var qeul=$(this).parent().prev();
             var type=qeul.find('input.type').val();
@@ -129,52 +138,63 @@
         <?php $this->load->view ( 'annual_survey/top_navi' ); ?>
     </div>
     <div class="comBox">
-        <p class="yellowTipBox mt20">请注意您的调研时间,调研问卷开始后,内容不可修改</p>
-        <form id="qsForm" method="post" action="<?php echo site_url('annualsurvey/saveQa/'.$qatype.'/'.$survey['id'])?>">
-            <?php if(count($questions)>0){
-                foreach ($questions as $kq=>$q ){?>
-                <div class="p20 borderBottom">
-                    <ul class="zuoyeList">
-                        <li>
-                            <span class="aRight numtype"></span><input class="type" type="hidden" name="type[]" value="<?php echo $q['type'] ?>"><input class="no" type="hidden" name="no[]" value="">
-                            <input name="question[]" type="text" class="iptH37 w345 ml10" value="<?php echo $q['title'] ?>" <?php if($isStarted){?>disabled="disabled"<?php } ?>>
-                            <select name="required[]" class="iptH37 w75 ml10" <?php if($isStarted){?>disabled="disabled"<?php } ?>>
-                                <option value="1" checked >必答</option>
-                                <option value="2" <?php if($q['required']==2){echo 'checked';} ?>>选答</option>
-                            </select>
-                            <?php if(!$isStarted){?>
-                            <a href="#" class="copy gray9 ml20">复制问题</a><a href="#" class="delquestion gray9 ml10">删除问题</a><?php } ?>
-                        </li>
-                        <?php if($q['type']==1||$q['type']==2) {
-                            foreach ($q['options'] as $ko=>$op){?>
-                                <li><span class="w50 aRight">选项<?php echo $ko+1 ?></span>
-                                    <input name="option<?php echo ($kq+1) ?>[]" type="text" class="iptH37 w345 ml10" value="<?php echo $op['content'] ?>"<?php if($isStarted){?>disabled="disabled"<?php } ?> ><?php if($ko>0){?> <?php if(!$isStarted){?><a href="#" class="deloption gray9 ml10">删除</a><?php } } ?>
-                                </li>
-                            <?php }
-                        } ?>
-                    </ul>
-                    <?php if(!$isStarted){?>
-                    <p class="f14 ml20 operational">
-                        <?php if($q['type']==1||$q['type']==2) {?>
-                            <a href="#" class="addoption blue mr20">+ 添加选项</a><?php } ?>
-                        <a href="#" class="movedown blue mr20">下移</a>
-                    </p>
+        <div class="baoming">
+            <div class="sideLeft">
+                <ul class="sideLnavi">
+                    <li class="<?php if(strpos(current_url(),'annualsurvey/qa/acceptance/'.$survey['id'])){?>cur<?php } ?>" style="padding-left: 20px;"><a href="<?php echo site_url('annualsurvey/qa/acceptance/'.$survey['id']);?>">培训认同度<?php if(strpos(current_url(),'annualsurvey/qa/acceptance/'.$survey['id'])){?><i class="ml10 fa fa-angle-right fa-lg"></i><?php } ?></a></li>
+                    <li class="<?php if(strpos(current_url(),'annualsurvey/qa/organization/'.$survey['id'])){?>cur<?php } ?>" style="padding-left: 20px;"><a href="<?php echo site_url('annualsurvey/qa/organization/'.$survey['id']);?>">培训组织性<?php if(strpos(current_url(),'annualsurvey/qa/organization/'.$survey['id'])){?><i class="ml10 fa fa-angle-right fa-lg"></i><?php } ?></a></li>
+                    <li class="<?php if(strpos(current_url(),'annualsurvey/qa/requirement/'.$survey['id'])){?>cur<?php } ?>" style="padding-left: 20px;"><a href="<?php echo site_url('annualsurvey/qa/requirement/'.$survey['id']);?>">需 求 信 息<?php if(strpos(current_url(),'annualsurvey/qa/requirement/'.$survey['id'])){?><i class="ml10 fa fa-angle-right fa-lg"></i><?php } ?></a></li>
+                </ul>
+            </div>
+            <div class="contRight">
+                <p class="yellowTipBox">请注意您的调研时间,调研问卷开始后,内容不可修改</p>
+                <form id="qsForm" method="post" action="<?php echo site_url('annualsurvey/saveQa/'.$qatype.'/'.$survey['id'])?>">
+                    <?php if(count($questions)>0){
+                        foreach ($questions as $kq=>$q ){?>
+                            <div class="p20 borderBottom">
+                                <ul class="zuoyeList">
+                                    <li>
+                                        <span class="aRight numtype"></span><input class="type" type="hidden" name="type[]" value="<?php echo $q['type'] ?>"><input class="no" type="hidden" name="no[]" value="">
+                                        <input name="question[]" type="text" class="iptH37 w345 ml10" value="<?php echo $q['title'] ?>" <?php if($isStarted){?>disabled="disabled"<?php } ?>>
+                                        <select name="required[]" class="iptH37 w75 ml10" <?php if($isStarted){?>disabled="disabled"<?php } ?>>
+                                            <option value="1" checked >必答</option>
+                                            <option value="2" <?php if($q['required']==2){echo 'checked';} ?>>选答</option>
+                                        </select>
+                                        <?php if(!$isStarted){?>
+                                            <a href="#" class="copy gray9 ml20">复制问题</a><a href="#" class="delquestion gray9 ml10">删除问题</a><?php } ?>
+                                    </li>
+                                    <?php if($q['type']==1||$q['type']==2) {
+                                        foreach ($q['options'] as $ko=>$op){?>
+                                            <li><span class="w50 aRight">选项<?php echo $ko+1 ?></span>
+                                                <input name="option<?php echo ($kq+1) ?>[]" type="text" class="iptH37 w345 ml10" value="<?php echo $op['content'] ?>"<?php if($isStarted){?>disabled="disabled"<?php } ?> ><?php if($ko>0){?> <?php if(!$isStarted){?><a href="#" class="deloption gray9 ml10">删除</a><?php } } ?>
+                                            </li>
+                                        <?php }
+                                    } ?>
+                                </ul>
+                                <?php if(!$isStarted){?>
+                                    <p class="f14 ml20 operational">
+                                        <?php if($q['type']==1||$q['type']==2) {?>
+                                            <a href="#" class="addoption blue mr20">+ 添加选项</a><?php } ?>
+                                        <a href="#" class="movedown blue mr20">下移</a>
+                                    </p>
+                                <?php } ?>
+                            </div>
+                        <?php }
+                    }else{ ?>
+                        <div class="listBox emptyTxt">
+                            <div class="listCont"><div class="listText"><p>暂未添加问题</p></div></div>        </div>
                     <?php } ?>
-                </div>
-            <?php }
-            }else{ ?>
-                <div class="listBox emptyTxt">
-                    <div class="listCont"><div class="listText"><p>暂未添加问题</p></div></div>        </div>
-            <?php } ?>
-            <?php if(!$isStarted){?>
-            <p class="f14 p20">
-                <a href="#" rel="1" class="addQuestion blue mr10">添加单选题</a>
-                <a href="#" rel="2" class="addQuestion blue mr10">添加多选题</a>
-                <a href="#" rel="3" class="addQuestion blue">添加开放题</a>
-            </p>
-            <p class="aCenter p40"><input id="save" type="button" class="coBtn" value="保存"></p>
-            <?php } ?>
-        </form>
+                    <?php if(!$isStarted){?>
+                        <p class="f14 p20">
+                            <a href="#" rel="1" class="addQuestion blue mr10">添加单选题</a>
+                            <a href="#" rel="2" class="addQuestion blue mr10">添加多选题</a>
+                            <a href="#" rel="3" class="addQuestion blue">添加开放题</a>
+                        </p>
+                        <p class="aCenter p40"><input id="save" type="button" class="coBtn" value="保存"></p>
+                    <?php } ?>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 <div class="surveySaveMsg">保存成功</div>

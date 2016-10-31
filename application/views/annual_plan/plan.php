@@ -1,6 +1,19 @@
 <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/kecheng.css"/>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css"/>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/print.css"/>
+<script>
+    $(document).ready(function(){
+        $('.teacherInfoToggle').click(function(){
+            var obj=$(this).parent().parent();
+            if(obj.find('.teacherInfo').eq(0).is(':hidden')){
+                obj.find('.teacherInfo').eq(0).show().next().hide();
+            }else{
+                obj.find('.teacherInfo').eq(0).hide().next().show();
+            }
+            return false;
+        });
+    });
+</script>
 <div class="wrap">
     <div class="titCom clearfix">
         <span class="titSpan"><?php echo $plan['title'] ?> </span>
@@ -131,7 +144,7 @@
                             <td <?php echo $bbno ?>><?php echo $t['name'] ?></td>
                             <td <?php echo $bbno ?>><?php echo $t['work_type']==1?'专职':'兼职'; ?></td>
                             <td <?php echo $bbno ?>><?php echo !empty($t['years'])?$t['years'].'年':'' ?></td>
-                            <td class="aLeft" <?php echo $bbno ?>><?php echo nl2br($t['info']) ?></td>
+                            <td class="aLeft" <?php echo $bbno ?>><p class="teacherInfo"><?php echo mb_strlen($t['info'],'utf-8')>30?mb_substr($t['info'],0,30,'utf-8').'……'.'<a href="#" class="teacherInfoToggle blue">查看更多</a>':mb_substr($t['info'],0,30,'utf-8') ?></p><p class="teacherInfo" style="display: none;"><?php echo nl2br($t['info']) ?><br/><a href="#" class="teacherInfoToggle blue fRight mr10">收起内容</a></p></td>
                         </tr>
                         <?php } ?>
                         </tbody>

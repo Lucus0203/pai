@@ -38,7 +38,7 @@
                 <?php foreach ($surveies as $c){ ?>
                     <div class="listCont">
                         <p class="operaBtn">
-                            <a href="<?php echo site_url('annualsurvey/edit/'.$c['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑</a><?php if($c['status']!=1){ ?><a href="<?php echo site_url('annualsurvey/del/'.$c['id']);?>" class="delBtn"><i class="fa fa-trash-o fa-lg mr5"></i>删除</a><?php } ?><a href="<?php echo site_url('annualsurvey/copy/'.$c['id']);?>" class="shareBtn"><i class="fa fa-copy fa-lg mr5"></i>复制</a></p>
+                            <a href="<?php echo site_url('annualsurvey/edit/'.$c['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑</a><a href="<?php echo site_url('annualsurvey/copy/'.$c['id']);?>" class="shareBtn"><i class="fa fa-copy fa-lg mr5"></i>复制</a><?php if($c['status']!=1){ ?><a href="<?php echo site_url('annualsurvey/del/'.$c['id']);?>" class="delBtn"><i class="fa fa-trash-o fa-lg mr5"></i>删除</a><?php } ?></p>
                         <div class="listText">
                             <p class="titp"><a class="blue" href="<?php echo site_url('annualsurvey/info/'.$c['id']);?>"><?php echo $c['title'] ?></a></p>
                             <p class="titp">
