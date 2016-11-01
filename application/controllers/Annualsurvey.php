@@ -342,7 +342,7 @@ class Annualsurvey extends CI_Controller
         }
         //已开始过的问卷不可修改问题
         $survey = $this->annualsurvey_model->get_row(array('id' => $surveyid,'company_code' => $this->_logininfo['company_code']));
-        $isStarted=strtotime($survey['time_start']) < strtotime("now")?true:false;
+        $isStarted=(strtotime("now")>strtotime($survey['time_start'])&&!empty($survey['time_start']))?true:false;//问卷是否已开始
         if($isStarted){
             echo 0;
         }else{
