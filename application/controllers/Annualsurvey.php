@@ -394,7 +394,7 @@ class Annualsurvey extends CI_Controller
         $links = $this->pagination->create_links();
 
         $anscount=$this->annualanswer_model->get_count(array('company_code'=>$this->_logininfo['company_code'],'annual_survey_id'=>$surveyid,'step'=>5));
-        $isStarted=strtotime("now")>strtotime($survey['time_start'])?true:false;//问卷是否已开始
+        $isStarted=(strtotime("now")>strtotime($survey['time_start'])&&!empty($survey['time_start']))?true:false;//问卷是否已开始
         $res=$this->session->userdata('res_status');//返回状态
         $this->session->unset_userdata('res_status');
         $this->load->view('header');
