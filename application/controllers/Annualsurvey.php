@@ -218,7 +218,7 @@ class Annualsurvey extends CI_Controller
                 //通知对象
                 if(count($notify_target)>0){
                     $this->load->library(array('notifyclass'));
-                    $this->notifyclass->annualsurveystart($surveyid,$notify_target);exit();
+                    $this->notifyclass->annualsurveystart($surveyid,$notify_target);
                 }
 
                 $msg = '保存成功';
