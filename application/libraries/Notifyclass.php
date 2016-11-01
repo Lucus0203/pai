@@ -305,9 +305,7 @@ EOF;
         $link_short='annual/answer/'.$surveyid.'.html';
         $sign=$company['name'];
         $sign.=($company['code']=='100276')?' 人力资源部':'';
-        $studentsarr = explode(',', $notifyTarget);
-        $students=array();
-        foreach ($studentsarr as $s) {
+        foreach ($notifyTarget as $s) {
             $student = $this->CI->student_model->get_row(array('id' => $s));
             if(!empty($student['email'])){
                 $students[]=$student;
