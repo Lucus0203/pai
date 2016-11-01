@@ -5,7 +5,6 @@
 <li id="naviDepartmentStudent"><a href="<?php echo site_url('department/index') ?>">组织与学员</a></li>
 <?php } ?>
 <li id="naviDepartmentStudent"><a href="<?php echo site_url('ability/index') ?>">能力模型</a></li>
-<?php if($loginInfo['company_code']=='100005'||$loginInfo['company_code']=='100281'||$loginInfo['company_code']=='100200'){ ?>
 <li><a href="javascript:;">年度培训计划</a>
     <ul>
         <li>
@@ -16,4 +15,3 @@
         </li>
     </ul>
 </li>
-<?php } ?>

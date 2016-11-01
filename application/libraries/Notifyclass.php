@@ -15,7 +15,7 @@ class Notifyclass
         $this->CI =& get_instance();
         $this->CI->load->library(array('wechat','zhidingsms'));
         $this->CI->load->helper(array('form', 'url'));
-        $this->CI->load->model(array('user_model', 'company_model', 'course_model', 'teacher_model', 'homework_model', 'survey_model', 'ratings_model', 'student_model', 'department_model','abilityjob_model'));
+        $this->CI->load->model(array('user_model', 'company_model', 'course_model', 'teacher_model', 'homework_model', 'survey_model', 'ratings_model', 'student_model', 'department_model','abilityjob_model','annualsurvey_model'));
 
         $config['protocol'] = 'smtp';
         $config['smtp_host'] = '127.0.0.1';
@@ -121,6 +121,37 @@ EOF;
                 }
             }
         }
+
+        //微信通知
+        if ($course['notice_type_wx']==1) {
+            foreach ($studentsarr as $s) {
+                $student = $this->CI->student_model->get_row(array('id' => $s));
+                if(!empty($student['openid'])){
+                    $wxdata = array(
+                        'first' => array(
+                            'value' => '亲爱的' . $student['name'] . '
+依据公司培训计划安排，《' . $course['title'] . '》将于{$t1}举行。现已启动报名工作，报名将在{$t2}截止',
+                            'color' => "#173177"
+                        ),
+                        'keyword1' => array(
+                            'value' => $course['title'],
+                            'color' => "#173177"
+                        ),
+                        'keyword2' => array(
+                            'value' => $t2 . '~' . $t3,
+                            'color' => "#173177"
+                        ),
+                        'remark' => array(
+                            'value' => "请提前安排好工作或出差行程，准时参加培训。上课前请先完成课前调研表和课前作业并提交给我们。
+预祝学习愉快，收获满满！",
+                            'color' => "#173177"
+                        )
+                    );
+                    $res = $this->CI->wechat->templateSend($student['openid'], 'iYvemgywJfyHxJu_lm_kS3-txaBnfR9gQCO93YCf0EA', $link, $wxdata);
+                }
+            }
+        }
+
 
     }
 
@@ -262,6 +293,113 @@ EOF;
             $this->CI->email->clear();
 
         }
+    }
+
+    public function annualsurveystart($surveyid,$notifyTarget){
+        $survey = $this->CI->annualsurvey_model->get_row(array('id' => $surveyid));
+        $qrcode = base_url('uploads/annualqrcode/'.$survey['qrcode'].'.png');
+        $company = $this->CI->company_model->get_row(array('code'=>$survey['company_code']));
+        $t1 = date('m月d日H:i', strtotime($survey['time_start']));//调研开始时间
+        $t2 = date('m月d日H:i', strtotime($survey['time_end']));//调研截止日期
+        $link = $this->CI->config->item('web_url') . 'annual/answer/'.$surveyid.'.html';//链接
+        $link_short='annual/answer/'.$surveyid.'.html';
+        $sign=$company['name'];
+        $sign.=($company['code']=='100276')?' 人力资源部':'';
+        $studentsarr = explode(',', $notifyTarget);
+        $students=array();
+        foreach ($studentsarr as $s) {
+            $student = $this->CI->student_model->get_row(array('id' => $s));
+            if(!empty($student['email'])){
+                $students[]=$student;
+            }
+            if($student['register_flag']==1){
+                $pass=substr($student['mobile'],-6);
+                $accountmsg='账号：'.$student['mobile'].'
+密码：'.$pass.'
+记得修改密码。';
+                $this->CI->student_model->update(array('user_pass'=>md5($pass)),$student['id']);
+            }else{
+                $accountmsg='';
+            }
+            $msg="亲爱的{$student['name']}：
+为了合理安排公司培训,提高您的工作能力,正在进行培训需求调研,点击链接完成《{$survey['title']}》,调研截止日期{$t2}
+{$link}
+{$accountmsg}
+
+".$company['name'];
+            if($company['code']=='100276'){
+                $msg.="
+人力资源部";
+            }
+            $msg.="
+". date("Y年m月d日");
+            $this->CI->zhidingsms->sendSMS($student['mobile'], $msg);
+//            $content='@1@='.$student['name'].',@2@='.$course['title'].',@3@='.$t1.',@4@='.$t2.',@5@='.$t3.',@6@='.$link_short.',@7@='.$accountmsg.',@8@='.$ischeckmsg.',@9@='.$sign.',@10@='.date("Y年m月d日");
+//            $this->CI->zhidingsms->sendTPSMS($student['mobile'], $content,'ZD30018-0007');
+        }
+
+        //mail
+        $tomail = $company['email'];
+        $subject = "《{$survey['title']}》开启报名";
+        $studentname="亲爱的{$company['contact']}：";
+        $message = <<< EOF
+<p style="text-indent:40px">为了合理安排公司培训,提高您的工作能力,正在进行培训需求调研,点击链接完成《{$survey['title']}》,调研截止日期{$t2}。
+<br>如果是手机端,直接点击链接<a href='{$link}' target='_blank'>{$link}</a>
+<br>如果是电脑端,请扫描下面二维码:</p>
+<p style="text-align: center;"><img src="{$qrcode}" alt="" width="320"></p>
+
+<br><p style="text-align: right;margin-right: 40px;">{$company['name']}</p>
+EOF;
+        if($company['code']=='100276'){
+            $message.='<p style="text-align: right;margin-right: 40px;">人力资源部</p>';
+        }
+        $message.='<p style="text-align: right;margin-right: 40px;">'. date("Y年m月d日").'</p>';
+        $this->CI->email->from('service@trainingpie.com', '培训派');
+        $this->CI->email->to($tomail);//
+        $this->CI->email->subject($subject);
+        $this->CI->email->message($studentname.$message);
+        $this->CI->email->send();//发送给创建者
+        $this->CI->email->clear();
+        //发送给学员
+        foreach ($students as $student) {
+            if(!empty($student['email'])){
+                $studentname="亲爱的{$student['name']}：";
+                $this->CI->email->from('service@trainingpie.com', '培训派');
+                $this->CI->email->to($student['email']);
+                $this->CI->email->subject($subject);
+                $this->CI->email->message($studentname.$message);
+                $this->CI->email->send();
+                $this->CI->email->clear();
+            }
+        }
+
+        //微信通知
+        foreach ($studentsarr as $s) {
+            $student = $this->CI->student_model->get_row(array('id' => $s));
+            if(!empty($student['openid'])){
+                $wxdata = array(
+                    'first' => array(
+                        'value' => '亲爱的' . $student['name'] . "
+为了合理安排公司培训,提高您的工作能力,正在进行培训需求调研,点击详情完成《{$survey['title']}》,调研截止日期{$t2}",
+                        'color' => "#173177"
+                    ),
+                    'keyword1' => array(
+                        'value' => $survey['title'],
+                        'color' => "#173177"
+                    ),
+                    'keyword2' => array(
+                        'value' => $t1 . '~' . $t2,
+                        'color' => "#173177"
+                    ),
+                    'remark' => array(
+                        'value' => "请点击详情进行处理",
+                        'color' => "#173177"
+                    )
+                );
+                $res = $this->CI->wechat->templateSend($student['openid'], 'iYvemgywJfyHxJu_lm_kS3-txaBnfR9gQCO93YCf0EA', $link, $wxdata);
+            }
+        }
+
     }
 
 

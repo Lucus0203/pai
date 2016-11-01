@@ -24,6 +24,8 @@
     <div class="bg"></div>
     <div class="noviceGuideInner">
         <a href="javascript:;" class="closeBtn"><i class="fa fa-close fa-lg"></i></a>
+
+        <?php if($loginInfo['guid_step']<4 ){ ?>
         <div class="guideBox" id="slide_tab1">
             <div class="boxL pt20">
                 <div class="guideTtl">快速创建课程</div>
@@ -49,11 +51,24 @@
             </div>
             <div class="boxR"><img src="<?php echo base_url(); ?>images/guideImg02.png" width="450" alt=""></div>
         </div>
+        <?php } ?>
+        <div class="guideBox" <?php if($loginInfo['guid_step']<4 ){ ?>style="display: none;"<?php } ?> id="slide_tab4">
+            <div class="boxL pt10" style="width: 450px;">
+                <div class="guideTtl">年度培训计划</div>
+                <p>如何快速的完成培训需求的收集与整理、培训的组织与建设、年度课程安排与年度预算计划等，是每个培训负责人都必然要面临的问题。</p>
+                <p>“年度培训计划”能够全面帮你解决这些烦恼。</p>
+                <a href="<?php echo site_url('annualsurvey/index') ?>" class="guideBtn">立即体验</a>
+            </div>
+            <div class="boxR" style="width: 300px;"><img src="<?php echo base_url(); ?>images/guideImg04.png" width="270" alt=""></div>
+        </div>
+        <?php if($loginInfo['guid_step']<4 ){ ?>
         <ul class="cricalList">
             <li data-rel="slide_tab1" class="cur"></li>
             <li data-rel="slide_tab2"></li>
             <li data-rel="slide_tab3"></li>
+            <li data-rel="slide_tab4"></li>
         </ul>
+        <?php } ?>
     </div>
 
 </div>

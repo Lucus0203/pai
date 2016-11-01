@@ -4,6 +4,7 @@
         $('#stoping').click(function () {
             return confirm('确定暂停发布吗?');
         });
+        $('.canntDelBtn').click(function(){alert('进行中无法删除,请您先暂停发布');return false;});
     });
 </script>
 <div class="wrap">
@@ -15,16 +16,14 @@
         <?php $this->load->view ( 'annual_survey/top_navi' ); ?>
         <?php if($survey['public']=='2'){ ?>
         <a id="stoping" href="<?php echo site_url('annualsurvey/stoping/'.$survey['id']) ?>" class="fRight borBlueH37 mt5 mr5">暂停发布</a>
-        <?php }elseif($survey['public']=='3'){ ?>
-        <a href="<?php echo site_url('annualsurvey/goon/'.$survey['id']) ?>" class="fRight borBlueH37 mt5 mr5">继续发布</a>
         <?php }else{ ?>
-            <a href="<?php echo site_url('annualsurvey/starting/'.$survey['id']) ?>" class="fRight borBlueH37 mt5 mr5">发布</a>
+            <a href="<?php echo site_url('annualsurvey/starting/'.$survey['id']) ?>" class="fRight borBlueH37 mt5 mr5"><?php echo $survey['public']=='3'?'继续发布':'发布' ?></a>
         <?php } ?>
     </div>
 
     <div class="comBox">
         <p class="opBtn pb0">
-            <a href="<?php echo site_url('annualsurvey/edit/'.$survey['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑信息</a><a href="<?php echo site_url('annualsurvey/copy/'.$survey['id']);?>" class="editBtn"><i class="fa fa-copy fa-lg mr5"></i>复制问卷</a><a href="<?php echo site_url('annualsurvey/del/'.$survey['id']);?>" class="delBtn"><i class="fa  fa-trash-o fa-lg mr5"></i>删除问卷</a>
+            <a href="<?php echo site_url('annualsurvey/edit/'.$survey['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑信息</a><a href="<?php echo site_url('annualsurvey/copy/'.$survey['id']);?>" class="editBtn"><i class="fa fa-copy fa-lg mr5"></i>复制问卷</a><a href="<?php echo site_url('annualsurvey/del/'.$survey['id']);?>" class="<?php echo (strtotime($survey['time_start'])<time()&&time()<strtotime($survey['time_end'])&&$survey['public']==2)?'canntDelBtn':'delBtn' ?>"><i class="fa fa-trash-o fa-lg mr5"></i>删除问卷</a>
         <div class="ewmBox">
             <div class="boxl">
                 <p class="blue f18"><?php echo $survey['title'] ?></p>

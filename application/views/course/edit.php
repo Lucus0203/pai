@@ -18,6 +18,9 @@
                 address: {
                     required: true
                 },
+                target:{
+                    required: true
+                },
                 page_img: {
                     accept: "image/*",
                     filesize: 5 * 1048576
@@ -40,6 +43,9 @@
                 },
                 address: {
                     required: "请输入课程地点"
+                },
+                target:{
+                    required: "请选择一个学员"
                 },
                 page_img: {
                     accept: "请选择正确的图片格式",
@@ -322,7 +328,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>学员名单</th>
+                        <th><span class="red">*</span>学员名单</th>
                         <td>
                             <span class="iptInner">
                             <input type="hidden" name="targetone" value="<?php echo $course['targetone'] ?>"/><input

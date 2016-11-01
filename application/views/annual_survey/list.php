@@ -1,4 +1,9 @@
 <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css"/>
+<script>
+    $(document).ready(function () {
+        $('.canntDelBtn').click(function(){alert('进行中无法删除,请您先暂停发布');return false;});
+    });
+</script>
 <div class="wrap">
     <div class="textureCont w960">
         <div class="texturetip p1524 clearfix">
@@ -38,7 +43,7 @@
                 <?php foreach ($surveies as $c){ ?>
                     <div class="listCont">
                         <p class="operaBtn">
-                            <a href="<?php echo site_url('annualsurvey/edit/'.$c['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑</a><a href="<?php echo site_url('annualsurvey/copy/'.$c['id']);?>" class="shareBtn"><i class="fa fa-copy fa-lg mr5"></i>复制</a><?php if($c['status']!=1){ ?><a href="<?php echo site_url('annualsurvey/del/'.$c['id']);?>" class="delBtn"><i class="fa fa-trash-o fa-lg mr5"></i>删除</a><?php } ?></p>
+                            <a href="<?php echo site_url('annualsurvey/edit/'.$c['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑</a><a href="<?php echo site_url('annualsurvey/copy/'.$c['id']);?>" class="shareBtn"><i class="fa fa-copy fa-lg mr5"></i>复制</a><a href="<?php echo site_url('annualsurvey/del/'.$c['id']); ?>" class="<?php echo ($c['status']==1&&$c['public']==2)?'canntDelBtn':'delBtn' ?>"><i class="fa fa-trash-o fa-lg mr5"></i>删除</a></p>
                         <div class="listText">
                             <p class="titp"><a class="blue" href="<?php echo site_url('annualsurvey/info/'.$c['id']);?>"><?php echo $c['title'] ?></a></p>
                             <p class="titp">
@@ -50,7 +55,7 @@
                                     <span class="grayH25">已结束</span>
                                 <?php } ?>
                             </p>
-                            <p><span class="mr30">开始时间：<?php echo date('Y-m-d H:i',strtotime($c['time_start'])) ?>&nbsp;至&nbsp;<?php echo date('Y-m-d H:i',strtotime($c['time_end'])) ?></span></p>
+                            <p><span class="mr30">开始时间：<?php if(empty($c['time_start'])||empty($c['time_end'])){echo '暂未设置';}else{ ?><?php echo date('Y-m-d H:i',strtotime($c['time_start'])) ?>&nbsp;至&nbsp;<?php echo date('Y-m-d H:i',strtotime($c['time_end'])); }?></span></p>
                             <?php if(!empty($c['info'])){ ?><p>问卷备注：<?php echo mb_strlen($c['info'],'utf-8')>30?mb_substr($c['info'],0,30,'utf-8').'……':mb_substr($c['info'],0,30,'utf-8') ?></p><?php } ?>
                         </div>
                     </div>

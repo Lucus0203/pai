@@ -66,12 +66,11 @@
 
                 <table cellspacing="0" class="listTable">
                     <colgroup>
-                        <col width="40%">
+                        <col width="45%">
                         <col width="10%">
                         <col width="10%">
                         <col width="10%">
                         <col width="10%">
-                        <col width="5%">
                         <col width="15%">
 
                     </colgroup>
@@ -79,7 +78,6 @@
                     <tr>
                         <th class="aLeft">课程名称</th>
                         <th>课程类型</th>
-                        <th>内训/公开</th>
                         <th>课程预算</th>
                         <th>天数</th>
                         <th>选择人数</th>
@@ -90,7 +88,6 @@
                     <tr>
                         <td class="blue wordBreak"><?php echo !empty($c['title'])?$c['title']:$c['course_title'] ?></td>
                         <td class="aCenter"><?php echo $c['type_name'] ?></td>
-                        <td class="aCenter"><?php if(!empty($c['external'])){echo ($c['external']=='1')?'公开':'内训';} ?></td>
                         <td class="aCenter"><?php echo $c['price'] ?></td>
                         <td class="aCenter"><?php echo !empty($c['day'])?$c['day']:1 ?>天</td>
                         <td class="aCenter"><?php echo $c['num'] ?></td>

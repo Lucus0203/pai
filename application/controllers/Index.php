@@ -10,7 +10,7 @@ class Index extends CI_Controller
         parent::__construct();
         $this->load->library('session');
         $this->load->helper(array('form', 'url','download'));
-        $this->load->model(array('user_model','useractionlog_model', 'course_model', 'teacher_model', 'homework_model','company_model'));
+        $this->load->model(array('user_model','useractionlog_model', 'course_model', 'teacher_model', 'homework_model','company_model','annualsurvey_model','annualcoursetype_model','annualcourse_model','annualquestion_model','annualoption_model'));
 
         $this->_logininfo = $this->session->userdata('loginInfo');
         if (empty($this->_logininfo)) {
@@ -54,6 +54,9 @@ class Index extends CI_Controller
             $this->ciqrcode->generate($params);
         }
 
+        //创建测试数据
+        $this->createtestdata();
+
         $this->load->view('header');
         $this->load->view('index', compact('courses_num', 'teachers_num', 'students_num', 'adms_num', 'courses','company'));
         $this->load->view('footer');
@@ -61,11 +64,55 @@ class Index extends CI_Controller
 
     public function guidReaded(){
         $userinfo = $this->_logininfo;
-        $this->user_model->update(array('guid_step' => 4), $userinfo['id']);
-        $userinfo['guid_step'] = 4;
+        $this->user_model->update(array('guid_step' => 5), $userinfo['id']);
+        $userinfo['guid_step'] = 5;
         $this->session->set_userdata('loginInfo', $userinfo);
         $this->load->vars(array('loginInfo' => $userinfo));
         echo 1;
+    }
+
+    private function createtestdata(){//创建测试数据;
+        //年度调研模板
+        if($this->_logininfo['guid_step'] < 5 && $this->annualsurvey_model->get_count(array('company_code'=>$this->_logininfo['company_code'])) <= 0){
+            $surveyid=11;
+            $survey=$this->annualsurvey_model->get_row(array('id'=>$surveyid));
+            $c = array('company_code' => $this->_logininfo['company_code'],
+                'title' => $survey['title'],
+                'time_start' => date('Y-m-d',strtotime('+1 day')).' 09:00:00',
+                'time_end' => date('Y-m-d',strtotime('+1 month')).' 18:00:00',
+                'info' => $survey['info'],
+                'created'=>date("Y-m-d H:i:s"));
+            $id = $this->annualsurvey_model->create($c);
+            //二维码
+            $survey = array('qrcode'=>$id . rand(1000, 9999));
+            $this->load->library('ciqrcode');
+            $params['data'] = $this->config->item('web_url') . 'annual/answer/'.$id.'.html';
+            $params['level'] = 'H';
+            $params['size'] = 1024;
+            $params['savename'] = './uploads/annualqrcode/' . $survey['qrcode'] . '.png';
+            $this->ciqrcode->generate($params);
+            $this->annualsurvey_model->update($survey, $id);
+            //复制课程类型
+            $types=$this->annualcoursetype_model->get_all(array('annual_survey_id'=>$surveyid));
+            foreach($types as $t){
+                $typdid=$this->annualcoursetype_model->create(array('annual_survey_id'=>$id,'company_code'=>$this->_logininfo['company_code'],'annual_course_library_type_id'=>$t['annual_course_library_type_id'],'name'=>$t['name']));
+                $courses=$this->annualcourse_model->get_all(array('annual_survey_id'=>$surveyid,'annual_course_type_id'=>$t['id']));
+                foreach ($courses as $c){
+                    //复制课程
+                    $this->annualcourse_model->create(array('annual_survey_id'=>$id,'company_code'=>$this->_logininfo['company_code'],'title'=>$c['title'],'annual_course_type_id'=>$typdid,'annual_course_library_id'=>$c['annual_course_library_id']));
+                }
+            }
+            //复制问题
+            $questions=$this->annualquestion_model->get_all(array('annual_survey_id'=>$surveyid));
+            foreach ($questions as $q){
+                $questionid=$this->annualquestion_model->create(array('annual_survey_id'=>$id,'type'=>$q['type'],'module'=>$q['module'],'title'=>$q['title'],'required'=>$q['required']));
+                $options=$this->annualoption_model->get_all(array('annual_survey_id'=>$surveyid,'annual_question_id'=>$q['id']));
+                foreach ($options as $o){
+                    //复制选项
+                    $this->annualoption_model->create(array('annual_survey_id'=>$id,'annual_question_id'=>$questionid,'content'=>$o['content']));
+                }
+            }
+        }
     }
 
     public function loginqrcode(){

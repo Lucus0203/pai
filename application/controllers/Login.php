@@ -9,7 +9,7 @@ class Login extends CI_Controller
         parent::__construct();
         $this->load->library(array('session'));
         $this->load->helper(array('form', 'url','captcha'));
-        $this->load->model(array('user_model','student_model','teacher_model','department_model','userloginlog_model', 'company_model', 'purview_model', 'industries_model','course_model'));
+        $this->load->model(array('user_model','student_model','teacher_model','department_model','userloginlog_model', 'company_model', 'purview_model', 'industries_model','course_model','annualsurvey_model','annualcoursetype_model','annualcourse_model','annualquestion_model','annualoption_model'));
     }
 
 

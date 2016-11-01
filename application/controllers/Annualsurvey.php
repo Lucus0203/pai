@@ -205,9 +205,20 @@ class Annualsurvey extends CI_Controller
                 $this->annualsurvey_model->update($survey, $surveyid);
                 //创建回答日志并发送通知
                 $studentsarr = explode(',', $survey['targetstudent']);
+                $notify_target=array();
                 foreach ($studentsarr as $s) {
-                    $this->annualanswer_model->create(array('company_code'=>$this->_logininfo['company_code'],'student_id'=>$s,'annual_survey_id'=>$surveyid));
+                    $annual=$this->annualanswer_model->get_row(array('company_code'=>$this->_logininfo['company_code'],'student_id'=>$s,'annual_survey_id'=>$surveyid));
+                    if(empty($annual['id'])){
+                        $this->annualanswer_model->create(array('company_code'=>$this->_logininfo['company_code'],'student_id'=>$s,'annual_survey_id'=>$surveyid));
+                    }
+                    if(empty($annual['id'])||$annual['step']!='5'){
+                        $notify_target[]=$s;
+                    }
                 }
+                //通知对象
+                $this->load->library(array('notifyclass'));
+                $this->notifyclass->annualsurveystart($surveyid,$notify_target);
+
                 $msg = '保存成功';
                 redirect(site_url('annualsurvey/info/'.$surveyid));
             }
@@ -231,11 +242,6 @@ class Annualsurvey extends CI_Controller
     //暂停发布
     public function stoping($surveyid){
         $this->annualsurvey_model->update(array('public'=>3), $surveyid);
-        redirect($_SERVER['HTTP_REFERER']);
-    }
-    //继续发布
-    public function goon($surveyid){
-        $this->annualsurvey_model->update(array('public'=>2), $surveyid);
         redirect($_SERVER['HTTP_REFERER']);
     }
 
@@ -271,7 +277,7 @@ class Annualsurvey extends CI_Controller
         $this->isAllowAnnualid($surveyid);
         if (!empty($surveyid)) {
             $a = $this->annualsurvey_model->get_row(array('id' => $surveyid));
-            if(strtotime($a['time_start'])<time()&&strtotime($a['time_end'])>time()){
+            if(strtotime($a['time_start'])<time()&&strtotime($a['time_end'])>time()&&$a['public']=='2'){
                 echo '问卷进行中不可删除';
                 return false;
             }

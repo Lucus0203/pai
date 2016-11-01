@@ -62,4 +62,4 @@
 
     </div>
 </div>
-<?php if($loginInfo['guid_step']!=4){$this->load->view ( 'walkthrough' );} ?>
+<?php if($loginInfo['guid_step']!=5){$this->load->view ( 'walkthrough' );} ?>

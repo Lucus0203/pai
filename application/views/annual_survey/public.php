@@ -13,7 +13,7 @@
             }
         });
         return flag;
-    }, "此时间段存在正在调研的问卷,请更换时间段");
+    }, "此时段有正在调研的问卷,请更换时段");
     $(document).ready(function () {
         $("#editForm").validate({
             rules: {
@@ -33,7 +33,7 @@
                 time_end: {
                     required: "请输入结束时间",
                     compareDate: "结束时间不能早于开始时间",
-                    isexistsurvey: "此时间段存在正在调研的问卷,请更换时间段"
+                    isexistsurvey: "此时段有正在调研的问卷,请更换时段"
                 }
             },
             errorPlacement: function (error, element) {
@@ -47,11 +47,16 @@
                 $(element).parents(".row").removeClass(errorClass);
             },
             submitHandler: function (form) {
+                $('input[type=submit]').val('请稍后..').attr('disabled', 'disabled');
+                <?php if($survey['public']==3){ ?>
+                form.submit();
+                <?php }else{ ?>
                 if(confirm('发布后问题及课程无法修改,确认发布吗?')){
                     form.submit();
                 }else{
-                    $('input[type=submit]').val('请稍后..').attr('disabled', 'disabled');
+                    $('input[type=submit]').val('确认发布').removeAttr('disabled');
                 }
+                <?php } ?>
             }
         });
 
@@ -235,7 +240,7 @@
 </script>
 <div class="wrap">
     <div class="titCom clearfix">
-        <span class="titSpan">发布调研问卷</span>
+        <span class="titSpan"><?php echo $survey['public']=='3'?'继续发布':'发布' ?>调研问卷</span>
         <a href="<?php echo site_url('annualsurvey/info/'.$survey['id']) ?>" class="fRight borBlueH37">返回</a>
     </div>
     <div class="comBox">
@@ -272,12 +277,12 @@
                         <th>调研对象</th>
                         <td>
                             <span class="iptInner">
-                                <input type="hidden" name="targetone" value="<?php echo $course['targetone'] ?>"/><input
-                                    type="hidden" name="targettwo" value="<?php echo $course['targettwo'] ?>"/><input
-                                    type="hidden" name="targetstudent" value="<?php echo $course['targetstudent'] ?>"/>
-                            <textarea readonly="true" placeholder="请选择学员" name="target" class="iptare pt10 w345"><?php echo $course['target'] ?></textarea><a id="addTarget" class="borBlueH37 ml20" href="javascript:void(0)">选择学员</a>
+                                <input type="hidden" name="targetone" value="<?php echo $survey['targetone'] ?>"/><input
+                                    type="hidden" name="targettwo" value="<?php echo $survey['targettwo'] ?>"/><input
+                                    type="hidden" name="targetstudent" value="<?php echo $survey['targetstudent'] ?>"/>
+                            <textarea readonly="true" placeholder="请选择学员" name="target" class="iptare pt10 w345"><?php echo $survey['target'] ?></textarea><a id="addTarget" class="borBlueH37 ml20" href="javascript:void(0)" style="vertical-align:text-bottom;">选择学员</a>
                             </span>
-                            <p class="gray9 mt15">学员将在发布后收到报名通知</p>
+                            <p class="gray9 mt15">仅选中学员将收到调研通知，并可完成需求调研</p>
 
                         </td>
                     </tr>
@@ -285,7 +290,7 @@
                         <th></th>
                         <td>
                             <span class="iptInner">
-                            <input type="submit" value="确认发布" class="coBtn mr30">
+                            <input type="submit" value="<?php echo $survey['public']=='3'?'确认继续':'确认' ?>发布" class="coBtn mr30">
                             </span>
                         </td>
                     </tr>
@@ -303,7 +308,7 @@
             <div class="secBox">
                 <ul class="oneUl">
                     <?php
-                    $arr = explode(",", $course['targetone']);
+                    $arr = explode(",", $survey['targetone']);
                     foreach ($deparone as $k => $d) { ?>
                         <li class="deparone <?php if ($k == 0) {
                             echo 'secIpt';
@@ -316,7 +321,7 @@
 
                 <ul class="twoUl">
                     <?php
-                    $arr = explode(",", $course['targettwo']);
+                    $arr = explode(",", $survey['targettwo']);
                     foreach ($departwo as $k => $d) { ?>
                         <li class="departwo <?php if ($k == 0) {
                             echo 'secIpt';
@@ -328,7 +333,7 @@
                 </ul>
                 <ul class="threeUl">
                     <?php
-                    $arr = explode(",", $course['targetstudent']);
+                    $arr = explode(",", $survey['targetstudent']);
                     foreach ($students as $k => $s) { ?>
                         <li class="students"><label><input class="studentscheckbox" <?php if (in_array($s['id'], $arr)) {
                                     echo 'checked';
