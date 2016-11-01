@@ -5,10 +5,12 @@
                 title: {
                     required: true
                 },
-                price: {
+                people: {
+                    required: true,
                     digits: true
                 },
-                people: {
+                price: {
+                    required: true,
                     digits: true
                 }
             },
@@ -16,10 +18,12 @@
                 title: {
                     required: "请输入课程名称"
                 },
-                price: {
+                people: {
+                    required: "请输入课程人次",
                     digits: '请输入数字'
                 },
-                people: {
+                price: {
+                    required: "请输入课程预算",
                     digits: '请输入数字'
                 }
             },
@@ -40,6 +44,12 @@
         });
         $('#time_end').focus(function(){
             $(this).val($.trim($(this).val())==''?$('#time_start').val():$(this).val());
+        });
+        $('input[name=price],input[name=people]').blur(function(){
+            var price=$('input[name=price]').val();
+            var people=$('input[name=people]').val();
+            var avg=(price*1>0&&people*1>0)?price/people:0;
+            $('#avgprice').text(Math.round(avg)+'元/人');
         });
 
     });
@@ -93,10 +103,17 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>课程预算</th>
+                        <th><span class="red">*</span>课程人次</th>
+                        <td><span class="iptInner">
+                                <input name="people" value="<?php echo !empty($course['people'])?$course['people']:$chosennum; ?>" placeholder="请输入课程人次" class="iptH37 w157 mr20 w237">
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><span class="red">*</span>课程预算</th>
                         <td>
                             <span class="iptInner">
-                            <input name="price" placeholder="请输入课程预算" value="<?php echo $course['price'] ?>" type="text" class="iptH37 w157 mr20 w237">元
+                            <input name="price" placeholder="请输入课程预算" value="<?php echo $course['price'] ?>" type="text" class="iptH37 w157 mr5">元<span id="avgprice" class="ml20"></span>
                             </span>
 
                         </td>
@@ -115,13 +132,6 @@
                     <tr>
                         <th>供应商</th>
                         <td><input name="supplier" value="<?php echo $course['supplier'] ?>" placeholder="请输入供应商" class="iptH37 w157 mr20 w237"></td>
-                    </tr>
-                    <tr>
-                        <th>课程人次</th>
-                        <td><span class="iptInner">
-                                <input name="people" value="<?php echo !empty($course['people'])?$course['people']:$chosennum; ?>" placeholder="请输入课程人次" class="iptH37 w157 mr20 w237">
-                            </span>
-                        </td>
                     </tr>
                     <tr>
                         <th>课程介绍</th>

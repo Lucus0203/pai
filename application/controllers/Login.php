@@ -161,7 +161,7 @@ class Login extends CI_Controller
             'mobile' => $userinfo['mobile'],
             'email' => $userinfo['email'],
             'user_name' => $userinfo['mobile'],
-            'user_pass' => md5(substr($userinfo['mobile'],-6)),
+            'user_pass' => $userinfo['user_pass'],
             'department_parent_id'=>$departmentid,
             'department_id'=>$departmentid,
             'role' => 9);

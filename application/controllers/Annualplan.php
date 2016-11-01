@@ -296,8 +296,8 @@ class Annualplan extends CI_Controller
             $lasty=substr($last['ym'],0,4);
             $lastm=substr($last['ym'],-2);
             for($y=$firsty;$y<=$lasty;$y++){
-                $fm=($firsty==$y)?$firstm:1;
-                $lm=($lasty==$y)?$lastm:12;
+                $fm=($firsty==$y)?$firstm*1:1;
+                $lm=($lasty==$y)?$lastm*1:12;
                 for($m=$fm;$m<=$lm;$m++){
                     $ym=$m<10?$y.'0'.$m:$y.$m;
                     $datatrend[$ym]=!empty($trend[$ym])?$trend[$ym]:0;
