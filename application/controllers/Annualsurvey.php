@@ -216,8 +216,11 @@ class Annualsurvey extends CI_Controller
                     }
                 }
                 //通知对象
-                $this->load->library(array('notifyclass'));
-                $this->notifyclass->annualsurveystart($surveyid,$notify_target);exit();
+                print_r($notify_target);
+                if(count($notify_target)>0){
+                    $this->load->library(array('notifyclass'));
+                    $this->notifyclass->annualsurveystart($surveyid,$notify_target);exit();
+                }
 
                 $msg = '保存成功';
                 redirect(site_url('annualsurvey/info/'.$surveyid));
@@ -311,7 +314,7 @@ class Annualsurvey extends CI_Controller
             $questions[$k]['options']=$this->annualoption_model->get_all(array('annual_question_id'=>$q['id']));
         }
         $anscount=$this->annualanswer_model->get_count(array('company_code'=>$this->_logininfo['company_code'],'annual_survey_id'=>$surveyid,'step'=>5));
-        $isStarted=(strtotime("now")>strtotime($survey['time_start'])&&!empty($survey['time_start']))?true:false;//问卷是否已开始
+        $isStarted=$this->isStarted($surveyid);//问卷是否已开始
         $view=!$isStarted?'annual_survey/qa':'annual_survey/qa_view';
         $this->load->view('header');
         $this->load->view($view, compact('survey','qatype','questions','isStarted','anscount'));
@@ -342,7 +345,7 @@ class Annualsurvey extends CI_Controller
         }
         //已开始过的问卷不可修改问题
         $survey = $this->annualsurvey_model->get_row(array('id' => $surveyid,'company_code' => $this->_logininfo['company_code']));
-        $isStarted=(strtotime("now")>strtotime($survey['time_start'])&&!empty($survey['time_start']))?true:false;//问卷是否已开始
+        $isStarted=$this->isStarted($surveyid);//问卷是否已开始
         if($isStarted){
             echo 0;
         }else{
@@ -394,7 +397,7 @@ class Annualsurvey extends CI_Controller
         $links = $this->pagination->create_links();
 
         $anscount=$this->annualanswer_model->get_count(array('company_code'=>$this->_logininfo['company_code'],'annual_survey_id'=>$surveyid,'step'=>5));
-        $isStarted=(strtotime("now")>strtotime($survey['time_start'])&&!empty($survey['time_start']))?true:false;//问卷是否已开始
+        $isStarted=$this->isStarted($surveyid);//问卷是否已开始
         $res=$this->session->userdata('res_status');//返回状态
         $this->session->unset_userdata('res_status');
         $this->load->view('header');
@@ -662,6 +665,11 @@ class Annualsurvey extends CI_Controller
         }else{
             return false;
         }
+    }
+
+    private function isStarted($surveyid){
+        $survey=$this->annualsurvey_model->get_row(array('id'=>$surveyid));
+        return (strtotime("now")>strtotime($survey['time_start'])&&!empty($survey['time_start']));//问卷是否已开始
     }
 
 }
