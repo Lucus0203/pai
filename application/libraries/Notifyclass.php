@@ -319,7 +319,7 @@ EOF;
             }else{
                 $accountmsg='';
             }
-            $msg="亲爱的{$student['name']}：
+            /*$msg="亲爱的{$student['name']}：
 为了合理安排公司培训,提高您的工作能力,正在进行培训需求调研,点击链接完成《{$survey['title']}》,调研截止日期{$t2}
 {$link}
 {$accountmsg}
@@ -331,14 +331,14 @@ EOF;
             }
             $msg.="
 ". date("Y年m月d日");
-            $this->CI->zhidingsms->sendSMS($student['mobile'], $msg);
-//            $content='@1@='.$student['name'].',@2@='.$course['title'].',@3@='.$t1.',@4@='.$t2.',@5@='.$t3.',@6@='.$link_short.',@7@='.$accountmsg.',@8@='.$ischeckmsg.',@9@='.$sign.',@10@='.date("Y年m月d日");
-//            $this->CI->zhidingsms->sendTPSMS($student['mobile'], $content,'ZD30018-0007');
+            $this->CI->zhidingsms->sendSMS($student['mobile'], $msg);*/
+            $content='@1@='.$student['name'].',@2@='.$survey['title'].',@3@='.$t2.',@4@='.$link_short.',@5@='.$accountmsg.',@6@='.$sign.',@7@='.date("Y年m月d日");
+            $this->CI->zhidingsms->sendTPSMS($student['mobile'], $content,'ZD30018-0008');
         }
 
         //mail
         $tomail = $company['email'];
-        $subject = "《{$survey['title']}》开启报名";
+        $subject = "《{$survey['title']}》";
         $studentname="亲爱的{$company['contact']}：";
         $message = <<< EOF
 <p style="text-indent:40px">为了合理安排公司培训,提高您的工作能力,正在进行培训需求调研,点击链接完成《{$survey['title']}》,调研截止日期{$t2}。

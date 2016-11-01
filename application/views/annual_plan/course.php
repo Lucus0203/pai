@@ -85,7 +85,7 @@
                         <th class="aLeft">课程名称</th>
                         <th>课程类型</th>
                         <th>课程预算</th>
-                        <th>天数</th>
+                        <th>课时</th>
                         <th>选择人数</th>
                         <th>操作</th>
 
@@ -94,8 +94,8 @@
                     <tr>
                         <td class="blue wordBreak"><?php echo !empty($c['title'])?$c['title']:$c['course_title'] ?></td>
                         <td class="aCenter"><?php echo $c['type_name'] ?></td>
-                        <td class="aCenter"><?php echo $c['price'] ?></td>
-                        <td class="aCenter"><?php echo !empty($c['day'])?$c['day']:1 ?>天</td>
+                        <td class="aCenter"><?php echo !empty($c['price'])?$c['price']:'未填写' ?></td>
+                        <td class="aCenter"><?php echo !empty($c['day'])?$c['day']:'未填写' ?></td>
                         <td class="aCenter"><?php echo $c['num'] ?></td>
                         <td class="aCenter">
                             <?php if($c['openstatus']==1){?>

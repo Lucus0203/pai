@@ -126,8 +126,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>课程天数</th>
-                        <td><input name="day" value="<?php echo !empty($course['day'])?$course['day']:$library['day'] ?>" placeholder="请输入天数" class="iptH37 w157 mr20 w237"></td>
+                        <th>课程时长</th>
+                        <td><input name="day" value="<?php echo $course['day'] ?>" placeholder="请输入课程时长" class="iptH37 w157 mr20 w237"></td>
                     </tr>
                     <tr>
                         <th>供应商</th>
