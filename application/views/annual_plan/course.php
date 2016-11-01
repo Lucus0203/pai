@@ -15,18 +15,24 @@
             return confirm('确定取消开课?');
         });
         $('#syncourse').click(function(){
-            $(this).text('同步中,请稍后..');
-            $.ajax({
-                type: "post",
-                url: '<?php echo site_url('annualplan/syncourse/'.$plan['id']) ?>',
-                async: false,
-                success: function (res) {
-                    if (res == 1) {
-                        $('.surveySaveMsg').show().fadeOut(3000);
-                        $('#syncourse').text('同步到课程管理');
+            var flag=true;
+            <?php if($total_syncoursed>0){?>
+            flag=confirm('此操作将更新课程管理中的课程信息,确认同步吗?');
+            <?php } ?>
+            if(flag){
+                $(this).text('同步中,请稍后..');
+                $.ajax({
+                    type: "post",
+                    url: '<?php echo site_url('annualplan/syncourse/'.$plan['id']) ?>',
+                    async: false,
+                    success: function (res) {
+                        if (res == 1) {
+                            $('.surveySaveMsg').show().fadeOut(3000);
+                            $('#syncourse').text('同步到课程管理');
+                        }
                     }
-                }
-            });
+                });
+            }
             return false;
         });
         $(document).tooltip();

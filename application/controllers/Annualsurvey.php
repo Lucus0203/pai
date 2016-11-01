@@ -217,7 +217,7 @@ class Annualsurvey extends CI_Controller
                 }
                 //通知对象
                 $this->load->library(array('notifyclass'));
-                $this->notifyclass->annualsurveystart($surveyid,$notify_target);
+                $this->notifyclass->annualsurveystart($surveyid,$notify_target);exit();
 
                 $msg = '保存成功';
                 redirect(site_url('annualsurvey/info/'.$surveyid));
@@ -311,7 +311,7 @@ class Annualsurvey extends CI_Controller
             $questions[$k]['options']=$this->annualoption_model->get_all(array('annual_question_id'=>$q['id']));
         }
         $anscount=$this->annualanswer_model->get_count(array('company_code'=>$this->_logininfo['company_code'],'annual_survey_id'=>$surveyid,'step'=>5));
-        $isStarted=strtotime("now")>strtotime($survey['time_start'])?true:false;//问卷是否已开始
+        $isStarted=(strtotime("now")>strtotime($survey['time_start'])&&!empty($survey['time_start']))?true:false;//问卷是否已开始
         $view=!$isStarted?'annual_survey/qa':'annual_survey/qa_view';
         $this->load->view('header');
         $this->load->view($view, compact('survey','qatype','questions','isStarted','anscount'));

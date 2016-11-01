@@ -130,8 +130,9 @@ class Annualplan extends CI_Controller
         $total=$this->annualcourse_model->get_count("company_code=" . $this->_logininfo['company_code'] ." and annual_survey_id = ".$plan['annual_survey_id']);
         $total_open=$this->annualplancourse_model->get_count("company_code=" . $this->_logininfo['company_code'] ." and annual_plan_id = ".$planid." and openstatus = 1 ");
         $typies=$this->annualcoursetype_model->get_all(array('annual_survey_id'=>$plan['annual_survey_id']));
+        $total_syncoursed=$this->annualplancourse_model->get_count("company_code=" . $this->_logininfo['company_code'] ." and annual_plan_id = ".$planid." and course_id is not null and course_id != '' ");
         $this->load->view('header');
-        $this->load->view('annual_plan/course',compact('plan','courses','links','total_open','total','parm','typies'));
+        $this->load->view('annual_plan/course',compact('plan','courses','links','total_open','total','parm','typies','total_syncoursed'));
         $this->load->view('footer');
     }
 
