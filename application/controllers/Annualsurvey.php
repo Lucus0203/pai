@@ -216,7 +216,6 @@ class Annualsurvey extends CI_Controller
                     }
                 }
                 //通知对象
-                print_r($notify_target);
                 if(count($notify_target)>0){
                     $this->load->library(array('notifyclass'));
                     $this->notifyclass->annualsurveystart($surveyid,$notify_target);exit();
