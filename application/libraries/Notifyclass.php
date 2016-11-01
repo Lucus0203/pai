@@ -372,7 +372,7 @@ EOF;
         }
 
         //微信通知
-        foreach ($studentsarr as $s) {
+        foreach ($notifyTarget as $s) {
             $student = $this->CI->student_model->get_row(array('id' => $s));
             if(!empty($student['openid'])){
                 $wxdata = array(
