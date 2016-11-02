@@ -73,7 +73,7 @@ class Index extends CI_Controller
 
     private function createtestdata(){//创建测试数据;
         //年度调研模板
-        if($this->_logininfo['guid_step'] < 5 && $this->annualsurvey_model->get_count(array('company_code'=>$this->_logininfo['company_code'])) <= 0){
+        if($this->annualsurvey_model->get_count(array('company_code'=>$this->_logininfo['company_code'])) <= 0){
             $surveyid=11;
             $survey=$this->annualsurvey_model->get_row(array('id'=>$surveyid));
             $c = array('company_code' => $this->_logininfo['company_code'],

@@ -341,10 +341,10 @@ class Login extends CI_Controller
             echo '请输入手机号';
             return false;
         }elseif($this->session->userdata('captcha')=='999999'){
-            echo '验证码已过期';
+            echo '图形验证码已过期';
             return false;
         }elseif(strtolower($captcha)!=$this->session->userdata('captcha')){
-            echo '验证码错误';
+            echo '图形验证码错误';
             return false;
         }
         $code = rand(1000, 9999);
