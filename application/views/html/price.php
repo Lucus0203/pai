@@ -264,15 +264,8 @@
                         <th>收费标准</th>
                     </tr>
                     <tr>
-                        <td>年度需求调研</td>
-                        <td>年度需求问卷的制作、调研发放与结果收集。</td>
-                        <td>
-                            2017年1月1日前免费使用。
-                        </td>
-                    </tr>
-                    <tr>
                         <td>年度培训计划</td>
-                        <td>年度培训计划、年度预算评估与培训计划分析，内训师与供应商资源整合。</td>
+                        <td>年度需求问卷的制作、调研发放与结果收集。<br>年度培训计划、年度预算评估与培训计划分析，内训师与供应商资源整合。</td>
                         <td>
                             <span class="red">3000</span>元/年。
                         </td>
@@ -280,13 +273,6 @@
                     </tr>
 
                 </table>
-                <div class="sidebox clearfix">
-                    <label>年度需求调研:</label>
-                    <label class="switch">
-                        <input id="requireSurvey" type="checkbox" name="requireSurvey" value="1">
-                        <div class="slider round"></div>
-                    </label>
-                </div>
                 <div class="sidebox clearfix">
                     <label>年度培训计划:</label>
                     <label class="switch">
