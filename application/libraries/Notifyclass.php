@@ -130,7 +130,7 @@ EOF;
                     $wxdata = array(
                         'first' => array(
                             'value' => '亲爱的' . $student['name'] . '
-依据公司培训计划安排，《' . $course['title'] . '》将于{$t1}举行。现已启动报名工作，报名将在{$t2}截止',
+依据公司培训计划安排，《' . $course['title'] . '》将于'.$t1.'举行。现已启动报名工作，报名将在'.$t2.'截止',
                             'color' => "#173177"
                         ),
                         'keyword1' => array(
