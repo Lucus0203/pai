@@ -344,7 +344,7 @@ EOF;
 <p style="text-indent:40px">为了合理安排公司培训,提高您的工作能力,正在进行培训需求调研,点击链接完成《{$survey['title']}》,调研截止日期{$t2}。
 <br>如果是手机端,直接点击链接<a href='{$link}' target='_blank'>{$link}</a>
 <br>如果是电脑端,请扫描下面二维码:</p>
-<p style="text-align: center;"><img src="{$qrcode}" alt="" width="320"></p>
+<p style="text-align: center;"><img src="{$qrcode}" alt="" width="200"></p>
 
 <br><p style="text-align: right;margin-right: 40px;">{$company['name']}</p>
 EOF;
