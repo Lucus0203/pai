@@ -215,7 +215,7 @@ class Ability extends CI_Controller {
         $data['target_two']=$this->input->post('targettwo');
         $data['target_student']=$this->input->post('targetstudent');
         $data['created']=date('Y-m-d H:i:s');
-        $target='';
+        $target=$targetstudentids='';
 //        if(!empty($data['target_one'])){
 //            $targetone=$this->department_model->get_all(' id in ('.$data['target_one'].') ');
 //            if(!empty($targetone)){
@@ -229,13 +229,16 @@ class Ability extends CI_Controller {
 //            }
 //        }
         if(!empty($data['target_student'])) {
-            $targetstudent = $this->student_model->get_all(' id in (' . $data['target_student'] . ') ');
+            $targetstudent = $this->student_model->get_all(' id in (' . $data['target_student'] . ') and isdel = 2 ');
             if (!empty($targetstudent)) {
-                $targetstudent = array_column($targetstudent, 'name');
-                $target .= implode(",", $targetstudent);
+                $targetnamearr = array_column($targetstudent, 'name');
+                $target .= implode(",", $targetnamearr);
+                $targetstudentidsarr = array_column($targetstudent, 'id');
+                $targetstudentids .= implode(",", $targetstudentidsarr);
             }
         }
         $data['target']=$target;
+        $data['target_student']=$targetstudentids;
         $compjob=$this->companyabilityjob_model->get_row(array('company_code'=>$data['company_code'],'ability_job_id'=>$data['ability_job_id']));
         if(!empty($compjob)){
             $this->companyabilityjob_model->update($data,$compjob['id']);
