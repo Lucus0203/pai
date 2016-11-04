@@ -125,6 +125,7 @@ class Annualsurvey extends CI_Controller
         $act = $this->input->post('act');
         $errmsg = '';
         $survey=$this->annualsurvey_model->get_row(array('id'=>$surveyid));
+        $survey['title'].='(副本)';
         unset($survey['time_start']);
         unset($survey['time_end']);
         if (!empty($act)) {
