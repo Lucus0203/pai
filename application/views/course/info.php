@@ -3,7 +3,7 @@
     $(function(){$('.shareBtn').click(function(){return confirm('确定发布吗?');});});
 </script>
 <div class="wrap">
-        <div class="titCom clearfix"><span class="titSpan"><?php echo $course['title'] ?>  </span><span class="<?php echo $course['status_class']; ?> ml20"><?php echo $course['status_str']; ?></span></div>
+        <div class="titCom clearfix"><span class="titSpan"><?php echo $course['title'] ?>  </span><?php if(empty($course['time_start'])||empty($course['time_end'])||empty($course['address'])){echo '<span class="orange ml20">未完善</span>';}?><span class="<?php echo $course['status_class']; ?> ml20"><?php echo $course['status_str']; ?></span></div>
         <div class="topNaviKec">
                 <?php $this->load->view ( 'course/top_navi' ); ?>
 
@@ -12,7 +12,8 @@
                 <p class="opBtn">
 <?php if($loginInfo['role']==1||$roleInfo['courseedit']==1){ ?>
                     <a href="<?php echo site_url('course/courseedit/'.$course['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑课程</a><a href="<?php echo site_url('course/coursedel/'.$course['id']);?>" class="delBtn"><i class="fa fa-trash-o fa-lg mr5"></i>删除课程</a>
-<?php } ?><?php if($course['ispublic']!=1){ ?><a href="<?php echo site_url('course/coursepublic/'.$course['id']);?>" class="shareBtn"><i class="fa fa-link fa-lg mr5"></i>发布</a></p><?php } ?>
+<?php } ?><?php if($course['ispublic']!=1){ ?><?php if(empty($course['time_start'])||empty($course['time_end'])||empty($course['address'])){?><a href="<?php echo site_url('course/courseedit/'.$course['id']); ?>"><i class="fa fa-link fa-lg mr5"></i>发布</a><?php }else{ ?><a href="<?php echo site_url('course/coursepublic/'.$course['id']); ?>" class="shareBtn"><i class="fa fa-link fa-lg mr5"></i>发布</a><?php }} ?>
+                </p>
 
                 <div class="listBox">
                         <div class="listCont listContGray">

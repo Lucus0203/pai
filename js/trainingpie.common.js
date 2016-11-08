@@ -1,3 +1,4 @@
+var alertBoxTimeSet=0;
 $(document).ready(function(){
     $('.listBox').delegate('.listCont','hover',function(){
         $(this).toggleClass('hover');
@@ -20,5 +21,5 @@ $(document).ready(function(){
     }, "结束时间不能小于开始时间");
     $('input, textarea').placeholder();
     $('.alert-remove').click(function(){$('.alertBox').hide()});
-    setTimeout(function(){$('.alertBox').fadeOut(500);},2000);
+    alertBoxTimeSet=setTimeout(function(){$('.alertBox').fadeOut(500);},2000);
 });

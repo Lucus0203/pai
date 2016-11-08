@@ -326,8 +326,12 @@ textarea:after {
 	background-color: #f6f6f6 !important;
 }
 
+.black {
+    color: #000000 !important;
+}
+
 .blue {
-	color: #09bed5 !important;
+    color: #09bed5 !important;
 }
 
 .red,label.error {
