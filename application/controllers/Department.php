@@ -145,8 +145,11 @@ class Department extends CI_Controller
         $departmentid = $this->input->post('departmentid');
         $departs = $this->department_model->get_all(array('parent_id' => $departmentid));
         $students = array();
-        if (!empty($departs[0])) {
-            $students = $this->student_model->get_all(array('department_id' => $departs[0]['id'],'isdel'=>2));
+        if (!empty($departs[0])) {//含二级部门
+            $students = $this->student_model->get_all(array('company_code'=>$this->_logininfo['company_code'],'department_id' => $departs[0]['id'],'isdel'=>2));
+            if($this->student_model->get_count("company_code='".$this->_logininfo['company_code']."' and department_id=$departmentid and department_id=department_parent_id and isdel = 2 ")>0){
+                $departs[]=array('id'=>$departmentid,'parent_id'=>$departmentid,'name'=>'未分配','level'=>1);
+            }
         } else {
             $students = $this->student_model->get_all(array('department_id' => $departmentid,'isdel'=>2));
         }
