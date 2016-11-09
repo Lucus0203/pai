@@ -91,7 +91,7 @@
         var wechat=($('#wechat').attr('checked'))?1:0;
         var discount=$('input[name=discount]:checked').val();
         var numval=minbeds>1000?minbeds*13:minbeds*15;
-        var amount=(200*minbeds01+2000*minbeds02+trainPlan*3000+wechat*500)*discount;
+        var amount=(200*minbeds01+2000*minbeds02+trainPlan*3000+wechat*800)*discount;
         $('.minbedsnum').text(minbeds+'人');
         $('.minbedsAmount').text(numval);
         $('.minbeds01num').text(minbeds01+'个');
@@ -290,11 +290,10 @@
                         <th>收费标准</th>
                     </tr>
                     <tr>
-                        <td>定制微信公众号/ 服务号
-                        </td>
-                        <td>定制企业专属公众号/服务号，提升使用体验。</td>
+                        <td>公众号搭建</td>
+                        <td>公众号搭建，绑定微信。</td>
                         <td>
-                            <span class="red">500元</span>/年。
+                            <span class="red">800元</span>/年(含微信认证300元)。
                         </td>
                     </tr>
 
@@ -302,7 +301,7 @@
 
 
                 <div class="sidebox clearfix">
-                    <label>个性化微信号:</label>
+                    <label>公众号搭建:</label>
                     <label class="switch">
                         <input id="wechat" name="wechat" type="checkbox">
                         <div class="slider round"></div>
@@ -399,9 +398,9 @@
                         <td class="red trainPlanAmount aRight">3000</td>
                     </tr>
                     <tr class="wechatTr" style="display: none;">
-                        <td>个性化微信号</td>
+                        <td>公众号搭建</td>
                         <td class="aCenter">1个</td>
-                        <td class="red wechatAmount aRight">500</td>
+                        <td class="red wechatAmount aRight">800</td>
                     </tr>
                     <tr>
                         <td colspan="3" class="aRight">
