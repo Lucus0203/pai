@@ -37,7 +37,6 @@
             <div class="clearfix">
                 <p class="f24 aCenter mb20"><?php echo $plan['title'] ?></p>
                 <div class="mb20">
-
                     <table class="tableC">
                         <tbody>
                         <tr>
@@ -51,12 +50,12 @@
                         </tr>
                         <?php $count_total=0;$people_total=0;$price_total=0;
                         foreach ($res as $r){ ?>
-                        <tr>
-                            <td><?php echo $r['name'] ?></td>
-                            <td><?php echo round($r['total']['count_num']);$count_total+=$r['total']['count_num']; ?></td>
-                            <td><?php echo round($r['total']['people_num']);$people_total+=$r['total']['people_num']; ?></td>
-                            <td><?php echo round($r['total']['price_num']);$price_total+=$r['total']['price_num']; ?></td>
-                        </tr>
+                            <tr>
+                                <td><?php echo $r['name'] ?></td>
+                                <td><?php echo round($r['total']['count_num']);$count_total+=$r['total']['count_num']; ?></td>
+                                <td><?php echo round($r['total']['people_num']);$people_total+=$r['total']['people_num']; ?></td>
+                                <td><?php echo round($r['total']['price_num']);$price_total+=$r['total']['price_num']; ?></td>
+                            </tr>
                         <?php } ?>
                         <tr>
                             <td style="border-bottom: none;">全部</td>
@@ -118,7 +117,7 @@
                 <?php }
                 } ?>
 
-                <?php if(count($teachers)>0){ ?>
+                <?php if(count($teachers)>0&&false){ ?>
                 <div class="mb20">
                     <table class="tableC">
                         <colgroup>
