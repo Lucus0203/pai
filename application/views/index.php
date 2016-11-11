@@ -16,15 +16,13 @@
                                 src="<?php echo empty($c['page_img']) ? base_url() . 'images/course_default_img.jpg' : base_url('uploads/course_img/' . $c['page_img']) ?>"
                                 alt="" width="130"></div>
                         <div class="listText">
-                            <p class="titp"><a
-                                    href="<?php echo site_url('course/courseinfo/' . $c['id']); ?>"><?php echo $c['title'] ?></a>
+                            <p class="titp">
+                                <a href="<?php echo site_url('course/courseinfo/' . $c['id']); ?>"><?php echo $c['title'] ?></a>
                             </p>
-                            <?php if (!empty($c['teacher'])) { ?>
-                                <p>课程讲师：<a class="blue"
-                                           href="<?php echo site_url('teacher/teacherinfo/' . $c['teacher_id']); ?>"><?php echo $c['teacher'] ?></a>
-                                </p><?php } ?>
-                            <p>开课时间：<?php echo $c['time_start'] ?> 至 <?php echo $c['time_end'] ?></p>
+                            <?php if (!empty($c['teacher'])) { ?><p>课程讲师：<a class="blue" href="<?php echo site_url('teacher/teacherinfo/' . $c['teacher_id']); ?>"><?php echo $c['teacher'] ?></a></p><?php } ?>
+                            <?php if(!empty($c['time_start'])&&!empty($c['time_start'])){ ?><p>开课时间：<?php echo $c['time_start'] ?> 至 <?php echo $c['time_end'] ?></p><?php } ?>
                             <?php echo !empty($c['apply_end']) ? '<p>报名截止：' . $c['apply_end'] . '</p>' : '' ?>
+                            <?php if(!empty($c['info'])){ ?><p>课程介绍：<?php echo mb_strlen($c['info'],'utf-8')>30?mb_substr($c['info'],0,20,'utf-8').'……':mb_substr($c['info'],0,20,'utf-8') ?></p><?php } ?>
                         </div>
                     </div>
                 <?php } ?>

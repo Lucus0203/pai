@@ -15,7 +15,7 @@ class Notifyclass
         $this->CI =& get_instance();
         $this->CI->load->library(array('wechat','zhidingsms'));
         $this->CI->load->helper(array('form', 'url'));
-        $this->CI->load->model(array('user_model', 'company_model', 'course_model', 'teacher_model', 'homework_model', 'survey_model', 'ratings_model', 'student_model', 'department_model','abilityjob_model','annualsurvey_model'));
+        $this->CI->load->model(array('user_model', 'company_model', 'course_model', 'teacher_model', 'homework_model', 'survey_model', 'ratings_model', 'student_model', 'department_model','abilityjob_model','annualsurvey_model','annualplan_model'));
 
         $config['protocol'] = 'smtp';
         $config['smtp_host'] = '127.0.0.1';
@@ -398,6 +398,104 @@ EOF;
             }
         }
 
+    }
+
+    //年度计划开启审核
+    public function planCourseApproved($planid,$nobifytarget){
+        $plan=$this->CI->annualplan_model->get_row(array('id'=>$planid));
+        $link_pc = $this->CI->config->item('base_url') . 'annualmanage/approved/'.$planid.'.html';//链接
+        $link_web = $this->CI->config->item('web_url') . 'annualmanage/approved/'.$planid.'.html';//链接
+        $link_short='annualmanage/approved/'.$planid.'.html';
+        $company = $this->CI->company_model->get_row(array('code'=>$plan['company_code']));
+        $sign=$company['name'];
+        $sign.=($company['code']=='100276')?' 人力资源部':'';
+        foreach ($nobifytarget as $s) {
+            $student = $this->CI->student_model->get_row(array('id' => $s));
+            if(!empty($student['email'])){
+                $students[]=$student;
+            }
+            if($student['register_flag']==1){
+                $pass=substr($student['mobile'],-6);
+                $accountmsg='账号：'.$student['mobile'].'
+密码：'.$pass.'
+记得修改密码。';
+                $this->CI->student_model->update(array('user_pass'=>md5($pass)),$student['id']);
+            }else{
+                $accountmsg='';
+            }
+            /*$msg="亲爱的{$student['name']}：
+公司正在制定未来的培训计划,您可以进行部门内员工的课程报名审核,点击链接审核,感谢配合
+{$link}
+{$accountmsg}
+
+".$company['name'];
+            if($company['code']=='100276'){
+                $msg.="
+人力资源部";
+            }
+            $msg.="
+". date("Y年m月d日");
+            $this->CI->zhidingsms->sendSMS($student['mobile'], $msg);*/
+            $content='@1@='.$student['name'].',@2@='.$link_short.',@3@='.$accountmsg.',@4@='.$sign.',@5@='.date("Y年m月d日");
+            $this->CI->zhidingsms->sendTPSMS($student['mobile'], $content,'ZD30018-0009');
+        }
+
+        //mail
+        $tomail = $company['email'];
+        $subject = "《年度计划待审核》";
+        $studentname="亲爱的{$company['contact']}：";
+        $message = <<< EOF
+<p style="text-indent:40px">公司正在制定未来的培训计划,您可以进行部门内员工的课程报名审核,点击链接审核,感谢配合。
+<br>如果是手机端,直接点击链接<a href='{$link_web}' target='_blank'>{$link_web}</a>
+<br>如果是电脑端,直接点击链接<a href='{$link_pc}' target='_blank'>{$link_pc}</a></p>
+
+<br><p style="text-align: right;margin-right: 40px;">{$company['name']}</p>
+EOF;
+        if($company['code']=='100276'){
+            $message.='<p style="text-align: right;margin-right: 40px;">人力资源部</p>';
+        }
+        $message.='<p style="text-align: right;margin-right: 40px;">'. date("Y年m月d日").'</p>';
+        $this->CI->email->from('service@trainingpie.com', '培训派');
+        $this->CI->email->to($tomail);//
+        $this->CI->email->subject($subject);
+        $this->CI->email->message($studentname.$message);
+        $this->CI->email->send();//发送给创建者
+        $this->CI->email->clear();
+        //发送给学员
+        foreach ($students as $student) {
+            if(!empty($student['email'])){
+                $studentname="亲爱的{$student['name']}：";
+                $this->CI->email->from('service@trainingpie.com', '培训派');
+                $this->CI->email->to($student['email']);
+                $this->CI->email->subject($subject);
+                $this->CI->email->message($studentname.$message);
+                $this->CI->email->send();
+                $this->CI->email->clear();
+            }
+        }
+
+        //微信通知
+        foreach ($nobifytarget as $s) {
+            $student = $this->CI->student_model->get_row(array('id' => $s));
+            if(!empty($student['openid'])){
+                $wxdata = array(
+                    'first' => array(
+                        'value' => '亲爱的' . $student['name'] . "
+公司正在制定未来的培训计划,您可以进行部门内员工的课程报名审核,点击链接审核,感谢配合。",
+                        'color' => "#173177"
+                    ),
+                    'keyword1' => array(
+                        'value' => '年度计划待审核',
+                        'color' => "#173177"
+                    ),
+                    'remark' => array(
+                        'value' => "请点击详情进行处理",
+                        'color' => "#173177"
+                    )
+                );
+                $res = $this->CI->wechat->templateSend($student['openid'], 'iYvemgywJfyHxJu_lm_kS3-txaBnfR9gQCO93YCf0EA', $link_web, $wxdata);
+            }
+        }
     }
 
 

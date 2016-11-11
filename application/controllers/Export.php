@@ -294,7 +294,8 @@ class Export extends CI_Controller
                 $res[$k]=$t;
             }
             //讲师
-            $teachersql="select teacher.* from ".$this->db->dbprefix('annual_plan_course')." plan_course left join ".$this->db->dbprefix('teacher')." teacher on plan_course.teacher_id=teacher.id where plan_course.openstatus=1 ";
+
+            $teachersql="select teacher.* from ".$this->db->dbprefix('annual_plan_course')." plan_course left join ".$this->db->dbprefix('teacher')." teacher on plan_course.teacher_id=teacher.id where plan_course.annual_plan_id=$planid and plan_course.company_code='".$this->_logininfo['company_code']."' and plan_course.openstatus=1 and plan_course.teacher_id is not null group by teacher.id ";
             $query = $this->db->query($teachersql . " order by plan_course.id asc ");
             $teachers = $query->result_array();
 

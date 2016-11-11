@@ -14,7 +14,7 @@ class Annualplan extends CI_Controller
         parent::__construct();
         $this->load->library(array('session','pagination'));
         $this->load->helper(array('form', 'url'));
-        $this->load->model(array('user_model','useractionlog_model', 'company_model','teacher_model','course_model', 'purview_model', 'industries_model','student_model','teacher_model','department_model','annualsurvey_model','annualplan_model','annualplancourse_model','annualcourse_model','annualanswercourse_model','annualcoursetype_model','annualcourselibrary_model'));
+        $this->load->model(array('user_model','useractionlog_model', 'company_model','teacher_model','course_model', 'purview_model', 'industries_model','student_model','teacher_model','department_model','annualsurvey_model','annualplan_model','annualplancourse_model','annualcourse_model','annualplancourselist_model','annualanswercourse_model','annualcoursetype_model','annualcourselibrary_model'));
 
         $this->_logininfo = $this->session->userdata('loginInfo');
         if (empty($this->_logininfo)) {
@@ -39,7 +39,7 @@ class Annualplan extends CI_Controller
         $this->load->database();
         //status 1进行中2未开始3已结束
         $sql = "select p.*,a.title as survey_title from " . $this->db->dbprefix('annual_plan') . " p left join " . $this->db->dbprefix('annual_survey') . " a on p.annual_survey_id = a.id "
-            . "where p.company_code = " . $this->_logininfo['company_code'] ;
+            . "where p.isdel != 1 and p.company_code = " . $this->_logininfo['company_code'] ;
         $query = $this->db->query("select count(*) as num from ($sql) s ");
         $num = $query->row_array();
         $total_rows = $num['num'];
@@ -69,7 +69,10 @@ class Annualplan extends CI_Controller
             $id=$this->annualplan_model->create($plan);
             redirect(site_url('annualplan/course/'.$id));
         }
-        $surveys=$this->annualsurvey_model->get_all("company_code = '".$this->_logininfo['company_code']."' and isdel = 2 and unix_timestamp(time_end) < unix_timestamp(now()) ");
+        $anscountsql="select count(aa.id) as anscount,aa.annual_survey_id from ".$this->db->dbprefix('annual_answer')." aa where aa.company_code='".$this->_logininfo['company_code']."' and step = 5 group by aa.annual_survey_id ";
+        $sql=" select survey.* from ".$this->db->dbprefix('annual_survey')." survey left join ($anscountsql) ans on survey.id=ans.annual_survey_id where survey.company_code='".$this->_logininfo['company_code']."' and isdel=2 and anscount > 0 ";
+        $query = $this->db->query($sql);
+        $surveys = $query->result_array();
         if(!empty($surveyid)){
             $this->isAllowAnnualid($surveyid);
             $survey=$this->annualsurvey_model->get_row(array('id'=>$surveyid));
@@ -105,8 +108,13 @@ class Annualplan extends CI_Controller
         $openstatus=$this->input->get('openstatus');
         $typeid=$this->input->get('typeid');
         $parm=array();
-        $sql = "select ac.id,ac.title as course_title,course.title,course.price,course.day,course.external,act.name as type_name,course.openstatus,count(aac.id) as num from " . $this->db->dbprefix('annual_course') . " ac left join ".$this->db->dbprefix('annual_plan_course')." course on ac.id=course.annual_course_id left join ".$this->db->dbprefix('annual_course_type')." act on ac.annual_course_type_id=act.id left join " . $this->db->dbprefix('annual_answer_course') . " aac on aac.annual_course_id = ac.id "
-            . "where ac.company_code = " . $this->_logininfo['company_code'] ." and ac.annual_survey_id = ".$plan['annual_survey_id'] ;
+        $sql = "select ac.id,ac.title as course_title,course.title,course.price,course.day,course.external,act.name as type_name,course.openstatus,aac.num,apcl.list_num from " .
+            $this->db->dbprefix('annual_course') . " ac left join ".
+            $this->db->dbprefix('annual_plan_course')." course on ac.id=course.annual_course_id and course.annual_plan_id=$planid left join ".
+            $this->db->dbprefix('annual_course_type')." act on ac.annual_course_type_id=act.id left join " .
+            "( select count(aac.id) as num,aac.annual_course_id from ".$this->db->dbprefix('annual_answer_course') . " aac where aac.company_code ='" . $this->_logininfo['company_code'] ."' and aac.annual_survey_id=".$plan['annual_survey_id']." group by aac.annual_course_id) aac on aac.annual_course_id = ac.id left join ".
+            "( select count(apcl.id) as list_num,apcl.annual_course_id from ".$this->db->dbprefix('annual_plan_course_list')." apcl where apcl.company_code ='" . $this->_logininfo['company_code'] ."' and apcl.annual_plan_id=".$plan['id']." and apcl.status = '1' group by apcl.annual_course_id) apcl on apcl.annual_course_id=ac.id  ".
+            "where ac.company_code = '" . $this->_logininfo['company_code'] ."' and ac.annual_survey_id = ".$plan['annual_survey_id'] ;
         if(!empty($openstatus)){
             $sql.=$openstatus==1?" and openstatus = 1 ":" and (openstatus != 1 or openstatus is null) ";
             $parm['openstatus']=$openstatus;
@@ -115,7 +123,6 @@ class Annualplan extends CI_Controller
             $sql.=" and ac.annual_course_type_id = ".$this->escapeVal($typeid);
             $parm['typeid']=$typeid;
         }
-        $sql.=" group by ac.id ";
         $query = $this->db->query("select count(*) as num from ($sql) s ");
         $num = $query->row_array();
         $total_rows = $num['num'];
@@ -194,27 +201,56 @@ class Annualplan extends CI_Controller
 
     //课程同步到课程管理
     public function syncourse($planid){
-        //同步开设中的课程
-        $acourses=$this->annualplancourse_model->get_all("company_code = '".$this->_logininfo['company_code']."' and annual_plan_id = ".$planid." and openstatus = 1 ");
+        $this->isAllowPlanid($planid,false);
+        //同步课程
+        $acourses=$this->annualplancourse_model->get_all("company_code = '".$this->_logininfo['company_code']."' and annual_plan_id = ".$planid);
         foreach ($acourses as $ac){
-            $c = array('company_code' => $this->_logininfo['company_code'],
+            $c = array('user_id'=>$this->_logininfo['id'],
+                'company_code' => $this->_logininfo['company_code'],
                 'title' => $ac['title'],
                 'teacher_id' => $ac['teacher_id'],
                 'price' => $ac['price'],
-                'info' => $ac['info'],
-                'isdel'=>2);
+                'external' => $ac['external'],
+                'supplier' => $ac['supplier'],
+                'info' => $ac['info']);
             if (empty($c['teacher_id'])) {
                 $c['teacher_id'] = NULL;
             }
-            if(empty($ac['course_id'])){
+            //同步审核后的学员名单annual_plan_id,annual_course_id
+            $stusql="select student.id,student.name,student.department_parent_id,student.department_id from ".$this->db->dbprefix('annual_plan_course_list')." course_list left join ".
+                $this->db->dbprefix('student')." student on course_list.student_id=student.id ".
+                "where course_list.company_code='".$this->_logininfo['company_code']."' and course_list.annual_plan_id=$planid and annual_course_id=".$ac['annual_course_id']." and course_list.status=1 ";
+            $query = $this->db->query($stusql);
+            $list = $query->result_array();
+            if (!empty($list)) {
+                $c['targetone']=$c['targettwo']=$c['target']=$c['targetstudent']='';
+                $studentid = array_column($list, 'id');
+                $c['targetstudent'] .= implode(",", $studentid);
+                $student = array_column($list, 'name');
+                $c['target'] .= implode(",", $student);
+                $one = array_column($list, 'department_parent_id');
+                $c['targetone'] .= implode(",", $one);
+                $two = array_column($list, 'department_id');
+                $c['targettwo'] .= implode(",", $two);
+            }
+
+
+            $c['isdel']=($ac['openstatus']==1)?2:1;//取消开课则删除之前的课程
+            if(empty($ac['course_id'])&&$ac['openstatus']==1){
                 $ac['course_id']=$this->course_model->create($c);
                 $this->annualplancourse_model->update($ac,array('id'=>$ac['id']));
-            }else{
+            }elseif(!empty($ac['course_id'])){
                 $this->course_model->update($c,$ac['course_id']);
             }
         }
-        //同步取消开课的课程
-        $acourses=$this->annualplancourse_model->get_all("company_code = '".$this->_logininfo['company_code']."' and annual_plan_id = ".$planid." and openstatus = 2 and (course_id is not null or course_id != '') ");
+        echo 1;
+
+    }
+
+    //取消同步的课程
+    public function cancelsyncourse($planid){
+        $this->isAllowPlanid($planid,false);
+        $acourses=$this->annualplancourse_model->get_all("company_code = '".$this->_logininfo['company_code']."' and annual_plan_id = ".$planid." and (course_id is not null or course_id != '') ");
         foreach ($acourses as $ac){
             $c = array('company_code' => $this->_logininfo['company_code'],
                 'title' => $ac['title'],
@@ -228,11 +264,183 @@ class Annualplan extends CI_Controller
             $this->course_model->update($c,$ac['course_id']);
         }
         echo 1;
+    }
 
+    //课程名单审核
+    public function courselist($planid,$courseid){
+        $this->isAllowPlanid($planid);
+        $parm['parent_department']=$this->input->get('parent_department');
+        $parm['department']=$this->input->get('department');
+        $success=$this->input->get('success');
+        $departWhere='';
+        if(!empty( $parm['parent_department'] )){
+            $departWhere.=" and student.department_parent_id = ".$parm['parent_department'];
+        }
+        if(!empty( $parm['department'] )){
+            $departWhere.=" and student.department_id = ".$parm['department'];
+        }
+        $plan=$this->annualplan_model->get_row(array('id'=>$planid));
+        $course=$this->annualplancourse_model->get_row(array('annual_plan_id'=>$planid,'annual_course_id'=>$courseid));
+        $cross_num=$this->annualplancourselist_model->get_count(array('annual_plan_id'=>$planid,'annual_course_id'=>$courseid,'status'=>1));
+        $aacsql = "select student.name,student.job_code,student.job_name,student.mobile,parentdepart.name as parent_department,depart.name as department,aac.student_id,aac.annual_course_id,apcl.status,aac.created from ".
+            $this->db->dbprefix('annual_answer_course') . " aac left join ".
+            $this->db->dbprefix('annual_plan_course_list') . " apcl on aac.id = apcl.answer_course_id and apcl.annual_plan_id=$planid left join ".
+            $this->db->dbprefix('student')." student on aac.student_id=student.id left join ".
+            $this->db->dbprefix('department')." parentdepart on student.department_parent_id = parentdepart.id left join ".
+            $this->db->dbprefix('department')." depart on student.department_id = depart.id ".
+            "where aac.company_code = '" . $this->_logininfo['company_code'] ."' and aac.annual_course_id = $courseid and aac.annual_survey_id = ".$plan['annual_survey_id'];
+        $aacsql .= $departWhere;
+        $aacsql .= " order by aac.created ";
+        $query = $this->db->query($aacsql);
+        $aaclist = $query->result_array();
+
+        $apclsql = "select student.name,student.job_code,student.job_name,student.mobile,parentdepart.name as parent_department,depart.name as department,apcl.student_id,apcl.annual_course_id,apcl.status,apcl.created from ".
+            $this->db->dbprefix('annual_plan_course_list')." apcl left join ".
+            $this->db->dbprefix('student')." student on apcl.student_id=student.id left join ".
+            $this->db->dbprefix('department')." parentdepart on student.department_parent_id = parentdepart.id left join ".
+            $this->db->dbprefix('department')." depart on student.department_id = depart.id ".
+            "where apcl.company_code = '" . $this->_logininfo['company_code'] ."' and apcl.annual_course_id = $courseid and apcl.annual_plan_id = $planid and apcl.annual_course_id=$courseid and (apcl.answer_course_id is null or apcl.answer_course_id = '') ";
+        $apclsql .= $departWhere;
+        $apclsql .= " order by apcl.created ";
+        $query = $this->db->query($apclsql);
+        $apclist = $query->result_array();
+
+        $where = "parent_id is null and company_code = '".$this->_logininfo['company_code']."' ";
+        $departments = $this->department_model->get_all($where);
+        $sec_departments = array();
+        if(!empty($parm['parent_department'])){
+            $where = "parent_id = ".$parm['parent_department']." and company_code = '".$this->_logininfo['company_code']."' ";
+            $sec_departments = $this->department_model->get_all($where);
+        }
+        $totals=count($apclist)+count($aaclist);
+
+        //已审核的学员对象
+        $stusql="select student.id,student.name,student.department_parent_id,student.department_id from ".$this->db->dbprefix('annual_plan_course_list')." course_list left join ".
+            $this->db->dbprefix('student')." student on course_list.student_id=student.id ".
+            "where course_list.company_code='".$this->_logininfo['company_code']."' and course_list.annual_plan_id=$planid and annual_course_id=".$courseid." and course_list.status=1 ";
+        $query = $this->db->query($stusql);
+        $list = $query->result_array();
+        if (!empty($list)) {
+            $studentid = array_column($list, 'id');
+            $plan['targetstudent'] = implode(",", $studentid);
+            $one = array_column($list, 'department_parent_id');
+            $plan['targetone'] = implode(",", $one);
+            $two = array_column($list, 'department_id');
+            $plan['targettwo'] = implode(",", $two);
+        }
+        //培训对象数据
+        $deparone = $this->department_model->get_all(array('company_code' => $this->_logininfo['company_code'], 'level' => 0));
+        if (!empty($deparone[0]['id'])) {
+            $departwo = $this->department_model->get_all(array('parent_id' => $deparone[0]['id']));
+            if($this->student_model->get_count("company_code='".$this->_logininfo['company_code']."' and department_id=".$deparone[0]['id']." and department_id=department_parent_id and isdel = 2 ")>0){
+                $departwo[]=array('id'=>$deparone[0]['id'],'parent_id'=>$deparone[0]['id'],'name'=>'未分配','level'=>1);
+            }
+        }
+        $student_departmentid=$departwo[0]['id']??$deparone[0]['id'];
+        if (!empty($student_departmentid)) {
+            $students = $this->student_model->get_all(array('department_id' => $student_departmentid,'isdel'=>2));
+        }
+
+        $this->load->view('header');
+        $this->load->view('annual_plan/course_list',compact('plan','course','aaclist','apclist','links','cross_num','totals','departments','sec_departments','parm','deparone', 'departwo', 'students','success'));
+        $this->load->view('footer');
+    }
+
+    //添加课程审核学员名单
+    public function addstudenttocourselist($planid,$courseid){
+        if(!$this->isAllowPlanid($planid,false)){
+            echo 2;
+            return false;
+        }
+        $targetstudent=$this->input->post('targetstudent');
+        $studentsarr = explode(',', $targetstudent);
+        foreach ($studentsarr as $s){
+            $l=array('company_code'=>$this->_logininfo['company_code'],'student_id'=>$s,'annual_plan_id'=>$planid,'annual_course_id'=>$courseid,'status'=>1);
+            if($this->annualplancourselist_model->get_count(array('company_code'=>$this->_logininfo['company_code'],'student_id'=>$s,'annual_plan_id'=>$planid,'annual_course_id'=>$courseid))<=0){
+                $this->annualplancourselist_model->create($l);
+            }
+        }
+        echo 1;
+    }
+
+    //开始审核
+    public function approvedstart($planid){
+        $this->isAllowPlanid($planid,false);
+        //判断是否有其他正在审核开启的年度计划
+        if($this->annualplan_model->get_count(array('company_code'=>$this->_logininfo['company_code'],'approval_status'=>1,'isdel'=>2))>0){
+            echo json_encode(array('err'=>'approvaling','msg'=>'有正在审核的年度计划,请先暂停其他计划的审核状态'));
+            return false;
+        }
+        //通知并判断部门经理是否缺失
+        $studentsql="select s.department_id from ".$this->db->dbprefix('annual_plan_course_list')." aplist left join ".$this->db->dbprefix('student')." s on aplist.student_id=s.id where aplist.annual_plan_id=$planid group by s.department_id ";
+        $sql="select * from ".$this->db->dbprefix('department')." department where id in ( select department_id from ($studentsql) s ) ";
+        $sql="select fsql.id as department_id,fsql.name as department,student.id as student_id,student.name,student.mobile from ($sql) fsql left join ".$this->db->dbprefix('student')." student on student.department_id = fsql.id and student.role=3 ";//员工经理
+        $query = $this->db->query($sql);
+        $firstudent = $query->result_array();
+        $errdepartment=array();
+        $nobifytarget=array();
+        foreach ($firstudent as $s){
+            if(empty($s['mobile'])){//没指定部门经理
+                $errdepartment[]=array('name'=>$s['department'],'department_id'=>$s['department_id']);
+            }else{
+                $nobifytarget[]=$s['student_id'];
+            }
+        }
+
+        if(count($errdepartment)<=0){
+            $plan=$this->annualplan_model->get_row(array('id'=>$planid));
+            $plan['approval_status']=1;
+            $this->annualplan_model->update($plan,$planid);
+            //通知部门经理审核
+            if(count($nobifytarget)>0){
+                $nobifytarget=array_unique($nobifytarget);
+                $this->load->library(array('notifyclass'));
+                $this->notifyclass->planCourseApproved($planid,$nobifytarget);
+            }
+        }
+        echo json_encode(array('err'=>count($errdepartment),'department'=>$errdepartment));
+    }
+
+    //暂停审核
+    public function approvedpause($planid){
+        if(!$this->isAllowPlanid($planid,false)){
+            echo 2;
+            return false;
+        }
+        $plan=$this->annualplan_model->get_row(array('id'=>$planid));
+        $plan['approval_status']=2;
+        $this->annualplan_model->update($plan,$planid);
+        echo 1;
+    }
+
+    //通过课程审核
+    public function approved($planid,$courseid,$studentid){
+        $this->isAllowPlanid($planid);
+        $pc=$this->annualplancourselist_model->get_row(array('annual_plan_id'=>$planid,'annual_course_id'=>$courseid,'student_id'=>$studentid));
+        if(!empty($pc['id'])){
+            $pc['status']=1;
+            $this->annualplancourselist_model->update($pc,array('id'=>$pc['id']));
+        }else{
+            $plan=$this->annualplan_model->get_row(array('id'=>$planid));
+            $asc=$this->annualanswercourse_model->get_row(array('annual_survey_id'=>$plan['annual_survey_id'],'annual_course_id'=>$courseid,'student_id'=>$studentid));
+            $this->annualplancourselist_model->create(array('answer_course_id'=>$asc['id'],'company_code'=>$this->_logininfo['company_code'],'student_id'=>$studentid,'annual_plan_id'=>$planid,'annual_course_id'=>$courseid,'status'=>1));
+        }
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+    //取消审核名单
+    public function unapproved($planid,$courseid,$studentid){
+        $this->isAllowPlanid($planid);
+        $pc=$this->annualplancourselist_model->get_row(array('annual_plan_id'=>$planid,'annual_course_id'=>$courseid,'student_id'=>$studentid));
+        if(!empty($pc['id'])){
+            $pc['status']=2;
+            $this->annualplancourselist_model->update($pc,array('id'=>$pc['id']));
+        }
+        redirect($_SERVER['HTTP_REFERER']);
     }
 
     //年度培训计划
     public function plan($planid){
+        $this->isAllowPlanid($planid);
         $plan=$this->annualplan_model->get_row(array('id'=>$planid));
         $typies=$this->annualcoursetype_model->get_all(array('annual_survey_id'=>$plan['annual_survey_id']));
         $res=array();
@@ -251,7 +459,7 @@ class Annualplan extends CI_Controller
             $t['courses'] = $query->result_array();
             $res[$k]=$t;
         }
-        $teachersql="select teacher.* from ".$this->db->dbprefix('annual_plan_course')." plan_course left join ".$this->db->dbprefix('teacher')." teacher on plan_course.teacher_id=teacher.id where plan_course.openstatus=1 ";
+        $teachersql="select teacher.* from ".$this->db->dbprefix('annual_plan_course')." plan_course left join ".$this->db->dbprefix('teacher')." teacher on plan_course.teacher_id=teacher.id where plan_course.annual_plan_id=$planid and plan_course.company_code='".$this->_logininfo['company_code']."' and plan_course.openstatus=1 and plan_course.teacher_id is not null group by teacher.id ";
         $query = $this->db->query($teachersql . " order by plan_course.id asc ");
         $teachers = $query->result_array();
 
@@ -262,14 +470,28 @@ class Annualplan extends CI_Controller
 
     //年度培训计划删除
     public function del($planid){
-        $this->annualplancourse_model->del($planid);
-        $this->annualplan_model->del($planid);
+        $this->isAllowPlanid($planid);
+        $this->annualplan_model->update(array('isdel'=>1),$planid);
+        $acourses=$this->annualplancourse_model->get_all("company_code = '".$this->_logininfo['company_code']."' and annual_plan_id = ".$planid." and (course_id is not null or course_id != '') ");
+        foreach ($acourses as $ac){
+            $c = array('company_code' => $this->_logininfo['company_code'],
+                'title' => $ac['title'],
+                'teacher_id' => $ac['teacher_id'],
+                'price' => $ac['price'],
+                'info' => $ac['info'],
+                'isdel'=>1);
+            if (empty($c['teacher_id'])) {
+                $c['teacher_id'] = NULL;
+            }
+            $this->course_model->update($c,$ac['course_id']);
+        }
         redirect($_SERVER['HTTP_REFERER']);
         return ;
     }
 
     //年度培训计划统计
     public function analysis($planid){
+        $this->isAllowPlanid($planid);
         $plan=$this->annualplan_model->get_row(array('id'=>$planid));
         $coursesql="select count(pc.id) as count_num , sum(people) as people_num,sum(price) as price_num,act.name as type_name from " . $this->db->dbprefix('annual_plan_course') . " pc left join " . $this->db->dbprefix('annual_course_type') . " act on pc.annual_course_type_id=act.id ".
             " where pc.annual_plan_id = $planid ".

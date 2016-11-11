@@ -1,4 +1,11 @@
 <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css"/>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.delPlanBtn').click(function(){
+            return confirm('确定删除计划,并清除此计划同步的课程吗?')
+        });
+    });
+</script>
 <div class="wrap">
         <div class="textureCont w960">
         <div class="texturetip p1524 clearfix">
@@ -14,10 +21,19 @@
                 <?php foreach ($plans as $p){ ?>
                     <div class="listCont">
                         <p class="operaBtn">
-                            <a href="<?php echo site_url('annualplan/edit/'.$p['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑</a><a href="<?php echo site_url('annualplan/del/'.$p['id']);?>" class="delBtn"><i class="fa fa-trash-o fa-lg mr5"></i>删除</a></p>
+                            <a href="<?php echo site_url('annualplan/edit/'.$p['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑</a><a href="<?php echo site_url('annualplan/del/'.$p['id']);?>" class="delPlanBtn"><i class="fa fa-trash-o fa-lg mr5"></i>删除</a></p>
                         <div class="listText">
                             <p class="titp">
                                 <a href="<?php echo site_url('annualplan/course/'.$p['id']);?>" class="blue"><?php echo $p['title'] ?></a>
+                            </p>
+                            <p class="titp">
+                                <?php if($p['approval_status']==1){//1审核中2审核暂停中3待开启 ?>
+                                    <span class="greenH25">审核中</span>
+                                <?php }elseif($p['approval_status']==2){ ?>
+                                    <span class="orangeH25">审核暂停中</span>
+                                <?php }elseif($p['approval_status']==3){ ?>
+                                    <span class="orangeH25">审核待开启</span>
+                                <?php } ?>
                             </p>
                             <p>调研问卷：<span class="blue"><?php echo $p['survey_title']; ?></span></p>
                             <p>创建时间：<?php echo date("Y-m-d H:i",strtotime($p['created'])); ?> </p>

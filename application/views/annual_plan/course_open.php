@@ -51,6 +51,13 @@
             var avg=(price*1>0&&people*1>0)?price/people:0;
             $('#avgprice').text(Math.round(avg)+'元/人');
         });
+        $('input[name=external]').change(function(){
+            if($('input[name=external]:checked').val()=='1'){
+                $('.supplierBox').show();
+            }else{
+                $('.supplierBox').hide();
+            }
+        });
 
     });
 </script>
@@ -125,13 +132,13 @@
 
                         </td>
                     </tr>
+                    <tr class="supplierBox" <?php if($course['external']!=1){?>style="display: none;" <?php } ?>>
+                        <th>供应商</th>
+                        <td><input name="supplier" value="<?php echo $course['supplier'] ?>" placeholder="请输入供应商" class="iptH37 w157 mr20 w237"></td>
+                    </tr>
                     <tr>
                         <th>课程时长</th>
                         <td><input name="day" value="<?php echo $course['day'] ?>" placeholder="请输入课程时长" class="iptH37 w157 mr20 w237"></td>
-                    </tr>
-                    <tr>
-                        <th>供应商</th>
-                        <td><input name="supplier" value="<?php echo $course['supplier'] ?>" placeholder="请输入供应商" class="iptH37 w157 mr20 w237"></td>
                     </tr>
                     <tr>
                         <th>课程介绍</th>

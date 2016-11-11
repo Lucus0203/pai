@@ -117,7 +117,7 @@
                 <?php }
                 } ?>
 
-                <?php if(count($teachers)>0&&false){ ?>
+                <?php if(count($teachers)>0){ ?>
                 <div class="mb20">
                     <table class="tableC">
                         <colgroup>

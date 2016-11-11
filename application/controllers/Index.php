@@ -76,40 +76,43 @@ class Index extends CI_Controller
         if($this->annualsurvey_model->get_count(array('company_code'=>$this->_logininfo['company_code'])) <= 0){
             $surveyid=11;
             $survey=$this->annualsurvey_model->get_row(array('id'=>$surveyid));
-            $c = array('company_code' => $this->_logininfo['company_code'],
-                'title' => $survey['title'],
-                'info' => $survey['info'],
-                'created'=>date("Y-m-d H:i:s"));
-            $id = $this->annualsurvey_model->create($c);
-            //二维码
-            $survey = array('qrcode'=>$id . rand(1000, 9999));
-            $this->load->library('ciqrcode');
-            $params['data'] = $this->config->item('web_url') . 'annual/answer/'.$id.'.html';
-            $params['level'] = 'H';
-            $params['size'] = 1024;
-            $params['savename'] = './uploads/annualqrcode/' . $survey['qrcode'] . '.png';
-            $this->ciqrcode->generate($params);
-            $this->annualsurvey_model->update($survey, $id);
-            //复制课程类型
-            $types=$this->annualcoursetype_model->get_all(array('annual_survey_id'=>$surveyid));
-            foreach($types as $t){
-                $typdid=$this->annualcoursetype_model->create(array('annual_survey_id'=>$id,'company_code'=>$this->_logininfo['company_code'],'annual_course_library_type_id'=>$t['annual_course_library_type_id'],'name'=>$t['name']));
-                $courses=$this->annualcourse_model->get_all(array('annual_survey_id'=>$surveyid,'annual_course_type_id'=>$t['id']));
-                foreach ($courses as $c){
-                    //复制课程
-                    $this->annualcourse_model->create(array('annual_survey_id'=>$id,'company_code'=>$this->_logininfo['company_code'],'title'=>$c['title'],'annual_course_type_id'=>$typdid,'annual_course_library_id'=>$c['annual_course_library_id']));
+            if(!empty($survey['id'])){
+                $c = array('company_code' => $this->_logininfo['company_code'],
+                    'title' => $survey['title'],
+                    'info' => $survey['info'],
+                    'created'=>date("Y-m-d H:i:s"));
+                $id = $this->annualsurvey_model->create($c);
+                //二维码
+                $survey = array('qrcode'=>$id . rand(1000, 9999));
+                $this->load->library('ciqrcode');
+                $params['data'] = $this->config->item('web_url') . 'annual/answer/'.$id.'.html';
+                $params['level'] = 'H';
+                $params['size'] = 1024;
+                $params['savename'] = './uploads/annualqrcode/' . $survey['qrcode'] . '.png';
+                $this->ciqrcode->generate($params);
+                $this->annualsurvey_model->update($survey, $id);
+                //复制课程类型
+                $types=$this->annualcoursetype_model->get_all(array('annual_survey_id'=>$surveyid));
+                foreach($types as $t){
+                    $typdid=$this->annualcoursetype_model->create(array('annual_survey_id'=>$id,'company_code'=>$this->_logininfo['company_code'],'annual_course_library_type_id'=>$t['annual_course_library_type_id'],'name'=>$t['name']));
+                    $courses=$this->annualcourse_model->get_all(array('annual_survey_id'=>$surveyid,'annual_course_type_id'=>$t['id']));
+                    foreach ($courses as $c){
+                        //复制课程
+                        $this->annualcourse_model->create(array('annual_survey_id'=>$id,'company_code'=>$this->_logininfo['company_code'],'title'=>$c['title'],'annual_course_type_id'=>$typdid,'annual_course_library_id'=>$c['annual_course_library_id']));
+                    }
+                }
+                //复制问题
+                $questions=$this->annualquestion_model->get_all(array('annual_survey_id'=>$surveyid));
+                foreach ($questions as $q){
+                    $questionid=$this->annualquestion_model->create(array('annual_survey_id'=>$id,'type'=>$q['type'],'module'=>$q['module'],'title'=>$q['title'],'required'=>$q['required']));
+                    $options=$this->annualoption_model->get_all(array('annual_survey_id'=>$surveyid,'annual_question_id'=>$q['id']));
+                    foreach ($options as $o){
+                        //复制选项
+                        $this->annualoption_model->create(array('annual_survey_id'=>$id,'annual_question_id'=>$questionid,'content'=>$o['content']));
+                    }
                 }
             }
-            //复制问题
-            $questions=$this->annualquestion_model->get_all(array('annual_survey_id'=>$surveyid));
-            foreach ($questions as $q){
-                $questionid=$this->annualquestion_model->create(array('annual_survey_id'=>$id,'type'=>$q['type'],'module'=>$q['module'],'title'=>$q['title'],'required'=>$q['required']));
-                $options=$this->annualoption_model->get_all(array('annual_survey_id'=>$surveyid,'annual_question_id'=>$q['id']));
-                foreach ($options as $o){
-                    //复制选项
-                    $this->annualoption_model->create(array('annual_survey_id'=>$id,'annual_question_id'=>$questionid,'content'=>$o['content']));
-                }
-            }
+
         }
     }
 
