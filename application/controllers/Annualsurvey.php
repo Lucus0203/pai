@@ -669,7 +669,7 @@ class Annualsurvey extends CI_Controller
 
     private function isStarted($surveyid){
         $survey=$this->annualsurvey_model->get_row(array('id'=>$surveyid));
-        return (strtotime("now")>strtotime($survey['time_start'])&&!empty($survey['time_start']));//问卷是否已开始
+        return ($survey['public']!=1);//问卷是否已开始
     }
 
 }

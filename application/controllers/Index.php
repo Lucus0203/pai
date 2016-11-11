@@ -78,8 +78,6 @@ class Index extends CI_Controller
             $survey=$this->annualsurvey_model->get_row(array('id'=>$surveyid));
             $c = array('company_code' => $this->_logininfo['company_code'],
                 'title' => $survey['title'],
-                'time_start' => date('Y-m-d',strtotime('+1 day')).' 09:00:00',
-                'time_end' => date('Y-m-d',strtotime('+1 month')).' 18:00:00',
                 'info' => $survey['info'],
                 'created'=>date("Y-m-d H:i:s"));
             $id = $this->annualsurvey_model->create($c);
