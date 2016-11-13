@@ -372,9 +372,18 @@ class Annualplan extends CI_Controller
             return false;
         }
         //通知并判断部门经理是否缺失
-        $studentsql="select s.department_id from ".$this->db->dbprefix('annual_plan_course_list')." aplist left join ".$this->db->dbprefix('student')." s on aplist.student_id=s.id where aplist.annual_plan_id=$planid group by s.department_id ";
-        $sql="select * from ".$this->db->dbprefix('department')." department where id in ( select department_id from ($studentsql) s ) ";
-        $sql="select fsql.id as department_id,fsql.name as department,student.id as student_id,student.name,student.mobile from ($sql) fsql left join ".$this->db->dbprefix('student')." student on student.department_id = fsql.id and student.role=3 ";//员工经理
+        $studentsql1="select s.department_id from ".$this->db->dbprefix('student')." s left join ".
+            $this->db->dbprefix('annual_answer_course')." aac on aac.student_id = s.id left join ".
+            $this->db->dbprefix('annual_plan')." plan ON plan.annual_survey_id = aac.annual_survey_id left join ".
+            $this->db->dbprefix('annual_plan_course')." apc ON apc.annual_plan_id = plan.id where plan.id = ".$planid."
+AND apc.openstatus =1 ";
+        $studentsql2="select s.department_id from ".$this->db->dbprefix('student')." s left join ".
+            $this->db->dbprefix('annual_plan_course_list')." aplist ON aplist.student_id = s.id where aplist.annual_plan_id = ".$planid;
+        $sql="SELECT fsql.department_id,department.name as department,student.id AS student_id, student.name, student.mobile from ".
+            "($studentsql1 UNION  ALL $studentsql2 ) fsql LEFT JOIN ".
+            $this->db->dbprefix('department')." department ON fsql.department_id=department.id left join ".
+            $this->db->dbprefix('student')." student ON student.department_id = fsql.department_id and student.role = 3 ".
+            "group by fsql.department_id";//员工经理
         $query = $this->db->query($sql);
         $firstudent = $query->result_array();
         $errdepartment=array();
