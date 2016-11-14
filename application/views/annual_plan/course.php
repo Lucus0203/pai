@@ -147,15 +147,15 @@
         <?php $this->load->view ( 'annual_plan/top_navi' ); ?>
         <ul class="fRight proPrint">
             <li>
-                <a href="#" <?php if($plan['approval_status']!=1){ ?>style="display: none;" <?php } ?> class="approvedpause borBlueH37 f13" title="员工经理将无法审核学员选课" >暂停审核</a>
-                <a href="#" <?php if($plan['approval_status']==1){ ?>style="display: none;" <?php } ?> class="approvedstart borBlueH37 f13" title="员工经理将收到学员选课通知" >开启审核并通知</a>
+                <a href="#" <?php if($plan['approval_status']!=1){ ?>style="display: none;" <?php } ?> class="approvedpause borBlueH37 f13" title="暂停员工经理将无法审核学员选课" >暂停审核</a>
+                <a href="#" <?php if($plan['approval_status']==1){ ?>style="display: none;" <?php } ?> class="approvedstart borBlueH37 f13" title="开启员工经理将收到学员选课通知" >开启审核并通知</a>
             </li>
             <li>
-                <a id="syncoursepause" <?php if($plan['syn_status']!=1){ ?>style="display: none" <?php } ?> href="#" class="borBlueH37 f13" title="课程不会自动添加到课程管理中" >暂停课程同步</a>
-                <a id="syncourse" <?php if($plan['syn_status']==1){ ?>style="display: none" <?php } ?> href="#" class="borBlueH37 f13" title="课程将自动添加到课程管理中" >开启课程同步</a>
+                <a id="syncoursepause" <?php if($plan['syn_status']!=1){ ?>style="display: none" <?php } ?> href="#" class="borBlueH37 f13" title="暂停同步课程将不会自动添加到课程管理中" >暂停课程同步</a>
+                <a id="syncourse" <?php if($plan['syn_status']==1){ ?>style="display: none" <?php } ?> href="#" class="borBlueH37 f13" title="开启课程同步将自动添加到课程管理中" >开启课程同步</a>
             </li>
             <li>
-                <a id="clearsyncourse" <?php if($total_syncoursed_opened<=0){ ?>style="border: none;background-color: #ccc; color:#fff;"<?php } ?> href="#" class="borBlueH37 f13" title="清除课程管理中该计划被同步的课程" >清除同步课程</a>
+                <a id="clearsyncourse" <?php if($total_syncoursed_opened<=0){ ?>style="border: none;background-color: #ccc; color:#fff;"<?php } ?> href="#" class="borBlueH37 f13" title="将清除课程管理中该计划被同步的课程" >清除同步课程</a>
                 <input type="hidden" id="total_syncoursed_opened" value="<?php echo $total_syncoursed_opened ?>" />
             </li>
         </ul>
