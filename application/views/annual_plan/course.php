@@ -26,18 +26,33 @@
                     url: '<?php echo site_url('annualplan/syncourse/'.$plan['id']) ?>',
                     async: false,
                     success: function (res) {
-                        if (res == 1) {
-                            $('.alert-success').show();
-                            setTimeout(function(){$('.alert-success').fadeOut(500);},2000);
-                            $('#syncourse').text('同步到课程管理');
-                        }
+                        $('#syncoursepause,.alert-success').show();
+                        setTimeout(function(){$('.alert-success').fadeOut(500);},2000);
+                        $('#syncourse').text('开启课程同步').hide();
+                        $('#total_syncoursed_opened').val(res);
+                        resetclearsyncoursebtn();
                     }
                 });
             }
             return false;
         });
-        $('a.approvedstart,a.approvedgoon').click(function(){
-            var msg=($(this).hasClass('approvedgoon'))?'确认继续审核并通知吗':'确认开启审核并通知吗?';
+        $('#syncoursepause').click(function(){
+            $(this).text('暂停同步中,请稍后..');
+            $.ajax({
+                type: "post",
+                url: '<?php echo site_url('annualplan/syncoursepause/'.$plan['id']) ?>',
+                async: false,
+                success: function (res) {
+                    $('#syncourse,.alert-success').show();
+                    setTimeout(function(){$('.alert-success').fadeOut(500);},2000);
+                    $('#syncoursepause').text('暂停课程同步').hide();
+                    $('#total_syncoursed_opened').val(res);
+                    resetclearsyncoursebtn();
+                }
+            });
+        });
+        $('a.approvedstart').click(function(){
+            var msg='确认开启审核并通知吗?';
             if(confirm(msg)){
                 $.ajax({
                     type: "post",
@@ -55,8 +70,8 @@
                             var href='<?php echo base_url() ?>department/index/'+res.department[0].department_id+'.html';
                             $('.alert-danger').html('<span class="alert-msg">以下部门尚未指定部门经理<a href="'+href+'" class="departmentUrl blue ml20">去完善</a></span><a href="javascript:;" class="alert-remove">X</a><br><br><span class="alert-msg black department">'+department+'</span>').show();
                         }else{
-                            $('.approvedstart,.approvedgoon').hide();
-                            $('.approvedpause,.alert-success').show();
+                            $('a.approvedstart').hide();
+                            $('a.approvedpause,.alert-success').show();
                             setTimeout(function(){$('.alert-success').fadeOut(500);},2000);
                         }
                     }
@@ -73,8 +88,8 @@
                     dataType : 'json',
                     success: function (res) {
                         if (res==1) {
-                            $('.approvedstart,.approvedpause').hide();
-                            $('.approvedgoon,.alert-success').show();
+                            $('a.approvedpause').hide();
+                            $('a.approvedstart,.alert-success').show();
                             setTimeout(function(){$('.alert-success').fadeOut(500);},2000);
                         }
                     }
@@ -82,8 +97,11 @@
             }
             return false;
         });
-        $('#cancelsyncourse').click(function(){
-            if(confirm('确定取消同步课程吗?')){
+        $('#clearsyncourse').click(function(){
+            if($('#total_syncoursed_opened').val()*1 <= 0){
+                return false;
+            }
+            if(confirm('确定清除同步课程吗?')){
                 $.ajax({
                     type: "post",
                     url: '<?php echo site_url('annualplan/cancelsyncourse/'.$plan['id']) ?>',
@@ -91,8 +109,10 @@
                     dataType : 'json',
                     success: function (res) {
                         if (res==1) {
-                            $('.alert-success').show();
+                            $('#syncourse,.alert-success').show();
+                            $('#syncoursepause').hide();
                             setTimeout(function(){$('.alert-success').fadeOut(500);},2000);
+                            $('#clearsyncourse').css({'border':'none','background-color':'#ccc','color':'#fff'});
                         }
                     }
                 });
@@ -101,6 +121,13 @@
         });
         $(document).tooltip();
         clearTimeout(alertBoxTimeSet);
+        function resetclearsyncoursebtn(){
+            if($('#total_syncoursed_opened').val()*1 > 0){
+                $('#clearsyncourse').removeAttr('style');
+            }else{
+                $('#clearsyncourse').css({'border':'none','background-color':'#ccc','color':'#fff'});
+            }
+        }
     });
 </script>
 <div class="wrap">
@@ -118,21 +145,20 @@
     </p>
     <div class="topNaviKec01">
         <?php $this->load->view ( 'annual_plan/top_navi' ); ?>
-        <?php if($total_open>0){ ?>
         <ul class="fRight proPrint">
             <li>
-                <a <?php if($plan['approval_status']!=3){ ?>style="display: none;"<?php } ?> href="#" class="approvedstart borBlueH37 f13" title="部门经理将收到学员选课通知" >开启审核并通知</a>
-                <a <?php if($plan['approval_status']!=1){ ?>style="display: none;"<?php } ?> href="<?php echo site_url('annualplan/approvedpause/'.$plan['id']); ?>" class="approvedpause borBlueH37 f13" >暂停审核</a>
-                <a <?php if($plan['approval_status']!=2){ ?>style="display: none;"<?php } ?> href="#" class="approvedgoon borBlueH37 f13" title="部门经理将收到学员选课通知">继续审核并通知</a>
+                <a href="#" <?php if($plan['approval_status']!=1){ ?>style="display: none;" <?php } ?> class="approvedpause borBlueH37 f13" title="员工经理将无法审核学员选课" >暂停审核</a>
+                <a href="#" <?php if($plan['approval_status']==1){ ?>style="display: none;" <?php } ?> class="approvedstart borBlueH37 f13" title="员工经理将收到学员选课通知" >开启审核并通知</a>
             </li>
             <li>
-                <a id="syncourse" href="#" class="borBlueH37 f13" title="开设了的课程将被添加到课程管理中" >同步到课程管理</a>
+                <a id="syncoursepause" <?php if($plan['syn_status']!=1){ ?>style="display: none" <?php } ?> href="#" class="borBlueH37 f13" title="课程不会自动添加到课程管理中" >暂停课程同步</a>
+                <a id="syncourse" <?php if($plan['syn_status']==1){ ?>style="display: none" <?php } ?> href="#" class="borBlueH37 f13" title="课程将自动添加到课程管理中" >开启课程同步</a>
             </li>
             <li>
-                <a id="cancelsyncourse" href="#" class="borBlueH37 f13" title="清除课程管理中该计划被同步的课程" >取消同步课程</a>
+                <a id="clearsyncourse" <?php if($total_syncoursed_opened<=0){ ?>style="border: none;background-color: #ccc; color:#fff;"<?php } ?> href="#" class="borBlueH37 f13" title="清除课程管理中该计划被同步的课程" >清除同步课程</a>
+                <input type="hidden" id="total_syncoursed_opened" value="<?php echo $total_syncoursed_opened ?>" />
             </li>
         </ul>
-        <?php } ?>
     </div>
 
     <div class="clearfix textureBox">

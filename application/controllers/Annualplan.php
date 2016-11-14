@@ -138,8 +138,14 @@ class Annualplan extends CI_Controller
         $total_open=$this->annualplancourse_model->get_count("company_code=" . $this->_logininfo['company_code'] ." and annual_plan_id = ".$planid." and openstatus = 1 ");
         $typies=$this->annualcoursetype_model->get_all(array('annual_survey_id'=>$plan['annual_survey_id']));
         $total_syncoursed=$this->annualplancourse_model->get_count("company_code=" . $this->_logininfo['company_code'] ." and annual_plan_id = ".$planid." and course_id is not null and course_id != '' ");
+
+        $total_syncoursed_opened_sql="select count(*) as num from ".$this->db->dbprefix('annual_plan_course')." apc left join ".$this->db->dbprefix('course')." c on apc.course_id=c.id where apc.annual_plan_id = ".$planid." and c.isdel = 2 ";
+        $query = $this->db->query($total_syncoursed_opened_sql);
+        $total_syncoursed_opened=$query->row_array();
+        $total_syncoursed_opened=$total_syncoursed_opened['num'];
+
         $this->load->view('header');
-        $this->load->view('annual_plan/course',compact('plan','courses','links','total_open','total','parm','typies','total_syncoursed'));
+        $this->load->view('annual_plan/course',compact('plan','courses','links','total_open','total','parm','typies','total_syncoursed','total_syncoursed_opened'));
         $this->load->view('footer');
     }
 
@@ -165,6 +171,7 @@ class Annualplan extends CI_Controller
             $c['people']=!empty($this->input->post('people'))?$this->input->post('people'):null;
             $c['info']=$this->input->post('info');
             $c['openstatus']=1;
+
             if($this->annualplancourse_model->get_count(array('annual_plan_id'=>$planid,'annual_course_id'=>$annualcourseid))>0){
                 $this->annualplancourse_model->update($c,array('annual_plan_id'=>$planid,'annual_course_id'=>$annualcourseid));
             }else{
@@ -172,8 +179,32 @@ class Annualplan extends CI_Controller
                 $c['annual_plan_id']=$planid;
                 $c['annual_course_id']=$annualcourseid;
                 $c['annual_course_type_id']=$annualcourse['annual_course_type_id'];
-                $this->annualplancourse_model->create($c);
+                $apc_id=$this->annualplancourse_model->create($c);
             }
+
+            if($plan['syn_status']==1){
+                //同步课程内容
+                $syncourse = array('user_id'=>$this->_logininfo['id'],
+                    'company_code' => $this->_logininfo['company_code'],
+                    'title' => $c['title'],
+                    'teacher_id' => $c['teacher_id'],
+                    'price' => $c['price'],
+                    'external' => $c['external'],
+                    'supplier' => $c['supplier'],
+                    'info' => $c['info'],
+                    'isdel' => 2);
+                if (empty($c['teacher_id'])) {
+                    $syncourse['teacher_id'] = NULL;
+                }
+                $apcourse=$this->annualplancourse_model->get_row(array('annual_plan_id'=>$planid,'annual_course_id'=>$annualcourseid));
+                if(empty($apcourse['course_id'])){
+                    $apcourse['course_id']=$this->course_model->create($syncourse);
+                    $this->annualplancourse_model->update($apcourse,array('id'=>$apcourse['id']));
+                }elseif(!empty($apcourse['course_id'])){
+                    $this->course_model->update($syncourse,$apcourse['course_id']);
+                }
+            }
+
             redirect($this->input->post('preurl'));
             return;
         }
@@ -182,7 +213,6 @@ class Annualplan extends CI_Controller
         $teachers = $this->teacher_model->get_all(array('company_code' => $this->_logininfo['company_code'], 'isdel' => 2));
         $library=$this->annualcourselibrary_model->get_row(array('id'=>$annualcourse['annual_course_library_id']));
         $preurl=$_SERVER['HTTP_REFERER'];
-
         $this->load->view('header');
         $this->load->view('annual_plan/course_open',compact('course','annualcourse','teachers','library','preurl','plan','chosennum'));
         $this->load->view('footer');
@@ -196,6 +226,16 @@ class Annualplan extends CI_Controller
             return false;
         }
         $this->annualplancourse_model->update(array('openstatus'=>2),array('annual_plan_id'=>$planid,'annual_course_id'=>$annualcourseid));
+
+        $plan=$this->annualplan_model->get_row(array('id'=>$planid));
+        if($plan['syn_status']==1){
+            //同步课程内容
+            $apcourse=$this->annualplancourse_model->get_row(array('annual_plan_id'=>$planid,'annual_course_id'=>$annualcourseid));
+            if(!empty($apcourse['course_id'])){
+                $this->course_model->update(array('isdel'=>1),$apcourse['course_id']);
+            }
+        }
+
         redirect($_SERVER['HTTP_REFERER']);
     }
 
@@ -244,6 +284,10 @@ class Annualplan extends CI_Controller
                 $this->course_model->update($c,$ac['course_id']);
             }
         }
+        //更新计划同步状态
+        $plan=$this->annualplan_model->get_row(array('id'=>$planid));
+        $plan['syn_status']=1;
+        $this->annualplan_model->update($plan,$planid);
         //同步课程报名名单
         $applylistsql="select apc.course_id,apcl.student_id,apcl.status from ".$this->db->dbprefix('annual_plan_course_list')." apcl left join ".$this->db->dbprefix('annual_plan_course')." apc on apcl.annual_plan_id=apc.annual_plan_id and apcl.annual_course_id=apc.annual_course_id where apcl.company_code='".$this->_logininfo['company_code']."' and apc.course_id is not null and apcl.annual_plan_id=$planid group by apc.course_id,apcl.student_id ";
         $query=$this->db->query($applylistsql);
@@ -262,8 +306,25 @@ class Annualplan extends CI_Controller
                 }
             }
         }
-        echo 1;
+        //正在同步中的课程数量
+        $total_syncoursed_opened_sql="select count(*) as num from ".$this->db->dbprefix('annual_plan_course')." apc left join ".$this->db->dbprefix('course')." c on apc.course_id=c.id where apc.annual_plan_id = ".$planid." and c.isdel = 2 ";
+        $query = $this->db->query($total_syncoursed_opened_sql);
+        $total_syncoursed_opened=$query->row_array();
+        echo $total_syncoursed_opened['num'];
 
+    }
+
+    //暂停课程同步
+    public function syncoursepause($planid){
+        //更新计划同步状态
+        $plan=$this->annualplan_model->get_row(array('id'=>$planid));
+        $plan['syn_status']=2;
+        $this->annualplan_model->update($plan,$planid);
+        //正在同步中的课程数量
+        $total_syncoursed_opened_sql="select count(*) as num from ".$this->db->dbprefix('annual_plan_course')." apc left join ".$this->db->dbprefix('course')." c on apc.course_id=c.id where apc.annual_plan_id = ".$planid." and c.isdel = 2 ";
+        $query = $this->db->query($total_syncoursed_opened_sql);
+        $total_syncoursed_opened=$query->row_array();
+        echo $total_syncoursed_opened['num'];
     }
 
     //取消同步的课程
@@ -282,6 +343,9 @@ class Annualplan extends CI_Controller
             }
             $this->course_model->update($c,$ac['course_id']);
         }
+        $plan=$this->annualplan_model->get_row(array('id'=>$planid));
+        $plan['syn_status']=2;
+        $this->annualplan_model->update($plan,$planid);
         echo 1;
     }
 
@@ -377,6 +441,8 @@ class Annualplan extends CI_Controller
             $l=array('company_code'=>$this->_logininfo['company_code'],'student_id'=>$s,'annual_plan_id'=>$planid,'annual_course_id'=>$courseid,'status'=>1);
             if($this->annualplancourselist_model->get_count(array('company_code'=>$this->_logininfo['company_code'],'student_id'=>$s,'annual_plan_id'=>$planid,'annual_course_id'=>$courseid))<=0){
                 $this->annualplancourselist_model->create($l);
+                //同步名单操作
+                $this->syncourselist($planid,$courseid,$s,1);
             }
         }
         echo 1;
@@ -444,15 +510,19 @@ AND apc.openstatus =1 ";
     //通过课程审核
     public function approved($planid,$courseid,$studentid){
         $this->isAllowPlanid($planid);
+        $plan=$this->annualplan_model->get_row(array('id'=>$planid));
         $pc=$this->annualplancourselist_model->get_row(array('annual_plan_id'=>$planid,'annual_course_id'=>$courseid,'student_id'=>$studentid));
         if(!empty($pc['id'])){
             $pc['status']=1;
             $this->annualplancourselist_model->update($pc,array('id'=>$pc['id']));
         }else{
-            $plan=$this->annualplan_model->get_row(array('id'=>$planid));
             $asc=$this->annualanswercourse_model->get_row(array('annual_survey_id'=>$plan['annual_survey_id'],'annual_course_id'=>$courseid,'student_id'=>$studentid));
             $this->annualplancourselist_model->create(array('answer_course_id'=>$asc['id'],'company_code'=>$this->_logininfo['company_code'],'student_id'=>$studentid,'annual_plan_id'=>$planid,'annual_course_id'=>$courseid,'status'=>1));
         }
+
+        //同步操作
+        $this->syncourselist($planid,$courseid,$studentid,1);
+
         redirect($_SERVER['HTTP_REFERER']);
     }
     //取消审核名单
@@ -462,6 +532,8 @@ AND apc.openstatus =1 ";
         if(!empty($pc['id'])){
             $pc['status']=2;
             $this->annualplancourselist_model->update($pc,array('id'=>$pc['id']));
+            //同步操作
+            $this->syncourselist($planid,$courseid,$studentid,2);
         }
         redirect($_SERVER['HTTP_REFERER']);
     }
@@ -559,6 +631,47 @@ AND apc.openstatus =1 ";
         $this->load->view('annual_plan/analysis',compact('plan','courses','datatrend'));
         $this->load->view('footer');
     }
+
+    //同步课程名单
+    private function syncourselist($planid,$courseid,$studentid,$status=1){//1通过2取消
+        $plan=$this->annualplan_model->get_row(array('id'=>$planid));
+        if($plan['syn_status']==1){
+            $apcourse=$this->annualplancourse_model->get_row(array('annual_plan_id'=>$planid,'annual_course_id'=>$courseid));
+            if(!empty($apcourse['course_id'])){
+                //课程名单
+                $stusql="select student.id,student.name,student.department_parent_id,student.department_id from ".$this->db->dbprefix('annual_plan_course_list')." course_list left join ".
+                    $this->db->dbprefix('student')." student on course_list.student_id=student.id ".
+                    "where course_list.company_code='".$this->_logininfo['company_code']."' and course_list.annual_plan_id=$planid and annual_course_id=".$courseid." and course_list.status=1 ";
+                $query = $this->db->query($stusql);
+                $list = $query->result_array();
+                if (!empty($list)) {
+                    $c=array();
+                    $c['targetone']=$c['targettwo']=$c['target']=$c['targetstudent']='';
+                    $targetstudentids = array_column($list, 'id');
+                    $c['targetstudent'] .= implode(",", $targetstudentids);
+                    $student = array_column($list, 'name');
+                    $c['target'] .= implode(",", $student);
+                    $one = array_column($list, 'department_parent_id');
+                    $c['targetone'] .= implode(",", $one);
+                    $two = array_column($list, 'department_id');
+                    $c['targettwo'] .= implode(",", $two);
+                    $this->course_model->update($c,$apcourse['course_id']);
+                }
+                //报名名单
+                $data = array('course_id' => $apcourse['course_id'], 'student_id' => $studentid);
+                $a = $this->db->get_where('course_apply_list', $data)->row_array();
+                $data['note'] = '来自年度需求调研的报名申请';
+                $data['status'] = $status;
+                if (empty($a)) {
+                    $this->db->insert('course_apply_list', $data);
+                } else {
+                    $this->db->where('id', $a['id']);
+                    $this->db->update('course_apply_list', $data);
+                }
+            }
+        }
+    }
+
 
     //是否是自己公司下的问卷
     private function isAllowAnnualid($surveyid,$redirect=true){

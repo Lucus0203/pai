@@ -26,15 +26,8 @@
                             <p class="titp">
                                 <a href="<?php echo site_url('annualplan/course/'.$p['id']);?>" class="blue"><?php echo $p['title'] ?></a>
                             </p>
-                            <p class="titp">
-                                <?php if($p['approval_status']==1){//1审核中2审核暂停中3待开启 ?>
-                                    <span class="greenH25">审核中</span>
-                                <?php }elseif($p['approval_status']==2){ ?>
-                                    <span class="orangeH25">审核暂停中</span>
-                                <?php }elseif($p['approval_status']==3){ ?>
-                                    <span class="orangeH25">审核待开启</span>
-                                <?php } ?>
-                            </p>
+                            <p>审核状态：<?php if($p['approval_status']==1){?><span class="green">已开启</span><?php }else{?><span class="orange">未开启</span><?php } ?></p>
+                            <p>课程同步：<?php if($p['syn_status']==1){?><span class="green">已开启</span><?php }else{?><span class="orange">未开启</span><?php } ?></p>
                             <p>调研问卷：<span class="blue"><?php echo $p['survey_title']; ?></span></p>
                             <p>创建时间：<?php echo date("Y-m-d H:i",strtotime($p['created'])); ?> </p>
                         </div>
