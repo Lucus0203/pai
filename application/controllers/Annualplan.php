@@ -232,6 +232,7 @@ class Annualplan extends CI_Controller
                 $c['targetone'] .= implode(",", $one);
                 $two = array_column($list, 'department_id');
                 $c['targettwo'] .= implode(",", $two);
+
             }
 
 
@@ -241,6 +242,24 @@ class Annualplan extends CI_Controller
                 $this->annualplancourse_model->update($ac,array('id'=>$ac['id']));
             }elseif(!empty($ac['course_id'])){
                 $this->course_model->update($c,$ac['course_id']);
+            }
+        }
+        //同步课程报名名单
+        $applylistsql="select apc.course_id,apcl.student_id,apcl.status from ".$this->db->dbprefix('annual_plan_course_list')." apcl left join ".$this->db->dbprefix('annual_plan_course')." apc on apcl.annual_plan_id=apc.annual_plan_id and apcl.annual_course_id=apc.annual_course_id where apcl.company_code='".$this->_logininfo['company_code']."' and apc.course_id is not null and apcl.annual_plan_id=$planid group by apc.course_id,apcl.student_id ";
+        $query=$this->db->query($applylistsql);
+        $list=$query->result_array();
+        if(!empty($list)){
+            foreach ($list as $s){
+                $data = array('course_id' => $s['course_id'], 'student_id' => $s['student_id']);
+                $a = $this->db->get_where('course_apply_list', $data)->row_array();
+                $data['note'] = '来自年度需求调研的报名申请';
+                $data['status'] = $s['status'];
+                if (empty($a)) {
+                    $this->db->insert('course_apply_list', $data);
+                } else {
+                    $this->db->where('id', $a['id']);
+                    $this->db->update('course_apply_list', $data);
+                }
             }
         }
         echo 1;
