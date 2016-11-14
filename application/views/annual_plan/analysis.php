@@ -52,7 +52,7 @@
                 type: 'column'
             },
             title: {
-                text: '课程选择人次'
+                text: '课程人次'
             },
             yAxis: {
                 allowDecimals: false,
@@ -209,7 +209,7 @@
                             <?php } ?>
                         </tr>
                         <tr>
-                            <td style="border-bottom: none;">课程选择人次</td>
+                            <td style="border-bottom: none;">课程人次</td>
                             <?php foreach ($courses as $c){ ?>
                                 <td style="border-bottom: none;"><?php echo round($c['people_num']) ?></td>
                             <?php } ?>
