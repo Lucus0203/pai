@@ -70,7 +70,7 @@
                             var href='<?php echo base_url() ?>department/index/'+res.department[0].department_id+'.html';
                             $('.alert-danger').html('<span class="alert-msg">以下部门尚未指定部门经理<a href="'+href+'" class="departmentUrl blue ml20">去完善</a></span><a href="javascript:;" class="alert-remove">X</a><br><br><span class="alert-msg black department">'+department+'</span>').show();
                         }else{
-                            $('a.approvedstart').hide();
+                            $('.alert-danger,a.approvedstart').hide();
                             $('a.approvedpause,.alert-success').show();
                             setTimeout(function(){$('.alert-success').fadeOut(500);},2000);
                         }
