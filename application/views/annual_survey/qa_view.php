@@ -59,6 +59,8 @@
                             </ul>
                         </div>
                     <?php }
+                }else{
+                    echo '<div class="p20 borderBottom"><span class="gray9 f14 ml10">没有设置问题内容</span></div>';
                 }?>
             </div>
         </div>

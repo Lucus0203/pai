@@ -159,7 +159,6 @@ $(document).ready(function(){
 <?php } ?>
             <div class="p15">
                     <form id="editForm" method="post" action=""  enctype="multipart/form-data" autocomplete="off">
-                        <div style="visibility: hidden;height: 0;"><input type="text"> <input type="password"></div>
                     <input name="act" type="hidden" value="act" />
                     <table cellspacing="0" class="comTable mb20">
                             <colgroup><col width="100">
