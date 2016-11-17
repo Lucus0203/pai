@@ -542,6 +542,16 @@ AND apc.openstatus =1 ";
     public function plan($planid){
         $this->isAllowPlanid($planid);
         $plan=$this->annualplan_model->get_row(array('id'=>$planid));
+        //部门总览
+        $countcourselist="select count(apcl.id) num,apc.annual_course_id,apc.title,apc.price,apc.people,parent_department.name as department,s.department_parent_id from ".$this->db->dbprefix('annual_plan_course_list')." apcl left join ".$this->db->dbprefix('student')." s on s.id = apcl.student_id ".
+            " left join ".$this->db->dbprefix('department')." parent_department on parent_department.id = s.department_parent_id ".
+            " left join ".$this->db->dbprefix('department')." department on department.id = s.department_id ".
+            " left join ".$this->db->dbprefix('annual_plan_course')." apc on apcl.annual_course_id=apc.annual_course_id and apcl.annual_plan_id=apc.annual_plan_id where apc.annual_plan_id=".$planid." and apc.openstatus=1 and apcl.status=1 group by apc.annual_course_id,s.department_parent_id ";
+        $ccsql="select cc.department_parent_id,cc.department,count(cc.annual_course_id) course_num,sum(cc.num) people_num,sum(cc.num * cc.price/cc.people) price_total from ($countcourselist) cc GROUP BY cc.department_parent_id order by cc.department_parent_id ";
+        $query = $this->db->query($ccsql);
+        $departmentcourse = $query->result_array();
+
+        //课程总览及课程内容
         $typies=$this->annualcoursetype_model->get_all(array('annual_survey_id'=>$plan['annual_survey_id']));
         $res=array();
         foreach ($typies as $k=>$t){
@@ -559,12 +569,13 @@ AND apc.openstatus =1 ";
             $t['courses'] = $query->result_array();
             $res[$k]=$t;
         }
+        //讲师信息
         $teachersql="select teacher.* from ".$this->db->dbprefix('annual_plan_course')." plan_course left join ".$this->db->dbprefix('teacher')." teacher on plan_course.teacher_id=teacher.id where plan_course.annual_plan_id=$planid and plan_course.company_code='".$this->_logininfo['company_code']."' and plan_course.openstatus=1 and plan_course.teacher_id is not null group by teacher.id ";
         $query = $this->db->query($teachersql . " order by plan_course.id asc ");
         $teachers = $query->result_array();
 
         $this->load->view('header');
-        $this->load->view('annual_plan/plan',compact('plan','teachers','res'));
+        $this->load->view('annual_plan/plan',compact('plan','teachers','res','departmentcourse'));
         $this->load->view('footer');
     }
 

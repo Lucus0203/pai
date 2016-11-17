@@ -36,11 +36,46 @@
 
             <div class="clearfix">
                 <p class="f24 aCenter mb20"><?php echo $plan['title'] ?></p>
+                <?php if(count($departmentcourse)>0){?>
+                    <div class="mb20">
+                        <table class="tableC">
+                            <tbody>
+                            <tr>
+                                <th colspan="5"  class="blueTxt">部门总览</th>
+                            </tr>
+                            <tr>
+                                <th>部门名称</th>
+                                <th>开课数量</th>
+                                <th>培训人次</th>
+                                <th>培训预算</th>
+                            </tr>
+                            <?php $count_total=0;$people_total=0;$price_total=0;
+                            foreach ($departmentcourse as $dc){ ?>
+                                <tr>
+                                    <td><?php echo $dc['department'] ?></td>
+                                    <td><?php echo round($dc['course_num']);$count_total+=$dc['course_num']; ?></td>
+                                    <td><?php echo round($dc['people_num']);$people_total+=$dc['people_num']; ?></td>
+                                    <td><?php echo round($dc['price_total']);$price_total+=$dc['price_total']; ?></td>
+                                </tr>
+                            <?php } ?>
+                            <?php if(count($departmentcourse)>1){ ?>
+                                <tr>
+                                    <td style="border-bottom: none;">全部</td>
+                                    <td style="border-bottom: none;"><?php echo round($count_total) ?></td>
+                                    <td style="border-bottom: none;"><?php echo round($people_total) ?></td>
+                                    <td style="border-bottom: none;"><?php echo round($price_total) ?></td>
+                                </tr>
+                            <?php } ?>
+
+                            </tbody>
+                        </table>
+                    </div>
+                <?php } ?>
                 <div class="mb20">
                     <table class="tableC">
                         <tbody>
                         <tr>
-                            <th colspan="5"  class="blueTxt">总览</th>
+                            <th colspan="5"  class="blueTxt">课程总览</th>
                         </tr>
                         <tr>
                             <th>课程类型</th>
@@ -57,12 +92,14 @@
                                 <td><?php echo round($r['total']['price_num']);$price_total+=$r['total']['price_num']; ?></td>
                             </tr>
                         <?php } ?>
+                        <?php if(count($res)>1){ ?>
                         <tr>
                             <td style="border-bottom: none;">全部</td>
                             <td style="border-bottom: none;"><?php echo round($count_total) ?></td>
                             <td style="border-bottom: none;"><?php echo round($people_total) ?></td>
                             <td style="border-bottom: none;"><?php echo round($price_total) ?></td>
                         </tr>
+                        <?php } ?>
 
                         </tbody>
                     </table>

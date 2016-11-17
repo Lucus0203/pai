@@ -276,6 +276,16 @@ class Export extends CI_Controller
     public function exportplan($planid){
         if($this->isAllowPlanid($planid)){
             $plan=$this->annualplan_model->get_row(array('id'=>$planid));
+            //部门总览
+            $countcourselist="select count(apcl.id) num,apc.annual_course_id,apc.title,apc.price,apc.people,parent_department.name as department,s.department_parent_id from ".$this->db->dbprefix('annual_plan_course_list')." apcl left join ".$this->db->dbprefix('student')." s on s.id = apcl.student_id ".
+                " left join ".$this->db->dbprefix('department')." parent_department on parent_department.id = s.department_parent_id ".
+                " left join ".$this->db->dbprefix('department')." department on department.id = s.department_id ".
+                " left join ".$this->db->dbprefix('annual_plan_course')." apc on apcl.annual_course_id=apc.annual_course_id and apcl.annual_plan_id=apc.annual_plan_id where apc.annual_plan_id=".$planid." and apc.openstatus=1 and apcl.status=1 group by apc.annual_course_id,s.department_parent_id ";
+            $ccsql="select cc.department_parent_id,cc.department,count(cc.annual_course_id) course_num,sum(cc.num) people_num,sum(cc.num * cc.price/cc.people) price_total from ($countcourselist) cc GROUP BY cc.department_parent_id order by cc.department_parent_id ";
+            $query = $this->db->query($ccsql);
+            $departmentcourse = $query->result_array();
+
+            //课程总览及课程内容
             $typies=$this->annualcoursetype_model->get_all(array('annual_survey_id'=>$plan['annual_survey_id']));
             $res=array();
             foreach ($typies as $k=>$t){
@@ -325,18 +335,62 @@ class Export extends CI_Controller
             );
 
             //$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, 8, 'Some value');
-            $objActSheet->mergeCells('A1:I1')->setCellValue('A1', '总览')
-                ->mergeCells('A2:C2')->setCellValue('A2', '课程类型')
-                ->mergeCells('D2:E2')->setCellValue('D2', '开课数量')
-                ->mergeCells('F2:G2')->setCellValue('F2', '培训人次')
-                ->mergeCells('H2:I2')->setCellValue('H2', '培训预算');
-            $objActSheet->getStyle('A1')->applyFromArray($styleTitle);
-            $objActSheet->getStyle('A2')->applyFromArray($styleTh);
-            $objActSheet->getStyle('D2')->applyFromArray($styleTh);
-            $objActSheet->getStyle('F2')->applyFromArray($styleTh);
-            $objActSheet->getStyle('H2')->applyFromArray($styleTh);
+            $i=1;
+            //部门总览
+            if(count($departmentcourse)>0){
+                $objActSheet->mergeCells('A'.$i.':I'.$i)->setCellValue('A'.$i, '部门总览')
+                    ->mergeCells('A'.($i+1).':C'.($i+1))->setCellValue('A'.($i+1), '部门名称')
+                    ->mergeCells('D'.($i+1).':E'.($i+1))->setCellValue('D'.($i+1), '开课数量')
+                    ->mergeCells('F'.($i+1).':G'.($i+1))->setCellValue('F'.($i+1), '培训人次')
+                    ->mergeCells('H'.($i+1).':I'.($i+1))->setCellValue('H'.($i+1), '培训预算');
+                $objActSheet->getStyle('A'.$i)->applyFromArray($styleTitle);
+                $objActSheet->getStyle('A'.($i+1))->applyFromArray($styleTh);
+                $objActSheet->getStyle('D'.($i+1))->applyFromArray($styleTh);
+                $objActSheet->getStyle('F'.($i+1))->applyFromArray($styleTh);
+                $objActSheet->getStyle('H'.($i+1))->applyFromArray($styleTh);
+                $count_total=0;$people_total=0;$price_total=0;
+                $i+=2;$fi=$i;
+                foreach ($departmentcourse as $dc){
+                    $count_total+=$dc['course_num'];
+                    $people_total+=$dc['people_num'];
+                    $price_total+=$dc['price_total'];
+                    $objActSheet->mergeCells('A'.$i.':C'.$i)->setCellValue('A'.$i,$dc['department']);
+                    $objActSheet->mergeCells('D'.$i.':E'.$i)->setCellValue('D'.$i,round($dc['course_num']));
+                    $objActSheet->mergeCells('F'.$i.':G'.$i)->setCellValue('F'.$i,round($dc['people_num']));
+                    $objActSheet->mergeCells('H'.$i.':I'.$i)->setCellValue('H'.$i,round($dc['price_total']));
+                    $objActSheet->getStyle('A'.$i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('D'.$i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('F'.$i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('H'.$i)->applyFromArray($styleTd);
+                    ++$i;
+                }
+                if(count($res)>1) {
+                    $objActSheet->mergeCells('A' . $i . ':C' . $i)->setCellValue('A' . $i, '全部');
+                    $objActSheet->mergeCells('D' . $i . ':E' . $i)->setCellValue('D' . $i, "=SUM(D" . $fi . ":D" . ($i - 1) . ")");
+                    $objActSheet->mergeCells('F' . $i . ':G' . $i)->setCellValue('F' . $i, "=SUM(F" . $fi . ":F" . ($i - 1) . ")");
+                    $objActSheet->mergeCells('H' . $i . ':I' . $i)->setCellValue('H' . $i, "=SUM(H" . $fi . ":H" . ($i - 1) . ")");
+                    $objActSheet->getStyle('A' . $i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('D' . $i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('F' . $i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('H' . $i)->applyFromArray($styleTd);
+                    ++$i;
+                }
+            }
+            //课程总览
+            $objActSheet->mergeCells('A' . $i . ':I' . $i)->setCellValue('A' . $i, '');
+            ++$i;
+            $objActSheet->mergeCells('A'.$i.':I'.$i)->setCellValue('A'.$i, '课程总览')
+                ->mergeCells('A'.($i+1).':C'.($i+1))->setCellValue('A'.($i+1), '课程类型')
+                ->mergeCells('D'.($i+1).':E'.($i+1))->setCellValue('D'.($i+1), '开课数量')
+                ->mergeCells('F'.($i+1).':G'.($i+1))->setCellValue('F'.($i+1), '培训人次')
+                ->mergeCells('H'.($i+1).':I'.($i+1))->setCellValue('H'.($i+1), '培训预算');
+            $objActSheet->getStyle('A'.$i)->applyFromArray($styleTitle);
+            $objActSheet->getStyle('A'.($i+1))->applyFromArray($styleTh);
+            $objActSheet->getStyle('D'.($i+1))->applyFromArray($styleTh);
+            $objActSheet->getStyle('F'.($i+1))->applyFromArray($styleTh);
+            $objActSheet->getStyle('H'.($i+1))->applyFromArray($styleTh);
             $count_total=0;$people_total=0;$price_total=0;
-            $i=3;
+            $i+=2;$fi=$i;
             foreach ($res as $r){
                 $count_total+=$r['total']['count_num'];
                 $people_total+=$r['total']['people_num'];
@@ -351,16 +405,18 @@ class Export extends CI_Controller
                 $objActSheet->getStyle('H'.$i)->applyFromArray($styleTd);
                 ++$i;
             }
-            $objActSheet->mergeCells('A'.$i.':C'.$i)->setCellValue('A'.$i,'全部');
-            $objActSheet->mergeCells('D'.$i.':E'.$i)->setCellValue('D'.$i,"=SUM(D3:D".($i-1).")");
-            $objActSheet->mergeCells('F'.$i.':G'.$i)->setCellValue('F'.$i,"=SUM(F3:F".($i-1).")");
-            $objActSheet->mergeCells('H'.$i.':I'.$i)->setCellValue('H'.$i,"=SUM(H3:H".($i-1).")");
-            $objActSheet->getStyle('A'.$i)->applyFromArray($styleTd);
-            $objActSheet->getStyle('D'.$i)->applyFromArray($styleTd);
-            $objActSheet->getStyle('F'.$i)->applyFromArray($styleTd);
-            $objActSheet->getStyle('H'.$i)->applyFromArray($styleTd);
+            if(count($res)>1){
+                $objActSheet->mergeCells('A'.$i.':C'.$i)->setCellValue('A'.$i,'全部');
+                $objActSheet->mergeCells('D'.$i.':E'.$i)->setCellValue('D'.$i,"=SUM(D".$fi.":D".($i-1).")");
+                $objActSheet->mergeCells('F'.$i.':G'.$i)->setCellValue('F'.$i,"=SUM(F".$fi.":F".($i-1).")");
+                $objActSheet->mergeCells('H'.$i.':I'.$i)->setCellValue('H'.$i,"=SUM(H".$fi.":H".($i-1).")");
+                $objActSheet->getStyle('A'.$i)->applyFromArray($styleTd);
+                $objActSheet->getStyle('D'.$i)->applyFromArray($styleTd);
+                $objActSheet->getStyle('F'.$i)->applyFromArray($styleTd);
+                $objActSheet->getStyle('H'.$i)->applyFromArray($styleTd);
+                ++$i;
+            }
 
-            ++$i;
             foreach ($res as $r){
                 $objActSheet->mergeCells('A' . $i . ':I' . $i)->setCellValue('A' . $i, '');
                 if($r['total']['count_num']>0){
