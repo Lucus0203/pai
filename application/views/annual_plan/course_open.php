@@ -7,7 +7,8 @@
                 },
                 people: {
                     required: true,
-                    digits: true
+                    digits: true,
+                    min:1
                 },
                 price: {
                     required: true,
@@ -20,7 +21,8 @@
                 },
                 people: {
                     required: "请输入课程人次",
-                    digits: '请输入数字'
+                    digits: '请输入数字',
+                    min:'课程人次不能少于1人'
                 },
                 price: {
                     required: "请输入课程预算",

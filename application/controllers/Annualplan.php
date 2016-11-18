@@ -604,6 +604,15 @@ AND apc.openstatus =1 ";
     public function analysis($planid){
         $this->isAllowPlanid($planid);
         $plan=$this->annualplan_model->get_row(array('id'=>$planid));
+        //部门统计
+        $countcourselist="select count(apcl.id) num,apc.annual_course_id,apc.title,apc.price,apc.people,parent_department.name as department,s.department_parent_id from ".$this->db->dbprefix('annual_plan_course_list')." apcl left join ".$this->db->dbprefix('student')." s on s.id = apcl.student_id ".
+            " left join ".$this->db->dbprefix('department')." parent_department on parent_department.id = s.department_parent_id ".
+            " left join ".$this->db->dbprefix('department')." department on department.id = s.department_id ".
+            " left join ".$this->db->dbprefix('annual_plan_course')." apc on apcl.annual_course_id=apc.annual_course_id and apcl.annual_plan_id=apc.annual_plan_id where apc.annual_plan_id=".$planid." and apc.openstatus=1 and apcl.status=1 group by apc.annual_course_id,s.department_parent_id ";
+        $ccsql="select cc.department_parent_id,cc.department,count(cc.annual_course_id) course_num,sum(cc.num) people_num,sum(cc.num * cc.price/cc.people) price_total from ($countcourselist) cc GROUP BY cc.department_parent_id order by cc.department_parent_id ";
+        $query = $this->db->query($ccsql);
+        $departmentcourse = $query->result_array();
+        //课程统计
         $coursesql="select count(pc.id) as count_num , sum(people) as people_num,sum(price) as price_num,act.name as type_name from " . $this->db->dbprefix('annual_plan_course') . " pc left join " . $this->db->dbprefix('annual_course_type') . " act on pc.annual_course_type_id=act.id ".
             " where pc.annual_plan_id = $planid ".
             " and pc.company_code = '".$this->_logininfo['company_code']."' ".
@@ -611,6 +620,7 @@ AND apc.openstatus =1 ";
             " group by pc.annual_course_type_id ";
         $query = $this->db->query($coursesql);
         $courses = $query->result_array();
+        //课程趋势
         $trendsql = "select pc.id,concat(pc.year,pc.month) as ym from " . $this->db->dbprefix('annual_plan_course') ." pc ".
             " where pc.annual_plan_id = $planid ".
             " and pc.company_code = '".$this->_logininfo['company_code']."' ".
@@ -639,7 +649,7 @@ AND apc.openstatus =1 ";
             }
         }
         $this->load->view('header');
-        $this->load->view('annual_plan/analysis',compact('plan','courses','datatrend'));
+        $this->load->view('annual_plan/analysis',compact('plan','courses','datatrend','departmentcourse'));
         $this->load->view('footer');
     }
 
