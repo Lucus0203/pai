@@ -5,7 +5,7 @@ class Html extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->library(array('session'));
-		$this->load->helper(array('form','url'));
+		$this->load->helper(array('form','url','download'));
 		$this->load->model(array('user_model','company_model'));
 		
 		$this->_logininfo=$this->session->userdata('loginInfo');
@@ -47,16 +47,19 @@ class Html extends CI_Controller {
     }
 
     public function price(){
-        $this->_logininfo = $this->session->userdata('loginInfo');
-        if (empty($this->_logininfo)) {
-            $this->session->set_userdata('action_uri', current_url());
-            redirect('login', 'index');
-        } else {
-            $this->session->unset_userdata('action_uri');
-            $this->load->view ( 'header' );
-            $this->load->view ( 'html/price');
-            $this->load->view ( 'footer' );
-        }
+        //$data = file_get_contents(base_url().'images/price.pdf'); // Read the file's contents
+        //force_download('培训派报价单.pdf', $data);
+        redirect(base_url().'images/price.pdf');
+//        $this->_logininfo = $this->session->userdata('loginInfo');
+//        if (empty($this->_logininfo)) {
+//            $this->session->set_userdata('action_uri', current_url());
+//            redirect('login', 'index');
+//        } else {
+//            $this->session->unset_userdata('action_uri');
+//            $this->load->view ( 'header' );
+//            $this->load->view ( 'html/price');
+//            $this->load->view ( 'footer' );
+//        }
     }
 
     public function downloadPrice(){
