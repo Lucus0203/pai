@@ -148,7 +148,7 @@ EOF;
                         )
                     );
                     $companyToken=$this->CI->companytokenwx_model->get_row(array('company_code'=>$student['company_code']));
-                    $this->load->library('wechat', $companyToken);
+                    $this->CI->load->library('wechat', $companyToken);
                     //OPENTM213512088
                     $res = $this->CI->wechat->templateSend($student['openid'], 'OPENTM213512088', $link, $wxdata);
                 }
@@ -243,7 +243,7 @@ EOF;
                 )
             );
             $companyToken=$this->CI->companytokenwx_model->get_row(array('company_code'=>$student['company_code']));
-            $this->load->library('wechat', $companyToken);
+            $this->CI->load->library('wechat', $companyToken);
             //TM00186
             $res = $this->CI->wechat->templateSend($student['openid'], 'TM00186', $this->CI->config->item('web_url') . 'course/survey/' . $course['id'] . '.html', $wxdata);
         }
@@ -316,7 +316,7 @@ EOF;
             )
         );
         $companyToken=$this->CI->companytokenwx_model->get_row(array('company_code'=>$student['company_code']));
-        $this->load->library('wechat', $companyToken);
+        $this->CI->load->library('wechat', $companyToken);
         //OPENTM213512088
         $res = $this->CI->wechat->templateSend($student['openid'], 'OPENTM213512088', $link, $wxdata);
 
@@ -422,7 +422,7 @@ EOF;
                     )
                 );
                 $companyToken=$this->CI->companytokenwx_model->get_row(array('company_code'=>$student['company_code']));
-                $this->load->library('wechat', $companyToken);
+                $this->CI->load->library('wechat', $companyToken);
                 //OPENTM213512088
                 $res = $this->CI->wechat->templateSend($student['openid'], 'OPENTM213512088', $link, $wxdata);
             }
@@ -524,7 +524,7 @@ EOF;
                     )
                 );
                 $companyToken=$this->CI->companytokenwx_model->get_row(array('company_code'=>$student['company_code']));
-                $this->load->library('wechat', $companyToken);
+                $this->CI->load->library('wechat', $companyToken);
                 //OPENTM213512088
                 $res = $this->CI->wechat->templateSend($student['openid'], 'OPENTM213512088', $link_web, $wxdata);
             }
