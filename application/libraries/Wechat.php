@@ -2,12 +2,18 @@
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Wechat{
-	var $_appID="wx2736e8f78ee6a1a0";//传师
-	var $_appsecret="5dcbec418c147ecf5d94f5221f20fdfb";//传师
+	var $_appID="wx24e254d9de36120a";//培训派//传师wx2736e8f78ee6a1a0
+	var $_appsecret="4e2d115891abc0c93bd4eaccaacc9e11";//培训派//传师5dcbec418c147ecf5d94f5221f20fdfb
 	var $_access_token;
 	var $_token_file;
-	function __construct() {
-		$this->_token_file=dirname(__FILE__) . '/access_token.wx';
+	function __construct($companyToken) {
+        if(!empty($companyToken['appid'])&&!empty($companyToken['appsecret'])){
+            $this->_appID=$companyToken['appid'];
+            $this->_appsecret=$companyToken['appsecret'];
+            $this->_token_file=dirname(__FILE__) . '/access/access_token'.$companyToken['company_code'].'.wx';
+        }else{
+            $this->_token_file=dirname(__FILE__) . '/access/access_token.wx';
+        }
 		$ctime = filectime($this->_token_file);
 		$this->_access_token = file_get_contents($this->_token_file);
 		if(empty($this->_access_token)||(time() - $ctime)>=7200){
@@ -101,16 +107,33 @@ class Wechat{
          * 发送模板消息
          * 
          */
-        function templateSend($touser,$templateid,$url,$data){
-            $uri="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=".$this->_access_token;
-            $obj=array('touser'=>$touser,'template_id'=>$templateid,'url'=>$url,'data'=>$data);
-            $o=json_encode($obj);
-            $res=$this->sendJsonData($uri,$o);
-            return $res;
+        function templateSend($touser,$templateCode,$url,$data){
+            $objTempid=$this->getTemplateId($templateCode);
+            if($objTempid->errcode=='0'){
+                $templateid=$objTempid->template_id;
+                $uri="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=".$this->_access_token;
+                $obj=array('touser'=>$touser,'template_id'=>$templateid,'url'=>$url,'data'=>$data);
+                $o=json_encode($obj);
+                $res=$this->sendJsonData($uri,$o);
+                return $res;
+            }
         }
-        
-        
-        //请求json数据
+
+    //获取模板id
+    function getTemplateId($templateCode){
+        $uri="https://api.weixin.qq.com/cgi-bin/template/api_add_template?access_token=".$this->_access_token;
+        $obj=array('template_id_short'=>$templateCode);
+        $o=json_encode($obj);
+        $res=$this->sendJsonData($uri,$o);
+        return $res;
+    }
+
+    /**
+     * @param $url
+     * @param array $parm
+     * @param int $post
+     * @return mixed
+     */
 	function returnWeChatJsonData($url,$parm=array(),$post=0){
 		$ch = curl_init(); //初始化curl
 		curl_setopt($ch, CURLOPT_URL, $url); //抓取指定网页

@@ -13,9 +13,9 @@ class Notifyclass
     {
 
         $this->CI =& get_instance();
-        $this->CI->load->library(array('wechat','zhidingsms'));
+        $this->CI->load->library(array('zhidingsms'));
         $this->CI->load->helper(array('form', 'url'));
-        $this->CI->load->model(array('user_model', 'company_model', 'course_model', 'teacher_model', 'homework_model', 'survey_model', 'ratings_model', 'student_model', 'department_model','abilityjob_model','annualsurvey_model','annualplan_model'));
+        $this->CI->load->model(array('user_model', 'company_model', 'course_model', 'teacher_model', 'homework_model', 'survey_model', 'ratings_model', 'student_model', 'department_model','abilityjob_model','annualsurvey_model','annualplan_model','companytokenwx_model'));
 
         $config['protocol'] = 'smtp';
         $config['smtp_host'] = '127.0.0.1';
@@ -147,7 +147,10 @@ EOF;
                             'color' => "#173177"
                         )
                     );
-                    $res = $this->CI->wechat->templateSend($student['openid'], 'iYvemgywJfyHxJu_lm_kS3-txaBnfR9gQCO93YCf0EA', $link, $wxdata);
+                    $companyToken=$this->CI->companytokenwx_model->get_row(array('company_code'=>$student['company_code']));
+                    $this->load->library('wechat', $companyToken);
+                    //OPENTM213512088
+                    $res = $this->CI->wechat->templateSend($student['openid'], 'OPENTM213512088', $link, $wxdata);
                 }
             }
         }
@@ -239,7 +242,10 @@ EOF;
                     'color' => "#173177"
                 )
             );
-            $res = $this->CI->wechat->templateSend($student['openid'], 'yFfIfh1EPvvpyeNplv5n6xBEyn5Em4r5ZYAHoLFnM9E', $this->CI->config->item('web_url') . 'course/survey/' . $course['id'] . '.html', $wxdata);
+            $companyToken=$this->CI->companytokenwx_model->get_row(array('company_code'=>$student['company_code']));
+            $this->load->library('wechat', $companyToken);
+            //TM00186
+            $res = $this->CI->wechat->templateSend($student['openid'], 'TM00186', $this->CI->config->item('web_url') . 'course/survey/' . $course['id'] . '.html', $wxdata);
         }
     }
 
@@ -293,6 +299,27 @@ EOF;
             $this->CI->email->clear();
 
         }
+
+        $wxdata = array(
+            'first' => array(
+                'value' => '亲爱的' . $student['name'] . "
+请完成《".$abilityjob['name']."》能力评估并提交给我们。",
+                'color' => "#173177"
+            ),
+            'keyword1' => array(
+                'value' => "《{$abilityjob['name']}》能力评估",
+                'color' => "#173177"
+            ),
+            'remark' => array(
+                'value' => "请点击详情进行处理",
+                'color' => "#173177"
+            )
+        );
+        $companyToken=$this->CI->companytokenwx_model->get_row(array('company_code'=>$student['company_code']));
+        $this->load->library('wechat', $companyToken);
+        //OPENTM213512088
+        $res = $this->CI->wechat->templateSend($student['openid'], 'OPENTM213512088', $link, $wxdata);
+
     }
 
     public function annualsurveystart($surveyid,$notifyTarget){
@@ -394,7 +421,10 @@ EOF;
                         'color' => "#173177"
                     )
                 );
-                $res = $this->CI->wechat->templateSend($student['openid'], 'iYvemgywJfyHxJu_lm_kS3-txaBnfR9gQCO93YCf0EA', $link, $wxdata);
+                $companyToken=$this->CI->companytokenwx_model->get_row(array('company_code'=>$student['company_code']));
+                $this->load->library('wechat', $companyToken);
+                //OPENTM213512088
+                $res = $this->CI->wechat->templateSend($student['openid'], 'OPENTM213512088', $link, $wxdata);
             }
         }
 
@@ -493,7 +523,10 @@ EOF;
                         'color' => "#173177"
                     )
                 );
-                $res = $this->CI->wechat->templateSend($student['openid'], 'iYvemgywJfyHxJu_lm_kS3-txaBnfR9gQCO93YCf0EA', $link_web, $wxdata);
+                $companyToken=$this->CI->companytokenwx_model->get_row(array('company_code'=>$student['company_code']));
+                $this->load->library('wechat', $companyToken);
+                //OPENTM213512088
+                $res = $this->CI->wechat->templateSend($student['openid'], 'OPENTM213512088', $link_web, $wxdata);
             }
         }
     }
