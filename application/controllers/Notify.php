@@ -4,9 +4,9 @@ class Notify extends CI_Controller {
 	
 	function __construct(){
 		parent::__construct();
-		$this->load->library(array('wechat','zhidingsms'));
+		$this->load->library(array('zhidingsms'));
 		$this->load->helper(array('form','url'));
-		$this->load->model(array('user_model','company_model','course_model','teacher_model','homework_model','survey_model','ratings_model','student_model','department_model'));
+		$this->load->model(array('user_model','company_model','course_model','teacher_model','homework_model','survey_model','ratings_model','student_model','department_model','companytokenwx_model'));
                 
                 $config['protocol']     = 'smtp';  
                 $config['smtp_host']    = '127.0.0.1';  
@@ -100,7 +100,9 @@ class Notify extends CI_Controller {
                                     'color' => "#173177"
                                 )
                             );
-                            $res = $this->wechat->templateSend($s['openid'], '5yxj6pEwlEw9xB0fFy-xUp6ec0azoAvPYA-tE-uBwDU', $this->config->item('web_url') . 'course/courseinfo/' . $c['id'] . '.html', $wxdata);
+                            $companyToken=$this->companytokenwx_model->get_row(array('company_code'=>$s['company_code']));
+                            $this->load->library('wechat', $companyToken);
+                            $res = $this->wechat->templateSend($s['openid'], 'TM00080', $this->config->item('web_url') . 'course/courseinfo/' . $c['id'] . '.html', $wxdata);
                         }
                     }
                 }
