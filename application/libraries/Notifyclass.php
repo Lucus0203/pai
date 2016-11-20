@@ -91,7 +91,7 @@ class Notifyclass
             $subject = "《{$course['title']}》开启报名";
             $studentname="亲爱的{$user['real_name']}：";
             $message = <<< EOF
-<p style="text-indent:40px">依据公司培训计划安排，《{$course['title']}》将于{$t1}举行。现已启动报名工作，报名将在{$t2}截止，点击下面的链接报名吧。
+<p style="text-indent:40px">依据公司培训计划安排，《{$course['title']}》将于{$t1}举行。现已启动报名工作，报名将在{$t3}截止，点击下面的链接报名吧。
 <br><a href='{$link}' target='_blank'>{$link}</a></p>
 <p style="text-indent:40px">{$ischeckmsg}</p>
 <p style="text-indent:40px">为了大家的共同进步，请积极参与！</p>
@@ -130,11 +130,11 @@ EOF;
                     $wxdata = array(
                         'first' => array(
                             'value' => '亲爱的' . $student['name'] . '
-依据公司培训计划安排，《' . $course['title'] . '》将于'.$t1.'举行。现已启动报名工作，报名将在'.$t2.'截止',
-                            'color' => "#173177"
+依据公司培训计划安排，《' . $course['title'] . '》将于'.$t1.'举行。现已启动报名工作，报名将在'.$t3.'截止',
+                            'color' => "#1000000"
                         ),
                         'keyword1' => array(
-                            'value' => $course['title'],
+                            'value' => '《' . $course['title'] . '》课程报名',
                             'color' => "#173177"
                         ),
                         'keyword2' => array(
@@ -144,7 +144,7 @@ EOF;
                         'remark' => array(
                             'value' => "请提前安排好工作或出差行程，准时参加培训。上课前请先完成课前调研表和课前作业并提交给我们。
 预祝学习愉快，收获满满！",
-                            'color' => "#173177"
+                            'color' => "#1000000"
                         )
                     );
                     $companyToken=$this->CI->companytokenwx_model->get_row(array('company_code'=>$student['company_code']));
