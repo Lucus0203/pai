@@ -758,6 +758,7 @@ class Course extends CI_Controller
     {
         $this->isAllowCourseid($id);
         $act = $this->input->post('act');
+        $msg='';
         if (!empty($act)) {
             $c = array('isnotice_open' => $this->input->post('isnotice_open'));
             $c['notice_type_msg'] = ($this->input->post('notice_type_msg') == 1) ? 1 : 2;
@@ -767,10 +768,11 @@ class Course extends CI_Controller
             $c['notice_trigger_two'] = ($this->input->post('notice_trigger_two') == 1) ? 1 : 2;
             $c['notice_trigger_three'] = ($this->input->post('notice_trigger_three') == 1) ? 1 : 2;
             $this->course_model->update($c, $id);
+            $msg='设置成功';
         }
         $course = $this->course_model->get_row(array('id' => $id));
         $this->load->view('header');
-        $this->load->view('course/notify_set', array('course' => $course));
+        $this->load->view('course/notify_set', array('course' => $course,'msg'=>$msg));
         $this->load->view('footer');
     }
 

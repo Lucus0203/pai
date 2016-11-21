@@ -131,7 +131,7 @@ EOF;
                         'first' => array(
                             'value' => '亲爱的' . $student['name'] . '
 依据公司培训计划安排，《' . $course['title'] . '》将于'.$t1.'举行。现已启动报名工作，报名将在'.$t3.'截止',
-                            'color' => "#1000000"
+                            'color' => "#000000"
                         ),
                         'keyword1' => array(
                             'value' => '《' . $course['title'] . '》课程报名',
@@ -144,7 +144,7 @@ EOF;
                         'remark' => array(
                             'value' => "请提前安排好工作或出差行程，准时参加培训。上课前请先完成课前调研表和课前作业并提交给我们。
 预祝学习愉快，收获满满！",
-                            'color' => "#1000000"
+                            'color' => "#000000"
                         )
                     );
                     $companyToken=$this->CI->companytokenwx_model->get_row(array('company_code'=>$student['company_code']));
@@ -221,7 +221,7 @@ EOF;
             $wxdata = array(
                 'first' => array(
                     'value' => '您好,' . $student['name'] . '
-您已成功报名参加' . $course['title'],
+您已成功报名参加《' . $course['title'].'》的课程',
                     'color' => "#173177"
                 ),
                 'class' => array(
@@ -239,7 +239,7 @@ EOF;
                 'remark' => array(
                     'value' => "请提前安排好工作或出差行程，准时参加培训。上课前请先完成课前调研表和课前作业并提交给我们。
 预祝学习愉快，收获满满！",
-                    'color' => "#173177"
+                    'color' => "#000000"
                 )
             );
             $companyToken=$this->CI->companytokenwx_model->get_row(array('company_code'=>$student['company_code']));

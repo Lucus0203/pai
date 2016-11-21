@@ -23,6 +23,9 @@
 
                         </div>
                         <div class="contRight">
+                            <?php if (!empty($msg)) {?>
+                                <p class="alertBox alert-success"><span class="alert-msg"><?php echo $msg ?></span><a href="javascript:;" class="alert-remove">X</a></p>
+                            <?php } ?>
                         <form id="editForm" method="post" action="">
                             <input name="act" type="hidden" value="act" />
                         <table cellspacing="0" class="comTable">
