@@ -177,7 +177,7 @@ class Login extends CI_Controller
 
         $c = array('user_id' => $userinfo['id'],
             'company_code' => $userinfo['company_code'],
-            'title' => '【模板】新员工入职培训',
+            'title' => '新员工入职培训(模板)',
             'time_start' => date('Y-m-d H:i:s', strtotime(date("Y-m-d 08:00:00") . ' +1 day')),
             'time_end' => date('Y-m-d H:i:s', strtotime(date("Y-m-d 17:00:00") . ' +1 day')),
             'address' => '公司会议室',
