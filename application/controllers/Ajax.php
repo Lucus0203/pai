@@ -29,7 +29,7 @@ class Ajax extends CI_Controller {
         $departmentid=$departs[0]['id']??$departmentid;
         $students=array();
         if(!empty($departmentid)){
-            $students = empty($course['targetstudent'])?array():$this->student_model->get_all(" id in (" . $course['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and department_id=".$departmentid." and isdel=2 ");
+            $students = empty($course['targetstudent'])?array():$this->student_model->get_all(" id in (" . $course['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and department_id=".$departmentid." and isdel=2 and isleaving=2 ");
         }
         echo json_encode(array('departs' => $departs, 'students' => $students));
     }
@@ -39,7 +39,7 @@ class Ajax extends CI_Controller {
     {
         $course = $this->course_model->get_row(array('id' => $courseid));
         $departmentid = $this->input->post('departmentid');
-        $students = empty($course['targetstudent'])?array():$this->student_model->get_all(" id in (" . $course['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and department_id=".$departmentid." and isdel=2 ");
+        $students = empty($course['targetstudent'])?array():$this->student_model->get_all(" id in (" . $course['targetstudent'] . ") and company_code='".$this->_logininfo['company_code']."' and department_id=".$departmentid." and isdel=2 and isleaving=2 ");
         echo json_encode(array('students' => $students));
     }
 

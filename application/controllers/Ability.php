@@ -52,13 +52,13 @@ class Ability extends CI_Controller {
         $deparone = $this->department_model->get_all(array('company_code' => $this->_logininfo['company_code'], 'level' => 0));
         if (!empty($deparone[0]['id'])) {
             $departwo = $this->department_model->get_all(array('parent_id' => $deparone[0]['id']));
-            if($this->student_model->get_count("company_code='".$this->_logininfo['company_code']."' and department_id=".$deparone[0]['id']." and department_id=department_parent_id and isdel = 2 ")>0){
+            if($this->student_model->get_count("company_code='".$this->_logininfo['company_code']."' and department_id=".$deparone[0]['id']." and department_id=department_parent_id and isdel = 2 and isleaving = 2 ")>0){
                 $departwo[]=array('id'=>$deparone[0]['id'],'parent_id'=>$deparone[0]['id'],'name'=>'未分配','level'=>1);
             }
         }
         $student_departmentid=$departwo[0]['id']??$deparone[0]['id'];
         if (!empty($student_departmentid)) {
-            $students = $this->student_model->get_all(array('department_id' => $student_departmentid,'isdel'=>2));
+            $students = $this->student_model->get_all(array('department_id' => $student_departmentid,'isdel'=>2 ,'isleaving'=>2));
         }
         $this->load->view ( 'header' );
         $this->load->view ( 'ability/index',compact('jobs','deparone','departwo','students','total_rows','links'));
@@ -232,7 +232,7 @@ class Ability extends CI_Controller {
 //            }
 //        }
         if(!empty($data['target_student'])) {
-            $targetstudent = $this->student_model->get_all(' id in (' . $data['target_student'] . ') and isdel = 2 ');
+            $targetstudent = $this->student_model->get_all(' id in (' . $data['target_student'] . ') and isdel = 2 and isleaving = 2 ');
             if (!empty($targetstudent)) {
                 $targetnamearr = array_column($targetstudent, 'name');
                 $target .= implode(",", $targetnamearr);

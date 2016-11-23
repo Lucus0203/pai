@@ -122,7 +122,8 @@ class Student extends CI_Controller
                 'email' => $this->input->post('email'),
                 'user_name' => $this->input->post('user_name'),
                 'user_pass' => $this->input->post('student_pass'),
-                'role' => $this->input->post('role'));
+                'role' => $this->input->post('role'),
+                'isleaving' => $this->input->post('isleaving'));
             $s['department_id']=$this->input->post('department_id')??$this->input->post('department_parent_id');
             if ($res['student']['user_pass'] != $s['user_pass']) {
                 $s['user_pass'] = md5($s['user_pass']);

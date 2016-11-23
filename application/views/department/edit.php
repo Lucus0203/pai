@@ -229,8 +229,8 @@
                             <td><?php echo $s['job_code'] ?></td>
                             <td><?php echo $s['job_name'] ?></td>
                             <td><?php echo $s['department'] ?></td>
-                            <td><?php echo $s['status'] == 1 ? '未激活' : '已激活' ?></td>
-                            <td><span class="yellow"><?php
+                            <td><?php if($s['isleaving']==1){echo '离职冻结';}else{echo $s['status'] == 1 ? '未激活' : '已激活';} ?></td>
+                            <td><span <?php if($s['role']>1){ ?>class="yellow"<?php } ?>><?php
                                     if ($s['role'] == 9) {
                                         echo '系统管理员';
                                     } elseif ($s['role'] == 1) {

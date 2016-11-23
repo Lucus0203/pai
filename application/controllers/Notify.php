@@ -35,7 +35,7 @@ class Notify extends CI_Controller {
             $sign=$company['name'];
             $sign.=($company['code']=='100276')?' 人力资源部':'';
             $this->load->database ();
-            $sql="select s.* from ".$this->db->dbprefix('student')." s left join ".$this->db->dbprefix('course_apply_list')." a on s.id=a.student_id where a.course_id=".$c['id']." and a.status=1 ";
+            $sql="select s.* from ".$this->db->dbprefix('student')." s left join ".$this->db->dbprefix('course_apply_list')." a on s.id=a.student_id where a.course_id=".$c['id']." and a.status=1 and s.isdel=2 and s.isleaving=2 ";
             $query = $this->db->query ($sql);
             $students=$query->result_array();
 

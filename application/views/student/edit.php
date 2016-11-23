@@ -256,6 +256,15 @@ $(document).ready(function(){
                                     <?php } ?>
                                 </td>
                             </tr>
+                            <tr>
+                                <th>状态</th>
+                                <td>
+                                    <ul class="lineUl">
+                                        <li><label><input name="isleaving" value="2" type="radio" checked="">在职</label></li>
+                                        <li><label><input name="isleaving" value="1" type="radio" <?php if($student['isleaving']==1){ echo 'checked'; } ?>>离职</label></li>
+                                        </ul>
+                                </td>
+                            </tr>
 
                             <tr>
                                 <th></th>
