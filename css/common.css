@@ -1565,6 +1565,7 @@ textarea:after {
 .secBox ul li {
 	border-bottom: 1px solid #e3e3e3;
 	padding-left: 10px;
+    cursor: default;
 }
 
 .secBox ul li input {

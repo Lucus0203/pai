@@ -54,14 +54,14 @@
                     var str = '';
                     $.each(json_obj.departs, function (i, item) {
                         var secIpt = (i == 0) ? 'secIpt' : '';
-                        str += '<li class="departwo ' + secIpt + '"><label><input type="checkbox" value="' + item.id + '" />' + item.name + '</label></li>';
+                        str += '<li class="departwo ' + secIpt + '"><input type="checkbox" value="' + item.id + '" />' + item.name + '</li>';
                         ++count;
                     });
                     $('ul.twoUl').html(str);
                     var studentcount = 0;
                     var studentstr = '';
                     $.each(json_obj.students, function (i, item) {
-                        studentstr += '<li class="students"><label><input type="checkbox" value="' + item.id + '" />' + item.name + '</label></li>';
+                        studentstr += '<li class="students"><input type="checkbox" value="' + item.id + '" />' + item.name + '</li>';
                         ++studentcount;
                     });
                     $('ul.threeUl').html(studentstr);
@@ -109,7 +109,7 @@
                     var count = 0;
                     var studentstr = '';
                     $.each(json_obj.students, function (i, item) {
-                        studentstr += '<li class="students"><label><input type="checkbox" value="' + item.id + '" />' + item.name + '</label></li>';
+                        studentstr += '<li class="students"><input type="checkbox" value="' + item.id + '" />' + item.name + '</li>';
                         ++count;
                     });
                     $('ul.threeUl').html(studentstr);
@@ -286,7 +286,7 @@
                     foreach ($deparone as $k => $d) { ?>
                         <li class="deparone <?php if ($k == 0) {
                             echo 'secIpt';
-                        } ?>"><label><input class="deparonecheckbox" type="checkbox" value="<?php echo $d['id']; ?>"/><?php echo $d['name']; ?></label>
+                        } ?>"><input class="deparonecheckbox" type="checkbox" value="<?php echo $d['id']; ?>"/><?php echo $d['name']; ?>
                         </li>
                     <?php } ?>
                 </ul>
@@ -296,14 +296,14 @@
                     foreach ($departwo as $k => $d) { ?>
                         <li class="departwo <?php if ($k == 0) {
                             echo 'secIpt';
-                        } ?>"><label><input class="departwocheckbox" type="checkbox" value="<?php echo $d['id']; ?>"/><?php echo $d['name']; ?></label>
+                        } ?>"><input class="departwocheckbox" type="checkbox" value="<?php echo $d['id']; ?>"/><?php echo $d['name']; ?>
                         </li>
                     <?php } ?>
                 </ul>
                 <ul class="threeUl">
                     <?php
                     foreach ($students as $k => $s) { ?>
-                        <li class="students"><label><input class="studentscheckbox" type="checkbox" value="<?php echo $s['id']; ?>"/><?php echo $s['name']; ?></label>
+                        <li class="students"><input class="studentscheckbox" type="checkbox" value="<?php echo $s['id']; ?>"/><?php echo $s['name']; ?>
                         </li>
                     <?php } ?>
 
