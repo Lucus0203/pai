@@ -24,7 +24,7 @@ class Notify extends CI_Controller {
 	
         //开课前一天通知  //时间触发
 	public function coursestart() {
-                $courses=$this->course_model->get_all(" notice_trigger_one=1 and time_start >= '".date('Y-m-d',strtotime('+1 day'))." 00:00:00' and time_start <= '".date('Y-m-d',strtotime('+1 day'))." 23:59:59' and ispublic=1 and isdel=2 and company_code='100200' ");
+                $courses=$this->course_model->get_all(" notice_trigger_one=1 and time_start >= '".date('Y-m-d',strtotime('+1 day'))." 00:00:00' and time_start <= '".date('Y-m-d',strtotime('+1 day'))." 23:59:59' and ispublic=1 and isdel=2 ");
                 foreach ($courses as $c) {
                     if($c['isnotice_open']!=1){//自动通知关闭
                         continue;
@@ -87,7 +87,7 @@ class Notify extends CI_Controller {
                                     'color' => "#173177"
                                 ),
                                 'courseName' => array(
-                                    'value' => $c['title'],
+                                    'value' => '《'.$c['title'].'》',
                                     'color' => "#173177"
                                 ),
                                 'date' => array(
