@@ -764,9 +764,9 @@ class Course extends CI_Controller
             $c['notice_type_msg'] = ($this->input->post('notice_type_msg') == 1) ? 1 : 2;
             $c['notice_type_email'] = ($this->input->post('notice_type_email') == 1) ? 1 : 2;
             $c['notice_type_wx'] = ($this->input->post('notice_type_wx') == 1) ? 1 : 2;
-            $c['notice_trigger_one'] = ($this->input->post('notice_trigger_one') == 1) ? 1 : 2;
-            $c['notice_trigger_two'] = ($this->input->post('notice_trigger_two') == 1) ? 1 : 2;
-            $c['notice_trigger_three'] = ($this->input->post('notice_trigger_three') == 1) ? 1 : 2;
+//            $c['notice_trigger_one'] = ($this->input->post('notice_trigger_one') == 1) ? 1 : 2;
+//            $c['notice_trigger_two'] = ($this->input->post('notice_trigger_two') == 1) ? 1 : 2;
+//            $c['notice_trigger_three'] = ($this->input->post('notice_trigger_three') == 1) ? 1 : 2;
             $this->course_model->update($c, $id);
             $msg='设置成功';
         }
