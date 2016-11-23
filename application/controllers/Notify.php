@@ -24,13 +24,13 @@ class Notify extends CI_Controller {
 	
         //开课前一天通知  //时间触发
 	public function coursestart() {
-                $courses=$this->course_model->get_all(" notice_trigger_one=1 and time_start >= '".date('Y-m-d',strtotime('+1 day'))." 00:00:00' and time_start <= '".date('Y-m-d',strtotime('+1 day'))." 23:59:59' ");
+                $courses=$this->course_model->get_all(" notice_trigger_one=1 and time_start >= '".date('Y-m-d',strtotime('+1 day'))." 00:00:00' and time_start <= '".date('Y-m-d',strtotime('+1 day'))." 23:59:59' and ispublic=1 and isdel=2 ");
                 foreach ($courses as $c) {
                     if($c['isnotice_open']!=1){//自动通知关闭
                         continue;
                     }
-                    $subject="《{$c['title']}》即将开课";
-                    $company = $this->CI->company_model->get_row(array('code' => $c['company_code']));
+                    $subject=$c['title'];
+                    $company = $this->company_model->get_row(array('code' => $c['company_code']));
                     $t=date('m月d日H时', strtotime($c['time_start']));
                     $sign=$company['name'];
                     $sign.=($company['code']=='100276')?' 人力资源部':'';
@@ -42,7 +42,7 @@ class Notify extends CI_Controller {
                         //短信通知
                         if (!empty($s['mobile'])) {
                             /*$msg = "亲爱的{$s['name']}:
-你已成功报名参加《{$subject}》课程即将开课。该课程将于{$t}在{$c['address']}举行，请安排好工作，或做好出差计划，准时参加课程。
+您参加的《{$subject}》课程即将开课。该课程将于{$t}在{$c['address']}举行，请安排好工作，或做好出差计划，准时参加课程。
 上课前，请做好课前作业，提交给我们。
 签到在开课前2小时生效，别忘了签到哦，谢谢！
 
@@ -53,9 +53,9 @@ class Notify extends CI_Controller {
                             }
                             $msg.="
 ". date("Y年m月d日");
-                            $this->CI->zhidingsms->sendSMS($s['mobile'], $msg);*/
+                            $this->zhidingsms->sendSMS($s['mobile'], $msg);*/
                             $content='@1@='.$s['name'].',@2@='.$subject.',@3@='.$t.',@4@='.$c['address'].',@5@='.$sign.',@6@='.date("Y年m月d日");
-                            $this->CI->zhidingsms->sendTPSMS($s['mobile'], $content,'ZD30018-0006');
+                            $this->zhidingsms->sendTPSMS($s['mobile'], $content,'ZD30018-0006');
                         }
 
                         //mail
@@ -95,8 +95,7 @@ class Notify extends CI_Controller {
                                 ),
                                 'remark' => array(
                                     'value' => "请安排好工作，或做好出差计划，准时参加课程。
-上课前，请做好课前作业，提交给我们。
-签到在开课前2小时生效，别忘了签到哦，谢谢！",
+如公司要求,请注意签到。",
                                     'color' => "#173177"
                                 )
                             );
