@@ -1572,6 +1572,10 @@ textarea:after {
 	margin-right: 5px;
 	vertical-align: middle;
 }
+.secBox ul li input[type=checkbox]{
+    width:1em;
+    height:1em;
+}
 
 .secBox ul li.secIpt {
 	background-color: #f7f7f7;
