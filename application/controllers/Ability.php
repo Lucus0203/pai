@@ -219,18 +219,6 @@ class Ability extends CI_Controller {
         $data['target_student']=$this->input->post('targetstudent');
         $data['created']=date('Y-m-d H:i:s');
         $target=$targetstudentids='';
-//        if(!empty($data['target_one'])){
-//            $targetone=$this->department_model->get_all(' id in ('.$data['target_one'].') ');
-//            if(!empty($targetone)){
-//                $targetone = array_column($targetone, 'name');
-//            }
-//        }
-//        if(!empty($data['target_two'])) {
-//            $targettwo = $this->department_model->get_all(' id in (' . $data['target_two'] . ') ');
-//            if (!empty($targettwo)) {
-//                $targettwo = array_column($targettwo, 'name');
-//            }
-//        }
         if(!empty($data['target_student'])) {
             $targetstudent = $this->student_model->get_all(' id in (' . $data['target_student'] . ') and isdel = 2 and isleaving = 2 ');
             if (!empty($targetstudent)) {

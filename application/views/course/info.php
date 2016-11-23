@@ -11,7 +11,7 @@
         <div class="comBox">
                 <p class="opBtn">
 <?php if($loginInfo['role']==1||$roleInfo['courseedit']==1){ ?>
-                    <a href="<?php echo site_url('course/courseedit/'.$course['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑课程</a><a href="<?php echo site_url('course/coursedel/'.$course['id']);?>" class="delBtn"><i class="fa fa-trash-o fa-lg mr5"></i>删除课程</a>
+                    <a href="<?php echo site_url('course/courseedit/'.$course['id']);?>" class="editBtn"><i class="fa fa-edit fa-lg mr5"></i>编辑课程</a><a href="<?php echo site_url('course/coursecopy/'.$course['id']);?>"><i class="fa fa-copy fa-lg mr5"></i>复制课程</a><a href="<?php echo site_url('course/coursedel/'.$course['id']);?>" class="delBtn"><i class="fa fa-trash-o fa-lg mr5"></i>删除课程</a>
 <?php } ?><?php if($course['ispublic']!=1){ ?><?php if(empty($course['time_start'])||empty($course['time_end'])||empty($course['address'])){?><a href="<?php echo site_url('course/courseedit/'.$course['id']); ?>"><i class="fa fa-link fa-lg mr5"></i>发布</a><?php }else{ ?><a href="<?php echo site_url('course/coursepublic/'.$course['id']); ?>" class="shareBtn"><i class="fa fa-link fa-lg mr5"></i>发布</a><?php }} ?>
                 </p>
 

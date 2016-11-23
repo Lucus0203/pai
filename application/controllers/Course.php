@@ -811,6 +811,24 @@ class Course extends CI_Controller
         redirect($_SERVER['HTTP_REFERER']);
     }
 
+    //课程复制
+    public function coursecopy($id){
+        $this->isAllowCourseid($id);
+        if (!empty($id)) {
+            $course = $this->course_model->get_row(array('id' => $id));
+            $c = array('user_id' => $this->_logininfo['id'],
+                'company_code' => $this->_logininfo['company_code'],
+                'title' => $course['title'].'(副本)',
+                'address' => $course['address'],
+                'teacher_id' => $course['teacher_id'],
+                'outline' => $course['outline'],
+                'info' => $course['info'],
+                'ispublic'=>2);
+            $this->course_model->create($c);
+        }
+        redirect(site_url('course/courselist'));
+    }
+
     //是否是自己公司下的课程
     private function isAllowCourseid($courseid){
         if(empty($courseid)||$this->course_model->get_count(array('id' => $courseid,'company_code'=>$this->_logininfo['company_code']))<=0){
