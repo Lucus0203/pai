@@ -39,7 +39,6 @@ class Notify extends CI_Controller {
                     $query = $this->db->query ($sql);
                     $students=$query->result_array();
                     foreach ($students as $s) {
-                        print_r($s);
                         //短信通知
                         if (!empty($s['mobile'])) {
                             /*$msg = "亲爱的{$s['name']}:
