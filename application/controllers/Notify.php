@@ -70,8 +70,7 @@ class Notify extends CI_Controller {
                     $tomail = $s['email'];
                     $message = "亲爱的{$s['name']}:
 <p style=\"text-indent:20px\">《{$c['title']}》课程将于{$t}在{$c['address']}举行，请安排好工作，或做好出差计划，准时参加课程。</p>
-<p style=\"text-indent:20px\">上课前，请做好课前作业，提交给我们。</p>
-<p style=\"text-indent:20px\">签到在开课前2小时生效，别忘了签到哦，谢谢！</p>
+<p style=\"text-indent:20px\">如公司要求,请注意签到。</p>
 
 <p>" . $company['name'].'</p>';
                     if($company['code']=='100276'){

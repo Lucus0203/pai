@@ -314,7 +314,7 @@ EOF;
             'first' => array(
                 'value' => '亲爱的' . $student['name'] . "
 请完成《".$abilityjob['name']."》能力评估并提交给我们。",
-                'color' => "#173177"
+                'color' => "#000000"
             ),
             'keyword1' => array(
                 'value' => "《{$abilityjob['name']}》能力评估",
@@ -420,7 +420,7 @@ EOF;
                     'first' => array(
                         'value' => '亲爱的' . $student['name'] . "
 为了合理安排公司培训,提高您的工作能力,正在进行培训需求调研,点击详情完成《{$survey['title']}》,调研截止日期{$t2}",
-                        'color' => "#173177"
+                        'color' => "#000000"
                     ),
                     'keyword1' => array(
                         'value' => $survey['title'],
@@ -473,7 +473,7 @@ EOF;
                 $accountmsg='';
             }
             /*$msg="亲爱的{$student['name']}：
-公司正在制定未来的培训计划,您可以进行部门内员工的课程报名审核,点击链接审核,感谢配合
+公司正在制定未来的培训计划,您可以进行部门内员工的课程报名审核,点击链接审核
 {$link}
 {$accountmsg}
 
@@ -494,7 +494,7 @@ EOF;
         $subject = "《年度计划待审核》";
         $studentname="亲爱的{$company['contact']}：";
         $message = <<< EOF
-<p style="text-indent:40px">公司正在制定未来的培训计划,您可以进行部门内员工的课程报名审核,点击链接审核,感谢配合。
+<p style="text-indent:40px">公司正在制定未来的培训计划,您可以进行部门内员工的课程报名审核,点击链接审核。
 <br>如果是手机端,直接点击链接<a href='{$link_web}' target='_blank'>{$link_web}</a>
 <br>如果是电脑端,直接点击链接<a href='{$link_pc}' target='_blank'>{$link_pc}</a></p>
 
@@ -535,8 +535,8 @@ EOF;
                 $wxdata = array(
                     'first' => array(
                         'value' => '亲爱的' . $student['name'] . "
-公司正在制定未来的培训计划,您可以进行部门内员工的课程报名审核,点击链接审核,感谢配合。",
-                        'color' => "#173177"
+公司正在制定未来的培训计划,您可以进行部门内员工的课程报名审核。",
+                        'color' => "#000000"
                     ),
                     'keyword1' => array(
                         'value' => '年度计划待审核',
