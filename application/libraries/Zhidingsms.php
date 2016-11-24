@@ -24,7 +24,6 @@ class Zhidingsms
         $post_data['method'] = 'sendMsg';
         $post_data['mobile'] = $mobile;
         $post_data['content']= $msg;
-        echo $msg;
         $post_data['msgtype']= '1';       // 1-普通短信，2-模板短信
         $post_data['code']   = 'utf-8';   // utf-8,gbk
         $res = $this->request_post($this->_svr_url, $post_data);  // 如果账号开了免审，或者是做模板短信，将会按照规则正常发出，而不会进人工审核平台
@@ -45,6 +44,7 @@ class Zhidingsms
         $post_data['method'] = 'sendMsg';
         $post_data['mobile'] = $mobile;
         $post_data['content']= $content; //模板参数 @1@=包先生,@2@=
+        echo $content;
         $post_data['msgtype']= '2';             // 1-普通短信，2-模板短信
         $post_data['tempid'] = $tempid; // 模板编号'ZD10004-0000'
         $post_data['code']   = 'utf-8';         // utf-8,gbk
