@@ -38,6 +38,7 @@ class Zhidingsms
      * @param $tempid
      */
     public function sendTPSMS($mobile, $content,$tempid){
+        echo $mobile;
         $post_data['username']=$this->_username;
         $post_data['password']=$this->_password;
         $post_data['veryCode']=$this->_veryCode;
