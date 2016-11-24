@@ -128,6 +128,7 @@ EOF;
             $this->CI->load->library('wechat', $companyToken);
             //获取templateid
             $objTempid=$this->CI->wechat->getTemplateId('OPENTM213512088');
+            print_r($studentsarr);
 
             foreach ($studentsarr as $s) {
                 $student = $this->CI->student_model->get_row(array('id' => $s));
