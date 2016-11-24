@@ -56,7 +56,7 @@
             yAxis: {
                 allowDecimals: false,
                 title: {
-                    text: '课程数'
+                    text: '人次'
                 }
             },
             plotOptions: {
@@ -76,38 +76,46 @@
             },
             credits:{enabled:false}//highcharts label hidden
         });
+
         $('#dpcontainer3').highcharts({
             colors:['#36a2eb', '#91e8e1', '#ffce56', '#ff8e72','#bc8500', '#45b7cd', '#36A2EB', '#af7cad', '#ff6384', '#cc65fe'],
-            data: {
-                table: 'dpdatatable3'
-            },
             chart: {
-                type: 'column'
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
             },
             title: {
-                text: '部门课程预算'
-            },
-            yAxis: {
-                allowDecimals: false,
-                title: {
-                    text: '课程数'
-                }
-            },
-            plotOptions: {
-                series: {
-                    borderWidth: 0,
-                    dataLabels: {
-                        enabled: true,
-                        format: '{point.y}'
-                    }
-                }
+                text: '部门培训预算分布图'
             },
             tooltip: {
-                formatter: function () {
-                    return '<b>' + this.series.name + '</b><br/>' +
-                        this.point.y + ' ' + this.point.name.toLowerCase();
+                pointFormat: '预算: <b>{point.y}元</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    },
+                    showInLegend: true
                 }
             },
+            series: [{
+                name: 'Brands',
+                colorByPoint: true,
+                data: [
+                    <?php foreach ($departmentcourse as $c){ ?>
+                    {
+                        name: '<?php echo $c['department'] ?>',
+                        y: <?php echo round($c['price_total']) ?>
+                    }<?php if($c!==end($courses)){ echo ','; } ?>
+                    <?php } ?>]
+            }],
             credits:{enabled:false}//highcharts label hidden
         });
         <?php } ?>
@@ -193,7 +201,7 @@
                 type: 'pie'
             },
             title: {
-                text: '培训预算分布图'
+                text: '课程预算分布图'
             },
             tooltip: {
                 pointFormat: '预算: <b>{point.y}元</b>'
@@ -203,7 +211,11 @@
                     allowPointSelect: true,
                     cursor: 'pointer',
                     dataLabels: {
-                        enabled: false
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
                     },
                     showInLegend: true
                 }
