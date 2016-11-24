@@ -66,6 +66,7 @@ class Zhidingsms
             $o.= "$k=" . urlencode( $v ). "&" ;
         }
         $post_data = substr($o,0,-1);
+        echo $post_data;
 
         $postUrl = $url;
         $curlPost = $post_data;
