@@ -119,6 +119,7 @@ class Wechat{
     function getTemplateId($templateCode){
         $tempkv=array('TM00186'=>'报名结果通知','TM00080'=>'课程开课通知','OPENTM213512088'=>'待办任务提醒');
         $temps=$this->getAllTemplate();
+        print_r($temps);
         foreach ($temps->template_list as $t){
             if($t->title == $tempkv[$templateCode]){
                 return $t;
