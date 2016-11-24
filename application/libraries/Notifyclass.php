@@ -47,15 +47,18 @@ class Notifyclass
         $link_short='course/info/'.$course['id'].'.html';
         $sign=$company['name'];
         $sign.=($company['code']=='100276')?' 人力资源部':'';
+
+
+        $studentsarr = explode(',', $notifyTarget);//explode(',', $course['targetstudent']);
+        $students=array();
+        foreach ($studentsarr as $s) {
+            $student = $this->CI->student_model->get_row(array('id' => $s));
+            $students[] = $student;
+        }
+
         //短信通知
         if($course['notice_type_msg']==1){
-            $studentsarr = explode(',', $notifyTarget);//explode(',', $course['targetstudent']);
-            $students=array();
-            foreach ($studentsarr as $s) {
-                $student = $this->CI->student_model->get_row(array('id' => $s));
-                if(!empty($student['email'])){
-                    $students[]=$student;
-                }
+            foreach ($students as $student) {
                 if($student['register_flag']==1){
                     $pass=substr($student['mobile'],-6);
                     $accountmsg='账号：'.$student['mobile'].'
@@ -123,16 +126,12 @@ EOF;
         }
 
         //微信通知
-        echo 1;
         if ($course['notice_type_wx']==1) {
             $companyToken=$this->CI->companytokenwx_model->get_row(array('company_code'=>$course['company_code']));
             $this->CI->load->library('wechat', $companyToken);
             //获取templateid
             $objTempid=$this->CI->wechat->getTemplateId('OPENTM213512088');
-            print_r($studentsarr);
-
-            foreach ($studentsarr as $s) {
-                $student = $this->CI->student_model->get_row(array('id' => $s));
+            foreach ($students as $student) {
                 if(!empty($student['openid'])){
                     $wxdata = array(
                         'first' => array(
@@ -154,7 +153,6 @@ EOF;
                             'color' => "#000000"
                         )
                     );
-                    print_r($objTempid).'<br>';
                     if($objTempid->errcode=='0') {
                         print_r($objTempid);
                         $templateid = $objTempid->template_id;
