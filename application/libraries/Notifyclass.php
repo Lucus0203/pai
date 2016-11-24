@@ -123,6 +123,7 @@ EOF;
         }
 
         //微信通知
+        echo 1;
         if ($course['notice_type_wx']==1) {
             $companyToken=$this->CI->companytokenwx_model->get_row(array('company_code'=>$course['company_code']));
             $this->CI->load->library('wechat', $companyToken);
