@@ -122,7 +122,6 @@ class Wechat{
         foreach ($temps->template_list as $t){
             if($t->title == $tempkv[$templateCode]){
                 $t->errcode='0';
-                print_r($t);
                 return $t;
             }
         }

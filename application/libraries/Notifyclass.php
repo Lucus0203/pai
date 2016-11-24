@@ -152,7 +152,9 @@ EOF;
                             'color' => "#000000"
                         )
                     );
+                    print_r($objTempid).'<br>';
                     if($objTempid->errcode=='0') {
+                        print_r($objTempid);
                         $templateid = $objTempid->template_id;
                         $res = $this->CI->wechat->templateSend($student['openid'], $templateid, $link, $wxdata);
                     }
