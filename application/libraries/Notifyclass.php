@@ -55,7 +55,6 @@ class Notifyclass
             $student = $this->CI->student_model->get_row(array('id' => $s));
             $students[] = $student;
         }
-        print_r($students);
 
         //短信通知
         if($course['notice_type_msg']==1){
@@ -85,6 +84,7 @@ class Notifyclass
 ". date("Y年m月d日");
                 $this->CI->zhidingsms->sendSMS($student['mobile'], $msg);*/
                 $content='@1@='.$student['name'].',@2@='.$course['title'].',@3@='.$t1.',@4@='.$t2.',@5@='.$t3.',@6@='.$link_short.',@7@='.$accountmsg.',@8@='.$ischeckmsg.',@9@='.$sign.',@10@='.date("Y年m月d日");
+                echo $student['mobile'];
                 $this->CI->zhidingsms->sendTPSMS($student['mobile'], $content,'ZD30018-0007');
             }
         }
