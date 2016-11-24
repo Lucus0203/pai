@@ -55,6 +55,7 @@ class Notifyclass
             $student = $this->CI->student_model->get_row(array('id' => $s));
             $students[] = $student;
         }
+        print_r($students);
 
         //短信通知
         if($course['notice_type_msg']==1){
