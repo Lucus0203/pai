@@ -161,7 +161,7 @@ class Course extends CI_Controller
         $deparone = $this->department_model->get_all(array('company_code' => $logininfo['company_code'], 'level' => 0));
         if (!empty($deparone[0]['id'])) {
             $departwo = $this->department_model->get_all(array('parent_id' => $deparone[0]['id']));
-            if($this->student_model->get_count("company_code='".$this->_logininfo['company_code']."' and department_id=".$deparone[0]['id']." and department_id=department_parent_id and isdel = 2 ")>0){
+            if($this->student_model->get_count("company_code='".$this->_logininfo['company_code']."' and department_id=".$deparone[0]['id']." and department_id=department_parent_id and isdel = 2 ")>0 && count($departwo)>0){
                 $departwo[]=array('id'=>$deparone[0]['id'],'parent_id'=>$deparone[0]['id'],'name'=>'未分配','level'=>1);
             }
         }
@@ -306,7 +306,7 @@ class Course extends CI_Controller
         $deparone = empty($course['targetone'])?array():$this->department_model->get_all(" id in (" . $course['targetone'] . ") and company_code='".$this->_logininfo['company_code']."' and level=0 ");
         if (!empty($deparone[0]['id'])) {
             $departwo = empty($course['targettwo'])?array():$this->department_model->get_all(" id in (" . $course['targettwo'] . ") and company_code='".$this->_logininfo['company_code']."' and parent_id=".$deparone[0]['id']);
-            if($this->student_model->get_count("company_code='".$this->_logininfo['company_code']."' and department_id=".$deparone[0]['id']." and department_id=department_parent_id and isdel = 2 and isleaving = 2 ")>0){
+            if($this->student_model->get_count("company_code='".$this->_logininfo['company_code']."' and department_id=".$deparone[0]['id']." and department_id=department_parent_id and isdel = 2 and isleaving = 2 ")>0 && count($departwo)>0){
                 $departwo[]=array('id'=>$deparone[0]['id'],'parent_id'=>$deparone[0]['id'],'name'=>'未分配','level'=>1);
             }
         }

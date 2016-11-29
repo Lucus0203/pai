@@ -415,7 +415,7 @@ class Annualplan extends CI_Controller
         $deparone = $this->department_model->get_all(array('company_code' => $this->_logininfo['company_code'], 'level' => 0));
         if (!empty($deparone[0]['id'])) {
             $departwo = $this->department_model->get_all(array('parent_id' => $deparone[0]['id']));
-            if($this->student_model->get_count("company_code='".$this->_logininfo['company_code']."' and department_id=".$deparone[0]['id']." and department_id=department_parent_id and isdel = 2 and isleaving=2 ")>0){
+            if($this->student_model->get_count("company_code='".$this->_logininfo['company_code']."' and department_id=".$deparone[0]['id']." and department_id=department_parent_id and isdel = 2 and isleaving=2 ")>0 && count($departwo)>0){
                 $departwo[]=array('id'=>$deparone[0]['id'],'parent_id'=>$deparone[0]['id'],'name'=>'未分配','level'=>1);
             }
         }
@@ -691,6 +691,80 @@ AND apc.openstatus =1 ";
                 }
             }
         }
+    }
+
+    //计划进度
+    public function progress(){
+        $page = $this->input->get('per_page', true);
+        $page = $page * 1 < 1 ? 1 : $page;
+        $page_size = 10;
+        $this->load->database();
+        //status 1进行中2未开始3已结束
+        $sql = "select p.* from " . $this->db->dbprefix('annual_plan') . " p "
+            . "where p.isdel != 1 and p.progress=1 and p.company_code = " . $this->_logininfo['company_code'] ;
+        $query = $this->db->query("select count(*) as num from ($sql) s ");
+        $num = $query->row_array();
+        $total_rows = $num['num'];
+        $config['base_url'] = site_url('annualplan/progress');
+        $config['per_page'] = $page_size;
+        $config['total_rows'] = $total_rows;
+        $this->pagination->initialize($config);
+
+        $query = $this->db->query($sql . " order by p.id desc limit " . ($page - 1) * $page_size . "," . $page_size);
+        $plans = $query->result_array();
+        foreach ($plans as $k=>$p){
+            //计划课程
+            $sql = "select pc.* from " . $this->db->dbprefix('annual_plan_course') . " pc "
+                . " where pc.openstatus = 1 and pc.annual_plan_id=".$p['id']." and pc.company_code = " . $this->_logininfo['company_code']
+                . " order by pc.year,pc.month ";
+            $query = $this->db->query($sql);
+            $cs = $query->result_array();
+            $sc=current($cs);
+            $ec=end($cs);
+            $plans[$k]['start']=$sc['year'].'.'.$sc['month'];
+            $plans[$k]['end']=$ec['year'].'.'.$ec['month'];
+            $query = $this->db->query("select sum(price) as price_total from ($sql) s ");
+            $price_total = $query->row_array();
+            $price_total = $price_total['price_total'];
+            //已开课程
+            $sql = "select course.* from " . $this->db->dbprefix('annual_plan_course') . " pc "
+                . " left join " . $this->db->dbprefix('course') . " course on pc.course_id=course.id "
+                . " where pc.openstatus = 1 and pc.annual_plan_id=".$p['id']." and pc.company_code = " . $this->_logininfo['company_code'] . " and course.time_end != '' and course.time_end is not null and unix_timestamp(now()) > unix_timestamp(course.time_end) " ;
+            $query = $this->db->query("select count(*) as num,sum(price) as price from ($sql) s ");
+            $num = $query->row_array();
+            $plans[$k]['progress_course'] = count($cs)>0?round($num['num']/count($cs)*100):0;
+            $plans[$k]['progress_price'] = $price_total*1>0?round($num['price']/$price_total*100):0;
+        }
+
+        $isAccessAccount=$this->isAccessAccount();
+
+        $this->load->view('header');
+        $this->load->view('annual_plan/progress_list', array('plans' => $plans,'isAccessAccount'=>$isAccessAccount, 'links' => $this->pagination->create_links()));
+        $this->load->view('footer');
+    }
+
+    //年度计划进度详细
+    public function progressdetail($planid){
+        $plan=$this->annualplan_model->get_row(array('id'=>$planid));
+
+        $this->load->view('header');
+        $this->load->view('annual_plan/progress_detail', compact('plan'));
+        $this->load->view('footer');
+    }
+
+    //年度培训计划追踪
+    public function progresstrace($planid){
+        $this->isAllowPlanid($planid);
+        $this->annualplan_model->update(array('progress'=>1),$planid);
+        redirect($_SERVER['HTTP_REFERER']);
+        return ;
+    }
+    //取消追踪
+    public function progressuntrace($planid){
+        $this->isAllowPlanid($planid);
+        $this->annualplan_model->update(array('progress'=>2),$planid);
+        redirect($_SERVER['HTTP_REFERER']);
+        return ;
     }
 
 
