@@ -1,7 +1,7 @@
 
 <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/texture.css" />
 <div class="wrap">
-    <div class="textureCont nengli01">
+    <div class="nengli01" style="background-color: #ffffff;">
         <div class="ttl01 aCenter">能力模型</div>
         <p><span class="blue">能力模型</span>又称胜任力模型，是企业人力资源的高端管理方式，培训派认为，企业的人才培养，其本质是提升员工与现有岗位以及未来岗位的匹配度来实现。我们将通过简单、高效、低价的定制化服务，快速帮助企业建立岗位能力模型，大大提高人才培养的效率。</p>
         <div class="nengliBox mb20">
@@ -14,7 +14,7 @@
             <div class="boxr"><img src="<?php echo base_url();?>images/nengli_img01.png" alt="" width="200"></div>
 
         </div>
-        <div class="aCenter mb">
+        <div class="aCenter mb30">
             <p class="f24 aCenter">价格体系</p>
             <table class="nengTable mb10">
                 <colgroup>
@@ -27,14 +27,14 @@
                 </tr>
                 <tr>
                     <td>一个</td>
-                    <td>&yen;300</td>
+                    <td>&yen;1500</td>
                 </tr>
                 <tr>
                     <td>两个</td>
-                    <td class="red">&yen;500</td>
+                    <td>&yen;3000</td>
                 </tr><tr>
                     <td>三个</td>
-                    <td class="red">&yen;600</td>
+                    <td class="red">&yen;4000</td>
                 </tr>
                 <tr>
                     <td><span class="red">高级定制模型</span></td>

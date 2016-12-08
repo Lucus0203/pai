@@ -1,5 +1,5 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery-scrolltofixed-min.js"></script>
-<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
+<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css?1128" />
 <script type="text/javascript">
     $(window).on('beforeunload',function(){
         saveFormdata('已自动保存');
@@ -138,7 +138,7 @@
         <?php $this->load->view ( 'annual_survey/top_navi' ); ?>
     </div>
     <div class="comBox">
-        <p class="yellowTipBox mt20">请注意您的调研时间,调研问卷开始后,内容不可修改</p>
+        <p class="yellowTipBox mt20">调研问卷发布后,内容不可修改</p>
         <div class="baoming">
             <div class="sideLeft">
                 <ul class="sideLnavi">

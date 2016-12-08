@@ -6,7 +6,7 @@
     <title></title>
     <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/font-awesome.min.css" />
     <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/common.css" />
-    <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
+    <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css?1128" />
     <script type="text/javascript" src="<?php echo base_url();?>js/jquery1.83.js"></script>
 </head>
 
@@ -15,11 +15,11 @@
     <div class="inner">
         <div class="log">
             <a href="javascript:void(0);"><img src="<?php echo base_url();?>images/logo01.png" alt="培训派"></a>
-            <span class="logoTip"><?php echo $survey['title']?></span>
         </div>
     </div>
 </div>
 <div class="wrap">
+    <p class="f24 aCenter"><?php echo $survey['title']?></p>
     <p class="askbox">答卷人:<span class="fbold">&nbsp;<?php echo $student['name'] ?>&nbsp;</span>
         <?php echo $student['job_name'].'/'.$student['department'].'/'.$student['mobile']; ?><span class="ml20">提交时间：<?php echo date("Y.m.d H:i:s",strtotime($answer['created'])) ?></span></p>
     <div class="comBox p40">
@@ -77,6 +77,12 @@
                 </ul>
             </div>
             </dd>
+            <?php if(!empty($answer['content'])){ ?>
+                <dt>补充的培训需求</dt>
+                <dd class="f18 mb10">
+                    <p><?php echo nl2br($answer['content']); ?></p>
+                </dd>
+            <?php } ?>
         </dl>
     </div>
 </div>

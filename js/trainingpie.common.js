@@ -22,4 +22,19 @@ $(document).ready(function(){
     $('input, textarea').placeholder();
     $('.alert-remove').click(function(){$('.alertBox').hide()});
     alertBoxTimeSet=setTimeout(function(){$('.alertBox').fadeOut(500);},2000);
+
+    $('a.back-to-top').click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 300);
+        return false;
+    });
+});
+
+$(window).scroll(function() {
+    if ( $(window).scrollTop() > 300 ) {
+        $('a.back-to-top').fadeIn('slow');
+    } else {
+        $('a.back-to-top').fadeOut('slow');
+    }
 });

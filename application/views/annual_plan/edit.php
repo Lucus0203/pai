@@ -78,6 +78,12 @@
                         </td>
                     </tr>
                     <tr>
+                        <th>进度追踪</th>
+                        <td>
+                            <label class="mr20"><input type="radio" name="progress" value="1" checked> 是</label><label><input type="radio" name="progress" value="2"<?php if($plan['progress']=='2'){?> checked <?php } ?>> 否</label>
+                        </td>
+                    </tr>
+                    <tr>
                         <th></th>
                         <td>
                             <span class="iptInner">

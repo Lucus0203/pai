@@ -135,7 +135,7 @@
                         </td>
                     </tr>
                     <tr class="supplierBox" <?php if($course['external']!=1){?>style="display: none;" <?php } ?>>
-                        <th>供应商</th>
+                        <th>供应商家</th>
                         <td><input name="supplier" value="<?php echo $course['supplier'] ?>" placeholder="请输入供应商" class="iptH37 w157 mr20 w237"></td>
                     </tr>
                     <tr>

@@ -6,7 +6,7 @@ $(document).ready(function(){
         var departmentid=$(this).val();
         $.ajax({
                 type:"post",
-                url:'<?php echo site_url('department/ajaxDepartmentAndStudent') ?>',
+                url:'<?php echo site_url('department/ajaxDepartmentAndStudent/studentedit') ?>',
                 data:{'departmentid':departmentid},
                 datatype:'jsonp',
                 success:function(res){
@@ -257,12 +257,21 @@ $(document).ready(function(){
                                 </td>
                             </tr>
                             <tr>
-                                <th>状态</th>
+                                <th>讲师</th>
                                 <td>
                                     <ul class="lineUl">
-                                        <li><label><input name="isleaving" value="2" type="radio" checked="">在职</label></li>
-                                        <li><label><input name="isleaving" value="1" type="radio" <?php if($student['isleaving']==1){ echo 'checked'; } ?>>离职</label></li>
-                                        </ul>
+                                        <li><label><input name="isteacher" value="1" type="radio" checked="">是</label></li>
+                                        <li><label><input name="isteacher" value="2" type="radio" <?php if($student['isteacher']!=1){ echo 'checked'; } ?>>否</label></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>在职</th>
+                                <td>
+                                    <ul class="lineUl">
+                                        <li><label><input name="isleaving" value="2" type="radio" checked="">是</label></li>
+                                        <li><label><input name="isleaving" value="1" type="radio" <?php if($student['isleaving']==1){ echo 'checked'; } ?>>否</label></li>
+                                    </ul>
                                 </td>
                             </tr>
 

@@ -25,15 +25,15 @@ $(document).ready(function(){
 
 				<div class="seachBox clearfix borderTop">
                     <form method="get" action="">
-                        <ul>
-                            <li class="w250 mr60">
+                        <ul class="fRight">
+                            <li class="w250 mr30">
                                 <input name="keyword" type="text" value="<?php echo $parm['keyword'] ?>" class="ipt w250" placeholder="关键字">
                             </li>
-                            <li class="w496 btn"><span class="mr20">开课时间</span><input name="time_start" type="text" value="<?php echo $parm['time_start'] ?>" class="ipt w156 mr10 DTdate" autocomplete="off">至
+                            <li class="btn mr20"><span class="mr20">开课时间</span><input name="time_start" type="text" value="<?php echo $parm['time_start'] ?>" class="ipt w156 mr10 DTdate" autocomplete="off">至
                                 <input name="time_end" type="text" value="<?php echo $parm['time_end'] ?>" class="ipt w156 ml10 DTdate" autocomplete="off">
                             </li>
 
-                            <li class="btn fRight"><input type="submit" class="borBlueH37 mt3" value="搜索" /></li>
+                            <li class="btn"><input type="submit" class="borBlueH37 mt3" value="搜索" /></li>
                         </ul>
                     </form>
 				</div>

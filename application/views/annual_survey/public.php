@@ -15,6 +15,7 @@
         return flag;
     }, "此时段有正在调研的问卷,请更换时段");
     $(document).ready(function () {
+        $('#time_end').appendDtpicker({"locale": "cn","calendarMouseScroll": false,"autodateOnStart": false,"closeOnSelected": true,'futureOnly':true});
         $("#editForm").validate({
             rules: {
                 time_start: {
@@ -265,10 +266,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <th><span class="red">*</span>调查时间</th>
+                        <th><span class="red">*</span>调研时间</th>
                         <td>
                             <span class="iptInner">
-                            <input placeholder="开始时间" name="time_start" id="time_start" value="<?php echo empty($survey['time_start'])?'':date("Y-m-d H:i",strtotime($survey['time_start'])) ?>" type="text" class="iptH37 mr10 DTdate w156" autocomplete="off" >至<input placeholder="结束时间" name="time_end" id="time_end" value="<?php echo empty($survey['time_end'])?'':date('Y-m-d H:i',strtotime($survey['time_end'])) ?>" type="text" class="iptH37 ml10 DTdate w156" autocomplete="off" >
+                            <input placeholder="开始时间" name="time_start" id="time_start" value="<?php echo empty($survey['time_start'])?'':date("Y-m-d H:i",strtotime($survey['time_start'])) ?>" type="text" class="iptH37 mr10 DTdate w156" autocomplete="off" >至<input placeholder="结束时间" name="time_end" id="time_end" value="<?php echo empty($survey['time_end'])?'':date('Y-m-d H:i',strtotime($survey['time_end'])) ?>" type="text" class="iptH37 ml10 w156" autocomplete="off" >
                             </span>
 
                         </td>

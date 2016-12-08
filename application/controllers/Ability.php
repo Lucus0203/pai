@@ -357,4 +357,23 @@ class Ability extends CI_Controller {
         $this->load->view ( 'footer' );
     }
 
+    /**
+     * 词条管理
+     */
+    public function entrymanagement(){
+        $title='词条管理';
+        $this->load->view ( 'header' );
+        $this->load->view ( 'html/coming_soon',compact('title','description'));
+        $this->load->view ( 'footer' );
+    }
+    /**
+     * 能力评估
+     */
+    public function evaluation(){
+        $title='能力评估';
+        $this->load->view ( 'header' );
+        $this->load->view ( 'html/coming_soon',compact('title','description'));
+        $this->load->view ( 'footer' );
+    }
+
 }

@@ -1,14 +1,92 @@
 <script type="text/javascript">
     $(document).ready(function () {
+        $('#department_parent_id').change(function(){
+            var departmentid=$(this).val();
+            $.ajax({
+                type:"post",
+                url:'<?php echo site_url('department/ajaxDepartmentAndStudent/teacheredit') ?>',
+                data:{'departmentid':departmentid},
+                datatype:'jsonp',
+                success:function(res){
+                    var json_obj = $.parseJSON(res);
+                    var count=0;
+                    var str='<option value="'+departmentid+'">请选择</option>';
+                    $.each(json_obj.departs,function(i,item){
+                        str+='<option value="'+item.id+'">'+item.name+'</option>';
+                        ++count;
+                    });
+                    if(count>0){
+                        $('#department_id').show().html(str)
+                    }else{
+                        $('#department_id').hide().html('<option value="'+departmentid+'" selected >请选择</option>');
+                    }
+                }
+            });
+            $.ajax({
+                type:"post",
+                url:'<?php echo site_url('teacher/ajaxStudent/'.$teacher['id']) ?>',
+                data:{'departmentid':departmentid},
+                datatype:'jsonp',
+                success:function(res){
+                    var json_obj = $.parseJSON(res);
+                    var str='<option value="">请选择</option>';
+                    $.each(json_obj.students,function(i,item){
+                        str+='<option value="'+item.id+'">'+item.name+'</option>';
+                    });
+                    $('select[name=student_id]').html(str);
+                }
+            });
+
+        });
+        $('#department_id').change(function(){
+            var departmentid=$(this).val();
+            $.ajax({
+                type:"post",
+                url:'<?php echo site_url('teacher/ajaxStudent/'.$teacher['id']) ?>',
+                data:{'departmentid':departmentid},
+                datatype:'jsonp',
+                success:function(res){
+                    var json_obj = $.parseJSON(res);
+                    var str='<option value="">请选择</option>';
+                    $.each(json_obj.students,function(i,item){
+                        str+='<option value="'+item.id+'">'+item.name+'</option>';
+                    });
+                    $('select[name=student_id]').html(str);
+                }
+            });
+        });
+
+        $('input[name=type]').change(function(){
+            if($('input[name=type]:checked').val()=='1'){
+                $('#editForm .comTable tr').eq(1).show();
+                $('#editForm .comTable tr').eq(2).show();
+                $('#editForm .comTable tr').eq(3).hide();
+            }else{
+                $('#editForm .comTable tr').eq(1).hide();
+                $('#editForm .comTable tr').eq(2).hide();
+                $('#editForm .comTable tr').eq(3).show();
+            }
+        });
+
         $("#editForm").validate({
             rules: {
                 name: {
-                    required: true
+                    required: function(element){
+                        return $('input[name=type]:checked').val() == '2' ;
+                    }
+                },
+                student_id: {
+                    required: function(element){
+                        return $('input[name=type]:checked').val() == '1' ;
+                    }
                 }
             },
             messages: {
                 name: {
                     required: "请输入讲师姓名"
+                },
+                student_id: {
+                    required: "请选择内部讲师"
                 }
             },
             errorPlacement: function (error, element) {
@@ -59,25 +137,54 @@
                 <table cellspacing="0" class="comTable">
                     <col width="20%"/>
                     <tr>
-                        <th><span class="red">*</span>讲师姓名</th>
-                        <td>
-                            <span class="iptInner">
-                            <input name="name" placeholder="请输入讲师姓名" value="<?php echo $teacher['name'] ?>"
-                                   type="text" class="iptH37 w237">
-                            </span>
-
-                        </td>
-                    </tr>
-                    <tr>
                         <th><span class="red">*</span>师资类型</th>
                         <td>
                             <ul class="lineUl">
                                 <li>
                                     <label><input name="type" checked="checked" value="1" type="radio">内部</label></li>
                                 <li>
-                                    <label><input
-                                            name="type" <?php echo $teacher['type'] == 2 ? 'checked="checked"' : '' ?> value="2" type="radio">外部</label></li>
+                                    <label><input name="type" <?php echo $teacher['type'] == 2 ? 'checked="checked"' : '' ?> value="2" type="radio">外部</label></li>
                             </ul>
+
+                        </td>
+                    </tr>
+                    <tr style="<?php if($teacher['type']==2){echo 'display:none;';} ?>">
+                        <th><span class="red">*</span>所在部门</th>
+                        <td><span class="iptInner">
+                                <select id="department_parent_id" class="iptH37 w156">
+                                    <option value="" selected>请选择</option>
+                                    <?php foreach($departments as $d){ ?>
+                                        <option <?php if($d['id']==$stu['department_parent_id']){ ?>selected<?php } ?> value="<?php echo $d['id'] ?>"><?php echo $d['name'] ?></option>
+                                    <?php } ?>
+                                </select>&nbsp;
+                                <select <?php if(count($second_departments)<=0){?>style="display: none;"<?php } ?> id="department_id" class="iptH37 w156">
+                                    <option value="<?php echo $stu['department_parent_id']?>" selected >请选择</option>
+                                    <?php foreach($second_departments as $d){ ?>
+                                        <option <?php if($d['id']==$stu['department_id']){ ?>selected<?php } ?> value="<?php echo $d['id'] ?>"><?php echo $d['name'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr style="<?php if($teacher['type']==2){echo 'display:none;';} ?>">
+                        <th><span class="red">*</span>讲师姓名</th>
+                        <td><span class="iptInner">
+                                <select name="student_id" class="iptH37 w156">
+                                    <option value="" selected >请选择</option>
+                                    <?php foreach ($students as $s){ ?>
+                                        <option value="<?php echo $s['id'] ?>"<?php if($s['id']==$teacher['student_id']){?>selected<?php } ?>><?php echo $s['name'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr style="<?php if($teacher['type']!=2){echo 'display:none;';} ?>">
+                        <th><span class="red">*</span>讲师姓名</th>
+                        <td>
+                            <span class="iptInner">
+                            <input name="name" placeholder="请输入讲师姓名" value="<?php echo $teacher['name'] ?>"
+                                   type="text" class="iptH37 w237" >
+                            </span>
 
                         </td>
                     </tr>

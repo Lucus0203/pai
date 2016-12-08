@@ -25,6 +25,12 @@
                     accept: "image/*",
                     filesize: 5 * 1048576
                 },
+                price: {
+                    digits: true
+                },
+                expend: {
+                    digits: true
+                },
                 outline: {
                     required: true
                 }
@@ -50,6 +56,12 @@
                 page_img: {
                     accept: "请选择正确的图片格式",
                     filesize: "图片大小不能超过5M"
+                },
+                price: {
+                    digits: "请输入正确的数字"
+                },
+                expend: {
+                    digits: "请输入正确的数字"
                 },
                 outline: {
                     required: "请输入课程大纲"
@@ -93,6 +105,14 @@
                 }
             }
         });
+        $('input[name=external]').change(function(){
+            if($('input[name=external]:checked').val()=='1'){
+                $('.supplierBox').show();
+            }else{
+                $('.supplierBox').hide();
+            }
+        });
+
         //选择对象
         $('#addTarget').click(function () {
             $('#conWindow').show();
@@ -358,10 +378,30 @@
                         </td>
                     </tr>
                     <tr>
+                        <th>内训/公开</th>
+                        <td>
+                            <label><input type="radio" name="external" value="2" checked />&nbsp;内训</label><label class="ml20"><input type="radio" name="external" value="1" <?php if($course['external']==1){?>checked<?php } ?> />&nbsp;公开</label>
+
+                        </td>
+                    </tr>
+                    <tr class="supplierBox" <?php if($course['external']!=1){?>style="display: none;" <?php } ?>>
+                        <th>供应商家</th>
+                        <td><input name="supplier" value="<?php echo $course['supplier'] ?>" placeholder="请输入供应商" class="iptH37 w157 mr20 w237"></td>
+                    </tr>
+                    <tr>
                         <th>课程预算</th>
                         <td>
                             <span class="iptInner">
-                            <input name="price" placeholder="请输入课程预算" value="<?php echo $course['price'] ?>" type="text" class="iptH37 w157 mr20 w237">元/课时
+                            <input name="price" placeholder="请输入课程预算" value="<?php echo $course['price'] ?>" type="text" class="iptH37 w157 mr20 w237">元
+                            </span>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>实际支出</th>
+                        <td>
+                            <span class="iptInner">
+                            <input name="expend" placeholder="请输入课程实际支出" value="<?php echo $course['expend'] ?>" type="text" class="iptH37 w157 mr20 w237">元
                             </span>
 
                         </td>

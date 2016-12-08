@@ -110,7 +110,10 @@ class Course extends CI_Controller
                 'targetone' => $this->input->post('targetone'),
                 'targettwo' => $this->input->post('targettwo'),
                 'targetstudent' => $this->input->post('targetstudent'),
+                'external' => $this->input->post('external'),
+                'supplier' => $this->input->post('supplier'),
                 'price' => $this->input->post('price'),
+                'expend' => $this->input->post('expend'),
                 'income' => $this->input->post('income'),
                 'outline' => $this->input->post('outline'),
                 'info' => $this->input->post('info'));
@@ -194,7 +197,10 @@ class Course extends CI_Controller
                 'targetone' => $this->input->post('targetone'),
                 'targettwo' => $this->input->post('targettwo'),
                 'targetstudent' => $this->input->post('targetstudent'),
+                'external' => $this->input->post('external'),
+                'supplier' => $this->input->post('supplier'),
                 'price' => $this->input->post('price'),
+                'expend' => $this->input->post('expend'),
                 'income' => $this->input->post('income'),
                 'outline' => $this->input->post('outline'),
                 'info' => $this->input->post('info'));
@@ -235,7 +241,12 @@ class Course extends CI_Controller
             }
             $this->course_model->update($c, $id);
             $msg = '课程保存成功';
-            redirect(site_url('course/courseinfo/'.$id));
+            $progress = $this->input->get('progress');
+            if(!empty($progress)){
+                redirect(site_url('annualplan/progressdetail/'.$progress));
+            }else{
+                redirect(site_url('course/courseinfo/'.$id));
+            }
             return;
         }
         $teachers = $this->teacher_model->get_all(array('company_code' => $logininfo['company_code'], 'isdel' => 2));
@@ -542,7 +553,7 @@ class Course extends CI_Controller
 
     }
 
-    //课前准备
+    //课程公告
     public function prepare($courseid){
         $this->isAllowCourseid($courseid);
         $act = $this->input->post('act');
@@ -796,7 +807,7 @@ class Course extends CI_Controller
                 $this->course_model->update(array('isdel' => 1), $id);
             }
         }
-        redirect(site_url('course/courselist'));
+        redirect($_SERVER['HTTP_REFERER']);
     }
 
     //课程发布
@@ -818,7 +829,7 @@ class Course extends CI_Controller
             $course = $this->course_model->get_row(array('id' => $id));
             $c = array('user_id' => $this->_logininfo['id'],
                 'company_code' => $this->_logininfo['company_code'],
-                'title' => $course['title'].'(副本)',
+                'title' => $course['title'].'（副本）',
                 'address' => $course['address'],
                 'teacher_id' => $course['teacher_id'],
                 'outline' => $course['outline'],

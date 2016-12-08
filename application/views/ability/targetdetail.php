@@ -76,7 +76,7 @@
     });
 </script>
 <div class="wrap">
-    <div class="textureCont w960">
+    <div class="textureCont width100">
 
         <div class="texturetip clearfix"><span class="fLeft pt5"><?php echo $student['name'].'《'.$abilityjob['name'] ?>》能力评估</span>
             <div class="fRight">
@@ -93,7 +93,7 @@
             <div class="nengliLeft">
                 <?php foreach ($abilities as $key=>$abilies) {?>
                     <?php if($key==1){
-                        echo '<p class="blueline"><span>专业/技能</span></p>';
+                        echo '<p class="blueline"><span>专业能力</span></p>';
                     }elseif($key==2){
                         echo '<p class="blueline"><span>通用能力</span></p>';
                     }elseif($key==3){

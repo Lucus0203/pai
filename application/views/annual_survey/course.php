@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/kecheng.css"/>
+<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/kecheng.css?1128"/>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css"/>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -151,7 +151,7 @@
         <?php $this->load->view ( 'annual_survey/top_navi' ); ?>
     </div>
     <div class="clearfix textureBox">
-        <p class="yellowTipBox mt20">请注意您的调研时间,调研问卷开始后,内容不可修改</p>
+        <p class="yellowTipBox mt20">调研问卷发布后,内容不可修改</p>
         <div class="textureSide">
             <?php if(!$isStarted){?><a id="addType" href="javascript:void(0)" class="topbtn">添加课程类型</a><?php } ?>
             <div class="fnavi mb10">

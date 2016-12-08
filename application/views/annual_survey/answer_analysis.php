@@ -1,5 +1,5 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery-scrolltofixed-min.js"></script>
-<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/kecheng.css"/>
+<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/kecheng.css?1128"/>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css"/>
 <script>
     $(document).ready(function(){
@@ -174,6 +174,12 @@
                                     <td colspan="3">有效填写人数 <?php echo $a['total'] ?></td>
                                 </tr>
                             </table>
+                            <p class="ttl01 pt0 mb20">补充的培训需求</p>
+                            <?php foreach ($answerlist as $a){
+                                if(!empty($a['content'])){ ?>
+                                <div class="contMsgBox mb10"><?php echo $a['name'].':' ?><br/><p><?php echo nl2br($a['content']); ?></p></div>
+                            <?php }
+                            } ?>
                         </div>
                     <?php } ?>
 

@@ -23,8 +23,11 @@ class Index extends CI_Controller
     }
 
 
-    public function index()
-    {
+    public function index(){
+        $this->load->view('main');
+    }
+
+    public function main(){
         $logininfo = $this->_logininfo;
         $company = $this->company_model->get_row(array('code'=>$logininfo['company_code']));
         $sql = "select count(*) as num from " . $this->db->dbprefix('course') . " c where c.company_code = '{$logininfo['company_code']}' and c.isdel=2 ";
@@ -114,6 +117,10 @@ class Index extends CI_Controller
             }
 
         }
+    }
+
+    public function manual(){
+        redirect(base_url().'images/manual.pdf');
     }
 
     public function loginqrcode(){

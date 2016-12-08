@@ -5,7 +5,7 @@
     });
 </script>
 <div class="wrap">
-    <div class="textureCont w960">
+    <div class="textureCont width100">
         <div class="texturetip p1524 clearfix">
             <div class="fLeft"><span class="pt5">年度调研</span>
                 <?php if(!$isAccessAccount){ ?><p class="clearfix gray9">您正免费体验该功能,有5个体验名额,如需开通请联系<a class="blue" href="tel:021-61723727">021-61723727</a>,辛老师</p><?php } ?>
@@ -26,15 +26,15 @@
 
         <div class="seachBox clearfix borderTop">
             <form method="get" action="">
-                <ul>
-                    <li class="w250 mr60">
+                <ul class="fRight">
+                    <li class="w250 mr20">
                         <input name="keyword" type="text" value="<?php echo $parm['keyword'] ?>" class="ipt w250" placeholder="关键字">
                     </li>
-                    <li class="w496 btn"><span class="mr20">开课时间</span><input name="time_start" type="text" value="<?php echo $parm['time_start'] ?>" class="ipt w156 mr10 DTdate" autocomplete="off">至
+                    <li class="btn mr20"><span class="mr20">开课时间</span><input name="time_start" type="text" value="<?php echo $parm['time_start'] ?>" class="ipt w156 mr10 DTdate" autocomplete="off">至
                         <input name="time_end" type="text" value="<?php echo $parm['time_end'] ?>" class="ipt w156 ml10 DTdate" autocomplete="off">
                     </li>
 
-                    <li class="btn fRight"><input type="submit" class="borBlueH37 mt3" value="搜索" /></li>
+                    <li class="btn"><input type="submit" class="borBlueH37 mt3" value="搜索" /></li>
                 </ul>
             </form>
         </div>
@@ -47,10 +47,14 @@
                         <div class="listText">
                             <p class="titp"><a class="blue" href="<?php echo site_url('annualsurvey/info/'.$c['id']);?>"><?php echo $c['title'] ?></a></p>
                             <p class="titp">
-                                <?php if($c['status']==1&&$c['public']==2){ ?>
-                                    <span class="greenH25">进行中</span>
-                                <?php }elseif($c['status']==2||$c['public']!=2){ ?>
+                                <?php if($c['public']==1){ ?>
                                     <span class="orangeH25">未发布</span>
+                                <?php }elseif($c['public']==3){ ?>
+                                    <span class="orangeH25">暂停发布</span>
+                                <?php }elseif($c['status']==1){ ?>
+                                    <span class="greenH25">进行中</span>
+                                <?php }elseif($c['status']==2){ ?>
+                                    <span class="orangeH25">未开始</span>
                                 <?php }elseif($c['status']==3){ ?>
                                     <span class="grayH25">已结束</span>
                                 <?php } ?>

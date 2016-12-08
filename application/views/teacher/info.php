@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
+<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css?1128" />
 <div class="wrap">
         <div class="titCom clearfix"><span class="titSpan">讲师介绍</span></div>
         <div class="comBox">
@@ -13,9 +13,10 @@
                                 <div class="listText">
                                         <p class="titp"><?php echo $teacher['name'] ?></p>
                                         <p>师资类型：<?php echo $teacher['type']==2?'外部':'内部' ?></p>
+            <?php if(!empty($depart_parent['name'])){?><p>所在部门：<?php echo $depart_parent['name'].'&nbsp;';echo $department['name']!=$depart_parent['name']?$department['name']:''; ?></p><?php } ?>
                                         <?php if(!empty($teacher['title'])){?><p>讲师头衔：<?php echo $teacher['title'] ?></p><?php } ?>
             <?php if(!empty($teacher['specialty'])){?><p>擅长类别：<?php echo $teacher['specialty'] ?></p><?php } ?>
-            <?php if(!empty($teacher['years'])){?><p>授课年限：<?php echo $teacher['years'] ?></p><?php } ?>
+            <?php if(!empty($teacher['years'])){?><p>授课年限：<?php echo $teacher['years'] ?>年</p><?php } ?>
                                         <p>工作形式：<?php echo $teacher['work_type']==2?'兼职':'专职' ?></p>
             <?php if(!empty($teacher['years'])){  if($loginInfo['role']==1||$roleInfo['teacheredit']==1){ ?><p>授课薪酬：<?php echo $teacher['hourly'] ?>元/课时</p><?php } } ?>
                                 </div>

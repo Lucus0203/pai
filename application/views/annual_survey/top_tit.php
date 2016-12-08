@@ -5,10 +5,14 @@
     });
 </script>
 <span class="titSpan"><?php echo $survey['title'] ?></span>
-<?php if(strtotime($survey['time_start'])<time()&&time()<strtotime($survey['time_end'])&&$survey['public']==2){ ?>
+<?php if($survey['public']==1){ ?>
+    <span class="orangeH25">未发布</span>
+<?php }elseif($survey['public']==3){ ?>
+    <span class="orangeH25">暂停发布</span>
+<?php }elseif(strtotime($survey['time_start'])<time()&&time()<strtotime($survey['time_end'])){ ?>
     <span class="greenH25 ml20">进行中</span>
-<?php }elseif(time()<strtotime($survey['time_start'])||$survey['public']!=2){ ?>
-    <span class="orangeH25 ml20">未发布</span>
+<?php }elseif(time()<strtotime($survey['time_start'])){ ?>
+    <span class="orangeH25 ml20">未开始</span>
 <?php }elseif(time()>strtotime($survey['time_end'])){ ?>
     <span class="grayH25 ml20">已结束</span>
 <?php } ?>

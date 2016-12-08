@@ -125,7 +125,7 @@ class Annualsurvey extends CI_Controller
         $act = $this->input->post('act');
         $errmsg = '';
         $survey=$this->annualsurvey_model->get_row(array('id'=>$surveyid));
-        $survey['title'].='(副本)';
+        $survey['title'].='（副本）';
         unset($survey['time_start']);
         unset($survey['time_end']);
         if (!empty($act)) {
@@ -611,10 +611,17 @@ class Annualsurvey extends CI_Controller
         $query = $this->db->query("select count(a.id) as total from ($answersql) a ");
         $total=$query->row_array();
         $answer['courses']['total']=$total['total'];
-        $anscount=$this->annualanswer_model->get_count(array('company_code'=>$this->_logininfo['company_code'],'annual_survey_id'=>$surveyid,'step'=>5));
+
+        $sql = "select a.content,s.name "
+            . "from " . $this->db->dbprefix('annual_answer') . " a "
+            . "left join " . $this->db->dbprefix('student') . " s on a.student_id=s.id "
+            . " where a.company_code = " . $this->_logininfo['company_code'] . " and a.annual_survey_id=$surveyid and step='5' ";
+        $query = $this->db->query($sql . " order by a.created asc ");
+        $answerlist = $query->result_array();
+        $anscount=count($answerlist);
 
         $this->load->view('header');
-        $this->load->view('annual_survey/answer_analysis', compact('parm','survey','departments','second_departments','answer','anscount'));
+        $this->load->view('annual_survey/answer_analysis', compact('parm','survey','departments','second_departments','answer','anscount','answerlist'));
         $this->load->view('footer');
 
     }

@@ -516,6 +516,200 @@ class Export extends CI_Controller
         }
     }
 
+    //导出年度计划进度excel
+    public function planprogress($planid){
+        if($this->isAllowPlanid($planid)){
+            $plan=$this->annualplan_model->get_row(array('id'=>$planid));
+            //计划课程数据
+            $this->load->library(array('countdata'));
+            $dataym=$this->countdata->progressdata($planid);
+
+            $this->load->library('PHPExcel');
+            $objPHPExcel = new PHPExcel();
+            $objActSheet = $objPHPExcel->getActiveSheet()->setTitle('计划进度');
+            //excel style
+            $styleTitle = array(
+                'font' => array('color' => array('argb' => 'FFffffff')),
+                'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'startcolor' => array('argb' => 'FF00bbd3')
+                ),
+            );
+            $styleTh = array(
+                'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER),
+                'fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'startcolor' => array('argb' => 'FFf5f5f5')
+                ),
+            );
+            $styleTd = array(
+                'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER),
+            );
+            $styleTdLeft = array(
+                'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER),
+            );
+
+            //$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, 8, 'Some value');
+            $i=1;
+            //部门总览
+            if(count($dataym)>0){
+                $objActSheet->mergeCells('A'.$i.':G'.$i)->setCellValue('A'.$i, '课程进度')
+                    ->setCellValue('A'.($i+1), '时间')
+                    ->setCellValue('B'.($i+1), '计划开课')
+                    ->setCellValue('C'.($i+1), '实际开课')
+                    ->setCellValue('D'.($i+1), '调出课程')
+                    ->setCellValue('E'.($i+1), '调入课程')
+                    ->setCellValue('F'.($i+1), '取消课程')
+                    ->setCellValue('G'.($i+1), '加开课程');
+                $objActSheet->getStyle('A'.$i)->applyFromArray($styleTitle);
+                $objActSheet->getStyle('A'.($i+1))->applyFromArray($styleTh);
+                $objActSheet->getStyle('B'.($i+1))->applyFromArray($styleTh);
+                $objActSheet->getStyle('C'.($i+1))->applyFromArray($styleTh);
+                $objActSheet->getStyle('D'.($i+1))->applyFromArray($styleTh);
+                $objActSheet->getStyle('E'.($i+1))->applyFromArray($styleTh);
+                $objActSheet->getStyle('F'.($i+1))->applyFromArray($styleTh);
+                $objActSheet->getStyle('G'.($i+1))->applyFromArray($styleTh);
+                $i+=2;$fi=$i;
+                foreach ($dataym as $k=>$d){
+                    $objActSheet->setCellValueExplicit('A'.$i, $k,PHPExcel_Cell_DataType::TYPE_STRING);
+                    $objActSheet->setCellValue('B'.$i,round($d['plan_num']));
+                    $objActSheet->setCellValue('C'.$i,round($d['actual_num']));
+                    $objActSheet->setCellValue('D'.$i,round($d['change_out_num']));
+                    $objActSheet->setCellValue('E'.$i,round($d['change_in_num']));
+                    $objActSheet->setCellValue('F'.$i,round($d['cancel_num']));
+                    $objActSheet->setCellValue('G'.$i,round($d['add_num']));
+                    $objActSheet->getStyle('A'.$i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('B'.$i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('C'.$i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('D'.$i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('E'.$i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('F'.$i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('G'.$i)->applyFromArray($styleTd);
+                    ++$i;
+                }
+                if(count($dataym)>1) {
+                    $objActSheet->setCellValue('A' . $i, '总计');
+                    $objActSheet->setCellValue('B' . $i, "=SUM(B" . $fi . ":B" . ($i - 1) . ")");
+                    $objActSheet->setCellValue('C' . $i, "=SUM(C" . $fi . ":C" . ($i - 1) . ")");
+                    $objActSheet->setCellValue('D' . $i, "=SUM(D" . $fi . ":D" . ($i - 1) . ")");
+                    $objActSheet->setCellValue('E' . $i, "=SUM(E" . $fi . ":E" . ($i - 1) . ")");
+                    $objActSheet->setCellValue('F' . $i, "=SUM(F" . $fi . ":F" . ($i - 1) . ")");
+                    $objActSheet->setCellValue('G' . $i, "=SUM(G" . $fi . ":G" . ($i - 1) . ")");
+                    $objActSheet->getStyle('A' . $i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('B' . $i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('C' . $i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('D' . $i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('E' . $i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('F' . $i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('G' . $i)->applyFromArray($styleTd);
+                    ++$i;
+                }
+            }
+            //预算总览
+            $objActSheet->mergeCells('A' . $i . ':G' . $i)->setCellValue('A' . $i, '');
+            ++$i;
+            $objActSheet->mergeCells('A'.$i.':G'.$i)->setCellValue('A'.$i, '预算总览')
+                ->setCellValue('A'.($i+1), '时间')
+                ->mergeCells('B'.($i+1).':C'.($i+1))->setCellValue('B'.($i+1), '计划预算')
+                ->mergeCells('D'.($i+1).':E'.($i+1))->setCellValue('D'.($i+1), '实际支出')
+                ->mergeCells('F'.($i+1).':G'.($i+1))->setCellValue('F'.($i+1), '结余预算');
+            $objActSheet->getStyle('A'.$i)->applyFromArray($styleTitle);
+            $objActSheet->getStyle('A'.($i+1))->applyFromArray($styleTh);
+            $objActSheet->getStyle('B'.($i+1))->applyFromArray($styleTh);
+            $objActSheet->getStyle('D'.($i+1))->applyFromArray($styleTh);
+            $objActSheet->getStyle('F'.($i+1))->applyFromArray($styleTh);
+            $i+=2;$fi=$i;
+            foreach ($dataym as $k=>$d){
+                $objActSheet->setCellValueExplicit('A'.$i, $k,PHPExcel_Cell_DataType::TYPE_STRING);
+                $objActSheet->mergeCells('B'.$i.':C'.$i)->setCellValue('B'.$i,round($d['plan_price']));
+                $objActSheet->mergeCells('D'.$i.':E'.$i)->setCellValue('D'.$i,round($d['actual_price']));
+                $objActSheet->mergeCells('F'.$i.':G'.$i)->setCellValue('F'.$i,round($d['plan_price']-$d['actual_price']));
+                $objActSheet->getStyle('A'.$i)->applyFromArray($styleTd);
+                $objActSheet->getStyle('B'.$i)->applyFromArray($styleTd);
+                $objActSheet->getStyle('D'.$i)->applyFromArray($styleTd);
+                $objActSheet->getStyle('F'.$i)->applyFromArray($styleTd);
+                ++$i;
+            }
+            if(count($dataym)>1){
+                $objActSheet->setCellValue('A'.$i,'全部');
+                $objActSheet->mergeCells('B'.$i.':C'.$i)->setCellValue('B'.$i,"=SUM(B".$fi.":B".($i-1).")");
+                $objActSheet->mergeCells('D'.$i.':E'.$i)->setCellValue('D'.$i,"=SUM(D".$fi.":D".($i-1).")");
+                $objActSheet->mergeCells('F'.$i.':G'.$i)->setCellValue('F'.$i,"=SUM(F".$fi.":F".($i-1).")");
+                $objActSheet->getStyle('A'.$i)->applyFromArray($styleTd);
+                $objActSheet->getStyle('B'.$i)->applyFromArray($styleTd);
+                $objActSheet->getStyle('D'.$i)->applyFromArray($styleTd);
+                $objActSheet->getStyle('F'.$i)->applyFromArray($styleTd);
+                ++$i;
+            }
+
+            //进度详情
+            $objActSheet->mergeCells('A' . $i . ':G' . $i)->setCellValue('A' . $i, '');
+            ++$i;
+            $objActSheet->mergeCells('A'.$i.':G'.$i)->setCellValue('A'.$i, '进度详情')
+                ->setCellValue('A'.($i+1), '时间')
+                ->mergeCells('B'.($i+1).':C'.($i+1))->setCellValue('B'.($i+1), '课程名称')
+                ->setCellValue('D'.($i+1), '执行情况')
+                ->setCellValue('E'.($i+1), '开课时间')
+                ->setCellValue('F'.($i+1), '计划预算')
+                ->setCellValue('G'.($i+1), '实际支出');
+            $objActSheet->getStyle('A'.$i)->applyFromArray($styleTitle);
+            $objActSheet->getStyle('A'.($i+1))->applyFromArray($styleTh);
+            $objActSheet->getStyle('B'.($i+1))->applyFromArray($styleTh);
+            $objActSheet->getStyle('D'.($i+1))->applyFromArray($styleTh);
+            $objActSheet->getStyle('E'.($i+1))->applyFromArray($styleTh);
+            $objActSheet->getStyle('F'.($i+1))->applyFromArray($styleTh);
+            $objActSheet->getStyle('G'.($i+1))->applyFromArray($styleTh);
+            $i+=2;
+            $dataymIndex=0;
+            foreach ($dataym as $k=>$d) {
+                ++$dataymIndex;
+                if (count($d['courses']) > 0) {
+                    $objActSheet->mergeCells('A'.$i.':A'.($i+count($d['courses'])-1))->setCellValueExplicit('A'.$i, $k,PHPExcel_Cell_DataType::TYPE_STRING);
+                    foreach ($d['courses'] as $ck => $c) {
+                        $objActSheet->mergeCells('B'.$i.':C'.$i)->setCellValue('B'.$i, empty($c['plan_course_title'])?$c['title']:$c['plan_course_title']);
+                        $status_txt='开课';
+                        if(empty($c['pc_id'])||$c['annual_plan_id']!=$plan['id']){
+                            $status_txt = '加课';
+                        }elseif(empty($c['course_id']) || $c['isdel']==1 || $c['ispublic']==2){
+                            $status_txt = count($dataym)==$dataymIndex?'未开':'取消';
+                        }elseif($c['annual_plan_id']==$plan['id']&&($c['plan_year'].'.'.$c['plan_month']!=$k)){
+                            $status_txt = '调入';
+                        }elseif($c['isdel']==2&&$c['ispublic']==1&&(date("Y.m",strtotime($c['time_start']))!=$k)){
+                            $status_txt = '调出';
+                        }
+                        $objActSheet->setCellValue('D'.$i, $status_txt);
+                        $objActSheet->setCellValue('E'.$i,(!empty($c['time_start']))?date("m.d H:i",strtotime($c['time_start'])):'');
+                        $objActSheet->setCellValue('F'.$i, $c['price']);
+                        $objActSheet->setCellValue('G'.$i, $c['expend']);
+                        $objActSheet->getStyle('A'.$i)->applyFromArray($styleTd);
+                        $objActSheet->getStyle('D'.$i)->applyFromArray($styleTd);
+                        $objActSheet->getStyle('E'.$i)->applyFromArray($styleTd);
+                        $objActSheet->getStyle('F'.$i)->applyFromArray($styleTd);
+                        $objActSheet->getStyle('G'.$i)->applyFromArray($styleTd);
+                        ++$i;
+                    }
+                }else{
+                    $objActSheet->setCellValueExplicit('A'.$i, $k,PHPExcel_Cell_DataType::TYPE_STRING);
+                    $objActSheet->mergeCells('B'.$i.':G'.$i)->setCellValue('B'.$i, '暂无课程记录');
+                    $objActSheet->getStyle('A'.$i)->applyFromArray($styleTd);
+                    $objActSheet->getStyle('B'.$i)->applyFromArray($styleTd);
+                    ++$i;
+                }
+            }
+
+
+            $name=$plan['title'].'执行进度'.date("YmdHis");
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="'.$name.'.xls"');
+            header('Cache-Control: max-age=0');
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
+            exit;
+        }else{
+            echo '数据错误,导出失败';
+        }
+    }
+
     //是否是自己公司下的课程
     private function isAllowCourseid($courseid){
         if(empty($courseid)||$this->course_model->get_count(array('id' => $courseid,'company_code'=>$this->_logininfo['company_code']))<=0){

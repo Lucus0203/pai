@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css" />
+<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css?1128" />
 <script type="text/javascript">
     $(function(){$('.shareBtn').click(function(){return confirm('确定发布吗?');});});
 </script>
@@ -20,6 +20,7 @@
                             <div class="imgBox"><img src="<?php echo empty($course['page_img'])?base_url().'images/course_default_img.jpg':base_url('uploads/course_img/'.$course['page_img']) ?>" alt="" width="160"></div>
                                 <div class="listText">
                                         <p class="titp"><?php echo $course['title'] ?></p>
+                                        <?php if(!empty($course['external'])){?><p>内训/公开：<?php echo $course['external']==1?'公开':'内训' ?></p><?php } ?>
                                         <p>开课时间：<?php echo $course['time_start'] ?> 至 <?php echo $course['time_end'] ?></p>
                                         <p>课程地点：<?php echo $course['address'] ?></p>
                                         <p>课程讲师：<a href="<?php echo site_url('teacher/teacherinfo/'.$teacher['id']) ?>" class="blue"><?php echo $teacher['name'] ?></a></span></p>

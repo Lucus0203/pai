@@ -161,10 +161,10 @@
 
         <div class="logTab">
             <ul class="logTabUl">
-                <li>公司信息</li>
-                <li>密码修改</li>
+                <li><a style="color:#484848;" href="<?php echo site_url('center/index/1') ?>">公司信息</a></li>
+                <li><a style="color:#484848;" href="<?php echo site_url('center/index/2') ?>">密码修改</a></li>
                 <?php if ($loginInfo['role'] == 1) { ?>
-                    <li>权限设置</li><?php } ?>
+                    <li><a style="color:#484848;" href="<?php echo site_url('center/index/3') ?>">权限设置</a></li><?php } ?>
             </ul>
             <p class="tabLine" style="left: 17px; width: 72px;"></p>
         </div>

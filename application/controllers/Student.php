@@ -9,7 +9,7 @@ class Student extends CI_Controller
         parent::__construct();
         $this->load->library(array('session'));
         $this->load->helper(array('form', 'url'));
-        $this->load->model(array('user_model', 'useractionlog_model', 'department_model', 'student_model'));
+        $this->load->model(array('user_model', 'useractionlog_model', 'department_model', 'student_model','teacher_model'));
 
         $this->_logininfo = $this->session->userdata('loginInfo');
         if (empty($this->_logininfo)) {
@@ -52,6 +52,7 @@ class Student extends CI_Controller
                 'email' => $this->input->post('email'),
                 'user_name' => $this->input->post('mobile'),
                 'user_pass' => $this->input->post('student_pass'),
+                'isteacher' => $this->input->post('isteacher'),
                 'role' => $this->input->post('role'));
             $s['department_id']=$this->input->post('department_id')??$this->input->post('department_parent_id');
 
@@ -62,6 +63,7 @@ class Student extends CI_Controller
             } else {
                 $s['user_pass'] = md5($s['user_pass']);
                 $id = $this->student_model->create($s);
+                $this->synteacher($id);//同步讲师属性
                 //创建下级管理员账号
                 if ($s['role'] != 1) {
                     $useracount = array('student_id' => $id,
@@ -122,6 +124,7 @@ class Student extends CI_Controller
                 'email' => $this->input->post('email'),
                 'user_name' => $this->input->post('user_name'),
                 'user_pass' => $this->input->post('student_pass'),
+                'isteacher' => $this->input->post('isteacher'),
                 'role' => $this->input->post('role'),
                 'isleaving' => $this->input->post('isleaving'));
             $s['department_id']=$this->input->post('department_id')??$this->input->post('department_parent_id');
@@ -134,6 +137,7 @@ class Student extends CI_Controller
                 $res['student'] = $s;
             } else {
                 $this->student_model->update($s, $id);
+                $this->synteacher($id);//同步讲师属性
                 //创建/更新下级管理员账号
                 if ($s['role'] != 1 && $s['role'] != 9) {
                     $u = $this->user_model->get_row(" student_id = $id ");
@@ -177,6 +181,23 @@ class Student extends CI_Controller
         $this->load->view('footer');
     }
 
+    //同步讲师
+    private function synteacher($studentid){
+        $teacher=$this->teacher_model->get_row(array('student_id'=>$studentid));
+        $student=$this->student_model->get_row(array('id'=>$studentid));
+        if($student['isteacher']==1&&$student['isdel']==2){//是讲师
+            if(!empty($teacher['student_id'])){
+                $this->teacher_model->update(array('isdel'=>2),$teacher['id']);
+            }else{
+                $this->teacher_model->create(array('company_code'=>$this->_logininfo['company_code'],'student_id'=>$studentid,'name'=>$student['name']));
+            }
+        }else{//不是
+            if(!empty($teacher['student_id'])){
+                $this->teacher_model->update(array('isdel'=>1),$teacher['id']);
+            }
+        }
+    }
+
     //删除学员
     public function del($id)
     {
@@ -184,6 +205,7 @@ class Student extends CI_Controller
         if ($s['company_code'] == $this->_logininfo['company_code']) {
             $this->student_model->update(array('isdel' => 1), $id);
             $this->user_model->del(array('student_id' => $id));
+            $this->synteacher($id);//同步讲师属性
         }
         redirect($_SERVER['HTTP_REFERER']);
     }

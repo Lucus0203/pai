@@ -65,7 +65,8 @@ class Annualplan extends CI_Controller
             $plan = array('title' => $this->input->post('title'),
                 'company_code' => $this->_logininfo['company_code'],
                 'annual_survey_id' => $this->input->post('annual_survey_id'),
-                'note' => $this->input->post('note'));
+                'note' => $this->input->post('note'),
+                'progress' => $this->input->post('progress'));
             $id=$this->annualplan_model->create($plan);
             redirect(site_url('annualplan/course/'.$id));
         }
@@ -86,7 +87,8 @@ class Annualplan extends CI_Controller
         $act = $this->input->post('act');
         if (!empty($act)) {
             $plan = array('title' => $this->input->post('title'),
-                'note' => $this->input->post('note'));
+                'note' => $this->input->post('note'),
+                'progress' => $this->input->post('progress'));
             $this->annualplan_model->update($plan,$planid);
             redirect(site_url('annualplan/course/'.$planid));
         }
@@ -131,7 +133,7 @@ class Annualplan extends CI_Controller
         $config['total_rows'] = $total_rows;
         $this->pagination->initialize($config);
         $links=$this->pagination->create_links();
-        $query = $this->db->query($sql . " order by ac.id asc limit " . ($page - 1) * $page_size . "," . $page_size);
+        $query = $this->db->query($sql . " order by ac.annual_course_type_id asc,aac.num desc limit " . ($page - 1) * $page_size . "," . $page_size);
         $courses = $query->result_array();
 
         $total=$this->annualcourse_model->get_count("company_code=" . $this->_logininfo['company_code'] ." and annual_survey_id = ".$plan['annual_survey_id']);
@@ -187,6 +189,7 @@ class Annualplan extends CI_Controller
                 $syncourse = array('user_id'=>$this->_logininfo['id'],
                     'company_code' => $this->_logininfo['company_code'],
                     'title' => $c['title'],
+                    'time_start' => $c['year'].'-'.$c['month'].'-01 09:00:00',
                     'teacher_id' => $c['teacher_id'],
                     'price' => $c['price'],
                     'external' => $c['external'],
@@ -247,6 +250,7 @@ class Annualplan extends CI_Controller
         foreach ($acourses as $ac){
             $c = array('user_id'=>$this->_logininfo['id'],
                 'company_code' => $this->_logininfo['company_code'],
+                'time_start' => $ac['year'].'-'.$ac['month'].'-01 09:00:00',
                 'title' => $ac['title'],
                 'teacher_id' => $ac['teacher_id'],
                 'price' => $ac['price'],
@@ -727,13 +731,15 @@ AND apc.openstatus =1 ";
             $price_total = $query->row_array();
             $price_total = $price_total['price_total'];
             //已开课程
-            $sql = "select course.* from " . $this->db->dbprefix('annual_plan_course') . " pc "
-                . " left join " . $this->db->dbprefix('course') . " course on pc.course_id=course.id "
-                . " where pc.openstatus = 1 and pc.annual_plan_id=".$p['id']." and pc.company_code = " . $this->_logininfo['company_code'] . " and course.time_end != '' and course.time_end is not null and unix_timestamp(now()) > unix_timestamp(course.time_end) " ;
-            $query = $this->db->query("select count(*) as num,sum(price) as price from ($sql) s ");
+            $sql = "select course.*,pc.annual_plan_id from " . $this->db->dbprefix('course') . " course "
+                . " left join " . $this->db->dbprefix('annual_plan_course') . " pc on pc.course_id=course.id "
+                . " where course.company_code = '".$this->_logininfo['company_code']."' and course.isdel = 2 and course.ispublic = 1 and (course.time_start >= '".$sc['year'].'-'.$sc['month']."-01 00:00:00' and unix_timestamp(course.time_start) <= unix_timestamp(now()) ) ";
+            $query = $this->db->query("select sum(expend) as expend from ($sql) s ");
             $num = $query->row_array();
-            $plans[$k]['progress_course'] = count($cs)>0?round($num['num']/count($cs)*100):0;
-            $plans[$k]['progress_price'] = $price_total*1>0?round($num['price']/$price_total*100):0;
+            $plans[$k]['progress_price'] = $price_total*1>0?round($num['expend']/$price_total*100,2):0;
+            $query = $this->db->query("select count(*) as num from ($sql) s WHERE s.annual_plan_id= ".$p['id']);
+            $num = $query->row_array();
+            $plans[$k]['progress_course'] = count($cs)>0?round($num['num']/count($cs)*100,2):0;
         }
 
         $isAccessAccount=$this->isAccessAccount();
@@ -745,10 +751,14 @@ AND apc.openstatus =1 ";
 
     //年度计划进度详细
     public function progressdetail($planid){
+        $this->isAllowPlanid($planid);
         $plan=$this->annualplan_model->get_row(array('id'=>$planid));
+        //计划课程数据
+        $this->load->library(array('countdata'));
+        $dataym=$this->countdata->progressdata($planid);
 
         $this->load->view('header');
-        $this->load->view('annual_plan/progress_detail', compact('plan'));
+        $this->load->view('annual_plan/progress_detail', compact('plan','dataym'));
         $this->load->view('footer');
     }
 

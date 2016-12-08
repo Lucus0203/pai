@@ -9,7 +9,7 @@ class Teacher extends CI_Controller
         parent::__construct();
         $this->load->library(array('session', 'pagination'));
         $this->load->helper(array('form', 'url'));
-        $this->load->model(array('teacher_model', 'useractionlog_model'));
+        $this->load->model(array('teacher_model', 'useractionlog_model','student_model','department_model'));
 
         $this->_logininfo = $this->session->userdata('loginInfo');
         if (empty($this->_logininfo)) {
@@ -86,14 +86,12 @@ class Teacher extends CI_Controller
     //创建课程
     public function teachercreate()
     {
-        $res = array();
         $act = $this->input->post('act');
+        $logininfo = $this->_logininfo;
         if (!empty($act)) {
             $refere_url=$this->input->post('refere_url');
-            $logininfo = $this->_logininfo;
             $t = array('company_code' => $logininfo['company_code'],
                 'type' => $this->input->post('type'),
-                'name' => $this->input->post('name'),
                 'title' => $this->input->post('title'),
                 'specialty' => $this->input->post('specialty'),
                 'years' => $this->input->post('years'),
@@ -119,13 +117,23 @@ class Teacher extends CI_Controller
                 $this->load->library('image_lib', $config);
                 $this->image_lib->resize();
             }
+            if($t['type']==1){
+                $t['student_id']=$this->input->post('student_id');
+                $student=$this->student_model->get_row(array('id'=>$t['student_id'],'company_code'=>$t['company_code']));
+                $this->student_model->update(array('isteacher'=>1),$student['id']);
+                $t['name']=$student['name'];
+            }else{
+                $t['name']=$this->input->post('name');
+            }
             $id = $this->teacher_model->create($t);
             echo '<script>history.go(-2);</script>';
             return;
         }
+        $where = "parent_id is null and company_code = '{$logininfo['company_code']}' ";
+        $departments = $this->department_model->get_all($where);
 
         $this->load->view('header');
-        $this->load->view('teacher/edit', $res);
+        $this->load->view('teacher/edit', compact('departments'));
         $this->load->view('footer');
     }
 
@@ -139,7 +147,6 @@ class Teacher extends CI_Controller
             $logininfo = $this->_logininfo;
             $t = array('company_code' => $logininfo['company_code'],
                 'type' => $this->input->post('type'),
-                'name' => $this->input->post('name'),
                 'title' => $this->input->post('title'),
                 'specialty' => $this->input->post('specialty'),
                 'years' => $this->input->post('years'),
@@ -163,12 +170,37 @@ class Teacher extends CI_Controller
                 $this->load->library('image_lib', $config);
                 $this->image_lib->resize();
             }
+            $teacher = $this->teacher_model->get_row(array('id' => $id,'company_code'=>$logininfo['company_code']));
+            if($t['type']==1){
+                $t['student_id']=$this->input->post('student_id');
+                if($t['student_id']!=$teacher['student_id']){
+                    $this->student_model->update(array('isteacher'=>2),$teacher['student_id']);//更新上一个学员讲师状态
+                    $student=$this->student_model->get_row(array('id'=>$t['student_id'],'company_code'=>$t['company_code']));
+                    $this->student_model->update(array('isteacher'=>1),$student['id']);
+                    $t['name']=$student['name'];
+                }
+            }else{
+                $this->student_model->update(array('isteacher'=>2),$teacher['student_id']);
+                $t['student_id']=null;
+                $t['name']=$this->input->post('name');
+            }
             $this->teacher_model->update($t, $id);
             $msg = '讲师保存成功';
+            echo '<script>history.go(-2);</script>';
+            return;
         }
         $teacher = $this->teacher_model->get_row(array('id' => $id,'company_code'=>$logininfo['company_code']));
+        $where = "parent_id is null and company_code = '{$logininfo['company_code']}' ";
+        $departments = $this->department_model->get_all($where);
+        if(!empty($teacher['student_id'])){
+            $stu=$this->student_model->get_row(array('id'=>$teacher['student_id']));
+            $where = "parent_id = ".$stu['department_parent_id']." and company_code = '{$logininfo['company_code']}' ";
+            $second_departments=$this->department_model->get_all($where);
+            $where = " department_id = ".$stu['department_id']." and company_code = '{$logininfo['company_code']}' and isdel=2 and isleaving=2 and (isteacher=2 or id = ".$teacher['student_id'].") ";
+            $students=$this->student_model->get_all($where);
+        }
         $this->load->view('header');
-        $this->load->view('teacher/edit', array('teacher' => $teacher, 'msg' => $msg));
+        $this->load->view('teacher/edit', compact('teacher','msg','departments','second_departments','students','stu'));
         $this->load->view('footer');
     }
 
@@ -176,9 +208,30 @@ class Teacher extends CI_Controller
     public function teacherinfo($id)
     {
         $teacher = $this->teacher_model->get_row(array('id' => $id,'company_code'=>$this->_logininfo['company_code']));
+        $student = $this->student_model->get_row(array('id'=>$teacher['student_id'],'company_code'=>$this->_logininfo['company_code']));
+        $depart_parent=$this->department_model->get_row(array('id'=>$student['department_parent_id']));
+        $department=$this->department_model->get_row(array('id'=>$student['department_id']));
         $this->load->view('header');
-        $this->load->view('teacher/info', array('teacher' => $teacher));
+        $this->load->view('teacher/info', compact('teacher','student','depart_parent','department'));
         $this->load->view('footer');
+    }
+
+    //Ajax获取部门里的非老师的学员
+    public function ajaxStudent($teacherid)
+    {
+        $departmentid = $this->input->post('departmentid');
+        $teacher=$this->teacher_model->get_row(array('id'=>$teacherid,'company_code'=>$this->_logininfo['company_code']));
+        if(!empty($departmentid)){
+            if(!empty($teacher['student_id'])){
+                $where=" department_id = $departmentid and isdel=2 and isleaving=2 and (isteacher=2 or id = ".$teacher['student_id'].") ";
+                $students = $this->student_model->get_all($where);
+            }else{
+                $students = $this->student_model->get_all(array('department_id' => $departmentid,'isdel'=>2,'isleaving'=>2,'isteacher'=>2));
+            }
+        }else{
+            $students = array();
+        }
+        echo json_encode(array('students' => $students));
     }
 
     //讲师编辑
