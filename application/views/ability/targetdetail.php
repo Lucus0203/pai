@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css"/>
+<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css?1228"/>
 <script type="text/javascript" src="<?php echo base_url(); ?>js/Chart.bundle.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery-scrolltofixed-min.js"></script>
 <style>

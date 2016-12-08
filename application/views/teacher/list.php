@@ -5,7 +5,7 @@
         })
     });
 </script>
-<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css"/>
+<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css?1228"/>
 <div class="wrap">
     <div class="comBox">
         <div class="texturetip clearfix p1524"><span class="fLeft pt5">讲师列表</span>

@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css"/>
+<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css?1228"/>
 <script type="text/javascript">
     currentTargetIndex=0;
     $(function(){
