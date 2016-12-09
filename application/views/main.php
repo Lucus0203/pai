@@ -32,7 +32,7 @@
 
     <div class="navbar-container" id="navbar-container">
         <div class="navbar-header pull-left">
-            <a href="#" class="navbar-brand"><img src="<?php echo site_url('index/manual') ?>images/logo01.png" alt=""></a>
+            <a href="#" class="navbar-brand"><img src="<?php echo base_url();?>images/logo01.png" alt=""></a>
         </div>
 
         <div class=" pull-right">
