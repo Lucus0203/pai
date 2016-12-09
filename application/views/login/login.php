@@ -12,13 +12,13 @@
         if($(window.parent.document).find(".navbar").length>0){
             window.parent.location='<?php echo site_url('login/loginout'); ?>';
         }
-        var _hmt = _hmt || [];
-        (function() {
-            var hm = document.createElement("script");
-            hm.src = "//hm.baidu.com/hm.js?9432a72cc245c2b9cafed658f471d489";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-        })();
+//        var _hmt = _hmt || [];
+//        (function() {
+//            var hm = document.createElement("script");
+//            hm.src = "//hm.baidu.com/hm.js?9432a72cc245c2b9cafed658f471d489";
+//            var s = document.getElementsByTagName("script")[0];
+//            s.parentNode.insertBefore(hm, s);
+//        })();
         $(document).ready(function(){
             $('input, textarea').placeholder();
             $('.logTabUl li').click(function(){

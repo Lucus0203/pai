@@ -9,13 +9,13 @@
     <script type="text/javascript" src="<?php echo base_url();?>js/jquery.placeholder.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery.validate.min.1.8.0.1.js"></script>
     <script type="text/javascript">
-        var _hmt = _hmt || [];
-        (function () {
-            var hm = document.createElement("script");
-            hm.src = "//hm.baidu.com/hm.js?9432a72cc245c2b9cafed658f471d489";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-        })();
+//        var _hmt = _hmt || [];
+//        (function () {
+//            var hm = document.createElement("script");
+//            hm.src = "//hm.baidu.com/hm.js?9432a72cc245c2b9cafed658f471d489";
+//            var s = document.getElementsByTagName("script")[0];
+//            s.parentNode.insertBefore(hm, s);
+//        })();
         $(document).ready(function () {
             if (!+[1,]) {
                 $('.ieTxt').show();
