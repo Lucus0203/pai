@@ -10,19 +10,19 @@
 
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <!-- bootstrap & fontawesome -->
-    <link rel="stylesheet" href="css/bootstrap.css" />
-    <link rel="stylesheet" href="css/font-awesome.css" />
+    <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap.css" />
+    <link rel="stylesheet" href="<?php echo base_url();?>css/font-awesome.css" />
     <!--<link rel="stylesheet" href="css/ace-fonts.css" />-->
-    <link rel="stylesheet" href="css/iframe.css?1209" />
+    <link rel="stylesheet" href="<?php echo base_url();?>css/iframe.css?1209" />
 
-    <!--[if lte IE 9]><link rel="stylesheet" href="css/ace-part2.css" class="ace-main-stylesheet" />
+    <!--[if lte IE 9]><link rel="stylesheet" href="<?php echo base_url();?>css/ace-part2.css" class="ace-main-stylesheet" />
     <![endif]-->
-    <!--[if lte IE 9]> <link rel="stylesheet" href="css/ace-ie.css" /> <![endif]-->
+    <!--[if lte IE 9]> <link rel="stylesheet" href="<?php echo base_url();?>css/ace-ie.css" /> <![endif]-->
     <!-- ace settings handler -->
     <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
     <!--[if lte IE 8]>
-    <script src="js/html5shiv.js"></script>
-    <script src="js/respond.js"></script>
+    <script src="<?php echo base_url();?>js/html5shiv.js"></script>
+    <script src="<?php echo base_url();?>js/respond.js"></script>
     <![endif]-->
 </head>
 
@@ -178,10 +178,10 @@
 
 <!--[if IE]>
 <script type="text/javascript">
-    window.jQuery || document.write("<script src='js/jquery1x.js'>" + "<" + "/script>");
+    window.jQuery || document.write("<script src='<?php echo base_url();?>js/jquery1x.js'>" + "<" + "/script>");
 </script>
 <![endif]-->
-<script src="js/jquery.slimscroll.js"></script>
+<script src="<?php echo base_url();?>js/jquery.slimscroll.js"></script>
 <script type="text/javascript">
 
 
@@ -237,14 +237,14 @@
     }
 </script>
 
-<script src="js/bootstrap.js"></script>
+<script src="<?php echo base_url();?>js/bootstrap.js"></script>
 
 <!-- ace scripts -->
-<script src="js/ace/elements.scroller.js"></script>
-<script src="js/ace/elements.aside.js"></script>
-<script src="js/ace/ace.js"></script>
-<script src="js/ace/ace.sidebar.js?112101"></script>
-<script src="js/ace/ace.sidebar-scroll-1.js"></script>
+<script src="<?php echo base_url();?>js/ace/elements.scroller.js"></script>
+<script src="<?php echo base_url();?>js/ace/elements.aside.js"></script>
+<script src="<?php echo base_url();?>js/ace/ace.js"></script>
+<script src="<?php echo base_url();?>js/ace/ace.sidebar.js?112101"></script>
+<script src="<?php echo base_url();?>js/ace/ace.sidebar-scroll-1.js"></script>
 <?php if($loginInfo['guid_step']!=5){$this->load->view ( 'walkthrough' );} ?>
 </body>
 
