@@ -164,10 +164,11 @@ class Login extends CI_Controller
             'user_pass' => $userinfo['user_pass'],
             'department_parent_id'=>$departmentid,
             'department_id'=>$departmentid,
+            'isteacher'=>1,
             'role' => 9);
         $studentid=$this->student_model->create($student);
         //创建讲师
-        $teacherid=$this->teacher_model->create(array('company_code'=>$userinfo['company_code'],'name'=>$userinfo['real_name']));
+        $teacherid=$this->teacher_model->create(array('company_code'=>$userinfo['company_code'],'student_id'=>$studentid,'name'=>$userinfo['real_name']));
         //其他部门
         $d = array('company_code' => $userinfo['company_code'], 'name' => '其他');
         $this->department_model->create($d);
