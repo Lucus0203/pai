@@ -37,10 +37,9 @@ class Countdata
         }
         if(count($data)>0){
             $first=$data[0];
-            $last=end($data);
             $firsty=substr($first['ym'],0,4);
             $firstm=substr($first['ym'],-2);
-            $lastym=$last['ym']>date("Ym",time())?date("Ym",time()):$last['ym'];
+            $lastym=date("Ym",time());
             $lasty=substr($lastym,0,4);
             $lastm=substr($lastym,-2);
             for($y=$firsty;$y<=$lasty;$y++){
