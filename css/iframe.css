@@ -93,7 +93,7 @@ input::-moz-placeholder,
 	width: 205px;
 	float: left;
 	background-color: #39595d;/*#00bbd3;*/
-    min-height: 680px;
+    min-height: 900px;
 }
 
 .navbar-container{
