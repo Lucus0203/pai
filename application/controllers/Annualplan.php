@@ -705,7 +705,9 @@ AND apc.openstatus =1 ";
         $this->load->database();
         //status 1进行中2未开始3已结束
         $sql = "select p.* from " . $this->db->dbprefix('annual_plan') . " p "
-            . "where p.isdel != 1 and p.progress=1 and p.company_code = " . $this->_logininfo['company_code'] ;
+            . " left join " . $this->db->dbprefix('annual_plan_course') . " pc on pc.annual_plan_id = p.id "
+            . " where pc.openstatus = 1 and p.isdel != 1 and p.progress=1 and p.company_code = " . $this->_logininfo['company_code']
+            . " group by pc.annual_plan_id ";
         $query = $this->db->query("select count(*) as num from ($sql) s ");
         $num = $query->row_array();
         $total_rows = $num['num'];
