@@ -63,7 +63,7 @@
                                 $('.textureSide').append('<div class="fnavi"><a href="<?php echo base_url() ?>department/index/' + res + '.html" class="flink"><i class="iup"></i>' + departname + '</a><ul class="clink departChildren' + res + '"></ul></div>');
                                 $('#conWindow').hide();
                             } else {
-                                $('ul.departChildren' + departid).append('<li><a target="_blank" href="<?php echo base_url() ?>department/index/' + res + '.html">' + departname + '</a></li>');
+                                $('ul.departChildren' + departid).append('<li><a href="<?php echo base_url() ?>department/index/' + res + '.html">' + departname + '</a></li>');
                                 $('#conWindow').hide();
                             }
                         }
@@ -88,9 +88,11 @@
                     success: function (res) {
                         if (res == 0) {
                             id = res;
-                            $('.textureSide a.on,.textureSide li.on a').remove();
-                            $('.textureCont').html('');
-                            $('#conWindow').hide();
+                            if($('.textureSide a.on,.textureSide li.on a').parent().parent().find('a').length>1){
+                                window.location=$('.textureSide a.on,.textureSide li.on a').parent().prev().find('a').attr('href');
+                            }else{
+                                window.location=$('.textureSide a.on,.textureSide li.on a').parent().parent().prev().attr('href');
+                            }
                         } else if (res == 1) {
                             alert('删除失败');
                         } else if (res == 2) {
@@ -288,7 +290,7 @@
                 </tr>
                 <tr>
                     <th></th>
-                    <td class="aLeft"><a jsbtn="okBtn" href="javascript:;" class="okBtn">保存设置</a></td>
+                    <td class="aLeft"><a jsbtn="okBtn" href="javascript:;" class="okBtn">保存</a></td>
                 </tr>
             </table>
 
