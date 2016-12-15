@@ -81,7 +81,7 @@
 	color: #747474;
 }
 
-.textureSide .fnavi ul.clink li a:hover {
+.textureSide .fnavi ul.clink li a:hover,.textureSide .fnavi ul.clink li.on a {
 	color: #62d6e4;
 }
 
