@@ -87,7 +87,6 @@
                     data: {'currentid': current_id},
                     success: function (res) {
                         if (res == 0) {
-                            id = res;
                             if($('.textureSide a.on,.textureSide li.on a').parent().parent().find('a').length>1){
                                 window.location=$('.textureSide a.on,.textureSide li.on a').parent().prev().find('a').attr('href');
                             }else{
