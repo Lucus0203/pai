@@ -83,12 +83,18 @@ class Department extends CI_Controller
         $parentid = $this->input->post('parentid');
         $departname = $this->input->post('departname');
         if (!empty($departname)) {
-            $d = array('company_code' => $logininfo['company_code'], 'name' => $departname);
-            if($this->department_model->get_count($d)>0){//已存在
-                echo -1;
-                return false;
-            }
-            if (!empty($parentid)) {
+            if(empty($parentid)){//一级部门
+                $d = array('company_code' => $logininfo['company_code'], 'name' => $departname,'level'=>0);
+                if($this->department_model->get_count($d)>0){//已存在
+                    echo -1;
+                    return false;
+                }
+            }else{
+                $d = array('company_code' => $logininfo['company_code'], 'name' => $departname,'parent_id'=>$parentid);
+                if($this->department_model->get_count($d)>0){//已存在
+                    echo -1;
+                    return false;
+                }
                 $p = $this->department_model->get_row(array('id' => $parentid));
                 $d['parent_id'] = $parentid;
                 $d['level'] = $p['level'] * 1 + 1;
@@ -104,7 +110,6 @@ class Department extends CI_Controller
     //部门编辑
     public function save()
     {
-        $logininfo = $this->_logininfo;
         $id = $this->input->post('currentid');
         $departname = $this->input->post('currentname');
         if (!empty($departname) && !empty($id)) {
