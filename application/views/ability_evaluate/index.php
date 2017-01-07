@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css?1228"/>
+<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css?0107"/>
 <script>
     $(document).ready(function(){
         $('.delBtnErr').click(function(){

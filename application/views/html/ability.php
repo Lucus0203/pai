@@ -1,5 +1,5 @@
 
-<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/texture.css" />
+<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/texture.css?0107" />
 <div class="wrap">
     <div class="nengli01" style="background-color: #ffffff;">
         <div class="ttl01 aCenter">能力模型</div>

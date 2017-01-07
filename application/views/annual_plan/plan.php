@@ -1,5 +1,5 @@
 <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/kecheng.css?1128"/>
-<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css"/>
+<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css?0107"/>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/print.css"/>
 <script>
     $(document).ready(function(){

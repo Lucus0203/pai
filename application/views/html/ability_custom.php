@@ -1,5 +1,5 @@
 
-<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/texture.css?1228" />
+<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/texture.css?0107" />
 <div class="wrap">
     <div class="textureCont nengli01">
         <div class="ttl01 aCenter">定制能力模型</div>

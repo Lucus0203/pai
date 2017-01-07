@@ -1,6 +1,6 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery-scrolltofixed-min.js"></script>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/kecheng.css?1128"/>
-<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css?1228"/>
+<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css?0107"/>
 <script>
     $(document).ready(function(){
         $('.sideLeft').scrollToFixed({
