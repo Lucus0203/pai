@@ -341,6 +341,7 @@
             </div>
             <ul class="com_btn_list clearfix">
                 <li><a class="okBtn" href="javascript:void(0);" jsBtn="okBtn">确定</a></li>
+            </ul>
         </div>
 
     </div>

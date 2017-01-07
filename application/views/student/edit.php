@@ -43,7 +43,7 @@ $(document).ready(function(){
                             alert('添加失败');
                         }else{
                             id=res;
-                            $('.textureSide').append('<div class="fnavi"><a href="<?php echo base_url() ?>department/index/'+res+'.html" class="flink"><i class="iup"></i>'+departname+'</a><ul class="clink departChildren'+res+'"></ul></div>');
+                            $('.textureSide').append('<div class="fnavi"><a href="<?php echo base_url() ?>department/index/'+res+'.html" class="flink"><i class="iup fa fa-angle-right fa-lg"></i>'+departname+'</a><ul class="clink departChildren'+res+'"></ul></div>');
                             $('select[name=department_parent_id]').append('<option value="'+res+'">'+departname+'</option>');
                             $('#conWindow').hide();
                         }
@@ -133,7 +133,7 @@ $(document).ready(function(){
         </div>
             <?php foreach ($departments as $d){ ?>
                 <div class="fnavi">
-                    <a href="<?php echo site_url('department/index/'.$d['id']) ?>" class="flink <?php echo $current_department['id']==$d['id']?'on':'' ?>"><i class="iup"></i><?php echo $d['name'] ?></a>
+                    <a href="<?php echo site_url('department/index/'.$d['id']) ?>" class="flink <?php echo $current_department['id']==$d['id']?'on':'' ?>"><i class="iup fa fa-angle-right fa-lg"></i><?php echo $d['name'] ?></a>
                     <ul class="clink departChildren<?php echo $d['id'] ?>">
                         <?php if(!empty($d['departs'])){
                             foreach ($d['departs'] as $dp){ ?>

@@ -15,7 +15,7 @@ class Notifyclass
         $this->CI =& get_instance();
         $this->CI->load->library(array('zhidingsms'));
         $this->CI->load->helper(array('form', 'url'));
-        $this->CI->load->model(array('user_model', 'company_model', 'course_model', 'teacher_model', 'homework_model', 'survey_model', 'ratings_model', 'student_model', 'department_model','abilityjob_model','annualsurvey_model','annualplan_model','companytokenwx_model'));
+        $this->CI->load->model(array('user_model', 'company_model', 'course_model', 'teacher_model', 'homework_model', 'survey_model', 'ratings_model', 'student_model', 'department_model','companyabilityjob_model','companyabilityjobevaluation_model','annualsurvey_model','annualplan_model','companytokenwx_model'));
 
         $config['protocol'] = 'smtp';
         $config['smtp_host'] = '127.0.0.1';
@@ -261,13 +261,14 @@ EOF;
     }
 
     //能力评估通知
-    public function abilitypublish($ability_job_id,$student_id){
-        $abilityjob = $this->CI->abilityjob_model->get_row(array('id' => $ability_job_id));
+    public function abilitypublish($evaluation_id,$student_id){
+        $evaluation=$this->CI->companyabilityjobevaluation_model->get_row(array('id'=>$evaluation_id));
+        $abilityjob = $this->CI->companyabilityjob_model->get_row(array('id' => $evaluation['ability_job_id']));
         $student = $this->CI->student_model->get_row(array('id' => $student_id));
         $company = $this->CI->company_model->get_row(array('code' => $student['company_code']));
 
-        $link = $this->CI->config->item('web_url') .'ability/assess/' . $ability_job_id . '/'.$student['company_code'].'.html';//链接
-        $link_short='ability/assess/' . $ability_job_id . '/'.$student['company_code'].'.html';
+        $link = $this->CI->config->item('web_url') .'ability/assess/' . $evaluation_id . '/'.$student['company_code'].'.html';//链接
+        $link_short='ability/assess/' . $evaluation_id . '/'.$student['company_code'].'.html';
         $sign=$company['name'];
         $sign.=($company['code']=='100276')?' 人力资源部':'';
         //短信通知

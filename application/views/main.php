@@ -105,19 +105,25 @@
                                 <a href="<?php echo site_url('department/index') ?>" target="backFramework"><i>&bull;</i>组织架构 </a>
                             </li>
                         <?php } ?>
+                        <li>
+                            <a href="javascript:;" target="backFramework"><i>&bull;</i>人才管理 </a>
+                        </li>
                     </ul>
                 </li>
                 <li>
                     <a href="JavaScript:;" target="backFramework" class="dropdown-toggle"><span class="menu-text"><i class="fa fa-line-chart"></i><s>能力模型</s></span><b class="fa fa-angle-right arrow "></b></a>
                     <ul class="submenu">
                         <li>
-                            <a href="<?php echo site_url('ability/index') ?>" target="backFramework"><i>&bull;</i>模型管理 </a>
+                            <a href="<?php echo site_url('abilitymanage/index') ?>" target="backFramework"><i>&bull;</i>模型管理 </a>
                         </li>
                         <li>
-                            <a href="<?php echo site_url('ability/entrymanagement') ?>" target="backFramework"><i>&bull;</i>词条管理 </a>
+                            <a href="<?php echo site_url('abilityentry/index') ?>" target="backFramework"><i>&bull;</i>词典管理 </a>
                         </li>
                         <li>
-                            <a href="<?php echo site_url('ability/evaluation') ?>" target="backFramework"><i>&bull;</i>能力评估 </a>
+                            <a href="<?php echo site_url('abilityevaluate/index') ?>" target="backFramework"><i>&bull;</i>能力评估 </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;" target="backFramework"><i>&bull;</i>人才盘点 </a>
                         </li>
                     </ul>
                 </li>

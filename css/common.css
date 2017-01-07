@@ -303,8 +303,13 @@ textarea:after {
 }
 
 .w157 {
-	min-width: 0 !important;
-	width: 157px !important;
+    min-width: 0 !important;
+    width: 157px !important;
+}
+
+.w184 {
+    min-width: 0 !important;
+    width: 184px !important;
 }
 
 .w100 {
@@ -1303,6 +1308,10 @@ textarea:after {
 	color: #898989;
 }
 
+.scrollListTable th,.scrollListTable td{
+    line-height: 1;
+}
+
 .startBox {
 	vertical-align: middle;
 	background: url(../images/star_rank.png) no-repeat left -23px;
@@ -1359,7 +1368,6 @@ textarea:after {
 }
 
 .popWinBox .pop_div {
-	width: 595px;
 	margin: 0 auto;
 	background-color: #fff;
 	position: fixed;
@@ -2186,4 +2194,9 @@ a.back-to-top {
     right: 20px;
     bottom: 50px;
     color:#31bad9;
+}
+
+/* 提示框 */
+.ui-tooltip{
+    background-color: #ffffe3 !important;
 }

@@ -60,7 +60,7 @@
                         }else {
                             id = res;
                             if (departid == '') {
-                                $('.textureSide').append('<div class="fnavi"><a href="<?php echo base_url() ?>department/index/' + res + '.html" class="flink"><i class="iup"></i>' + departname + '</a><ul class="clink departChildren' + res + '"></ul></div>');
+                                $('.textureSide').append('<div class="fnavi"><a href="<?php echo base_url() ?>department/index/' + res + '.html" class="flink"><i class="iup fa fa-angle-right fa-lg"></i>' + departname + '</a><ul class="clink departChildren' + res + '"></ul></div>');
                                 $('#conWindow').hide();
                             } else {
                                 $('ul.departChildren' + departid).append('<li><a href="<?php echo base_url() ?>department/index/' + res + '.html">' + departname + '</a></li>');
@@ -170,7 +170,7 @@
             <div class="fnavi">
                 <a href="<?php echo site_url('department/index/' . $d['id']) ?>"
                    class="flink <?php echo $current_department['id'] == $d['id'] ? 'on' : '' ?>"><i
-                        class="iup"></i><?php echo $d['name'] ?></a>
+                        class="iup fa fa-angle-right fa-lg"></i><?php echo $d['name'] ?></a>
                 <ul class="clink departChildren<?php echo $d['id'] ?>">
                     <?php if (!empty($d['departs'])) {
                         foreach ($d['departs'] as $dp) { ?>
