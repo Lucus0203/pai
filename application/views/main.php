@@ -106,7 +106,7 @@
                             </li>
                         <?php } ?>
                         <li>
-                            <a href="javascript:;" target="backFramework"><i>&bull;</i>人才管理 </a>
+                            <a href="<?php echo site_url('html/comingsoon/talentmanage') ?>" target="backFramework"><i>&bull;</i>人才管理 </a>
                         </li>
                     </ul>
                 </li>
@@ -123,7 +123,7 @@
                             <a href="<?php echo site_url('abilityevaluate/index') ?>" target="backFramework"><i>&bull;</i>能力评估 </a>
                         </li>
                         <li>
-                            <a href="javascript:;" target="backFramework"><i>&bull;</i>人才盘点 </a>
+                            <a href="<?php echo site_url('html/comingsoon/talentinventory') ?>" target="backFramework"><i>&bull;</i>人才盘点 </a>
                         </li>
                     </ul>
                 </li>
