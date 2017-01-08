@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>培训派</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
-    <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/common.css" />
+    <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/common.css?<?php echo $this->config->item('version');?>" />
     <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/login.css" />
     <script type="text/javascript" src="<?php echo base_url();?>js/jquery1.83.js"></script>
     <script type="text/javascript" src="<?php echo base_url();?>js/jquery.placeholder.min.js"></script>

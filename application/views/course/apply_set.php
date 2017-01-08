@@ -265,7 +265,7 @@
         $('#addTarget').next().text('通知人数('+tar.length+')');
     });
 </script>
-<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css?1128" />
+<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css?<?php echo $this->config->item('version');?>" />
 <div class="wrap">
         <div class="titCom clearfix"><span class="titSpan"><?php echo $course['title'] ?>  </span><span class="<?php echo $course['status_class']; ?> ml20"><?php echo $course['status_str']; ?></span></div>
         <div class="topNaviKec">

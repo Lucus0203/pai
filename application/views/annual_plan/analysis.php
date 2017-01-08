@@ -1,5 +1,5 @@
-<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/kecheng.css?1128"/>
-<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css?0107"/>
+<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/kecheng.css?<?php echo $this->config->item('version');?>"/>
+<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css?<?php echo $this->config->item('version');?>"/>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/print.css"/>
 <script src="<?php echo base_url(); ?>js/highcharts/highcharts.js"></script>
 <script src="<?php echo base_url(); ?>js/highcharts/modules/data.js"></script>

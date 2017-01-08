@@ -1,5 +1,5 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery-scrolltofixed-min.js"></script>
-<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css?1128" />
+<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css?<?php echo $this->config->item('version');?>" />
 <script type="text/javascript">
     $(document).ready(function(){
         $('.sideLeft').scrollToFixed({

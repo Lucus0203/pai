@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css?0107"/>
+<link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>css/texture.css?<?php echo $this->config->item('version');?>"/>
 <script>
     $(document).ready(function () {
         $('.canntDelBtn').click(function(){alert('进行中无法删除,请您先暂停发布');return false;});

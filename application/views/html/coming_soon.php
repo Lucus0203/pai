@@ -1,5 +1,5 @@
 
-<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/texture.css?0107" />
+<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/texture.css?<?php echo $this->config->item('version');?>" />
 <div class="wrap">
     <div class="textureCont width100">
         <div class="texturetip p2015 clearfix"><span class="fLeft pt5"><?php echo $title; ?></span></div>

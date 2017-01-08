@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css?1128" />
+<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css?<?php echo $this->config->item('version');?>" />
 <script type="text/javascript">
     $(function(){$('.shareBtn').click(function(){return confirm('确定发布吗?');});});
 </script>

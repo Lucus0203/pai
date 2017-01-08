@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <title></title>
     <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/font-awesome.min.css" />
-    <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/common.css" />
-    <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css?1128" />
+    <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/common.css?<?php echo $this->config->item('version');?>" />
+    <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css?<?php echo $this->config->item('version');?>" />
     <script type="text/javascript" src="<?php echo base_url();?>js/jquery1.83.js"></script>
 </head>
 

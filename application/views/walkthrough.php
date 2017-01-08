@@ -20,7 +20,7 @@
 
     });
 </script>
-<link rel="stylesheet" href="<?php echo base_url(); ?>css/common.css" />
+<link rel="stylesheet" href="<?php echo base_url(); ?>css/common.css?<?php echo $this->config->item('version');?>" />
 <div class="noviceGuide">
     <div class="bg"></div>
     <div class="noviceGuideInner">

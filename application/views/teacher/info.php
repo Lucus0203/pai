@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css?1128" />
+<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css?<?php echo $this->config->item('version');?>" />
 <div class="wrap">
         <div class="titCom clearfix"><span class="titSpan">讲师介绍</span></div>
         <div class="comBox">
