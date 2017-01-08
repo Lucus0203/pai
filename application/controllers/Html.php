@@ -50,7 +50,7 @@ class Html extends CI_Controller {
         $arr=array('talentmanage'=>'人才管理','talentinventory'=>'人才盘点');
         $title=$arr[$key];
         $msgarr=array('talentinventory'=>'功能限特定用户');
-        $msg=$msgarr['talentinventory'];
+        $msg=$msgarr[$key];
         $this->load->view ( 'header' );
         $this->load->view ( 'html/coming_soon',compact('title','msg'));
         $this->load->view ( 'footer' );
