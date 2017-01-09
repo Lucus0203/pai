@@ -20,7 +20,7 @@ $(document).ready(function(){
         return date1 < date2;
     }, "结束时间不能小于开始时间");
     $('input, textarea').placeholder();
-    $('.alert-remove').click(function(){$('.alertBox').hide()});
+    $('.alert-remove').live('click',function(){$('.alertBox').hide();return false;});
     alertBoxTimeSet=setTimeout(function(){$('.alertBox').fadeOut(500);},2000);
 
     $('a.back-to-top').click(function() {
