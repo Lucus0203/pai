@@ -6,7 +6,7 @@
 
         <div class="p15">
             <div class="aCenter" style="padding: 200px 0;">
-                <p class="f18"><?php echo !empty($msg)?$msg:'功能开发中,即将上线'; ?></p>
+                <p class="f18">功能暂未开放</p>
             </div>
         </div>
 
