@@ -5,6 +5,10 @@
             alert('删除失败,已有学员提交了评估记录,请先删除评估记录');
             return false;
         });
+        $('.editDisabled').click(function(){
+            alert('模型已被删除,此评估无法再次编辑');
+            return false;
+        });
     });
 </script>
 <div class="wrap">
@@ -43,7 +47,7 @@
                             <td class="aCenter"><?php echo $r['submit_num'] ?></td>
                             <td class="aCenter">
                                 <a class="blue mr5" href="<?php echo site_url('abilityevaluate/evaluationlist/'.$r['id']) ?>">名单</a>
-                                <a class="blue mr5" href="<?php echo site_url('abilitymanage/editevaluation/'.$r['id']) ?>">编辑</a>
+                                <a class="blue <?php echo $r['abilityjob_delstatus']==1?'editDisabled':'' ?> mr5" href="<?php echo site_url('abilitymanage/editevaluation/'.$r['id']) ?>">编辑</a>
                                 <?php if($r['submit_num']<=0){?>
                                     <a class="blue delBtn" href="<?php echo site_url('abilitymanage/delevaluation/'.$r['id']) ?>">删除</a>
                                 <?php }else{ ?>

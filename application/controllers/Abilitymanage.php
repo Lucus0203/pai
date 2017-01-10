@@ -228,9 +228,7 @@ class Abilitymanage extends CI_Controller {
     public function delabilityjob($abilityjobid){
         if($this->isAllowAbilityjob($abilityjobid,false) && $this->companyabilityjob_model->get_count(array('id'=>$abilityjobid,'company_code'=>$this->_logininfo['company_code']))>0){
             $this->companyabilityjob_model->update(array('isdel'=>1),$abilityjobid);
-            echo '1';//删除成功
-        }else{
-            echo '2';//删除失败
+            redirect($_SERVER['HTTP_REFERER']);
         }
     }
 
@@ -432,7 +430,6 @@ class Abilitymanage extends CI_Controller {
             redirect(site_url('abilitymanage/index'));
         }else{
             $evaluation=$this->companyabilityjobevaluation_model->get_row(array('id'=>$evaluationid));
-            $this->isAllowAbilityjob($evaluation['ability_job_id']);
             $abilityjob=$this->companyabilityjob_model->get_row(array('id'=>$evaluation['ability_job_id']));
             $job_series=$this->companyabilityjobseries_model->get_row(array('id'=>$abilityjob['ability_job_series_id']));
             $job_level=$this->companyabilityjoblevel_model->get_row(array('id'=>$abilityjob['ability_job_level_id']));
@@ -515,7 +512,6 @@ class Abilitymanage extends CI_Controller {
         }else{
             $this->session->set_userdata('returnevaluationlisturl', 'abilitymanage/evaluationlist/'.$evaluationid);
             $evaluation=$this->companyabilityjobevaluation_model->get_row(array('id'=>$evaluationid));
-            $this->isAllowAbilityjob($evaluation['ability_job_id']);
             $abilityjob=$this->companyabilityjob_model->get_row(array('id'=>$evaluation['ability_job_id']));
 
             $sql = "select s.id,s.name,s.department_parent_id,s.department_id,department.name as department,point,others_point,.abilityjob.point_standard from " . $this->db->dbprefix('student') . " s "
@@ -549,7 +545,6 @@ class Abilitymanage extends CI_Controller {
     public function reportevaluation($evaluationid,$studentid){
         $returnevaluationlisturl=$this->session->userdata('returnevaluationlisturl');
         $evaluation=$this->companyabilityjobevaluation_model->get_row(array('id'=>$evaluationid));
-        $this->isAllowAbilityjob($evaluation['ability_job_id']);
         $abilityjob=$this->companyabilityjob_model->get_row(array('id'=>$evaluation['ability_job_id']));
         $student=$this->student_model->get_row(array('id'=>$studentid));
         $where="company_code='".$this->_logininfo['company_code']."' and ability_job_evaluation_id=$evaluationid and student_id = $studentid ";
@@ -592,7 +587,6 @@ class Abilitymanage extends CI_Controller {
     public function selfevaluation($evaluationid,$studentid){
         $returnevaluationlisturl=$this->session->userdata('returnevaluationlisturl');
         $evaluation=$this->companyabilityjobevaluation_model->get_row(array('id'=>$evaluationid));
-        $this->isAllowAbilityjob($evaluation['ability_job_id']);
         $abilityjob=$this->companyabilityjob_model->get_row(array('id'=>$evaluation['ability_job_id']));
         $student=$this->student_model->get_row(array('id'=>$studentid));
         $where="company_code='".$this->_logininfo['company_code']."' and ability_job_evaluation_id=$evaluationid and student_id = $studentid ";
@@ -632,7 +626,6 @@ class Abilitymanage extends CI_Controller {
     public function othersevaluation($evaluationid,$studentid){
         $returnevaluationlisturl=$this->session->userdata('returnevaluationlisturl');
         $evaluation=$this->companyabilityjobevaluation_model->get_row(array('id'=>$evaluationid));
-        $this->isAllowAbilityjob($evaluation['ability_job_id']);
         $abilityjob=$this->companyabilityjob_model->get_row(array('id'=>$evaluation['ability_job_id']));
         $student=$this->student_model->get_row(array('id'=>$studentid));
         $where="company_code='".$this->_logininfo['company_code']."' and ability_job_evaluation_id=$evaluationid and student_id = $studentid ";

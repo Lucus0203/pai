@@ -21,24 +21,7 @@
             return false;
         });
         $('.delAbilityJob').click(function(){
-            var num=$(this).prev().find('a').text();
-            var str=num > 0 ? '此岗位模型含有评估记录,确认删除吗?' : '确认删除吗?';
-            if(confirm(str)){
-                var url = $(this).attr('href');
-                $.ajax({
-                    type: "post",
-                    url: url,
-                    datatype: 'jsonp',
-                    success: function (res) {
-                        if (res == 1) {
-                            window.location = '<?php echo site_url('abilitymanage/index/'.$series['id'])?>';
-                        } else {
-                            alert('删除失败')
-                        }
-                    }
-                });
-            }
-            return false;
+            return confirm('此岗位模型含有评估记录,确认删除吗?');
         });
     });
 </script>
@@ -93,7 +76,7 @@
                                     <td class="aCenter">
                                         <a class="blue editCourse mr5" href="<?php echo site_url('abilitymanage/detailabilityjob/'.$j['id']) ?>">查看</a>
                                         <a class="blue mr5" href="<?php echo site_url('abilitymanage/editabilityjob/'.$series['id'].'/'.$j['id']) ?>">编辑</a>
-                                        <a class="blue delAbilityJob mr5" href="<?php echo site_url('abilitymanage/delabilityjob/'.$j['id']) ?>">删除</a>
+                                        <a class="blue <?php echo $j['evaluation_num']>0?'delAbilityJob':'delBtn' ?> mr5" href="<?php echo site_url('abilitymanage/delabilityjob/'.$j['id']) ?>">删除</a>
                                     </td>
                                 </tr>
                             <?php } ?>

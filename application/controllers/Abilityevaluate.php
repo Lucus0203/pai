@@ -23,7 +23,7 @@ class Abilityevaluate extends CI_Controller {
         $page = $this->input->get('per_page', true);
         $page = $page * 1 < 1 ? 1 : $page;
         $page_size = 10;
-        $sql = " select abilityjob.name as ability_name,evaluation.* from " . $this->db->dbprefix('company_ability_job_evaluation') . " evaluation "
+        $sql = " select abilityjob.name as ability_name,abilityjob.isdel as abilityjob_delstatus,evaluation.* from " . $this->db->dbprefix('company_ability_job_evaluation') . " evaluation "
             . " left join " . $this->db->dbprefix('company_ability_job') . " abilityjob on abilityjob.id = evaluation.ability_job_id "
             . " where abilityjob.company_code = '".$this->_logininfo['company_code']."' ";
         $query = $this->db->query("select count(*) as num from ($sql) s ");
@@ -58,7 +58,6 @@ class Abilityevaluate extends CI_Controller {
         }else{
             $this->session->set_userdata('returnevaluationlisturl', 'abilityevaluate/evaluationlist/'.$evaluationid);
             $evaluation=$this->companyabilityjobevaluation_model->get_row(array('id'=>$evaluationid));
-            $this->isAllowAbilityjob($evaluation['ability_job_id']);
             $abilityjob=$this->companyabilityjob_model->get_row(array('id'=>$evaluation['ability_job_id']));
             $sql = "select s.id,s.name,s.department_parent_id,s.department_id,department.name as department,point,others_point,.abilityjob.point_standard from " . $this->db->dbprefix('student') . " s "
                 . "left join " . $this->db->dbprefix('department') . " department on s.department_id = department.id "
