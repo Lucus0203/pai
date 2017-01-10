@@ -42,7 +42,7 @@
                                 obj.remove();
                                 serializ();
                             }else{
-                                alert('该职级存在能力模型,无法删除')
+                                alert('该职级存在岗位模型,无法删除')
                             }
                         }
                     });

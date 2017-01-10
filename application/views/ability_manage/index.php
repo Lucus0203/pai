@@ -13,7 +13,7 @@
                         if (res == 1) {
                             window.location = '<?php echo site_url('abilitymanage/index')?>';
                         } else {
-                            alert('该岗位系列存在能力模型,无法删除')
+                            alert('该岗位系列存在岗位模型,无法删除')
                         }
                     }
                 });
@@ -22,7 +22,7 @@
         });
         $('.delAbilityJob').click(function(){
             var num=$(this).prev().find('a').text();
-            var str=num > 0 ? '此能力模型含有评估记录,确认删除吗?' : '确认删除吗?';
+            var str=num > 0 ? '此岗位模型含有评估记录,确认删除吗?' : '确认删除吗?';
             if(confirm(str)){
                 var url = $(this).attr('href');
                 $.ajax({
@@ -57,7 +57,7 @@
             </div>
             <div class="textureCont">
                 <div class="texturetip textureWite clearfix mb10 mr20">
-                    <p class="fLeft clearfix f14">共有<?php echo round($total_rows) ?>个能力模型</p>
+                    <p class="fLeft clearfix f14">共有<?php echo round($total_rows) ?>个岗位模型</p>
                     <?php if(!empty($series['id'])){ ?>
                     <div class="fRight">
                         <a class="borBlueBtnH28 w72 aCenter" href="<?php echo site_url('abilitymanage/editjobseries/'.$series['id']) ?>">编辑岗位系列</a>
