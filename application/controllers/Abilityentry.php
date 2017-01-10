@@ -38,7 +38,7 @@ class Abilityentry extends CI_Controller {
         $query = $this->db->query("select count(*) as num from ($sql) s ");
         $num = $query->row_array();
         $total_rows = $num['num'];
-        $config['base_url'] = site_url('abilitymanage/index/'.$model_type.'/'.$subcategoryid);
+        $config['base_url'] = site_url('abilityentry/index/'.$model_type.'/'.$subcategoryid);
         $config['per_page'] = $page_size;
         $config['total_rows'] = $total_rows;
         $this->pagination->initialize($config);

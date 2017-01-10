@@ -36,7 +36,7 @@ class Abilitymanage extends CI_Controller {
             $query = $this->db->query("select count(*) as num from ($sql) s ");
             $num = $query->row_array();
             $total_rows = $num['num'];
-            $config['base_url'] = site_url('abilitymanage/index');
+            $config['base_url'] = site_url('abilitymanage/index/'.$seriesid);
             $config['per_page'] = $page_size;
             $config['total_rows'] = $total_rows;
             $this->pagination->initialize($config);
@@ -359,7 +359,7 @@ class Abilitymanage extends CI_Controller {
         $query = $this->db->query("select count(*) as num from ($sql) s ");
         $num = $query->row_array();
         $total_rows = $num['num'];
-        $config['base_url'] = site_url('abilitymanage/index');
+        $config['base_url'] = site_url('abilitymanage/abilityjobrecords/'.$abilityjobid);
         $config['per_page'] = $page_size;
         $config['total_rows'] = $total_rows;
         $this->pagination->initialize($config);
