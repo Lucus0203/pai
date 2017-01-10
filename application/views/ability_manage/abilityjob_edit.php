@@ -44,7 +44,7 @@
     });
 </script>
 <div class="wrap">
-    <div class="titCom clearfix"><span class="titSpan"><?php if(strpos(current_url(),'copyabilityjob')){echo '复制能力模型';}else{echo empty($abilityjob) ? '新增能力模型' : '编辑能力模型';} ?></span></div>
+    <div class="titCom clearfix"><span class="titSpan"><?php if(strpos(current_url(),'copyabilityjob')){echo '复制能力模型';}else{echo empty($abilityjob) ? '新增岗位模型' : '编辑岗位模型';} ?></span></div>
     <div class="comBox">
         <div class="tableBox">
             <form id="editForm" method="post" action="" enctype="multipart/form-data">

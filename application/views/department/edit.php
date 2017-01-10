@@ -174,15 +174,13 @@
                 <ul class="clink departChildren<?php echo $d['id'] ?>">
                     <?php if (!empty($d['departs'])) {
                         foreach ($d['departs'] as $dp) { ?>
-                            <li class="<?php echo $current_department['id'] == $dp['id'] ? 'on' : '' ?>"><a
-                                    href="<?php echo site_url('department/index/' . $dp['id']) ?>"><?php echo $dp['name'] ?></a>
+                            <li class="<?php echo $current_department['id'] == $dp['id'] ? 'on' : '' ?>"><a href="<?php echo site_url('department/index/' . $dp['id']) ?>"><?php echo $dp['name'] ?></a>
                             </li>
                         <?php }
                     } ?>
                 </ul>
             </div>
         <?php } ?>
-<!--        <a href="--><?php //echo site_url('ability/index') ?><!--" class="toporangebtn mt20">能力模型管理</a>-->
     </div>
     <div class="textureCont">
         <?php if (!empty($current_department)) { ?>

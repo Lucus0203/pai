@@ -62,7 +62,7 @@
                     <div class="fRight">
                         <a class="borBlueBtnH28 w72 aCenter" href="<?php echo site_url('abilitymanage/editjobseries/'.$series['id']) ?>">编辑岗位系列</a>
                         <a class="borBlueBtnH28 w72 aCenter" href="<?php echo site_url('abilitymanage/delseries/'.$series['id']) ?>" id="delseries">删除岗位系列</a>
-                        <a class="borBlueBtnH28 w72 aCenter" href="<?php echo site_url('abilitymanage/createabilityjob/'.$series['id']) ?>">创建能力模型</a>
+                        <a class="borBlueBtnH28 w72 aCenter" href="<?php echo site_url('abilitymanage/createabilityjob/'.$series['id']) ?>">创建岗位模型</a>
                     </div>
                     <?php } ?>
                 </div>
@@ -78,7 +78,7 @@
                             </colgroup>
                             <tbody>
                             <tr>
-                                <th class="aLeft">能力名称</th>
+                                <th class="aLeft">模型名称</th>
                                 <th class="aCenter">职级</th>
                                 <th class="aCenter">领导力</th>
                                 <th class="aCenter">评估记录</th>
@@ -102,7 +102,7 @@
                         </table>
                         <?php echo $links ?>
                     <?php }else{ ?>
-                        <p class="clearfix f14 p2015">暂未创建能力模型</p>
+                        <p class="clearfix f14 p2015">暂未创建岗位模型</p>
                     <?php } ?>
                 </div>
             </div>
