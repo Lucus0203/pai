@@ -42,7 +42,7 @@ class Abilitymanage extends CI_Controller {
             $this->pagination->initialize($config);
             $links=$this->pagination->create_links();
 
-            $query = $this->db->query($sql . " order by job.id desc limit " . ($page - 1) * $page_size . "," . $page_size);
+            $query = $this->db->query($sql . " order by joblevel.series_type asc,joblevel.level asc,job.id desc limit " . ($page - 1) * $page_size . "," . $page_size);
             $abilityjobs = $query->result_array();
         }
         $serieses=$this->companyabilityjobseries_model->get_all(array('company_code'=>$this->_logininfo['company_code'],'isdel'=>2));
