@@ -242,7 +242,7 @@
                 </div>
                 <div class="iptBox">
                     <div class="iptInner">
-                        <select id="industry_parent_id" name="industry_parent_id" class="iptH37 mr5">
+                        <select id="industry_parent_id" name="industry_parent_id" class="iptH37 w157 mr5">
                             <option value="">请选择所属行业</option>
                             <?php foreach ($industry_parent as $pindus) { ?>
                                 <option value="<?php echo $pindus['id'] ?>" <?php if($pindus['id']==$user_industry_parent['id']){ ?>selected<?php } ?> ><?php echo $pindus['name'] ?></option>
