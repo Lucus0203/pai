@@ -12,9 +12,7 @@
                 <div class="ttl01">最近的添加的课程</div>
                 <?php foreach ($courses as $c) { ?>
                     <div class="listCont">
-                        <div class="imgBox"><img
-                                src="<?php echo empty($c['page_img']) ? base_url() . 'images/course_default_img.jpg' : base_url('uploads/course_img/' . $c['page_img']) ?>"
-                                alt="" width="130"></div>
+                        <div class="imgBox"><img src="<?php echo empty($c['page_img']) ? base_url() . 'images/course_default_img.jpg' : base_url('uploads/course_img/' . $c['page_img']) ?>" alt="" width="130"></div>
                         <div class="listText">
                             <p class="titp">
                                 <a href="<?php echo site_url('course/courseinfo/' . $c['id']); ?>"><?php echo $c['title'] ?></a>

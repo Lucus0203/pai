@@ -128,6 +128,17 @@
                     </ul>
                 </li>
                 <li>
+                    <a href="JavaScript:;" target="backFramework" class="dropdown-toggle"><span class="menu-text"><i class="fa fa-file-text-o"></i><s>考试和调研</s></span><b class="fa fa-angle-right arrow "></b></a>
+                    <ul class="submenu">
+                        <li>
+                            <a href="<?php echo site_url('html/comingsoon/examination') ?>" target="backFramework"><i>&bull;</i>考试试卷 </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo site_url('html/comingsoon/survey') ?>" target="backFramework"><i>&bull;</i>调研问卷 </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
                     <a href="JavaScript:;" target="backFramework" class="dropdown-toggle"><span class="menu-text"><i class="fa fa-calendar-check-o"></i><s>年度培训计划</s></span><b class="fa fa-angle-right arrow "></b></a>
                     <ul class="submenu">
                         <li>
@@ -168,7 +179,7 @@
     <div class="main-content">
         <div class="main-content-inner">
 
-            <iframe width="100%" height="99%" frameborder="0" id="backFramework" scrolling="auto" allowtransparency="true" name="backFramework" src="<?php echo site_url('index/main') ?>"></iframe>
+            <iframe width="100%" height="99%" frameborder="0" id="backFramework" scrolling="auto" allowtransparency="true" name="backFramework" src="<?php echo $action_uri; ?>"></iframe>
 
         </div>
     </div>

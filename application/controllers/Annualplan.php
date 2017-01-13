@@ -18,6 +18,7 @@ class Annualplan extends CI_Controller
 
         $this->_logininfo = $this->session->userdata('loginInfo');
         if (empty($this->_logininfo)) {
+            $this->session->set_userdata('action_uri', current_url().'?'.$_SERVER['QUERY_STRING']);
             redirect('login', 'index');
         } else {
             $roleInfo = $this->session->userdata('roleInfo');

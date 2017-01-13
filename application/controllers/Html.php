@@ -47,7 +47,7 @@ class Html extends CI_Controller {
     }
 
     public function comingsoon($key){
-        $arr=array('talentmanage'=>'人才管理','talentinventory'=>'人才盘点');
+        $arr=array('talentinventory'=>'人才盘点','examination'=>'考试试卷','survey'=>'调研问卷');
         $title=$arr[$key];
         $this->load->view ( 'header' );
         $this->load->view ( 'html/coming_soon',compact('title'));

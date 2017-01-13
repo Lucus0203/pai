@@ -24,7 +24,9 @@ class Index extends CI_Controller
 
 
     public function index(){
-        $this->load->view('main');
+        $action_uri=$this->session->userdata('action_uri');
+        $action_uri=!empty($action_uri)?$action_uri:site_url('index/main');
+        $this->load->view('main',compact('action_uri'));
     }
 
     public function main(){

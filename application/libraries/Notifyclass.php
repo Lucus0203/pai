@@ -454,13 +454,13 @@ EOF;
     //年度计划开启审核
     public function planCourseApproved($planid,$nobifytarget){
         $plan=$this->CI->annualplan_model->get_row(array('id'=>$planid));
-        $link_pc = $this->CI->config->item('base_url') . 'annualmanage/approved/'.$planid.'.html';//链接
-        $link_web = $this->CI->config->item('web_url') . 'annualmanage/approved/'.$planid.'.html';//链接
-        $link_short='annualmanage/approved/'.$planid.'.html';
+        $link_short='annualmanage/approved.html';
         $company = $this->CI->company_model->get_row(array('code'=>$plan['company_code']));
         $sign=$company['name'];
         $sign.=($company['code']=='100276')?' 人力资源部':'';
         foreach ($nobifytarget as $s) {
+            $link_pc = $this->CI->config->item('base_url') . 'annualplan/course/'.$planid.'.html?openstatus=1';//链接
+            $link_web = $this->CI->config->item('web_url') . 'annualmanage/approved.html';//链接
             $student = $this->CI->student_model->get_row(array('id' => $s));
             if(!empty($student['email'])){
                 $students[]=$student;

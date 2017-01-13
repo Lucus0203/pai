@@ -29,12 +29,7 @@ class Login extends CI_Controller
                     $this->session->set_userdata('loginInfo', $userinfo);
                     //登录记录
                     $this->userloginlog_model->create(array('user_id' => $userinfo['id']));
-                    $action_uri=$this->session->userdata('action_uri');
-                    if (!empty($action_uri)) {
-                        redirect($action_uri);
-                    } else {
-                        redirect('index', 'index');
-                    }
+                    redirect('index', 'index');
                 } else {
                     $error_msg = "密码错误!";
                 }
