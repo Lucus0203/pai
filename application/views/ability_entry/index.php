@@ -101,7 +101,7 @@
 </script>
 <div class="wrap">
     <div class="textureCont width100">
-        <div class="texturetip p2015 clearfix"><span class="fLeft pt5">能力词典管理</span>
+        <div class="texturetip p15 clearfix"><span class="fLeft pt5">能力词典管理</span>
         </div>
         <div class="clearfix textureBox noborder">
             <div class="textureSide">
@@ -124,7 +124,7 @@
                 <?php } ?>
             </div>
             <div class="textureCont">
-                <div class="texturetip textureWite clearfix mb10 mr20">
+                <div class="texturetip textureWite pt10 clearfix mr20">
                     <span class="fLeft"><?php echo $types[$model_type] ;if(!empty($subcategory)){echo '&nbsp;>&nbsp;<span class="categoryname">'.$subcategory['name'].'</span>';}elseif($subcategoryid=='model_type'){echo '&nbsp;>&nbsp;未分配';}?></span>
                     <div class="fRight">
                             <a id="addSubcategory" class="borBlueBtnH28 w72 aCenter" href="#">创建子分类</a>

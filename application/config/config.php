@@ -25,8 +25,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $config['base_url'] = 'http://pai.trainingpie.com/';
 $config['web_url'] = 'http://wx.trainingpie.com/';
-
-$config['version'] = '0108';
+//$config['base_url'] = 'http://192.168.1.15/pai/pc/';
+//$config['web_url'] = 'http://192.168.1.15/pai/wxpai/';
+$config['version'] = '0113';
 
 /*
 |--------------------------------------------------------------------------

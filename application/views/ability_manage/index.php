@@ -27,7 +27,7 @@
 </script>
 <div class="wrap">
     <div class="textureCont width100">
-        <div class="texturetip p2015 clearfix"><span class="fLeft pt5">模型管理</span>
+        <div class="texturetip p15 clearfix"><span class="fLeft pt5">模型管理</span>
         </div>
         <div class="clearfix textureBox noborder">
             <div class="textureSide">
@@ -39,7 +39,7 @@
                 <?php } ?>
             </div>
             <div class="textureCont">
-                <div class="texturetip textureWite clearfix mb10 mr20">
+                <div class="texturetip textureWite pt10 clearfix mr20">
                     <p class="fLeft clearfix f14">共有<?php echo round($total_rows) ?>个岗位模型</p>
                     <?php if(!empty($series['id'])){ ?>
                     <div class="fRight">

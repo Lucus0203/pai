@@ -13,7 +13,7 @@
 </script>
 <div class="wrap">
     <div class="textureCont width100">
-        <div class="texturetip p2015 clearfix"><span class="fLeft pt5">能力评估</span>
+        <div class="texturetip p15 clearfix"><span class="fLeft pt5">能力评估</span>
             <div class="fRight">
                 <a class="borBlueH37" href="<?php echo site_url('abilitymanage/createevaluation') ?>">发起能力评估</a>
             </div>

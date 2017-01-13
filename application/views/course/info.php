@@ -3,7 +3,12 @@
     $(function(){$('.shareBtn').click(function(){return confirm('确定发布吗?');});});
 </script>
 <div class="wrap">
-        <div class="titCom clearfix"><span class="titSpan"><?php echo $course['title'] ?>  </span><?php if(empty($course['time_start'])||empty($course['time_end'])||empty($course['address'])){echo '<span class="orange ml20">未完善</span>';}?><span class="<?php echo $course['status_class']; ?> ml20"><?php echo $course['status_str']; ?></span></div>
+        <div class="titCom clearfix">
+            <span class="titSpan"><?php echo $course['title'] ?>  </span><?php if(empty($course['time_start'])||empty($course['time_end'])||empty($course['address'])){echo '<span class="orange ml20">未完善</span>';}?><span class="<?php echo $course['status_class']; ?> ml20"><?php echo $course['status_str']; ?></span>
+            <div class="fRight">
+                <a class="borBlueH37" href="<?php echo $returncourseurl ?>" >返回列表</a>
+            </div>
+        </div>
         <div class="topNaviKec">
                 <?php $this->load->view ( 'course/top_navi' ); ?>
 

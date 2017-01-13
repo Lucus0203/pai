@@ -106,7 +106,7 @@
                             </li>
                         <?php } ?>
                         <li>
-                            <a href="<?php echo site_url('html/comingsoon/talentmanage') ?>" target="backFramework"><i>&bull;</i>人才管理 </a>
+                            <a href="<?php echo site_url('talentmanage/index') ?>" target="backFramework"><i>&bull;</i>人才管理 </a>
                         </li>
                     </ul>
                 </li>

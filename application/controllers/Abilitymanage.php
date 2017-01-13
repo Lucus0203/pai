@@ -467,7 +467,7 @@ class Abilitymanage extends CI_Controller {
     public function delevaluation($evaluationid){
         $this->db->where ( 'ability_job_evaluation_id', $evaluationid );
         $this->db->update ( 'company_ability_job_evaluation_student', array('isdel'=>1) );
-        $this->companyabilityjobevaluation_model->del($evaluationid);
+        $this->companyabilityjobevaluation_model->update(array('isdel'=>1),$evaluationid);
         redirect($_SERVER['HTTP_REFERER']);
     }
 
@@ -545,11 +545,11 @@ class Abilitymanage extends CI_Controller {
     public function reportevaluation($evaluationid,$studentid){
         $returnevaluationlisturl=$this->session->userdata('returnevaluationlisturl');
         $evaluation=$this->companyabilityjobevaluation_model->get_row(array('id'=>$evaluationid));
-        $abilityjob=$this->companyabilityjob_model->get_row(array('id'=>$evaluation['ability_job_id']));
         $student=$this->student_model->get_row(array('id'=>$studentid));
         $where="company_code='".$this->_logininfo['company_code']."' and ability_job_evaluation_id=$evaluationid and student_id = $studentid ";
         $query = $this->db->get_where ( 'company_ability_job_evaluation_student', $where );
         $evaluation_student=$query->row_array();
+        $abilityjob=$this->companyabilityjob_model->get_row(array('id'=>$evaluation_student['ability_job_id']));
         //自评
         $selfsql="select type,sum(point) as point,sum(level) as level from ".$this->db->dbprefix('company_ability_job_student_assess')." assess where ability_job_evaluation_id=$evaluationid and isothersevaluation=2 and student_id=$studentid and company_code='".$this->_logininfo['company_code']."' group by type ";
         $query = $this->db->query($selfsql . " order by type asc ");
@@ -562,7 +562,7 @@ class Abilitymanage extends CI_Controller {
         $dataother = $this->relistmodel($other);
         //标准
         $standardsql="select jobmodel.type,sum(level_standard) as point,sum(level) as level from ".$this->db->dbprefix('company_ability_job_model')." jobmodel left join 
-        ".$this->db->dbprefix('company_ability_model')." model on jobmodel.ability_model_id=model.id where jobmodel.ability_job_id=".$evaluation['ability_job_id']." and jobmodel.company_code='".$this->_logininfo['company_code']."' group by jobmodel.type ";
+        ".$this->db->dbprefix('company_ability_model')." model on jobmodel.ability_model_id=model.id where jobmodel.ability_job_id=".$evaluation_student['ability_job_id']." and jobmodel.company_code='".$this->_logininfo['company_code']."' group by jobmodel.type ";
         $query = $this->db->query($standardsql . " order by type asc ");
         $standar = $query->result_array();
         $datastandar = $this->relistmodel($standar);
@@ -587,11 +587,11 @@ class Abilitymanage extends CI_Controller {
     public function selfevaluation($evaluationid,$studentid){
         $returnevaluationlisturl=$this->session->userdata('returnevaluationlisturl');
         $evaluation=$this->companyabilityjobevaluation_model->get_row(array('id'=>$evaluationid));
-        $abilityjob=$this->companyabilityjob_model->get_row(array('id'=>$evaluation['ability_job_id']));
         $student=$this->student_model->get_row(array('id'=>$studentid));
         $where="company_code='".$this->_logininfo['company_code']."' and ability_job_evaluation_id=$evaluationid and student_id = $studentid ";
         $query = $this->db->get_where ( 'company_ability_job_evaluation_student', $where );
         $evaluation_student=$query->row_array();
+        $abilityjob=$this->companyabilityjob_model->get_row(array('id'=>$evaluation_student['ability_job_id']));
         if($evaluation_student['status']!=2){
             redirect($returnevaluationlisturl);
             return;
@@ -626,11 +626,11 @@ class Abilitymanage extends CI_Controller {
     public function othersevaluation($evaluationid,$studentid){
         $returnevaluationlisturl=$this->session->userdata('returnevaluationlisturl');
         $evaluation=$this->companyabilityjobevaluation_model->get_row(array('id'=>$evaluationid));
-        $abilityjob=$this->companyabilityjob_model->get_row(array('id'=>$evaluation['ability_job_id']));
         $student=$this->student_model->get_row(array('id'=>$studentid));
         $where="company_code='".$this->_logininfo['company_code']."' and ability_job_evaluation_id=$evaluationid and student_id = $studentid ";
         $query = $this->db->get_where ( 'company_ability_job_evaluation_student', $where );
         $evaluation_student=$query->row_array();
+        $abilityjob=$this->companyabilityjob_model->get_row(array('id'=>$evaluation_student['ability_job_id']));
         if(empty($evaluation_student['others_id'])){
             redirect($returnevaluationlisturl);
             return;

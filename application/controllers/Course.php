@@ -29,7 +29,8 @@ class Course extends CI_Controller
                 }
             }
             $this->useractionlog_model->create(array('user_id' => $this->_logininfo['id'], 'url' => uri_string()));
-            $this->load->vars(array('loginInfo' => $this->_logininfo, 'roleInfo' => $roleInfo));
+            $returncourseurl=$this->session->userdata('returncourseurl');
+            $this->load->vars(array('loginInfo' => $this->_logininfo, 'roleInfo' => $roleInfo,'returncourseurl'=>$returncourseurl));
         }
 
     }
@@ -38,8 +39,8 @@ class Course extends CI_Controller
         return !empty($val)?$this->db->escape($val):'';
     }
 
-    public function courselist()
-    {
+    public function courselist(){
+        $this->session->set_userdata('returncourseurl', site_url('course/courselist/'));
         $logininfo = $this->_logininfo;
         $page = $this->input->get('per_page', true);
         $page = $page * 1 < 1 ? 1 : $page;

@@ -245,8 +245,12 @@ textarea:after {
 	padding-bottom: 0 !important;
 }
 
+.p13 {
+    padding: 13px !important;
+}
+
 .p15 {
-	padding: 15px !important;
+    padding: 15px !important;
 }
 
 .p1524 {
@@ -589,7 +593,11 @@ textarea:after {
 }
 
 .gray9 {
-	color: #999 !important;
+    color: #999 !important;
+}
+
+.grayC {
+    color: #ccc !important;
 }
 
 .greenH25,

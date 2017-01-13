@@ -25,7 +25,7 @@ class Abilityevaluate extends CI_Controller {
         $page_size = 10;
         $sql = " select abilityjob.name as ability_name,abilityjob.isdel as abilityjob_delstatus,evaluation.* from " . $this->db->dbprefix('company_ability_job_evaluation') . " evaluation "
             . " left join " . $this->db->dbprefix('company_ability_job') . " abilityjob on abilityjob.id = evaluation.ability_job_id "
-            . " where abilityjob.company_code = '".$this->_logininfo['company_code']."' ";
+            . " where abilityjob.company_code = '".$this->_logininfo['company_code']."' and evaluation.isdel=2 ";
         $query = $this->db->query("select count(*) as num from ($sql) s ");
         $num = $query->row_array();
         $total_rows = $num['num'];

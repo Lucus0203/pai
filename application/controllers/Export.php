@@ -710,6 +710,109 @@ class Export extends CI_Controller
         }
     }
 
+    //导出学员课程记录
+    public function courserecords($studentid){
+        $sql = "select course.title,course.time_start,teacher.name as teacher,count(DISTINCT survey.id) AS survey_num,count(DISTINCT ratings.id) AS ratings_num from " . $this->db->dbprefix('course_apply_list') . " a left join " . $this->db->dbprefix('course') . " course on a.course_id=course.id left join " . $this->db->dbprefix('teacher') . " teacher on course.`teacher_id`=teacher.id left join " . $this->db->dbprefix('course_survey_list') . " survey on survey.course_id=course.id left join ".$this->db->dbprefix('course_ratings_list')." ratings on ratings.course_id=course.id where course.`company_code`='{$this->_logininfo['company_code']}' and a.`student_id`='$studentid' ";
+        $sql .= " group by course.id order by course.id desc ";
+        $query=$this->db->query($sql);
+        $courses=$query->result_array();
+        $student=$this->student_model->get_row(array('id'=>$studentid));
+
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', '课程名称')
+            ->setCellValue('B1', '开始时间')
+            ->setCellValue('C1', '课程讲师')
+            ->setCellValue('D1', '内训/公开');
+        foreach($courses as $k => $c){
+            $num=$k+2;
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$num, $c['title'])
+                ->setCellValue('B'.$num, date('Y-m-d H:i',strtotime($c['time_start'])))
+                ->setCellValue('C'.$num, !empty($c['teacher'])?$c['teacher']:'无')
+                ->setCellValue('D'.$num, ($c['external']==1)?'公开':'内训');
+        }
+        $objPHPExcel->getActiveSheet()->setTitle($student['name'].'课程记录');
+        $objPHPExcel->setActiveSheetIndex(0);
+        $name='《'.$student['name'].'》课程记录';
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'.$name.'.xls"');
+        header('Cache-Control: max-age=0');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    //导出学员评估记录
+    public function evaluaterecords($studentid){
+        $sql = "select evaluation_student.ability_job_evaluation_id,evaluation.name as evaluation,evaluation_student.isdel,abilityjob.name as abilityjob,point,others_point,abilityjob.point_standard from " . $this->db->dbprefix('company_ability_job_evaluation_student') . " evaluation_student "
+            . "left join " . $this->db->dbprefix('company_ability_job'). " abilityjob on evaluation_student.ability_job_id=abilityjob.id "
+            . "left join " . $this->db->dbprefix('company_ability_job_evaluation'). " evaluation on evaluation_student.ability_job_evaluation_id=evaluation.id "
+            . "where evaluation_student.company_code='".$this->_logininfo['company_code']."' and evaluation_student.student_id=$studentid ";
+        $sql .= " order by evaluation_student.id desc ";
+        $query=$this->db->query($sql);
+        $evaluates = $query->result_array();
+        $student=$this->student_model->get_row(array('id'=>$studentid));
+
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', '评估名称')
+            ->setCellValue('B1', '能力模型')
+            ->setCellValue('C1', '标准总分')
+            ->setCellValue('D1', '自评总分')
+            ->setCellValue('E1', '他评总分');
+        foreach($evaluates as $k => $e){
+            $num=$k+2;
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$num, !empty($e['evaluation'])?$e['evaluation']:'无')
+                ->setCellValue('B'.$num, $e['abilityjob'])
+                ->setCellValue('C'.$num, $e['point_standard'])
+                ->setCellValue('D'.$num, $e['point'])
+                ->setCellValue('E'.$num, $e['others_point']);
+        }
+        $objPHPExcel->getActiveSheet()->setTitle($student['name'].'评估记录');
+        $objPHPExcel->setActiveSheetIndex(0);
+        $name='《'.$student['name'].'》评估记录';
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'.$name.'.xls"');
+        header('Cache-Control: max-age=0');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+    }
+
+    //导出学员年度调研记录
+    public function annualrecords($studentid){
+        $sql = "select annual_survey.*,annual_answer.id as answer_id from " . $this->db->dbprefix('annual_answer') . " annual_answer "
+            . "left join " . $this->db->dbprefix('annual_survey'). " annual_survey on annual_answer.annual_survey_id=annual_survey.id "
+            . "where annual_answer.company_code='".$this->_logininfo['company_code']."' and annual_answer.student_id=$studentid and annual_answer.step=5 ";
+        $sql .= " order by annual_answer.id desc ";
+        $query=$this->db->query($sql);
+        $annuals = $query->result_array();
+        $student=$this->student_model->get_row(array('id'=>$studentid));
+
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', '调研名称')
+            ->setCellValue('B1', '开始时间');
+        foreach($annuals as $k => $a){
+            $num=$k+2;
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$num, $a['title'])
+                ->setCellValue('B'.$num, date('Y-m-d H:i',strtotime($a['time_start'])));
+        }
+        $objPHPExcel->getActiveSheet()->setTitle($student['name'].'年度调研记录');
+        $objPHPExcel->setActiveSheetIndex(0);
+        $name='《'.$student['name'].'》年度调研记录';
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'.$name.'.xls"');
+        header('Cache-Control: max-age=0');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+    }
+
     //是否是自己公司下的课程
     private function isAllowCourseid($courseid){
         if(empty($courseid)||$this->course_model->get_count(array('id' => $courseid,'company_code'=>$this->_logininfo['company_code']))<=0){

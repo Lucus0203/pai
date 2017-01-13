@@ -24,7 +24,11 @@
 </script>
 <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>css/kecheng.css?<?php echo $this->config->item('version');?>" />
 <div class="wrap">
-        <div class="titCom clearfix"><span class="titSpan"><?php echo $course['title'] ?>  </span><span class="<?php echo $course['status_class']; ?> ml20"><?php echo $course['status_str']; ?></span></div>
+        <div class="titCom clearfix"><span class="titSpan"><?php echo $course['title'] ?>  </span><span class="<?php echo $course['status_class']; ?> ml20"><?php echo $course['status_str']; ?></span>
+            <div class="fRight">
+                <a class="borBlueH37" href="<?php echo $returncourseurl ?>" >返回列表</a>
+            </div>
+        </div>
         <div class="topNaviKec">
                 <?php $this->load->view ( 'course/top_navi' ); ?>
         </div>
